@@ -11,21 +11,20 @@ locale: 'fr'
 
 # Configuration des collections (= ce que l'admin peut modifier)
 collections:
-  # ===== HORAIRES, NAVETTE, ÉQUIPE, DÉPARTEMENTS, ANNONCES =====
-  # Tout est dans un seul fichier contenu.json, on le découpe en "files"
   - name: "site"
     label: "Contenu du site"
+    label_singular: "section"
     files:
       # ----------------------------------------
-      # HORAIRES DES CULTES
+      # 1. HORAIRES DES CULTES
       # ----------------------------------------
       - name: "horaires"
-        label: "Horaires des cultes"
+        label: "1. Horaires des cultes"
         file: "contenu.json"
         fields:
-          - { label: "Horaires", name: "horaires", widget: "object", fields: [
+          - { label: "Horaires des cultes", name: "horaires", widget: "object", fields: [
               { label: "Dimanche", name: "dimanche", widget: "object", fields: [
-                { label: "Heure", name: "heure", widget: "string", default: "10h00" },
+                { label: "Heure", name: "heure", widget: "string" },
                 { label: "Nom du culte (FR)", name: "nom", widget: "string" },
                 { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" },
                 { label: "Description (FR)", name: "description", widget: "text" },
@@ -46,26 +45,25 @@ collections:
                 { label: "Description (NL)", name: "description_nl", widget: "text" }
               ]}
             ]}
-          # On garde tous les autres champs intacts en les passant en lecture seule via 'hidden'
           - { label: "Navette (ne pas toucher ici)", name: "navette", widget: "hidden" }
-          - { label: "Équipe (ne pas toucher ici)", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "Départements (ne pas toucher ici)", name: "departements", widget: "hidden" }
+          - { label: "Equipe (ne pas toucher ici)", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "Departements (ne pas toucher ici)", name: "departements", widget: "hidden" }
           - { label: "Annonces (ne pas toucher ici)", name: "annonces", widget: "hidden" }
           - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
 
       # ----------------------------------------
-      # NAVETTE
+      # 2. NAVETTE
       # ----------------------------------------
       - name: "navette"
-        label: "Navette gratuite"
+        label: "2. Navette gratuite"
         file: "contenu.json"
         fields:
           - { label: "Navette", name: "navette", widget: "object", fields: [
-              { label: "Point de départ (FR)", name: "depart", widget: "string", default: "Gare d'Alost" },
-              { label: "Point de départ (NL)", name: "depart_nl", widget: "string" },
-              { label: "Point d'arrivée (FR)", name: "arrivee", widget: "string", default: "Wijngaardveld 29" },
-              { label: "Point d'arrivée (NL)", name: "arrivee_nl", widget: "string" },
-              { label: "Créneaux horaires", name: "creneaux", widget: "list", fields: [
+              { label: "Point de depart (FR)", name: "depart", widget: "string" },
+              { label: "Point de depart (NL)", name: "depart_nl", widget: "string" },
+              { label: "Point d'arrivee (FR)", name: "arrivee", widget: "string" },
+              { label: "Point d'arrivee (NL)", name: "arrivee_nl", widget: "string" },
+              { label: "Creneaux horaires", name: "creneaux", widget: "list", fields: [
                 { label: "Jour (FR)", name: "jour", widget: "string" },
                 { label: "Jour (NL)", name: "jour_nl", widget: "string" },
                 { label: "Horaire (FR)", name: "horaire", widget: "string" },
@@ -76,60 +74,60 @@ collections:
               ]}
             ]}
           - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
-          - { label: "Équipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "Départements (ne pas toucher)", name: "departements", widget: "hidden" }
+          - { label: "Equipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "Departements (ne pas toucher)", name: "departements", widget: "hidden" }
           - { label: "Annonces (ne pas toucher)", name: "annonces", widget: "hidden" }
           - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
 
       # ----------------------------------------
-      # ÉQUIPE PASTORALE
+      # 3. EQUIPE PASTORALE
       # ----------------------------------------
       - name: "equipe"
-        label: "Équipe pastorale"
+        label: "3. Equipe pastorale"
         file: "contenu.json"
         fields:
-          - { label: "Équipe pastorale", name: "equipe_pastorale", widget: "object", fields: [
+          - { label: "Equipe pastorale", name: "equipe_pastorale", widget: "object", fields: [
               { label: "Membres", name: "membres", widget: "list", fields: [
-                { label: "Initiales (2 lettres, ex: GK)", name: "initiales", widget: "string", pattern: ['^[A-Z]{2}$', 'Doit être 2 lettres en majuscule'] },
+                { label: "Initiales (2 lettres ex GK)", name: "initiales", widget: "string" },
                 { label: "Nom complet", name: "nom", widget: "string" },
-                { label: "Rôle (FR)", name: "role", widget: "string" },
-                { label: "Rôle (NL)", name: "role_nl", widget: "string" }
+                { label: "Role (FR)", name: "role", widget: "string" },
+                { label: "Role (NL)", name: "role_nl", widget: "string" }
               ]}
             ]}
           - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
           - { label: "Navette (ne pas toucher)", name: "navette", widget: "hidden" }
-          - { label: "Départements (ne pas toucher)", name: "departements", widget: "hidden" }
+          - { label: "Departements (ne pas toucher)", name: "departements", widget: "hidden" }
           - { label: "Annonces (ne pas toucher)", name: "annonces", widget: "hidden" }
           - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
 
       # ----------------------------------------
-      # DÉPARTEMENTS
+      # 4. DEPARTEMENTS
       # ----------------------------------------
       - name: "departements"
-        label: "Départements"
+        label: "4. Departements"
         file: "contenu.json"
         fields:
-          - { label: "Départements", name: "departements", widget: "object", fields: [
-              { label: "Liste des départements", name: "liste", widget: "list", fields: [
+          - { label: "Departements", name: "departements", widget: "object", fields: [
+              { label: "Liste des departements", name: "liste", widget: "list", fields: [
                 { label: "Identifiant (ne pas changer)", name: "id", widget: "string" },
                 { label: "Nom (FR)", name: "nom", widget: "string" },
                 { label: "Nom (NL)", name: "nom_nl", widget: "string" },
                 { label: "Description (FR)", name: "description", widget: "text" },
                 { label: "Description (NL)", name: "description_nl", widget: "text" },
-                { label: "Photo (nom du fichier dans img/dept/, ex: technique.jpg)", name: "photo", widget: "string", required: false }
+                { label: "Photo (nom du fichier dans img/dept/)", name: "photo", widget: "string", required: false }
               ]}
             ]}
           - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
           - { label: "Navette (ne pas toucher)", name: "navette", widget: "hidden" }
-          - { label: "Équipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "Equipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
           - { label: "Annonces (ne pas toucher)", name: "annonces", widget: "hidden" }
           - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
 
       # ----------------------------------------
-      # ANNONCES
+      # 5. ANNONCES
       # ----------------------------------------
       - name: "annonces"
-        label: "Annonces & événements"
+        label: "5. Annonces et evenements"
         file: "contenu.json"
         fields:
           - { label: "Annonces", name: "annonces", widget: "object", fields: [
@@ -145,6 +143,6 @@ collections:
             ]}
           - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
           - { label: "Navette (ne pas toucher)", name: "navette", widget: "hidden" }
-          - { label: "Équipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "Départements (ne pas toucher)", name: "departements", widget: "hidden" }
+          - { label: "Equipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "Departements (ne pas toucher)", name: "departements", widget: "hidden" }
           - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
