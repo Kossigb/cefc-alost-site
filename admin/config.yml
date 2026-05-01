@@ -1,0 +1,150 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Médias (photos uploadées par l'admin)
+media_folder: "img/uploads"
+public_folder: "/img/uploads"
+
+# Langue de l'interface admin
+locale: 'fr'
+
+# Configuration des collections (= ce que l'admin peut modifier)
+collections:
+  # ===== HORAIRES, NAVETTE, ÉQUIPE, DÉPARTEMENTS, ANNONCES =====
+  # Tout est dans un seul fichier contenu.json, on le découpe en "files"
+  - name: "site"
+    label: "Contenu du site"
+    files:
+      # ----------------------------------------
+      # HORAIRES DES CULTES
+      # ----------------------------------------
+      - name: "horaires"
+        label: "Horaires des cultes"
+        file: "contenu.json"
+        fields:
+          - { label: "Horaires", name: "horaires", widget: "object", fields: [
+              { label: "Dimanche", name: "dimanche", widget: "object", fields: [
+                { label: "Heure", name: "heure", widget: "string", default: "10h00" },
+                { label: "Nom du culte (FR)", name: "nom", widget: "string" },
+                { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" },
+                { label: "Description (FR)", name: "description", widget: "text" },
+                { label: "Description (NL)", name: "description_nl", widget: "text" }
+              ]},
+              { label: "Mercredi", name: "mercredi", widget: "object", fields: [
+                { label: "Heure", name: "heure", widget: "string" },
+                { label: "Nom du culte (FR)", name: "nom", widget: "string" },
+                { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" },
+                { label: "Description (FR)", name: "description", widget: "text" },
+                { label: "Description (NL)", name: "description_nl", widget: "text" }
+              ]},
+              { label: "Vendredi", name: "vendredi", widget: "object", fields: [
+                { label: "Heure", name: "heure", widget: "string" },
+                { label: "Nom du culte (FR)", name: "nom", widget: "string" },
+                { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" },
+                { label: "Description (FR)", name: "description", widget: "text" },
+                { label: "Description (NL)", name: "description_nl", widget: "text" }
+              ]}
+            ]}
+          # On garde tous les autres champs intacts en les passant en lecture seule via 'hidden'
+          - { label: "Navette (ne pas toucher ici)", name: "navette", widget: "hidden" }
+          - { label: "Équipe (ne pas toucher ici)", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "Départements (ne pas toucher ici)", name: "departements", widget: "hidden" }
+          - { label: "Annonces (ne pas toucher ici)", name: "annonces", widget: "hidden" }
+          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
+
+      # ----------------------------------------
+      # NAVETTE
+      # ----------------------------------------
+      - name: "navette"
+        label: "Navette gratuite"
+        file: "contenu.json"
+        fields:
+          - { label: "Navette", name: "navette", widget: "object", fields: [
+              { label: "Point de départ (FR)", name: "depart", widget: "string", default: "Gare d'Alost" },
+              { label: "Point de départ (NL)", name: "depart_nl", widget: "string" },
+              { label: "Point d'arrivée (FR)", name: "arrivee", widget: "string", default: "Wijngaardveld 29" },
+              { label: "Point d'arrivée (NL)", name: "arrivee_nl", widget: "string" },
+              { label: "Créneaux horaires", name: "creneaux", widget: "list", fields: [
+                { label: "Jour (FR)", name: "jour", widget: "string" },
+                { label: "Jour (NL)", name: "jour_nl", widget: "string" },
+                { label: "Horaire (FR)", name: "horaire", widget: "string" },
+                { label: "Horaire (NL)", name: "horaire_nl", widget: "string" },
+                { label: "Description (FR)", name: "description", widget: "text" },
+                { label: "Description (NL)", name: "description_nl", widget: "text" },
+                { label: "Mettre en avant ?", name: "principal", widget: "boolean", default: false }
+              ]}
+            ]}
+          - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
+          - { label: "Équipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "Départements (ne pas toucher)", name: "departements", widget: "hidden" }
+          - { label: "Annonces (ne pas toucher)", name: "annonces", widget: "hidden" }
+          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
+
+      # ----------------------------------------
+      # ÉQUIPE PASTORALE
+      # ----------------------------------------
+      - name: "equipe"
+        label: "Équipe pastorale"
+        file: "contenu.json"
+        fields:
+          - { label: "Équipe pastorale", name: "equipe_pastorale", widget: "object", fields: [
+              { label: "Membres", name: "membres", widget: "list", fields: [
+                { label: "Initiales (2 lettres, ex: GK)", name: "initiales", widget: "string", pattern: ['^[A-Z]{2}$', 'Doit être 2 lettres en majuscule'] },
+                { label: "Nom complet", name: "nom", widget: "string" },
+                { label: "Rôle (FR)", name: "role", widget: "string" },
+                { label: "Rôle (NL)", name: "role_nl", widget: "string" }
+              ]}
+            ]}
+          - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
+          - { label: "Navette (ne pas toucher)", name: "navette", widget: "hidden" }
+          - { label: "Départements (ne pas toucher)", name: "departements", widget: "hidden" }
+          - { label: "Annonces (ne pas toucher)", name: "annonces", widget: "hidden" }
+          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
+
+      # ----------------------------------------
+      # DÉPARTEMENTS
+      # ----------------------------------------
+      - name: "departements"
+        label: "Départements"
+        file: "contenu.json"
+        fields:
+          - { label: "Départements", name: "departements", widget: "object", fields: [
+              { label: "Liste des départements", name: "liste", widget: "list", fields: [
+                { label: "Identifiant (ne pas changer)", name: "id", widget: "string" },
+                { label: "Nom (FR)", name: "nom", widget: "string" },
+                { label: "Nom (NL)", name: "nom_nl", widget: "string" },
+                { label: "Description (FR)", name: "description", widget: "text" },
+                { label: "Description (NL)", name: "description_nl", widget: "text" },
+                { label: "Photo (nom du fichier dans img/dept/, ex: technique.jpg)", name: "photo", widget: "string", required: false }
+              ]}
+            ]}
+          - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
+          - { label: "Navette (ne pas toucher)", name: "navette", widget: "hidden" }
+          - { label: "Équipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "Annonces (ne pas toucher)", name: "annonces", widget: "hidden" }
+          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
+
+      # ----------------------------------------
+      # ANNONCES
+      # ----------------------------------------
+      - name: "annonces"
+        label: "Annonces & événements"
+        file: "contenu.json"
+        fields:
+          - { label: "Annonces", name: "annonces", widget: "object", fields: [
+              { label: "Liste des annonces", name: "liste", widget: "list", fields: [
+                { label: "Titre (FR)", name: "titre", widget: "string" },
+                { label: "Titre (NL)", name: "titre_nl", widget: "string" },
+                { label: "Date (FR)", name: "date", widget: "string", hint: "Ex: Dimanche 14 juin 2026" },
+                { label: "Date (NL)", name: "date_nl", widget: "string" },
+                { label: "Description (FR)", name: "description", widget: "text" },
+                { label: "Description (NL)", name: "description_nl", widget: "text" },
+                { label: "Mettre en avant (carte bleu nuit) ?", name: "important", widget: "boolean", default: false }
+              ]}
+            ]}
+          - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
+          - { label: "Navette (ne pas toucher)", name: "navette", widget: "hidden" }
+          - { label: "Équipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "Départements (ne pas toucher)", name: "departements", widget: "hidden" }
+          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
