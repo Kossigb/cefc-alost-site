@@ -1,0 +1,208 @@
+{
+  "_GUIDE": [
+    "============================================================",
+    "  GUIDE D'UTILISATION DE CE FICHIER",
+    "============================================================",
+    "Ce fichier contient toutes les informations modifiables du site.",
+    "Pour modifier une information, change uniquement le texte ENTRE LES GUILLEMETS.",
+    "Ne supprime pas les guillemets, les virgules, les crochets.",
+    "Apres modification : sauvegarde le fichier puis redeploie sur Netlify.",
+    "============================================================",
+    "  REGLES IMPORTANTES",
+    "============================================================",
+    "1. Garde toujours les guillemets autour des textes : \"comme ceci\"",
+    "2. Garde la virgule a la fin de chaque ligne, SAUF la derniere",
+    "3. Pour aller a la ligne dans un texte, utilise \\n",
+    "4. Pour mettre un guillemet dans un texte, utilise \\\"",
+    "5. Si tu casses un truc : ouvre https://jsonlint.com et colle ton fichier pour voir l'erreur",
+    "============================================================"
+  ],
+
+  "horaires": {
+    "_commentaire": "Les 3 cultes hebdomadaires affiches dans la section Services",
+    "dimanche": {
+      "heure": "10h00",
+      "nom": "Culte principal",
+      "nom_nl": "Hoofddienst",
+      "description": "Adoration, predication et communion fraternelle. Le rendez-vous central de notre communaute.",
+      "description_nl": "Aanbidding, prediking en broederlijke gemeenschap. Het centrale moment van onze gemeenschap."
+    },
+    "mercredi": {
+      "heure": "18h00",
+      "nom": "Etude biblique",
+      "nom_nl": "Bijbelstudie",
+      "description": "Approfondissement de la Parole dans un cadre intime et interactif.",
+      "description_nl": "Verdieping van het Woord in een intieme en interactieve sfeer."
+    },
+    "vendredi": {
+      "heure": "18h00",
+      "nom": "Jeune & priere",
+      "nom_nl": "Vasten & gebed",
+      "description": "Une soiree consacree a l'intercession et a la recherche de la face de Dieu.",
+      "description_nl": "Een avond gewijd aan voorbede en het zoeken van Gods aangezicht."
+    }
+  },
+
+  "navette": {
+    "_commentaire": "Horaires de la navette gratuite. Modifie les heures et descriptions ici.",
+    "depart": "Gare d'Alost",
+    "depart_nl": "Station Aalst",
+    "arrivee": "Wijngaardveld 29",
+    "arrivee_nl": "Wijngaardveld 29",
+    "creneaux": [
+      {
+        "jour": "Dimanche",
+        "jour_nl": "Zondag",
+        "horaire": "9h — 10h",
+        "horaire_nl": "9u — 10u",
+        "description": "Navettes continues entre la gare et l'eglise avant le culte principal.",
+        "description_nl": "Doorlopende ritten tussen het station en de kerk voor de hoofddienst.",
+        "principal": true
+      },
+      {
+        "jour": "Mercredi",
+        "jour_nl": "Woensdag",
+        "horaire": "17h10",
+        "horaire_nl": "17u10",
+        "description": "Depart depuis la Gare d'Alost vers l'eglise pour l'etude biblique.",
+        "description_nl": "Vertrek vanaf station Aalst naar de kerk voor de bijbelstudie.",
+        "principal": false
+      },
+      {
+        "jour": "Vendredi",
+        "jour_nl": "Vrijdag",
+        "horaire": "17h10",
+        "horaire_nl": "17u10",
+        "description": "Depart depuis la Gare d'Alost vers l'eglise pour le jeune et la priere.",
+        "description_nl": "Vertrek vanaf station Aalst naar de kerk voor vasten en gebed.",
+        "principal": false
+      }
+    ]
+  },
+
+  "equipe_pastorale": {
+    "_commentaire": "Membres de l'equipe affiches dans la section Contact. Tu peux ajouter/retirer des membres en respectant le format.",
+    "membres": [
+      {
+        "initiales": "GK",
+        "nom": "Pasteur Guy KOBI",
+        "role": "Pasteur principal",
+        "role_nl": "Hoofdpastor"
+      },
+      {
+        "initiales": "MM",
+        "nom": "Mimi Mbenza",
+        "role": "Epouse du pasteur",
+        "role_nl": "Echtgenote van de pastor"
+      },
+      {
+        "initiales": "SM",
+        "nom": "Safi Mudiri",
+        "role": "Secretaire de l'eglise",
+        "role_nl": "Secretaresse van de kerk"
+      }
+    ]
+  },
+
+  "departements": {
+    "_commentaire": "9 departements affiches en grille. Tu peux changer le nom, la description, et la photo (mets un fichier dans img/dept/ et indique son nom ici, par exemple 'technique.jpg').",
+    "liste": [
+      {
+        "id": "technique",
+        "nom": "Technique",
+        "nom_nl": "Techniek",
+        "description": "Son, ecrans, photographie & diffusion. L'equipe qui rend chaque culte visible et audible.",
+        "description_nl": "Geluid, schermen, fotografie & uitzending. Het team dat elke dienst zichtbaar en hoorbaar maakt.",
+        "photo": "technique.jpg"
+      },
+      {
+        "id": "media",
+        "nom": "Media",
+        "nom_nl": "Media",
+        "description": "Reseaux sociaux & communication.",
+        "description_nl": "Sociale media & communicatie.",
+        "photo": "media.jpg"
+      },
+      {
+        "id": "chorale",
+        "nom": "Chorale",
+        "nom_nl": "Koor",
+        "description": "Louange & adoration musicale.",
+        "description_nl": "Lofzang & muzikale aanbidding.",
+        "photo": "chorale.jpg"
+      },
+      {
+        "id": "ecodim",
+        "nom": "Ecodim",
+        "nom_nl": "Zondagsschool",
+        "description": "Ecole du dimanche pour enfants.",
+        "description_nl": "Zondagsschool voor kinderen.",
+        "photo": "ecodim.jpg"
+      },
+      {
+        "id": "accueil",
+        "nom": "Accueil",
+        "nom_nl": "Onthaal",
+        "description": "Hospitalite & integration. Les premieres mains tendues a toute personne qui franchit la porte.",
+        "description_nl": "Gastvrijheid & integratie. De eerste uitgestoken handen voor wie binnenkomt.",
+        "photo": "accueil.jpg"
+      },
+      {
+        "id": "intercesseurs",
+        "nom": "Intercesseurs",
+        "nom_nl": "Voorbidders",
+        "description": "Equipe de priere & intercession.",
+        "description_nl": "Gebedsteam & voorbede.",
+        "photo": "intercesseurs.jpg"
+      },
+      {
+        "id": "traducteurs",
+        "nom": "Traducteurs",
+        "nom_nl": "Vertalers",
+        "description": "Traduction simultanee.",
+        "description_nl": "Simultaanvertaling.",
+        "photo": "traducteurs.jpg"
+      },
+      {
+        "id": "solidarite",
+        "nom": "Solidarite",
+        "nom_nl": "Solidariteit",
+        "description": "Aide sociale & fraternelle.",
+        "description_nl": "Sociale & broederlijke hulp.",
+        "photo": ""
+      },
+      {
+        "id": "surface",
+        "nom": "Techniciens de surface",
+        "nom_nl": "Schoonmaakdienst",
+        "description": "Proprete & entretien des locaux.",
+        "description_nl": "Netheid & onderhoud van de lokalen.",
+        "photo": ""
+      }
+    ]
+  },
+
+  "annonces": {
+    "_commentaire": "Annonces / evenements importants affiches dans une nouvelle section sur le site. Pour ajouter une annonce, copie un bloc complet (entre accolades) et adapte-le. Pour supprimer, supprime tout le bloc avec sa virgule. Si tu ne veux aucune annonce, mets une liste vide : \"liste\": []",
+    "liste": [
+      {
+        "titre": "Celebration des 10 ans",
+        "titre_nl": "Viering van 10 jaar",
+        "date": "Dimanche 14 juin 2026",
+        "date_nl": "Zondag 14 juni 2026",
+        "description": "Grande celebration anniversaire des 10 ans de l'eglise. Cultes speciaux, temoignages, repas fraternel.",
+        "description_nl": "Grote viering van het 10-jarig bestaan van de kerk. Speciale diensten, getuigenissen, broedermaaltijd.",
+        "important": true
+      },
+      {
+        "titre": "Conference jeunesse",
+        "titre_nl": "Jeugdconferentie",
+        "date": "Samedi 23 mai 2026",
+        "date_nl": "Zaterdag 23 mei 2026",
+        "description": "Conference speciale pour la JEFC avec invite. Plus d'informations bientot.",
+        "description_nl": "Speciale conferentie voor JEFC met gastspreker. Meer info binnenkort.",
+        "important": false
+      }
+    ]
+  }
+}

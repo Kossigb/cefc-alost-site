@@ -1,0 +1,146 @@
+================================================================
+GUIDE ADMIN — SITE CEFC ALOST
+Comment modifier le site sans toucher au code
+================================================================
+
+Tu veux changer un horaire, ajouter une annonce, ou changer une photo ?
+Tu n'as PAS besoin de toucher au code (index.html).
+Tout se passe dans le fichier "contenu.json".
+
+
+================================================================
+1. OUVRIR LE FICHIER contenu.json
+================================================================
+
+  - Va dans le dossier du site
+  - Clic DROIT sur "contenu.json"
+  - Choisis "Ouvrir avec" -> "Bloc-notes"
+    (Ne pas utiliser Word, jamais)
+
+
+================================================================
+2. CHANGER UN HORAIRE DE CULTE
+================================================================
+
+Dans le fichier, cherche la section "horaires".
+Tu vas voir par exemple :
+
+  "dimanche": {
+    "heure": "10h00",
+    "nom": "Culte principal",
+    ...
+
+Pour changer l'heure du dimanche, remplace "10h00" par ta nouvelle heure.
+ATTENTION : ne touche PAS aux guillemets " ni aux virgules.
+
+Exemple correct :  "heure": "11h00",
+Exemple INCORRECT : heure: 11h00     (guillemets manquants)
+
+
+================================================================
+3. AJOUTER UNE ANNONCE / EVENEMENT
+================================================================
+
+Dans la section "annonces", tu verras la "liste". Pour ajouter
+une annonce, copie-colle un bloc complet et adapte-le.
+
+Exemple :
+
+  {
+    "titre": "Concert de Noel",
+    "titre_nl": "Kerstconcert",
+    "date": "Samedi 20 decembre 2026",
+    "date_nl": "Zaterdag 20 december 2026",
+    "description": "Grand concert de Noel avec la chorale.",
+    "description_nl": "Groot kerstconcert met het koor.",
+    "important": false
+  }
+
+REGLES :
+  - Mets "important": true   si tu veux que l'annonce soit en avant
+    (carte bleu nuit au lieu de grise)
+  - N'oublie PAS la virgule entre chaque annonce
+  - PAS de virgule apres la DERNIERE annonce
+
+
+================================================================
+4. SUPPRIMER UNE ANNONCE
+================================================================
+
+Supprime tout le bloc { ... } de l'annonce, y compris la virgule
+qui suit. Si tu veux supprimer toutes les annonces, remplace par :
+
+  "liste": []
+
+
+================================================================
+5. CHANGER LES NOMS DE L'EQUIPE PASTORALE
+================================================================
+
+Dans "equipe_pastorale", tu peux modifier les noms et roles.
+Pour les initiales, mets 2 lettres en majuscule (ex: "GK").
+
+
+================================================================
+6. CHANGER UNE PHOTO DE DEPARTEMENT
+================================================================
+
+Etape 1 : place ta nouvelle photo dans le dossier img/dept/
+          (par exemple "nouvelle_photo.jpg")
+
+Etape 2 : dans contenu.json, cherche le departement concerne
+          et change la valeur "photo" :
+
+          "photo": "nouvelle_photo.jpg"
+
+Etape 3 : sauvegarde et redeploie
+
+
+================================================================
+7. SAUVEGARDER ET PUBLIER LES CHANGEMENTS
+================================================================
+
+  1. Dans le Bloc-notes : Fichier -> Enregistrer (Ctrl+S)
+  2. Va sur https://app.netlify.com et connecte-toi
+  3. Clique sur ton site -> "Deploys"
+  4. Glisse-depose le dossier complet du site (avec contenu.json modifie)
+  5. Attends 30 secondes, c'est en ligne
+
+
+================================================================
+8. TESTER AVANT DE PUBLIER
+================================================================
+
+Pour verifier que tu n'as rien casse :
+  - Va sur https://jsonlint.com
+  - Copie tout le contenu de ton fichier contenu.json
+  - Colle-le sur le site
+  - Clique "Validate JSON"
+  - S'il dit "Valid JSON" : tout est bon
+  - S'il dit "Error" : il te dira la ligne du probleme
+
+
+================================================================
+EN CAS DE PROBLEME
+================================================================
+
+Si ton site n'affiche plus les bonnes infos :
+  - Verifie sur jsonlint.com que ton JSON est valide
+  - Si tu ne trouves pas, restaure une ancienne version du fichier
+    (pense a faire une copie avant chaque modification importante)
+
+
+================================================================
+NOTE TECHNIQUE
+================================================================
+
+Ce systeme charge contenu.json au chargement du site et remplit
+automatiquement :
+  - Les 3 horaires de culte
+  - Les 3 creneaux de navette
+  - Les membres de l'equipe pastorale
+  - Les 9 departements (nom, description, photo)
+  - Toutes les annonces
+
+Si contenu.json est manquant ou casse, le site garde les valeurs
+par defaut ecrites dans le code (donc rien n'est jamais perdu).
