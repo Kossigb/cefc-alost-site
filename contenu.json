@@ -17,7 +17,6 @@
     "5. Si tu casses un truc : ouvre https://jsonlint.com et colle ton fichier pour voir l'erreur",
     "============================================================"
   ],
-
   "horaires": {
     "_commentaire": "Les 3 cultes hebdomadaires affiches dans la section Services",
     "dimanche": {
@@ -38,11 +37,10 @@
       "heure": "18h00",
       "nom": "Jeune & priere",
       "nom_nl": "Vasten & gebed",
-      "description": "Une soiree consacree a l'intercession et a la recherche de la face de Dieu.",
+      "description": "Une soiree consacree a l'intercession et a la recherche de la face de Dieu. Ce vendredi nous debutont la convention annuelle de l'eglise! ",
       "description_nl": "Een avond gewijd aan voorbede en het zoeken van Gods aangezicht."
     }
   },
-
   "navette": {
     "_commentaire": "Horaires de la navette gratuite. Modifie les heures et descriptions ici.",
     "depart": "Gare d'Alost",
@@ -79,7 +77,6 @@
       }
     ]
   },
-
   "equipe_pastorale": {
     "_commentaire": "Membres de l'equipe affiches dans la section Contact. Tu peux ajouter/retirer des membres en respectant le format.",
     "membres": [
@@ -103,7 +100,6 @@
       }
     ]
   },
-
   "departements": {
     "_commentaire": "9 departements affiches en grille. Tu peux changer le nom, la description, et la photo (mets un fichier dans img/dept/ et indique son nom ici, par exemple 'technique.jpg').",
     "liste": [
@@ -181,7 +177,6 @@
       }
     ]
   },
-
   "annonces": {
     "_commentaire": "Annonces / evenements importants affiches dans une nouvelle section sur le site. Pour ajouter une annonce, copie un bloc complet (entre accolades) et adapte-le. Pour supprimer, supprime tout le bloc avec sa virgule. Si tu ne veux aucune annonce, mets une liste vide : \"liste\": []",
     "liste": [
