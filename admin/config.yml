@@ -9,17 +9,18 @@ public_folder: "/img/uploads"
 # Langue de l'interface admin
 locale: 'fr'
 
-# Configuration des collections (= ce que l'admin peut modifier)
+# IMPORTANT : chaque section est une collection distincte (pas un sous-fichier)
+# pour avoir des noms différents dans le menu de gauche.
 collections:
-  - name: "site"
-    label: "Contenu du site"
-    label_singular: "section"
+  # ========================================
+  # 1. HORAIRES DES CULTES
+  # ========================================
+  - name: "horaires"
+    label: "Horaires des cultes"
+    label_singular: "horaires"
     files:
-      # ----------------------------------------
-      # 1. HORAIRES DES CULTES
-      # ----------------------------------------
-      - name: "horaires"
-        label: "1. Horaires des cultes"
+      - name: "horaires_data"
+        label: "Horaires"
         file: "contenu.json"
         fields:
           - { label: "Horaires des cultes", name: "horaires", widget: "object", fields: [
@@ -45,17 +46,21 @@ collections:
                 { label: "Description (NL)", name: "description_nl", widget: "text" }
               ]}
             ]}
-          - { label: "Navette (ne pas toucher ici)", name: "navette", widget: "hidden" }
-          - { label: "Equipe (ne pas toucher ici)", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "Departements (ne pas toucher ici)", name: "departements", widget: "hidden" }
-          - { label: "Annonces (ne pas toucher ici)", name: "annonces", widget: "hidden" }
-          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
 
-      # ----------------------------------------
-      # 2. NAVETTE
-      # ----------------------------------------
-      - name: "navette"
-        label: "2. Navette gratuite"
+  # ========================================
+  # 2. NAVETTE GRATUITE
+  # ========================================
+  - name: "navette"
+    label: "Navette gratuite"
+    label_singular: "navette"
+    files:
+      - name: "navette_data"
+        label: "Navette"
         file: "contenu.json"
         fields:
           - { label: "Navette", name: "navette", widget: "object", fields: [
@@ -73,17 +78,21 @@ collections:
                 { label: "Mettre en avant ?", name: "principal", widget: "boolean", default: false }
               ]}
             ]}
-          - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
-          - { label: "Equipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "Departements (ne pas toucher)", name: "departements", widget: "hidden" }
-          - { label: "Annonces (ne pas toucher)", name: "annonces", widget: "hidden" }
-          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
 
-      # ----------------------------------------
-      # 3. EQUIPE PASTORALE
-      # ----------------------------------------
-      - name: "equipe"
-        label: "3. Equipe pastorale"
+  # ========================================
+  # 3. EQUIPE PASTORALE
+  # ========================================
+  - name: "equipe"
+    label: "Equipe pastorale"
+    label_singular: "equipe"
+    files:
+      - name: "equipe_data"
+        label: "Equipe"
         file: "contenu.json"
         fields:
           - { label: "Equipe pastorale", name: "equipe_pastorale", widget: "object", fields: [
@@ -94,17 +103,21 @@ collections:
                 { label: "Role (NL)", name: "role_nl", widget: "string" }
               ]}
             ]}
-          - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
-          - { label: "Navette (ne pas toucher)", name: "navette", widget: "hidden" }
-          - { label: "Departements (ne pas toucher)", name: "departements", widget: "hidden" }
-          - { label: "Annonces (ne pas toucher)", name: "annonces", widget: "hidden" }
-          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
 
-      # ----------------------------------------
-      # 4. DEPARTEMENTS
-      # ----------------------------------------
-      - name: "departements"
-        label: "4. Departements"
+  # ========================================
+  # 4. DEPARTEMENTS
+  # ========================================
+  - name: "departements"
+    label: "Departements"
+    label_singular: "departements"
+    files:
+      - name: "departements_data"
+        label: "Departements"
         file: "contenu.json"
         fields:
           - { label: "Departements", name: "departements", widget: "object", fields: [
@@ -117,17 +130,21 @@ collections:
                 { label: "Photo (nom du fichier dans img/dept/)", name: "photo", widget: "string", required: false }
               ]}
             ]}
-          - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
-          - { label: "Navette (ne pas toucher)", name: "navette", widget: "hidden" }
-          - { label: "Equipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "Annonces (ne pas toucher)", name: "annonces", widget: "hidden" }
-          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
 
-      # ----------------------------------------
-      # 5. ANNONCES
-      # ----------------------------------------
-      - name: "annonces"
-        label: "5. Annonces et evenements"
+  # ========================================
+  # 5. ANNONCES
+  # ========================================
+  - name: "annonces"
+    label: "Annonces et evenements"
+    label_singular: "annonces"
+    files:
+      - name: "annonces_data"
+        label: "Annonces"
         file: "contenu.json"
         fields:
           - { label: "Annonces", name: "annonces", widget: "object", fields: [
@@ -141,8 +158,8 @@ collections:
                 { label: "Mettre en avant (carte bleu nuit) ?", name: "important", widget: "boolean", default: false }
               ]}
             ]}
-          - { label: "Horaires (ne pas toucher)", name: "horaires", widget: "hidden" }
-          - { label: "Navette (ne pas toucher)", name: "navette", widget: "hidden" }
-          - { label: "Equipe (ne pas toucher)", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "Departements (ne pas toucher)", name: "departements", widget: "hidden" }
-          - { label: "Guide (ne pas toucher)", name: "_GUIDE", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
