@@ -13,6 +13,21 @@
 <meta property="og:url" content="https://cefclabornealost.netlify.app/" />
 <link rel="icon" type="image/png" href="cefc-logo.png" />
 
+<!-- Netlify Identity widget : permet aux invités cliquant sur un lien d'invitation
+     d'arriver sur l'admin sans avoir à recopier le token manuellement -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
