@@ -45,8 +45,8 @@
     "_commentaire": "Horaires de la navette gratuite. Modifie les heures et descriptions ici.",
     "depart": "Gare d'Alost",
     "depart_nl": "Station Aalst",
-    "arrivee": "Wijngaardveld 29",
-    "arrivee_nl": "Wijngaardveld 29",
+    "arrivee": "Wijngaardveld 29, 9300 Alost",
+    "arrivee_nl": "Wijngaardveld 29, 9300 Aalst",
     "creneaux": [
       {
         "jour": "Dimanche",
@@ -64,7 +64,7 @@
         "horaire_nl": "17u10",
         "description": "Depart depuis la Gare d'Alost vers l'eglise pour l'etude biblique.",
         "description_nl": "Vertrek vanaf station Aalst naar de kerk voor de bijbelstudie.",
-        "principal": false
+        "principal": true
       },
       {
         "jour": "Vendredi",
@@ -73,7 +73,7 @@
         "horaire_nl": "17u10",
         "description": "Depart depuis la Gare d'Alost vers l'eglise pour le jeune et la priere.",
         "description_nl": "Vertrek vanaf station Aalst naar de kerk voor vasten en gebed.",
-        "principal": false
+        "principal": true
       }
     ]
   },
