@@ -9,157 +9,484 @@ public_folder: "/img/uploads"
 # Langue de l'interface admin
 locale: 'fr'
 
-# IMPORTANT : chaque section est une collection distincte (pas un sous-fichier)
-# pour avoir des noms différents dans le menu de gauche.
+# Champs réutilisables masqués — à inclure dans chaque collection pour ne pas écraser les autres données
+# (Netlify CMS réécrit tout le fichier à chaque sauvegarde)
+
 collections:
+
   # ========================================
   # 1. HORAIRES DES CULTES
   # ========================================
   - name: "horaires"
-    label: "Horaires des cultes"
+    label: "🕐 Horaires des cultes"
     label_singular: "horaires"
     files:
       - name: "horaires_data"
         label: "Horaires"
         file: "contenu.json"
         fields:
-          - { label: "Horaires des cultes", name: "horaires", widget: "object", fields: [
-              { label: "Dimanche", name: "dimanche", widget: "object", fields: [
-                { label: "Heure", name: "heure", widget: "string" },
-                { label: "Nom du culte (FR)", name: "nom", widget: "string" },
-                { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" },
-                { label: "Description (FR)", name: "description", widget: "text" },
-                { label: "Description (NL)", name: "description_nl", widget: "text" }
-              ]},
-              { label: "Mercredi", name: "mercredi", widget: "object", fields: [
-                { label: "Heure", name: "heure", widget: "string" },
-                { label: "Nom du culte (FR)", name: "nom", widget: "string" },
-                { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" },
-                { label: "Description (FR)", name: "description", widget: "text" },
-                { label: "Description (NL)", name: "description_nl", widget: "text" }
-              ]},
-              { label: "Vendredi", name: "vendredi", widget: "object", fields: [
-                { label: "Heure", name: "heure", widget: "string" },
-                { label: "Nom du culte (FR)", name: "nom", widget: "string" },
-                { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" },
-                { label: "Description (FR)", name: "description", widget: "text" },
-                { label: "Description (NL)", name: "description_nl", widget: "text" }
-              ]}
-            ]}
+          - label: "Horaires des cultes"
+            name: "horaires"
+            widget: "object"
+            fields:
+              - label: "Culte du dimanche"
+                name: "dimanche"
+                widget: "object"
+                fields:
+                  - { label: "Heure (ex: 10h00)", name: "heure", widget: "string" }
+                  - { label: "Nom du culte (FR)", name: "nom", widget: "string" }
+                  - { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" }
+                  - { label: "Description (FR)", name: "description", widget: "text" }
+                  - { label: "Description (NL)", name: "description_nl", widget: "text" }
+              - label: "Etude biblique du mercredi"
+                name: "mercredi"
+                widget: "object"
+                fields:
+                  - { label: "Heure (ex: 18h00)", name: "heure", widget: "string" }
+                  - { label: "Nom du culte (FR)", name: "nom", widget: "string" }
+                  - { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" }
+                  - { label: "Description (FR)", name: "description", widget: "text" }
+                  - { label: "Description (NL)", name: "description_nl", widget: "text" }
+              - label: "Jeune & Priere du vendredi"
+                name: "vendredi"
+                widget: "object"
+                fields:
+                  - { label: "Heure (ex: 18h00-20h00)", name: "heure", widget: "string" }
+                  - { label: "Nom du culte (FR)", name: "nom", widget: "string" }
+                  - { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" }
+                  - { label: "Description (FR)", name: "description", widget: "text" }
+                  - { label: "Description (NL)", name: "description_nl", widget: "text" }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 2. PHOTOS DU CULTE (GALERIE)
+  # ========================================
+  - name: "photos_culte"
+    label: "📸 Photos du culte"
+    label_singular: "photos"
+    files:
+      - name: "photos_data"
+        label: "Galerie photos"
+        file: "contenu.json"
+        fields:
+          - label: "Galerie photos du culte"
+            name: "photos_culte"
+            widget: "object"
+            fields:
+              - { label: "Titre de la section (mot en italique)", name: "titre", widget: "string", default: "culte" }
+              - { label: "Sous-titre de la section", name: "sous_titre", widget: "string", required: false }
+              - label: "Photos"
+                name: "photos"
+                widget: "list"
+                hint: "Ajoutez vos photos du culte ici. Elles s'afficheront en carrousel sur le site."
+                fields:
+                  - label: "Photo"
+                    name: "url"
+                    widget: "image"
+                    hint: "Choisissez une photo depuis votre ordinateur"
+                  - label: "Legende (optionnel)"
+                    name: "legende"
+                    widget: "string"
+                    required: false
+                    hint: "Ex: Culte du 4 mai 2025"
+                  - label: "Date (optionnel)"
+                    name: "date"
+                    widget: "string"
+                    required: false
+                    hint: "Ex: 4 mai 2025"
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
           - { label: "_", name: "navette", widget: "hidden" }
           - { label: "_", name: "equipe_pastorale", widget: "hidden" }
           - { label: "_", name: "departements", widget: "hidden" }
           - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 2. NAVETTE GRATUITE
-  # ========================================
-  - name: "navette"
-    label: "Navette gratuite"
-    label_singular: "navette"
-    files:
-      - name: "navette_data"
-        label: "Navette"
-        file: "contenu.json"
-        fields:
-          - { label: "Navette", name: "navette", widget: "object", fields: [
-              { label: "Point de depart (FR)", name: "depart", widget: "string" },
-              { label: "Point de depart (NL)", name: "depart_nl", widget: "string" },
-              { label: "Point d'arrivee (FR)", name: "arrivee", widget: "string" },
-              { label: "Point d'arrivee (NL)", name: "arrivee_nl", widget: "string" },
-              { label: "Creneaux horaires", name: "creneaux", widget: "list", fields: [
-                { label: "Jour (FR)", name: "jour", widget: "string" },
-                { label: "Jour (NL)", name: "jour_nl", widget: "string" },
-                { label: "Horaire (FR)", name: "horaire", widget: "string" },
-                { label: "Horaire (NL)", name: "horaire_nl", widget: "string" },
-                { label: "Description (FR)", name: "description", widget: "text" },
-                { label: "Description (NL)", name: "description_nl", widget: "text" },
-                { label: "Mettre en avant ?", name: "principal", widget: "boolean", default: false }
-              ]}
-            ]}
-          - { label: "_", name: "horaires", widget: "hidden" }
-          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "_", name: "departements", widget: "hidden" }
-          - { label: "_", name: "annonces", widget: "hidden" }
-          - { label: "_", name: "_GUIDE", widget: "hidden" }
-
-  # ========================================
-  # 3. EQUIPE PASTORALE
-  # ========================================
-  - name: "equipe"
-    label: "Equipe pastorale"
-    label_singular: "equipe"
-    files:
-      - name: "equipe_data"
-        label: "Equipe"
-        file: "contenu.json"
-        fields:
-          - { label: "Equipe pastorale", name: "equipe_pastorale", widget: "object", fields: [
-              { label: "Membres", name: "membres", widget: "list", fields: [
-                { label: "Initiales (2 lettres ex GK)", name: "initiales", widget: "string" },
-                { label: "Nom complet", name: "nom", widget: "string" },
-                { label: "Role (FR)", name: "role", widget: "string" },
-                { label: "Role (NL)", name: "role_nl", widget: "string" }
-              ]}
-            ]}
-          - { label: "_", name: "horaires", widget: "hidden" }
-          - { label: "_", name: "navette", widget: "hidden" }
-          - { label: "_", name: "departements", widget: "hidden" }
-          - { label: "_", name: "annonces", widget: "hidden" }
-          - { label: "_", name: "_GUIDE", widget: "hidden" }
-
-  # ========================================
-  # 4. DEPARTEMENTS
-  # ========================================
-  - name: "departements"
-    label: "Departements"
-    label_singular: "departements"
-    files:
-      - name: "departements_data"
-        label: "Departements"
-        file: "contenu.json"
-        fields:
-          - { label: "Departements", name: "departements", widget: "object", fields: [
-              { label: "Liste des departements", name: "liste", widget: "list", fields: [
-                { label: "Identifiant (ne pas changer)", name: "id", widget: "string" },
-                { label: "Nom (FR)", name: "nom", widget: "string" },
-                { label: "Nom (NL)", name: "nom_nl", widget: "string" },
-                { label: "Description (FR)", name: "description", widget: "text" },
-                { label: "Description (NL)", name: "description_nl", widget: "text" },
-                { label: "Photo (nom du fichier dans img/dept/)", name: "photo", widget: "string", required: false }
-              ]}
-            ]}
-          - { label: "_", name: "horaires", widget: "hidden" }
-          - { label: "_", name: "navette", widget: "hidden" }
-          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "_", name: "annonces", widget: "hidden" }
-          - { label: "_", name: "_GUIDE", widget: "hidden" }
-
-  # ========================================
-  # 5. ANNONCES
+  # 3. ANNONCES ET EVENEMENTS
   # ========================================
   - name: "annonces"
-    label: "Annonces et evenements"
+    label: "📢 Annonces et événements"
     label_singular: "annonces"
     files:
       - name: "annonces_data"
         label: "Annonces"
         file: "contenu.json"
         fields:
-          - { label: "Annonces", name: "annonces", widget: "object", fields: [
-              { label: "Liste des annonces", name: "liste", widget: "list", fields: [
-                { label: "Titre (FR)", name: "titre", widget: "string" },
-                { label: "Titre (NL)", name: "titre_nl", widget: "string" },
-                { label: "Date (FR)", name: "date", widget: "string", hint: "Ex: Dimanche 14 juin 2026" },
-                { label: "Date (NL)", name: "date_nl", widget: "string" },
-                { label: "Description (FR)", name: "description", widget: "text" },
-                { label: "Description (NL)", name: "description_nl", widget: "text" },
-                { label: "Mettre en avant (carte bleu nuit) ?", name: "important", widget: "boolean", default: false }
-              ]}
-            ]}
+          - label: "Annonces et evenements"
+            name: "annonces"
+            widget: "object"
+            fields:
+              - label: "Liste des annonces"
+                name: "liste"
+                widget: "list"
+                hint: "Ajoutez, modifiez ou supprimez des annonces. Les annonces importantes s'affichent en bleu nuit."
+                fields:
+                  - { label: "Titre (FR)", name: "titre", widget: "string" }
+                  - { label: "Titre (NL)", name: "titre_nl", widget: "string", required: false }
+                  - { label: "Date (FR) — ex: Dimanche 14 juin 2026", name: "date", widget: "string" }
+                  - { label: "Date (NL)", name: "date_nl", widget: "string", required: false }
+                  - { label: "Description (FR)", name: "description", widget: "text" }
+                  - { label: "Description (NL)", name: "description_nl", widget: "text", required: false }
+                  - { label: "Mettre en avant ? (fond bleu nuit)", name: "important", widget: "boolean", default: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
           - { label: "_", name: "navette", widget: "hidden" }
           - { label: "_", name: "equipe_pastorale", widget: "hidden" }
           - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 4. BANNIERE EN HAUT DU SITE
+  # ========================================
+  - name: "banniere"
+    label: "🔔 Bannière d'annonce"
+    label_singular: "banniere"
+    files:
+      - name: "banniere_data"
+        label: "Bannière"
+        file: "contenu.json"
+        fields:
+          - label: "Banniere en haut du site"
+            name: "banniere"
+            widget: "object"
+            hint: "La bannière s'affiche tout en haut du site. Activez-la pour les annonces importantes."
+            fields:
+              - { label: "Afficher la banniere ?", name: "active", widget: "boolean", default: false }
+              - { label: "Texte de la banniere (FR)", name: "texte", widget: "string", required: false, hint: "Ex: Grande celebration le 14 juin — Tous invites !" }
+              - { label: "Texte de la banniere (NL)", name: "texte_nl", widget: "string", required: false }
+              - { label: "Lien (optionnel)", name: "lien", widget: "string", required: false, hint: "Ex: #annonces ou une URL externe" }
+              - { label: "Texte du lien (FR)", name: "lien_texte", widget: "string", required: false, hint: "Ex: En savoir plus" }
+              - { label: "Texte du lien (NL)", name: "lien_texte_nl", widget: "string", required: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 5. MESSAGE DU PASTEUR
+  # ========================================
+  - name: "message_pasteur"
+    label: "✉️ Message du Pasteur"
+    label_singular: "message"
+    files:
+      - name: "message_data"
+        label: "Message du Pasteur"
+        file: "contenu.json"
+        fields:
+          - label: "Message du Pasteur"
+            name: "message_pasteur"
+            widget: "object"
+            hint: "Affiche un encart avec un message du pasteur sur le site. Activez-le pour le rendre visible."
+            fields:
+              - { label: "Afficher le message ?", name: "actif", widget: "boolean", default: false }
+              - { label: "Nom de l'auteur", name: "auteur", widget: "string", default: "Pasteur Guy KOBI" }
+              - { label: "Titre du message (FR)", name: "titre", widget: "string", default: "Un message du pasteur" }
+              - { label: "Message (FR)", name: "message", widget: "text", required: false, hint: "Le message s'affichera en citation sur le site" }
+              - { label: "Message (NL)", name: "message_nl", widget: "text", required: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 6. TEMOIGNAGES
+  # ========================================
+  - name: "temoignages"
+    label: "💬 Témoignages"
+    label_singular: "temoignages"
+    files:
+      - name: "temoignages_data"
+        label: "Temoignages"
+        file: "contenu.json"
+        fields:
+          - label: "Temoignages de membres"
+            name: "temoignages"
+            widget: "object"
+            hint: "Activez pour afficher une section de temoignages sur le site."
+            fields:
+              - { label: "Afficher les temoignages ?", name: "actif", widget: "boolean", default: false }
+              - label: "Liste des temoignages"
+                name: "liste"
+                widget: "list"
+                fields:
+                  - { label: "Prenom", name: "prenom", widget: "string" }
+                  - { label: "Initiales (2 lettres, ex: MK)", name: "initiales", widget: "string" }
+                  - { label: "Role / Anciennete", name: "role", widget: "string", required: false, hint: "Ex: Membre depuis 3 ans" }
+                  - { label: "Temoignage (FR)", name: "texte", widget: "text" }
+                  - { label: "Temoignage (NL)", name: "texte_nl", widget: "text", required: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 7. NAVETTE GRATUITE
+  # ========================================
+  - name: "navette"
+    label: "🚌 Navette gratuite"
+    label_singular: "navette"
+    files:
+      - name: "navette_data"
+        label: "Navette"
+        file: "contenu.json"
+        fields:
+          - label: "Navette"
+            name: "navette"
+            widget: "object"
+            fields:
+              - { label: "Point de depart (FR)", name: "depart", widget: "string" }
+              - { label: "Point de depart (NL)", name: "depart_nl", widget: "string" }
+              - { label: "Point d'arrivee (FR)", name: "arrivee", widget: "string" }
+              - { label: "Point d'arrivee (NL)", name: "arrivee_nl", widget: "string" }
+              - label: "Creneaux horaires"
+                name: "creneaux"
+                widget: "list"
+                fields:
+                  - { label: "Jour (FR)", name: "jour", widget: "string" }
+                  - { label: "Jour (NL)", name: "jour_nl", widget: "string" }
+                  - { label: "Horaire (FR)", name: "horaire", widget: "string" }
+                  - { label: "Horaire (NL)", name: "horaire_nl", widget: "string" }
+                  - { label: "Description (FR)", name: "description", widget: "text" }
+                  - { label: "Description (NL)", name: "description_nl", widget: "text" }
+                  - { label: "Mettre en avant ?", name: "principal", widget: "boolean", default: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 8. EQUIPE PASTORALE
+  # ========================================
+  - name: "equipe"
+    label: "👥 Equipe pastorale"
+    label_singular: "equipe"
+    files:
+      - name: "equipe_data"
+        label: "Equipe"
+        file: "contenu.json"
+        fields:
+          - label: "Equipe pastorale"
+            name: "equipe_pastorale"
+            widget: "object"
+            fields:
+              - label: "Membres de l'equipe"
+                name: "membres"
+                widget: "list"
+                hint: "Ajoutez ou modifiez les membres de l'equipe pastorale."
+                fields:
+                  - { label: "Initiales (2 lettres, ex: GK)", name: "initiales", widget: "string" }
+                  - { label: "Nom complet", name: "nom", widget: "string" }
+                  - { label: "Role (FR)", name: "role", widget: "string" }
+                  - { label: "Role (NL)", name: "role_nl", widget: "string" }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 9. DEPARTEMENTS
+  # ========================================
+  - name: "departements"
+    label: "🏛️ Departements"
+    label_singular: "departements"
+    files:
+      - name: "departements_data"
+        label: "Departements"
+        file: "contenu.json"
+        fields:
+          - label: "Departements"
+            name: "departements"
+            widget: "object"
+            fields:
+              - label: "Liste des departements"
+                name: "liste"
+                widget: "list"
+                fields:
+                  - { label: "Identifiant technique (ne pas changer)", name: "id", widget: "string" }
+                  - { label: "Nom (FR)", name: "nom", widget: "string" }
+                  - { label: "Nom (NL)", name: "nom_nl", widget: "string" }
+                  - { label: "Description courte (FR)", name: "description", widget: "text" }
+                  - { label: "Description courte (NL)", name: "description_nl", widget: "text" }
+                  - label: "Photo de couverture"
+                    name: "photo"
+                    widget: "image"
+                    required: false
+                    hint: "Photo de fond de la carte. Taille recommandee : 600x400px minimum."
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 10. INFORMATIONS DE CONTACT
+  # ========================================
+  - name: "infos"
+    label: "📍 Informations de contact"
+    label_singular: "infos"
+    files:
+      - name: "infos_data"
+        label: "Informations pratiques"
+        file: "contenu.json"
+        fields:
+          - label: "Informations de contact"
+            name: "infos"
+            widget: "object"
+            fields:
+              - { label: "Adresse — ligne 1 (ex: Wijngaardveld 29)", name: "adresse_ligne1", widget: "string" }
+              - { label: "Adresse — ligne 2 (ex: 9300 Alost)", name: "adresse_ligne2", widget: "string" }
+              - { label: "Pays", name: "pays", widget: "string", default: "Belgique" }
+              - { label: "Telephone (ex: +32 xxx xx xx xx)", name: "telephone", widget: "string", required: false }
+              - { label: "E-mail de contact", name: "email", widget: "string", required: false }
+              - { label: "Lien YouTube", name: "youtube", widget: "string", required: false, hint: "URL complete de la chaine YouTube" }
+              - { label: "Lien Facebook", name: "facebook", widget: "string", required: false, hint: "URL complete de la page Facebook" }
+              - { label: "Numero WhatsApp (ex: +32xxx)", name: "whatsapp", widget: "string", required: false, hint: "Numero avec indicatif international. Sera utilise pour le lien wa.me/" }
+              - { label: "Lien Instagram", name: "instagram", widget: "string", required: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 11. FOOTER — VERSET BIBLIQUE
+  # ========================================
+  - name: "footer"
+    label: "📖 Verset du footer"
+    label_singular: "footer"
+    files:
+      - name: "footer_data"
+        label: "Verset en bas de page"
+        file: "contenu.json"
+        fields:
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            hint: "Le verset qui s'affiche en bas de chaque page."
+            fields:
+              - { label: "Texte du verset (avec guillemets)", name: "verset_texte", widget: "string", hint: "Ex: « Car nous sommes tous un seul corps en Christ. »" }
+              - { label: "Reference du verset", name: "verset_reference", widget: "string", hint: "Ex: Romains 12 : 5" }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 12. TEXTE HERO (PAGE D'ACCUEIL)
+  # ========================================
+  - name: "hero"
+    label: "🏠 Page d'accueil (Hero)"
+    label_singular: "hero"
+    files:
+      - name: "hero_data"
+        label: "Texte de la page d'accueil"
+        file: "contenu.json"
+        fields:
+          - label: "Section d'accueil"
+            name: "hero"
+            widget: "object"
+            hint: "Texte principal affiché en grand sur la page d'accueil."
+            fields:
+              - { label: "Texte de surtitre", name: "eyebrow", widget: "string", hint: "Ex: Centre Evangelique · Alost" }
+              - { label: "Titre — ligne 1", name: "titre_ligne1", widget: "string", hint: "Ex: La Famille" }
+              - { label: "Titre — ligne 2 (en italique)", name: "titre_ligne2", widget: "string", hint: "Ex: Chretienne" }
+              - { label: "Sous-titre", name: "sous_titre", widget: "text", hint: "Phrase d'accueil sous le titre principal" }
+              - { label: "Texte bouton principal", name: "bouton_principal", widget: "string", default: "Nos horaires" }
+              - { label: "Texte bouton secondaire", name: "bouton_secondaire", widget: "string", default: "Rejoindre le live" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
