@@ -9,8 +9,9 @@
 <meta property="og:title" content="CEFC Alost · 10 ans de Grâce" />
 <meta property="og:description" content="Célébrons ensemble dix années de fidélité divine. Vous êtes les bienvenus dans la famille." />
 <meta property="og:type" content="website" />
-<meta property="og:image" content="https://cefclabornealost.netlify.app/cefc-logo.png" />
-<meta property="og:url" content="https://cefclabornealost.netlify.app/" />
+<meta property="og:image" content="https://cefclabornealost9300.netlify.app/cefc-logo.png" />
+<meta property="og:url" content="https://cefclabornealost9300.netlify.app/" />
+<link rel="canonical" href="https://cefclabornealost9300.netlify.app/" />
 <link rel="icon" type="image/png" href="cefc-logo.png" />
 
 <!-- Netlify Identity widget : permet aux invités cliquant sur un lien d'invitation
@@ -139,6 +140,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: all 0.2s;
 }
 .nav-live:hover { background: rgba(226, 75, 74, 0.15); }
+.nav-live .dot {
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--live);
   animation: pulse-dot 1.6s ease-in-out infinite;
@@ -1540,6 +1542,91 @@ section { scroll-margin-top: 80px; }
   gap: 8px;
 }
 
+/* ===== COUNTDOWN ===== */
+.countdown-bar {
+  background: linear-gradient(135deg, #0e1530 0%, var(--night) 100%);
+  border-bottom: 0.5px solid rgba(227, 227, 235, 0.12);
+  padding: 14px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.countdown-bar::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(227, 227, 235, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+.countdown-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+.countdown-label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(227, 227, 235, 0.6);
+}
+.countdown-units {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.countdown-unit {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.countdown-value {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--silver);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  min-width: 42px;
+}
+.countdown-unit-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(227, 227, 235, 0.45);
+}
+.countdown-sep {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: rgba(227, 227, 235, 0.25);
+  line-height: 1;
+  margin-bottom: 14px;
+}
+.countdown-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(227, 227, 235, 0.1);
+  border: 0.5px solid rgba(227, 227, 235, 0.3);
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--silver);
+  letter-spacing: 0.05em;
+  transition: background 0.2s, border-color 0.2s;
+}
+.countdown-cta:hover {
+  background: rgba(227, 227, 235, 0.18);
+  border-color: rgba(227, 227, 235, 0.5);
+}
+
 /* ===== LANGUAGE SWITCHER ===== */
 .lang-switch {
   display: inline-flex;
@@ -1697,6 +1784,33 @@ footer::before {
     </div>
   </div>
 </nav>
+
+<!-- ===== BARRE COMPTE À REBOURS 10 ANS ===== -->
+<div class="countdown-bar" id="countdownBar">
+  <div class="countdown-inner">
+    <span class="countdown-label">Célébration des 10 ans · 14 juin 2026</span>
+    <div class="countdown-units">
+      <div class="countdown-unit">
+        <span class="countdown-value" id="cdDays">—</span>
+        <span class="countdown-unit-label">Jours</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-value" id="cdHours">—</span>
+        <span class="countdown-unit-label">Heures</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <span class="countdown-value" id="cdMins">—</span>
+        <span class="countdown-unit-label">Minutes</span>
+      </div>
+    </div>
+    <a href="#annonces" class="countdown-cta">
+      En savoir plus
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</div>
 
 <!-- ===== HERO ===== -->
 <header class="hero" id="accueil">
@@ -2185,7 +2299,10 @@ footer::before {
       </div>
 
       <!-- Vue formulaire -->
-      <form class="modal-form" id="modalForm" novalidate>
+      <form class="modal-form" id="modalForm" novalidate name="candidature-departement" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="candidature-departement" />
+        <input type="hidden" name="departement" id="f-dept" />
+        <p style="display:none;"><label>Ne pas remplir : <input name="bot-field" /></label></p>
         <button type="button" class="form-back" id="formBack">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Retour
@@ -2246,7 +2363,10 @@ footer::before {
       </form>
 
       <!-- Vue formulaire question -->
-      <form class="modal-form" id="modalQuestionForm" novalidate>
+      <form class="modal-form" id="modalQuestionForm" novalidate name="question-departement" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="question-departement" />
+        <input type="hidden" name="departement" id="q-dept" />
+        <p style="display:none;"><label>Ne pas remplir : <input name="bot-field" /></label></p>
         <button type="button" class="form-back" id="questionBack">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Retour
@@ -2321,7 +2441,7 @@ footer::before {
       <span data-i18n="pastor.title.1">Rendez-vous avec</span> <span class="accent" data-i18n="pastor.title.2">le Pasteur</span>
     </h2>
     <p class="pastor-sub" data-i18n="pastor.sub">Un temps d'écoute, de prière et d'accompagnement personnel avec le Pasteur Guy KOBI. Les consultations se font uniquement sur rendez-vous, via le secrétariat.</p>
-    <a href="#" class="pastor-cta" id="pastorCta" data-i18n="pastor.cta">
+    <a href="#contact" class="pastor-cta" id="pastorCta" data-i18n="pastor.cta">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Demander un rendez-vous
     </a>
@@ -2353,6 +2473,33 @@ footer::before {
       <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener">YouTube</a>
     </div>
 
+    <div style="display:flex; gap:20px; justify-content:center; margin-bottom:40px;">
+      <!-- YouTube -->
+      <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener"
+         style="width:42px;height:42px;border-radius:50%;background:rgba(227,227,235,0.08);border:0.5px solid rgba(227,227,235,0.2);display:inline-flex;align-items:center;justify-content:center;color:rgba(227,227,235,0.7);transition:background 0.2s,color 0.2s;"
+         aria-label="YouTube"
+         onmouseover="this.style.background='rgba(227,227,235,0.18)';this.style.color='#E3E3EB';"
+         onmouseout="this.style.background='rgba(227,227,235,0.08)';this.style.color='rgba(227,227,235,0.7)';">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
+      </a>
+      <!-- Facebook -->
+      <a href="https://www.facebook.com/CentreEvangeliqueLaFamilleChretienne" target="_blank" rel="noopener"
+         style="width:42px;height:42px;border-radius:50%;background:rgba(227,227,235,0.08);border:0.5px solid rgba(227,227,235,0.2);display:inline-flex;align-items:center;justify-content:center;color:rgba(227,227,235,0.7);transition:background 0.2s,color 0.2s;"
+         aria-label="Facebook"
+         onmouseover="this.style.background='rgba(227,227,235,0.18)';this.style.color='#E3E3EB';"
+         onmouseout="this.style.background='rgba(227,227,235,0.08)';this.style.color='rgba(227,227,235,0.7)';">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+      <!-- WhatsApp -->
+      <a href="https://wa.me/32000000000" target="_blank" rel="noopener"
+         style="width:42px;height:42px;border-radius:50%;background:rgba(227,227,235,0.08);border:0.5px solid rgba(227,227,235,0.2);display:inline-flex;align-items:center;justify-content:center;color:rgba(227,227,235,0.7);transition:background 0.2s,color 0.2s;"
+         aria-label="WhatsApp"
+         onmouseover="this.style.background='rgba(227,227,235,0.18)';this.style.color='#E3E3EB';"
+         onmouseout="this.style.background='rgba(227,227,235,0.08)';this.style.color='rgba(227,227,235,0.7)';">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      </a>
+    </div>
+
     <div class="footer-divider"></div>
 
     <div class="footer-meta">
@@ -2369,6 +2516,28 @@ window.addEventListener('load', () => {
     document.getElementById('loader').classList.add('hide');
   }, 600);
 });
+
+// ===== COMPTE À REBOURS 10ème ANNIVERSAIRE (14 juin 2026) =====
+(function() {
+  const target = new Date('2026-06-14T10:00:00+02:00');
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function updateCountdown() {
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('countdownBar').style.display = 'none';
+      return;
+    }
+    const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    document.getElementById('cdDays').textContent  = days;
+    document.getElementById('cdHours').textContent = pad(hours);
+    document.getElementById('cdMins').textContent  = pad(mins);
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 30000);
+})();
 
 // ===== NAV SCROLL =====
 const nav = document.getElementById('nav');
@@ -3166,6 +3335,10 @@ function openModal(deptKey) {
 
   modalForm.reset();
   modalQuestionForm.reset();
+  const fDept = document.getElementById('f-dept');
+  const qDept = document.getElementById('q-dept');
+  if (fDept) fDept.value = data.name;
+  if (qDept) qDept.value = data.name;
   showView('choice');
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
