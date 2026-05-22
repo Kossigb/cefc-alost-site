@@ -17,6 +17,27 @@
     "5. Si tu casses un truc : ouvre https://jsonlint.com et colle ton fichier pour voir l'erreur",
     "============================================================"
   ],
+
+  "hero": {
+    "_commentaire": "Texte de la section d'accueil (hero). Modifie le titre, le sous-titre et le texte des boutons.",
+    "eyebrow": "Centre Évangélique · Alost",
+    "titre_ligne1": "La Famille",
+    "titre_ligne2": "Chrétienne",
+    "sous_titre": "Vous êtes les bienvenus dans notre famille. Ensemble dans la foi, la prière et la fraternité.",
+    "bouton_principal": "Nos horaires",
+    "bouton_secondaire": "Rejoindre le live"
+  },
+
+  "banniere": {
+    "_commentaire": "Bannière d'annonce en haut du site. Mets 'active' à true pour l'afficher.",
+    "active": false,
+    "texte": "",
+    "texte_nl": "",
+    "lien": "",
+    "lien_texte": "",
+    "lien_texte_nl": ""
+  },
+
   "horaires": {
     "_commentaire": "Les 3 cultes hebdomadaires affiches dans la section Services",
     "dimanche": {
@@ -37,10 +58,11 @@
       "heure": "18h00-20h00",
       "nom": "Jeune & priere",
       "nom_nl": "Vasten & gebed",
-      "description": "Une soiree consacree a l'intercession et a la recherche de la face de Dieu. ",
+      "description": "Une soiree consacree a l'intercession et a la recherche de la face de Dieu.",
       "description_nl": "Een avond gewijd aan voorbede en het zoeken van Gods aangezicht."
     }
   },
+
   "navette": {
     "_commentaire": "Horaires de la navette gratuite. Modifie les heures et descriptions ici.",
     "depart": "Gare d'Alost",
@@ -77,8 +99,9 @@
       }
     ]
   },
+
   "equipe_pastorale": {
-    "_commentaire": "Membres de l'equipe affiches dans la section Contact. Tu peux ajouter/retirer des membres en respectant le format.",
+    "_commentaire": "Membres de l'equipe affiches dans la section Contact.",
     "membres": [
       {
         "initiales": "GK",
@@ -100,8 +123,9 @@
       }
     ]
   },
+
   "departements": {
-    "_commentaire": "9 departements affiches en grille. Tu peux changer le nom, la description, et la photo (mets un fichier dans img/dept/ et indique son nom ici, par exemple 'technique.jpg').",
+    "_commentaire": "9 departements affiches en grille.",
     "liste": [
       {
         "id": "technique",
@@ -177,27 +201,58 @@
       }
     ]
   },
+
+  "photos_culte": {
+    "_commentaire": "Photos du culte du dimanche affichees dans le carrousel. Ajoute une photo : mets son URL (depuis img/uploads/) et une legende facultative.",
+    "eyebrow": "Photos",
+    "titre": "culte",
+    "sous_titre": "Retrouvez les moments forts de nos rassemblements dominicaux.",
+    "photos": []
+  },
+
   "annonces": {
-    "_commentaire": "Annonces / evenements importants affiches dans une nouvelle section sur le site. Pour ajouter une annonce, copie un bloc complet (entre accolades) et adapte-le. Pour supprimer, supprime tout le bloc avec sa virgule. Si tu ne veux aucune annonce, mets une liste vide : \"liste\": []",
+    "_commentaire": "Annonces / evenements importants. Pour ajouter une annonce, copie un bloc complet. Si tu ne veux aucune annonce, mets une liste vide : \"liste\": []",
+    "liste": []
+  },
+
+  "temoignages": {
+    "_commentaire": "Temoignages de membres de l'eglise. Mets 'actif' a true pour afficher la section. Ajoute des temoignages avec un prenom, un texte et un role optionnel.",
+    "actif": false,
     "liste": [
       {
-        "titre": "Celebration des 10 ans",
-        "titre_nl": "Viering van 10 jaar",
-        "date": "Dimanche 14 juin 2026",
-        "date_nl": "Zondag 14 juni 2026",
-        "description": "Grande celebration anniversaire des 10 ans de l'eglise. Cultes speciaux, temoignages, repas fraternel.",
-        "description_nl": "Grote viering van het 10-jarig bestaan van de kerk. Speciale diensten, getuigenissen, broedermaaltijd.",
-        "important": true
-      },
-      {
-        "titre": "Conference jeunesse",
-        "titre_nl": "Jeugdconferentie",
-        "date": "Samedi 23 mai 2026",
-        "date_nl": "Zaterdag 23 mei 2026",
-        "description": "Conference speciale pour la JEFC avec invite. Plus d'informations bientot.",
-        "description_nl": "Speciale conferentie voor JEFC met gastspreker. Meer info binnenkort.",
-        "important": false
+        "prenom": "Marie",
+        "role": "Membre depuis 3 ans",
+        "texte": "Cette eglise m'a accueillie comme une famille des le premier jour.",
+        "initiales": "M"
       }
     ]
+  },
+
+  "message_pasteur": {
+    "_commentaire": "Message du pasteur affiché sur le site. Mets 'actif' à true pour l'afficher.",
+    "actif": false,
+    "auteur": "Pasteur Guy KOBI",
+    "titre": "Un message du pasteur",
+    "message": "",
+    "message_nl": ""
+  },
+
+  "infos": {
+    "_commentaire": "Informations pratiques de l'eglise (adresse, telephone, email, reseaux sociaux).",
+    "adresse_ligne1": "Wijngaardveld 29",
+    "adresse_ligne2": "9300 Alost (Aalst)",
+    "pays": "Belgique",
+    "telephone": "",
+    "email": "contact@cefclabornealost.be",
+    "youtube": "https://www.youtube.com/@CE_laFamilleChretienne",
+    "facebook": "https://www.facebook.com/CentreEvangeliqueLaFamilleChretienne",
+    "whatsapp": "",
+    "instagram": ""
+  },
+
+  "footer": {
+    "_commentaire": "Contenu du bas de page : verset biblique.",
+    "verset_texte": "« Car nous sommes tous un seul corps en Christ. »",
+    "verset_reference": "Romains 12 : 5"
   }
 }
