@@ -265,29 +265,113 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ===== MARQUEE ===== */
-.marquee {
-  background: var(--night-deep);
-  border-top: 0.5px solid rgba(227, 227, 235, 0.15);
-  border-bottom: 0.5px solid rgba(227, 227, 235, 0.15);
+.ticker-bar {
+  background: #07071a;
+  border-top: 1px solid rgba(227,227,235,0.07);
+  border-bottom: 1px solid rgba(227,227,235,0.07);
+  display: flex;
+  align-items: stretch;
+  height: 46px;
   overflow: hidden;
-  padding: 14px 0;
   position: relative;
 }
-.marquee-track {
+.ticker-label {
+  flex-shrink: 0;
   display: flex;
-  white-space: nowrap;
-  animation: scroll-marquee 45s linear infinite;
-  gap: 36px;
-  color: rgba(227, 227, 235, 0.85);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px 0 22px;
+  border-right: 1px solid rgba(227,227,235,0.1);
+  z-index: 3;
+  background: #07071a;
 }
-.marquee-track:hover { animation-play-state: paused; }
-.marquee-track span.sep { opacity: 0.4; }
-@keyframes scroll-marquee {
+.ticker-label-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #a78bfa;
+  box-shadow: 0 0 6px rgba(167,139,250,0.8);
+  animation: ticker-pulse 2s ease-in-out infinite;
+}
+@keyframes ticker-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+.ticker-label-text {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(227,227,235,0.55);
+}
+.ticker-scroll-wrap {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ticker-fade-left {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 60px;
+  background: linear-gradient(90deg, #07071a 30%, transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+.ticker-fade-right {
+  position: absolute; right: 0; top: 0; bottom: 0;
+  width: 60px;
+  background: linear-gradient(270deg, #07071a 30%, transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+.ticker-track {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  gap: 0;
+  animation: ticker-scroll 40s linear infinite;
+  will-change: transform;
+}
+.ticker-track:hover { animation-play-state: paused; }
+@keyframes ticker-scroll {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 32px;
+  font-size: 12px;
+  font-weight: 450;
+  letter-spacing: 0.04em;
+  color: rgba(227,227,235,0.78);
+}
+.ticker-item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  background: rgba(167,139,250,0.12);
+  color: #a78bfa;
+  flex-shrink: 0;
+}
+.ticker-item-icon svg { display: block; }
+.ticker-item-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #a78bfa;
+  opacity: 0.85;
+}
+.ticker-sep {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: rgba(227,227,235,0.12);
+  flex-shrink: 0;
 }
 
 /* ===== SECTION GENERIC ===== */
@@ -1918,20 +2002,88 @@ footer::before {
     </div>
   </div>
 
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track">
-      <span>Culte dominical 10h</span><span class="sep">◆</span>
-      <span>Étude biblique mercredi 18h</span><span class="sep">◆</span>
-      <span>Jeûne &amp; prière vendredi 18h</span><span class="sep">◆</span>
-      <span>Navette gratuite depuis la gare d'Alost</span><span class="sep">◆</span>
-      <span>JEFC — jeunesse toutes les 2 semaines</span><span class="sep">◆</span>
-      <span>Bienvenue dans la famille</span><span class="sep">◆</span>
-      <span>Culte dominical 10h</span><span class="sep">◆</span>
-      <span>Étude biblique mercredi 18h</span><span class="sep">◆</span>
-      <span>Jeûne &amp; prière vendredi 18h</span><span class="sep">◆</span>
-      <span>Navette gratuite depuis la gare d'Alost</span><span class="sep">◆</span>
-      <span>JEFC — jeunesse toutes les 2 semaines</span><span class="sep">◆</span>
-      <span>Bienvenue dans la famille</span><span class="sep">◆</span>
+  <div class="ticker-bar" aria-hidden="true">
+    <div class="ticker-label">
+      <span class="ticker-label-dot"></span>
+      <span class="ticker-label-text">Infos</span>
+    </div>
+    <div class="ticker-scroll-wrap">
+      <div class="ticker-fade-left"></div>
+      <div class="ticker-track">
+        <!-- set 1 -->
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <span class="ticker-item-label">Dimanche</span>
+          Culte principal · 10h00
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+          <span class="ticker-item-label">Mercredi</span>
+          Étude biblique · 18h00
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
+          <span class="ticker-item-label">Vendredi</span>
+          Jeûne &amp; prière · 18h00
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
+          <span class="ticker-item-label">Navette</span>
+          Gratuite depuis la Gare d'Alost
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span class="ticker-item-label">JEFC</span>
+          Jeunesse · toutes les 2 semaines
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+          Bienvenue dans la famille
+        </span>
+        <span class="ticker-sep"></span>
+        <!-- set 2 (copie pour boucle infinie) -->
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <span class="ticker-item-label">Dimanche</span>
+          Culte principal · 10h00
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+          <span class="ticker-item-label">Mercredi</span>
+          Étude biblique · 18h00
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
+          <span class="ticker-item-label">Vendredi</span>
+          Jeûne &amp; prière · 18h00
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
+          <span class="ticker-item-label">Navette</span>
+          Gratuite depuis la Gare d'Alost
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span class="ticker-item-label">JEFC</span>
+          Jeunesse · toutes les 2 semaines
+        </span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">
+          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+          Bienvenue dans la famille
+        </span>
+        <span class="ticker-sep"></span>
+      </div>
+      <div class="ticker-fade-right"></div>
     </div>
   </div>
 </header>
