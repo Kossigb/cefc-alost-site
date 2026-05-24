@@ -1,88 +1,4 @@
 {
-  "_GUIDE": [
-    "============================================================",
-    "  GUIDE D'UTILISATION DE CE FICHIER",
-    "============================================================",
-    "Ce fichier contient toutes les informations modifiables du site.",
-    "Pour modifier une information, change uniquement le texte ENTRE LES GUILLEMETS.",
-    "Ne supprime pas les guillemets, les virgules, les crochets.",
-    "Apres modification : sauvegarde le fichier puis redeploie sur Netlify.",
-    "============================================================",
-    "  REGLES IMPORTANTES",
-    "============================================================",
-    "1. Garde toujours les guillemets autour des textes : \"comme ceci\"",
-    "2. Garde la virgule a la fin de chaque ligne, SAUF la derniere",
-    "3. Pour aller a la ligne dans un texte, utilise \\n",
-    "4. Pour mettre un guillemet dans un texte, utilise \\\"",
-    "5. Si tu casses un truc : ouvre https://jsonlint.com et colle ton fichier pour voir l'erreur",
-    "============================================================"
-  ],
-
-  "vision_mission": {
-    "_commentaire": "Section Vision et Mission affichée sur le site. Mets 'actif' à false pour la masquer.",
-    "actif": true,
-    "eyebrow": "Qui sommes-nous",
-    "titre": "Vision & Mission",
-    "intro": "Nous sommes une église évangélique francophone établie à Alost, en Belgique. Notre porte est ouverte à tous — sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.",
-    "vision_titre": "Notre Vision",
-    "vision_texte": "Être un lieu de transformation spirituelle où chaque personne découvre son identité en Christ et rayonne cette foi dans sa famille, sa ville et au-delà des frontières.",
-    "mission_titre": "Notre Mission",
-    "mission_texte": "Annoncer l'Évangile de Jésus-Christ, faire des disciples, bâtir une communauté de foi vivante et unie, et servir notre prochain avec amour et compassion.",
-    "valeurs": [
-      { "icone": "✝", "titre": "La Parole", "texte": "La Bible est notre fondement et notre guide pour toute décision et tout enseignement." },
-      { "icone": "🙏", "titre": "La Prière", "texte": "Nous croyons à la puissance de la prière et cherchons la face de Dieu ensemble." },
-      { "icone": "👨‍👩‍👧", "titre": "La Famille", "texte": "Chaque personne est accueillie, aimée et accompagnée dans son chemin de foi." },
-      { "icone": "🌍", "titre": "L'Évangélisation", "texte": "Nous partageons la bonne nouvelle avec notre ville et les nations." }
-    ],
-    "verset_texte": "« Allez, faites de toutes les nations des disciples. »",
-    "verset_reference": "Matthieu 28 : 19"
-  },
-
-  "hero": {
-    "_commentaire": "Texte de la section d'accueil (hero). Modifie le titre, le sous-titre et le texte des boutons.",
-    "eyebrow": "Centre Évangélique · Alost",
-    "titre_ligne1": "Centre Évangélique",
-    "titre_ligne2": "La Famille Chrétienne",
-    "sous_titre": "Vous êtes les bienvenus dans notre famille. Ensemble dans la foi, la prière et la fraternité.",
-    "bouton_principal": "Nos horaires",
-    "bouton_secondaire": "Rejoindre le live"
-  },
-
-  "banniere": {
-    "_commentaire": "Bannière d'annonce en haut du site. Mets 'active' à true pour l'afficher.",
-    "active": false,
-    "texte": "",
-    "texte_nl": "",
-    "lien": "",
-    "lien_texte": "",
-    "lien_texte_nl": ""
-  },
-
-  "horaires": {
-    "_commentaire": "Les 3 cultes hebdomadaires affiches dans la section Services",
-    "dimanche": {
-      "heure": "10h00",
-      "nom": "Culte principal",
-      "nom_nl": "Hoofddienst",
-      "description": "Adoration, predication et communion fraternelle. Le rendez-vous central de notre communaute.",
-      "description_nl": "Aanbidding, prediking en broederlijke gemeenschap. Het centrale moment van onze gemeenschap."
-    },
-    "mercredi": {
-      "heure": "18h00",
-      "nom": "Etude biblique",
-      "nom_nl": "Bijbelstudie",
-      "description": "Approfondissement de la Parole dans un cadre intime et interactif.",
-      "description_nl": "Verdieping van het Woord in een intieme en interactieve sfeer."
-    },
-    "vendredi": {
-      "heure": "18h00-20h00",
-      "nom": "Jeune & priere",
-      "nom_nl": "Vasten & gebed",
-      "description": "Une soiree consacree a l'intercession et a la recherche de la face de Dieu.",
-      "description_nl": "Een avond gewijd aan voorbede en het zoeken van Gods aangezicht."
-    }
-  },
-
   "navette": {
     "_commentaire": "Horaires de la navette gratuite. Modifie les heures et descriptions ici.",
     "depart": "Gare d'Alost",
@@ -119,31 +35,6 @@
       }
     ]
   },
-
-  "equipe_pastorale": {
-    "_commentaire": "Membres de l'equipe affiches dans la section Contact.",
-    "membres": [
-      {
-        "initiales": "GK",
-        "nom": "Pasteur Guy KOBI",
-        "role": "Pasteur principal",
-        "role_nl": "Hoofdpastor"
-      },
-      {
-        "initiales": "MM",
-        "nom": "Mimi Mbenza",
-        "role": "Epouse du pasteur",
-        "role_nl": "Echtgenote van de pastor"
-      },
-      {
-        "initiales": "SM",
-        "nom": "Safi Mudiri",
-        "role": "Secretaire de l'eglise",
-        "role_nl": "Secretaresse van de kerk"
-      }
-    ]
-  },
-
   "departements": {
     "_commentaire": "9 departements affiches en grille.",
     "liste": [
@@ -221,7 +112,18 @@
       }
     ]
   },
-
+  "infos": {
+    "adresse_ligne1": "Wijngaardveld 29",
+    "adresse_ligne2": "9300 Alost (Aalst)",
+    "youtube": "https://www.youtube.com/@CE_laFamilleChretienne",
+    "telephone": "",
+    "facebook": "https://www.facebook.com/CentreEvangeliqueLaFamilleChretienne",
+    "pays": "Belgique",
+    "whatsapp": "",
+    "instagram": "",
+    "_commentaire": "Informations pratiques de l'eglise (adresse, telephone, email, reseaux sociaux).",
+    "email": "contact@cefclabornealost.be"
+  },
   "photos_culte": {
     "_commentaire": "Photos du culte du dimanche affichees dans le carrousel. Ajoute une photo : mets son URL (depuis img/uploads/) et une legende facultative.",
     "eyebrow": "Photos",
@@ -229,12 +131,43 @@
     "sous_titre": "Retrouvez les moments forts de nos rassemblements dominicaux.",
     "photos": []
   },
-
+  "horaires": {
+    "_commentaire": "Les 3 cultes hebdomadaires affiches dans la section Services",
+    "dimanche": {
+      "heure": "10h00",
+      "nom": "Culte principal",
+      "nom_nl": "Hoofddienst",
+      "description": "Adoration, predication et communion fraternelle. Le rendez-vous central de notre communaute.",
+      "description_nl": "Aanbidding, prediking en broederlijke gemeenschap. Het centrale moment van onze gemeenschap."
+    },
+    "mercredi": {
+      "heure": "18h00",
+      "nom": "Etude biblique",
+      "nom_nl": "Bijbelstudie",
+      "description": "Approfondissement de la Parole dans un cadre intime et interactif.",
+      "description_nl": "Verdieping van het Woord in een intieme en interactieve sfeer."
+    },
+    "vendredi": {
+      "heure": "18h00-20h00",
+      "nom": "Jeune & priere",
+      "nom_nl": "Vasten & gebed",
+      "description": "Une soiree consacree a l'intercession et a la recherche de la face de Dieu.",
+      "description_nl": "Een avond gewijd aan voorbede en het zoeken van Gods aangezicht."
+    }
+  },
+  "banniere": {
+    "_commentaire": "Bannière d'annonce en haut du site. Mets 'active' à true pour l'afficher.",
+    "active": false,
+    "texte": "",
+    "texte_nl": "",
+    "lien": "",
+    "lien_texte": "",
+    "lien_texte_nl": ""
+  },
   "annonces": {
     "_commentaire": "Annonces / evenements importants. Pour ajouter une annonce, copie un bloc complet. Si tu ne veux aucune annonce, mets une liste vide : \"liste\": []",
     "liste": []
   },
-
   "temoignages": {
     "_commentaire": "Temoignages de membres de l'eglise. Mets 'actif' a true pour afficher la section. Ajoute des temoignages avec un prenom, un texte et un role optionnel.",
     "actif": false,
@@ -247,7 +180,41 @@
       }
     ]
   },
-
+  "vision_mission": {
+    "vision_texte": "Être un lieu de transformation spirituelle où chaque personne découvre son identité en Christ et rayonne cette foi dans sa famille, sa ville et au-delà des frontières.",
+    "mission_texte": "Ramener Christ au sein de la famille",
+    "eyebrow": "Qui sommes-nous",
+    "verset_reference": "Matthieu 28 : 19",
+    "intro": "Nous sommes une église évangélique francophone établie à Alost, en Belgique. Notre porte est ouverte à tous — sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.",
+    "actif": true,
+    "valeurs": [
+      {
+        "icone": "✝",
+        "titre": "La Parole",
+        "texte": "La Bible est notre fondement et notre guide pour toute décision et tout enseignement."
+      },
+      {
+        "icone": "🙏",
+        "titre": "La Prière",
+        "texte": "Nous croyons à la puissance de la prière et cherchons la face de Dieu ensemble."
+      },
+      {
+        "icone": "👨‍👩‍👧",
+        "titre": "La Famille",
+        "texte": "Chaque personne est accueillie, aimée et accompagnée dans son chemin de foi."
+      },
+      {
+        "icone": "🌍",
+        "titre": "L'Évangélisation",
+        "texte": "Nous partageons la bonne nouvelle avec notre ville et les nations."
+      }
+    ],
+    "titre": "Vision & Mission",
+    "verset_texte": "« Allez, faites de toutes les nations des disciples. »",
+    "_commentaire": "Section Vision et Mission affichée sur le site. Mets 'actif' à false pour la masquer.",
+    "vision_titre": "Notre Vision",
+    "mission_titre": "Notre Mission"
+  },
   "message_pasteur": {
     "_commentaire": "Message du pasteur affiché sur le site. Mets 'actif' à true pour l'afficher.",
     "actif": false,
@@ -256,23 +223,59 @@
     "message": "",
     "message_nl": ""
   },
-
-  "infos": {
-    "_commentaire": "Informations pratiques de l'eglise (adresse, telephone, email, reseaux sociaux).",
-    "adresse_ligne1": "Wijngaardveld 29",
-    "adresse_ligne2": "9300 Alost (Aalst)",
-    "pays": "Belgique",
-    "telephone": "",
-    "email": "contact@cefclabornealost.be",
-    "youtube": "https://www.youtube.com/@CE_laFamilleChretienne",
-    "facebook": "https://www.facebook.com/CentreEvangeliqueLaFamilleChretienne",
-    "whatsapp": "",
-    "instagram": ""
+  "hero": {
+    "_commentaire": "Texte de la section d'accueil (hero). Modifie le titre, le sous-titre et le texte des boutons.",
+    "eyebrow": "Centre Évangélique · Alost",
+    "titre_ligne1": "Centre Évangélique",
+    "titre_ligne2": "La Famille Chrétienne",
+    "sous_titre": "Vous êtes les bienvenus dans notre famille. Ensemble dans la foi, la prière et la fraternité.",
+    "bouton_principal": "Nos horaires",
+    "bouton_secondaire": "Rejoindre le live"
   },
-
   "footer": {
     "_commentaire": "Contenu du bas de page : verset biblique.",
     "verset_texte": "« Car nous sommes tous un seul corps en Christ. »",
     "verset_reference": "Romains 12 : 5"
-  }
+  },
+  "equipe_pastorale": {
+    "_commentaire": "Membres de l'equipe affiches dans la section Contact.",
+    "membres": [
+      {
+        "initiales": "GK",
+        "nom": "Pasteur Guy KOBI",
+        "role": "Pasteur principal",
+        "role_nl": "Hoofdpastor"
+      },
+      {
+        "initiales": "MM",
+        "nom": "Mimi Mbenza",
+        "role": "Epouse du pasteur",
+        "role_nl": "Echtgenote van de pastor"
+      },
+      {
+        "initiales": "SM",
+        "nom": "Safi Mudiri",
+        "role": "Secretaire de l'eglise",
+        "role_nl": "Secretaresse van de kerk"
+      }
+    ]
+  },
+  "_GUIDE": [
+    "============================================================",
+    "  GUIDE D'UTILISATION DE CE FICHIER",
+    "============================================================",
+    "Ce fichier contient toutes les informations modifiables du site.",
+    "Pour modifier une information, change uniquement le texte ENTRE LES GUILLEMETS.",
+    "Ne supprime pas les guillemets, les virgules, les crochets.",
+    "Apres modification : sauvegarde le fichier puis redeploie sur Netlify.",
+    "============================================================",
+    "  REGLES IMPORTANTES",
+    "============================================================",
+    "1. Garde toujours les guillemets autour des textes : \"comme ceci\"",
+    "2. Garde la virgule a la fin de chaque ligne, SAUF la derniere",
+    "3. Pour aller a la ligne dans un texte, utilise \\n",
+    "4. Pour mettre un guillemet dans un texte, utilise \\\"",
+    "5. Si tu casses un truc : ouvre https://jsonlint.com et colle ton fichier pour voir l'erreur",
+    "============================================================"
+  ]
 }
