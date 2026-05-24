@@ -18,6 +18,26 @@
     "============================================================"
   ],
 
+  "vision_mission": {
+    "_commentaire": "Section Vision et Mission affichée sur le site. Mets 'actif' à false pour la masquer.",
+    "actif": true,
+    "eyebrow": "Qui sommes-nous",
+    "titre": "Vision & Mission",
+    "intro": "Nous sommes une église évangélique francophone établie à Alost, en Belgique. Notre porte est ouverte à tous — sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.",
+    "vision_titre": "Notre Vision",
+    "vision_texte": "Être un lieu de transformation spirituelle où chaque personne découvre son identité en Christ et rayonne cette foi dans sa famille, sa ville et au-delà des frontières.",
+    "mission_titre": "Notre Mission",
+    "mission_texte": "Annoncer l'Évangile de Jésus-Christ, faire des disciples, bâtir une communauté de foi vivante et unie, et servir notre prochain avec amour et compassion.",
+    "valeurs": [
+      { "icone": "✝", "titre": "La Parole", "texte": "La Bible est notre fondement et notre guide pour toute décision et tout enseignement." },
+      { "icone": "🙏", "titre": "La Prière", "texte": "Nous croyons à la puissance de la prière et cherchons la face de Dieu ensemble." },
+      { "icone": "👨‍👩‍👧", "titre": "La Famille", "texte": "Chaque personne est accueillie, aimée et accompagnée dans son chemin de foi." },
+      { "icone": "🌍", "titre": "L'Évangélisation", "texte": "Nous partageons la bonne nouvelle avec notre ville et les nations." }
+    ],
+    "verset_texte": "« Allez, faites de toutes les nations des disciples. »",
+    "verset_reference": "Matthieu 28 : 19"
+  },
+
   "hero": {
     "_commentaire": "Texte de la section d'accueil (hero). Modifie le titre, le sous-titre et le texte des boutons.",
     "eyebrow": "Centre Évangélique · Alost",

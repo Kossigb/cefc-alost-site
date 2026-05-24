@@ -1622,6 +1622,125 @@ section { scroll-margin-top: 80px; }
   .gallery-nav { width: 38px; height: 38px; }
 }
 
+/* ===== VISION & MISSION ===== */
+.vision {
+  padding: 120px 0;
+  background: var(--night);
+  position: relative;
+  overflow: hidden;
+}
+.vision::before {
+  content: '';
+  position: absolute;
+  top: -160px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 900px;
+  background: radial-gradient(circle, rgba(90,60,180,0.09) 0%, transparent 68%);
+  pointer-events: none;
+}
+.vision .section-head { text-align: center; margin-bottom: 48px; }
+.vision .section-title { color: var(--silver); }
+.vision-lead {
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 64px;
+  color: rgba(227,227,235,0.62);
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+.vision-vm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 48px;
+}
+@media (max-width: 640px) { .vision-vm-grid { grid-template-columns: 1fr; } }
+.vision-card {
+  background: rgba(227,227,235,0.04);
+  border: 1px solid rgba(227,227,235,0.09);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  transition: border-color 0.3s, background 0.3s;
+}
+.vision-card:hover {
+  border-color: rgba(227,227,235,0.2);
+  background: rgba(227,227,235,0.07);
+}
+.vision-card-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(227,227,235,0.14);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+}
+.vision-card h3 {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  color: var(--silver);
+  margin-bottom: 0.9rem;
+  font-style: italic;
+}
+.vision-card p {
+  color: rgba(227,227,235,0.62);
+  line-height: 1.85;
+  font-size: 0.97rem;
+}
+.vision-valeurs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 56px;
+}
+@media (max-width: 860px) { .vision-valeurs-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .vision-valeurs-grid { grid-template-columns: 1fr; } }
+.valeur-item {
+  background: rgba(227,227,235,0.03);
+  border: 1px solid rgba(227,227,235,0.07);
+  border-radius: 12px;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  transition: border-color 0.3s, background 0.3s;
+}
+.valeur-item:hover {
+  border-color: rgba(227,227,235,0.15);
+  background: rgba(227,227,235,0.06);
+}
+.valeur-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+.valeur-item h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--silver);
+  margin-bottom: 0.5rem;
+}
+.valeur-item p {
+  font-size: 0.85rem;
+  color: rgba(227,227,235,0.48);
+  line-height: 1.65;
+}
+.vision-verse {
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: rgba(227,227,235,0.75);
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 0;
+  border: none;
+}
+.vision-verse cite {
+  display: block;
+  margin-top: 0.75rem;
+  font-style: normal;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(227,227,235,0.3);
+  font-family: var(--sans);
+}
+
 /* ===== LANGUAGE SWITCHER ===== */
 .lang-switch {
   display: inline-flex;
@@ -1816,6 +1935,58 @@ footer::before {
     </div>
   </div>
 </header>
+
+<!-- ===== VISION & MISSION ===== -->
+<section class="vision" id="vision">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow" id="vm-eyebrow">Qui sommes-nous</span>
+      <h2 class="section-title">Notre <span class="accent" id="vm-titre-accent">Vision & Mission</span></h2>
+    </div>
+    <p class="vision-lead reveal" id="vm-lead">Nous sommes une église évangélique francophone établie à Alost, en Belgique. Notre porte est ouverte à tous — sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.</p>
+
+    <div class="vision-vm-grid">
+      <div class="vision-card reveal">
+        <div class="vision-card-icon">✦</div>
+        <h3 id="vm-vision-titre">Notre Vision</h3>
+        <p id="vm-vision-texte">Être un lieu de transformation spirituelle où chaque personne découvre son identité en Christ et rayonne cette foi dans sa famille, sa ville et au-delà des frontières.</p>
+      </div>
+      <div class="vision-card reveal">
+        <div class="vision-card-icon">◎</div>
+        <h3 id="vm-mission-titre">Notre Mission</h3>
+        <p id="vm-mission-texte">Annoncer l'Évangile de Jésus-Christ, faire des disciples, bâtir une communauté de foi vivante et unie, et servir notre prochain avec amour et compassion.</p>
+      </div>
+    </div>
+
+    <div class="vision-valeurs-grid" id="vm-valeurs">
+      <div class="valeur-item reveal">
+        <div class="valeur-icon">✝</div>
+        <h4>La Parole</h4>
+        <p>La Bible est notre fondement et notre guide pour toute décision.</p>
+      </div>
+      <div class="valeur-item reveal">
+        <div class="valeur-icon">🙏</div>
+        <h4>La Prière</h4>
+        <p>Nous croyons à la puissance de la prière et cherchons la face de Dieu ensemble.</p>
+      </div>
+      <div class="valeur-item reveal">
+        <div class="valeur-icon">👨‍👩‍👧</div>
+        <h4>La Famille</h4>
+        <p>Chaque personne est accueillie, aimée et accompagnée dans son chemin.</p>
+      </div>
+      <div class="valeur-item reveal">
+        <div class="valeur-icon">🌍</div>
+        <h4>L'Évangélisation</h4>
+        <p>Nous partageons la bonne nouvelle avec notre ville et les nations.</p>
+      </div>
+    </div>
+
+    <blockquote class="vision-verse reveal">
+      <span id="vm-verset-texte">« Allez, faites de toutes les nations des disciples. »</span>
+      <cite id="vm-verset-ref">Matthieu 28 : 19</cite>
+    </blockquote>
+  </div>
+</section>
 
 <!-- ===== SERVICES ===== -->
 <section class="services" id="services">
@@ -2731,6 +2902,39 @@ function applyCmsContent() {
 
 loadCmsContentSync();
 applyCmsContent();
+
+// ===== VISION & MISSION — rendu depuis contenu.json =====
+(function() {
+  const vm = CMS_DATA && CMS_DATA.vision_mission;
+  if (!vm) return;
+  const section = document.getElementById('vision');
+  if (!section) return;
+  if (vm.actif === false) { section.style.display = 'none'; return; }
+
+  const setText = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+  setText('vm-eyebrow',       vm.eyebrow);
+  setText('vm-titre-accent',  vm.titre);
+  setText('vm-lead',          vm.intro);
+  setText('vm-vision-titre',  vm.vision_titre);
+  setText('vm-vision-texte',  vm.vision_texte);
+  setText('vm-mission-titre', vm.mission_titre);
+  setText('vm-mission-texte', vm.mission_texte);
+  setText('vm-verset-texte',  vm.verset_texte);
+  setText('vm-verset-ref',    vm.verset_reference);
+
+  if (vm.valeurs && vm.valeurs.length) {
+    const grid = document.getElementById('vm-valeurs');
+    if (grid) {
+      grid.innerHTML = '';
+      vm.valeurs.forEach(v => {
+        const d = document.createElement('div');
+        d.className = 'valeur-item reveal';
+        d.innerHTML = `<div class="valeur-icon">${v.icone || '✦'}</div><h4>${v.titre || ''}</h4><p>${v.texte || ''}</p>`;
+        grid.appendChild(d);
+      });
+    }
+  }
+})();
 
 // ===== TRADUCTION FR / NL =====
 // Dictionnaire complet : chaque texte FR → traduction NL.

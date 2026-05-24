@@ -67,6 +67,7 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -137,6 +138,7 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -172,6 +174,7 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -206,6 +209,7 @@ collections:
           - { label: "_", name: "temoignages", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -245,6 +249,7 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -288,6 +293,7 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -325,6 +331,7 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -367,6 +374,7 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -404,6 +412,7 @@ collections:
           - { label: "_", name: "temoignages", widget: "hidden" }
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -435,6 +444,7 @@ collections:
           - { label: "_", name: "temoignages", widget: "hidden" }
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
@@ -459,6 +469,54 @@ collections:
               - { label: "Sous-titre", name: "sous_titre", widget: "text", hint: "Phrase d'accueil sous le titre principal" }
               - { label: "Texte bouton principal", name: "bouton_principal", widget: "string", default: "Nos horaires" }
               - { label: "Texte bouton secondaire", name: "bouton_secondaire", widget: "string", default: "Rejoindre le live" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 13. VISION & MISSION
+  # ========================================
+  - name: "vision_mission"
+    label: "✝ Vision & Mission"
+    files:
+      - name: "vision_mission_data"
+        label: "Vision & Mission"
+        file: "contenu.json"
+        fields:
+          - label: "Vision & Mission"
+            name: "vision_mission"
+            widget: "object"
+            hint: "Section 'Qui sommes-nous' visible sur le site. Activez-la pour la rendre visible."
+            fields:
+              - { label: "Afficher la section ?", name: "actif", widget: "boolean", default: true }
+              - { label: "Surtitre (ex: Qui sommes-nous)", name: "eyebrow", widget: "string" }
+              - { label: "Titre de la section", name: "titre", widget: "string" }
+              - { label: "Texte d'introduction", name: "intro", widget: "text", hint: "Courte présentation de l'église pour les nouveaux visiteurs." }
+              - { label: "Titre Vision", name: "vision_titre", widget: "string", default: "Notre Vision" }
+              - { label: "Texte Vision", name: "vision_texte", widget: "text" }
+              - { label: "Titre Mission", name: "mission_titre", widget: "string", default: "Notre Mission" }
+              - { label: "Texte Mission", name: "mission_texte", widget: "text" }
+              - label: "Valeurs (4 maximum)"
+                name: "valeurs"
+                widget: "list"
+                max: 4
+                fields:
+                  - { label: "Icône (emoji)", name: "icone", widget: "string", hint: "Ex: ✝ 🙏 👨‍👩‍👧 🌍" }
+                  - { label: "Titre de la valeur", name: "titre", widget: "string" }
+                  - { label: "Description courte", name: "texte", widget: "text" }
+              - { label: "Verset biblique (avec guillemets)", name: "verset_texte", widget: "string" }
+              - { label: "Référence du verset", name: "verset_reference", widget: "string" }
+          - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
           - { label: "_", name: "navette", widget: "hidden" }
