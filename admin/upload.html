@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Photos · CEFC Admin</title>
+  <link rel="icon" type="image/png" href="../cefc-logo.png" />
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 680px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #f7fafc;
+    }
+    .subtitle {
+      color: #718096;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Drop zone */
+    .drop-zone {
+      border: 2px dashed #4a5568;
+      border-radius: 12px;
+      padding: 3rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: #7c3aed;
+      background: rgba(124,58,237,0.06);
+    }
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .drop-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+    .drop-text { font-size: 1rem; color: #a0aec0; }
+    .drop-text strong { color: #e2e8f0; }
+    .drop-hint { font-size: 0.8rem; color: #718096; margin-top: 0.4rem; }
+
+    /* Preview grid */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    .preview-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: #2d3748;
+    }
+    .preview-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .preview-item .remove-btn {
+      position: absolute;
+      top: 4px; right: 4px;
+      background: rgba(0,0,0,0.7);
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 22px; height: 22px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .preview-item .status-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .preview-item.uploading .status-overlay { background: rgba(0,0,0,0.5); }
+    .preview-item.done .status-overlay { background: rgba(0,100,0,0.5); }
+    .preview-item.error .status-overlay { background: rgba(150,0,0,0.5); }
+
+    /* Actions */
+    .actions {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 0.65rem 1.5rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary { background: #7c3aed; color: white; }
+    .btn-primary:hover:not(:disabled) { background: #6d28d9; }
+    .btn-secondary { background: #2d3748; color: #e2e8f0; }
+    .btn-secondary:hover:not(:disabled) { background: #3a4a5c; }
+
+    .progress-text {
+      font-size: 0.85rem;
+      color: #a0aec0;
+    }
+
+    /* Log */
+    .log {
+      margin-top: 1.5rem;
+      background: #0f1117;
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.82rem;
+      font-family: monospace;
+      max-height: 180px;
+      overflow-y: auto;
+      display: none;
+    }
+    .log.visible { display: block; }
+    .log-line { padding: 0.15rem 0; }
+    .log-line.ok { color: #48bb78; }
+    .log-line.err { color: #fc8181; }
+    .log-line.info { color: #63b3ed; }
+
+    /* Auth screen */
+    #authScreen {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    #authScreen p { color: #a0aec0; margin-bottom: 1.5rem; }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #718096;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .back-link:hover { color: #e2e8f0; }
+
+    .success-banner {
+      background: rgba(72,187,120,0.15);
+      border: 1px solid #48bb78;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-top: 1.5rem;
+      color: #9ae6b4;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .success-banner.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<div style="width:100%;max-width:680px">
+  <a href="/admin/" class="back-link">← Retour à l'admin</a>
+</div>
+
+<div class="card">
+
+  <!-- Auth screen -->
+  <div id="authScreen">
+    <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
+    <h1>Connexion requise</h1>
+    <p>Connectez-vous pour accéder à l'upload de photos.</p>
+    <button class="btn btn-primary" onclick="netlifyIdentity.open('login')">Se connecter</button>
+  </div>
+
+  <!-- Upload screen -->
+  <div id="uploadScreen" style="display:none">
+    <h1>📸 Upload de photos du culte</h1>
+    <p class="subtitle">Sélectionnez ou glissez toutes vos photos en une seule fois.</p>
+
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" multiple accept="image/*" />
+      <div class="drop-icon">🖼️</div>
+      <p class="drop-text"><strong>Glissez vos photos ici</strong></p>
+      <p class="drop-text">ou cliquez pour sélectionner</p>
+      <p class="drop-hint">JPG, PNG, WEBP · Plusieurs photos à la fois</p>
+    </div>
+
+    <div class="preview-grid" id="previewGrid"></div>
+
+    <div class="actions" id="actions" style="display:none">
+      <button class="btn btn-primary" id="uploadBtn">⬆️ Publier les photos</button>
+      <button class="btn btn-secondary" id="clearBtn">Tout effacer</button>
+      <span class="progress-text" id="progressText"></span>
+    </div>
+
+    <div class="success-banner" id="successBanner">
+      ✅ Photos publiées ! Elles apparaîtront sur le site dans 1–2 minutes après le déploiement Netlify.
+    </div>
+
+    <div class="log" id="log"></div>
+  </div>
+
+</div>
+
+<script>
+  const GIT = '/.netlify/git/github';
+
+  let files = []; // { file, objectUrl, status: 'pending'|'uploading'|'done'|'error' }
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
+  window.netlifyIdentity.on('init', user => {
+    if (user) showUpload();
+  });
+  window.netlifyIdentity.on('login', () => {
+    window.netlifyIdentity.close();
+    showUpload();
+  });
+  window.netlifyIdentity.on('logout', () => {
+    document.getElementById('uploadScreen').style.display = 'none';
+    document.getElementById('authScreen').style.display = 'block';
+  });
+
+  function showUpload() {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('uploadScreen').style.display = 'block';
+  }
+
+  async function getToken() {
+    const user = window.netlifyIdentity.currentUser();
+    if (!user) throw new Error('Non connecté');
+    await user.jwt(true); // refresh
+    return user.token.access_token;
+  }
+
+  // ── File selection ────────────────────────────────────────────────────────
+  const dropZone   = document.getElementById('dropZone');
+  const fileInput  = document.getElementById('fileInput');
+  const previewGrid = document.getElementById('previewGrid');
+  const actions    = document.getElementById('actions');
+  const uploadBtn  = document.getElementById('uploadBtn');
+  const clearBtn   = document.getElementById('clearBtn');
+  const progressText = document.getElementById('progressText');
+  const logEl      = document.getElementById('log');
+  const successBanner = document.getElementById('successBanner');
+
+  fileInput.addEventListener('change', e => addFiles(Array.from(e.target.files)));
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    addFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
+  });
+
+  function addFiles(newFiles) {
+    for (const f of newFiles) {
+      const objectUrl = URL.createObjectURL(f);
+      files.push({ file: f, objectUrl, status: 'pending', id: Math.random().toString(36).slice(2) });
+    }
+    renderPreviews();
+    actions.style.display = files.length ? 'flex' : 'none';
+    successBanner.classList.remove('visible');
+    progressText.textContent = `${files.length} photo${files.length > 1 ? 's' : ''} sélectionnée${files.length > 1 ? 's' : ''}`;
+  }
+
+  function renderPreviews() {
+    previewGrid.innerHTML = '';
+    for (const item of files) {
+      const div = document.createElement('div');
+      div.className = `preview-item ${item.status !== 'pending' ? item.status : ''}`;
+      div.dataset.id = item.id;
+
+      const img = document.createElement('img');
+      img.src = item.objectUrl;
+      div.appendChild(img);
+
+      if (item.status === 'pending') {
+        const btn = document.createElement('button');
+        btn.className = 'remove-btn';
+        btn.innerHTML = '✕';
+        btn.onclick = () => removeFile(item.id);
+        div.appendChild(btn);
+      } else {
+        const overlay = document.createElement('div');
+        overlay.className = 'status-overlay';
+        overlay.textContent = item.status === 'uploading' ? '⏳' : item.status === 'done' ? '✅' : '❌';
+        div.appendChild(overlay);
+      }
+
+      previewGrid.appendChild(div);
+    }
+  }
+
+  function removeFile(id) {
+    files = files.filter(f => f.id !== id);
+    renderPreviews();
+    actions.style.display = files.length ? 'flex' : 'none';
+    if (files.length) progressText.textContent = `${files.length} photo${files.length > 1 ? 's' : ''} sélectionnée${files.length > 1 ? 's' : ''}`;
+  }
+
+  clearBtn.addEventListener('click', () => {
+    files = [];
+    renderPreviews();
+    actions.style.display = 'none';
+    fileInput.value = '';
+    logEl.classList.remove('visible');
+    logEl.innerHTML = '';
+    successBanner.classList.remove('visible');
+  });
+
+  // ── Upload ────────────────────────────────────────────────────────────────
+  uploadBtn.addEventListener('click', doUpload);
+
+  function log(msg, type = 'info') {
+    logEl.classList.add('visible');
+    const line = document.createElement('div');
+    line.className = `log-line ${type}`;
+    line.textContent = msg;
+    logEl.appendChild(line);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  async function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // result is "data:image/jpeg;base64,XXXXX" — we only want XXXXX
+        resolve(reader.result.split(',')[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function sanitizeFilename(name) {
+    // Keep extension, replace spaces/special chars
+    return name
+      .normalize('NFD').replace(/[̀-ͯ]/g, '') // remove accents
+      .replace(/[^a-zA-Z0-9._-]/g, '-')
+      .replace(/-+/g, '-')
+      .toLowerCase();
+  }
+
+  async function uploadSingleFile(token, item) {
+    const filename = `${Date.now()}-${sanitizeFilename(item.file.name)}`;
+    const b64 = await fileToBase64(item.file);
+
+    // Check if file already exists (get SHA)
+    const checkRes = await fetch(`${GIT}/contents/img/uploads/${filename}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const body = { message: `photo: ${filename}`, content: b64 };
+    if (checkRes.ok) {
+      const existing = await checkRes.json();
+      body.sha = existing.sha;
+    }
+
+    const res = await fetch(`${GIT}/contents/img/uploads/${filename}`, {
+      method: 'PUT',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return `/img/uploads/${filename}`;
+  }
+
+  async function updatePhotosJson(token, newUrls) {
+    // Fetch current photos_culte.json
+    const getRes = await fetch(`${GIT}/contents/photos_culte.json`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    let currentPhotos = [];
+    let sha = null;
+    if (getRes.ok) {
+      const data = await getRes.json();
+      sha = data.sha;
+      try {
+        const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+        currentPhotos = JSON.parse(decoded).photos || [];
+      } catch(e) {}
+    }
+
+    const allPhotos = [...currentPhotos, ...newUrls.map(url => ({ url, legende: '', date: '' }))];
+    const jsonStr = JSON.stringify({ photos: allPhotos }, null, 2);
+    const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+
+    const putBody = { message: `Ajout de ${newUrls.length} photo(s)`, content: encoded };
+    if (sha) putBody.sha = sha;
+
+    const putRes = await fetch(`${GIT}/contents/photos_culte.json`, {
+      method: 'PUT',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(putBody)
+    });
+    if (!putRes.ok) throw new Error(`Mise à jour JSON échouée: HTTP ${putRes.status}`);
+  }
+
+  async function doUpload() {
+    const pending = files.filter(f => f.status === 'pending');
+    if (!pending.length) return;
+
+    uploadBtn.disabled = true;
+    clearBtn.disabled = true;
+    logEl.innerHTML = '';
+    successBanner.classList.remove('visible');
+
+    let token;
+    try {
+      token = await getToken();
+    } catch(e) {
+      log('Erreur : non connecté. Rechargez la page.', 'err');
+      uploadBtn.disabled = false;
+      clearBtn.disabled = false;
+      return;
+    }
+
+    const uploadedUrls = [];
+    let done = 0;
+
+    for (const item of pending) {
+      item.status = 'uploading';
+      renderPreviews();
+      progressText.textContent = `Upload ${done + 1} / ${pending.length}…`;
+      log(`⬆ ${item.file.name}…`, 'info');
+
+      try {
+        const url = await uploadSingleFile(token, item);
+        item.status = 'done';
+        uploadedUrls.push(url);
+        done++;
+        log(`✓ ${item.file.name}`, 'ok');
+      } catch(e) {
+        item.status = 'error';
+        log(`✗ ${item.file.name} — ${e.message}`, 'err');
+      }
+      renderPreviews();
+    }
+
+    if (uploadedUrls.length > 0) {
+      log('Mise à jour de la galerie…', 'info');
+      try {
+        await updatePhotosJson(token, uploadedUrls);
+        log(`✓ Galerie mise à jour avec ${uploadedUrls.length} photo(s)`, 'ok');
+        successBanner.classList.add('visible');
+        progressText.textContent = `${done} / ${pending.length} photo${done > 1 ? 's' : ''} publiée${done > 1 ? 's' : ''} ✓`;
+      } catch(e) {
+        log(`✗ Erreur mise à jour galerie: ${e.message}`, 'err');
+      }
+    }
+
+    uploadBtn.disabled = false;
+    clearBtn.disabled = false;
+  }
+</script>
+</body>
+</html>

@@ -9,6 +9,13 @@
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
+  <!-- Bouton accès rapide upload photos -->
+  <div id="uploadShortcut" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999">
+    <a href="/admin/upload.html"
+       style="display:inline-flex;align-items:center;gap:8px;background:#7c3aed;color:white;padding:12px 20px;border-radius:12px;text-decoration:none;font-family:sans-serif;font-weight:600;font-size:14px;box-shadow:0 4px 20px rgba(0,0,0,0.4)">
+      📸 Upload photos (multi)
+    </a>
+  </div>
   <!-- Le CMS s'injecte ici -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
@@ -19,7 +26,12 @@
           window.netlifyIdentity.on("login", () => {
             document.location.href = "/admin/";
           });
+        } else {
+          document.getElementById('uploadShortcut').style.display = 'block';
         }
+      });
+      window.netlifyIdentity.on("login", () => {
+        document.getElementById('uploadShortcut').style.display = 'block';
       });
     }
   </script>
