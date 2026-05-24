@@ -3392,6 +3392,7 @@ modalQuestionForm.addEventListener('submit', (e) => {
 });
 
 // ===== GALERIE PHOTOS CULTE =====
+// Charge photos_culte.json (fichier dédié, mis à jour par l'admin)
 (function() {
   const track   = document.getElementById('galleryTrack');
   const dotsWrap= document.getElementById('galleryDots');
@@ -3400,30 +3401,33 @@ modalQuestionForm.addEventListener('submit', (e) => {
   const nextBtn = document.getElementById('galleryNext');
   if (!track) return;
 
-  const photos = (CMS_DATA && CMS_DATA.photos_culte && CMS_DATA.photos_culte.photos) || [];
-  const validPhotos = photos.filter(p => p && p.url && p.url.trim());
+  function buildGallery(rawPhotos) {
+    // Accepte ["/img/uploads/photo.jpg", ...] ou [{url: "...", legende: "..."}]
+    const validPhotos = (rawPhotos || [])
+      .map(p => typeof p === 'string' ? { url: p, legende: '', date: '' } : p)
+      .filter(p => p && p.url && p.url.trim());
 
-  if (validPhotos.length === 0) {
-    track.innerHTML = `
-      <div class="gallery-placeholder">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        <p>Photos à venir</p>
-      </div>`;
-    prevBtn.style.display = 'none';
-    nextBtn.style.display = 'none';
-    return;
-  }
+    if (validPhotos.length === 0) {
+      track.innerHTML = `
+        <div class="gallery-placeholder">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p>Photos à venir</p>
+        </div>`;
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+      return;
+    }
 
-  let current = 0;
-  let autoTimer = null;
+    let current = 0;
+    let autoTimer = null;
 
-  validPhotos.forEach((p, i) => {
-    const slide = document.createElement('div');
-    slide.className = 'gallery-slide' + (i === 0 ? ' active' : '');
-    slide.innerHTML = `
-      <img src="${p.url}" alt="${p.legende || ''}" loading="${i === 0 ? 'eager' : 'lazy'}" />
-      ${p.legende ? `<div class="gallery-slide-caption">${p.legende}${p.date ? ' · ' + p.date : ''}</div>` : ''}`;
-    track.appendChild(slide);
+    validPhotos.forEach((p, i) => {
+      const slide = document.createElement('div');
+      slide.className = 'gallery-slide' + (i === 0 ? ' active' : '');
+      slide.innerHTML = `
+        <img src="${p.url}" alt="${p.legende || ''}" loading="${i === 0 ? 'eager' : 'lazy'}" />
+        ${p.legende ? `<div class="gallery-slide-caption">${p.legende}${p.date ? ' · ' + p.date : ''}</div>` : ''}`;
+      track.appendChild(slide);
 
     const dot = document.createElement('button');
     dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
@@ -3475,6 +3479,12 @@ modalQuestionForm.addEventListener('submit', (e) => {
   }, { passive: true });
 
   if (validPhotos.length > 1) startAuto();
+  } // end buildGallery
+
+  fetch('photos_culte.json')
+    .then(r => r.json())
+    .then(data => buildGallery(data.photos || []))
+    .catch(() => buildGallery([]));
 })();
 </script>
 </body>

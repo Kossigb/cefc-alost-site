@@ -74,49 +74,30 @@ collections:
   # ========================================
   - name: "photos_culte"
     label: "📸 Photos du culte"
-    label_singular: "photos"
     files:
       - name: "photos_data"
         label: "Galerie photos"
-        file: "contenu.json"
+        file: "photos_culte.json"
+        description: >
+          COMMENT AJOUTER PLUSIEURS PHOTOS EN UNE FOIS :
+          1. Cliquez sur le bouton "Médias" (icône en haut à droite)
+          2. Cliquez "Téléverser une nouvelle ressource"
+          3. Sélectionnez TOUTES vos photos en même temps (Ctrl+clic ou Cmd+clic)
+          4. Revenez ici et ajoutez chaque photo dans la liste ci-dessous (elles sont déjà uploadées, cliquez juste Choisir)
         fields:
-          - label: "Galerie photos du culte"
-            name: "photos_culte"
-            widget: "object"
-            fields:
-              - { label: "Titre de la section (mot en italique)", name: "titre", widget: "string", default: "culte" }
-              - { label: "Sous-titre de la section", name: "sous_titre", widget: "string", required: false }
-              - label: "Photos"
-                name: "photos"
-                widget: "list"
-                hint: "Ajoutez vos photos du culte ici. Elles s'afficheront en carrousel sur le site."
-                fields:
-                  - label: "Photo"
-                    name: "url"
-                    widget: "image"
-                    hint: "Choisissez une photo depuis votre ordinateur"
-                  - label: "Legende (optionnel)"
-                    name: "legende"
-                    widget: "string"
-                    required: false
-                    hint: "Ex: Culte du 4 mai 2025"
-                  - label: "Date (optionnel)"
-                    name: "date"
-                    widget: "string"
-                    required: false
-                    hint: "Ex: 4 mai 2025"
-          - { label: "_", name: "hero", widget: "hidden" }
-          - { label: "_", name: "banniere", widget: "hidden" }
-          - { label: "_", name: "horaires", widget: "hidden" }
-          - { label: "_", name: "navette", widget: "hidden" }
-          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "_", name: "departements", widget: "hidden" }
-          - { label: "_", name: "annonces", widget: "hidden" }
-          - { label: "_", name: "temoignages", widget: "hidden" }
-          - { label: "_", name: "message_pasteur", widget: "hidden" }
-          - { label: "_", name: "infos", widget: "hidden" }
-          - { label: "_", name: "footer", widget: "hidden" }
-          - { label: "_", name: "_GUIDE", widget: "hidden" }
+          - label: "Photos du culte"
+            name: "photos"
+            widget: "list"
+            minimize_collapsed: true
+            collapsed: false
+            hint: >
+              ➕ Astuce : uploadez d'abord TOUTES vos photos en cliquant sur l'icône 📁 Médias en haut à droite,
+              puis revenez ici et ajoutez-les une par une (elles seront déjà disponibles dans la bibliothèque, 1 clic par photo).
+            field:
+              label: "Photo"
+              name: "url"
+              widget: "image"
+              hint: "Cliquez pour choisir une photo déjà uploadée ou en uploader une nouvelle"
 
   # ========================================
   # 3. ANNONCES ET EVENEMENTS
