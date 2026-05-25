@@ -181,11 +181,11 @@
     ]
   },
   "vision_mission": {
-    "vision_texte": "Être un lieu de transformation spirituelle où chaque personne découvre son identité en Christ et rayonne cette foi dans sa famille, sa ville et au-delà des frontières.",
+    "vision_texte": "Le Centre Evangélique La Famille Chrétienne repend le message de l'évangile. Nous prechons le nom de Jésus Christ. Ce nom qui sauve, qui libère, qui affranchit et qui délivre. Le seul nom capable de donner le bonheur et la joie dans le coeur des hommes et de réparer ce que l'ennemi a brisé.\n\n<< Il n'y a de salut en aucun autre; car il n'y a sous le ciel aucun autre nom qui ait été donné parmi les hommes, par lequel nous devions être sauvés. » Actes 4.12",
     "mission_texte": "Ramener Christ au sein de la famille.",
     "eyebrow": "Qui sommes-nous",
-    "verset_reference": "Matthieu 28 : 19",
-    "intro": "Nous sommes une église évangélique francophone établie à Alost, en Belgique. Notre porte est ouverte à tous — sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.",
+    "verset_reference": "Actes 4:12",
+    "intro": "Nous sommes une église évangélique franco néerlandophone établie à Alost, en Belgique. Notre porte est ouverte à tous — sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.",
     "actif": true,
     "valeurs": [
       {
@@ -210,7 +210,7 @@
       }
     ],
     "titre": "Vision & Mission",
-    "verset_texte": "« Allez, faites de toutes les nations des disciples. »",
+    "verset_texte": "<< Il n'y a de salut en aucun autre; car il n'y a sous le ciel aucun autre nom qui ait été donné parmi les hommes, par lequel nous devions être sauvés. »",
     "_commentaire": "Section Vision et Mission affichée sur le site. Mets 'actif' à false pour la masquer.",
     "vision_titre": "Notre Vision",
     "mission_titre": "Notre Mission"
