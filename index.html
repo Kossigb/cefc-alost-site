@@ -525,6 +525,14 @@ section { scroll-margin-top: 80px; }
   transition: transform 0.25s var(--ease), box-shadow 0.25s;
 }
 .btn-youtube:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(227, 227, 235, 0.2); }
+.live-embed {
+  grid-column: 1 / -1;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+.live-embed iframe { width: 100%; height: 100%; display: block; border: none; }
 
 /* ===== ANNONCES ===== */
 .annonces {
@@ -2143,13 +2151,18 @@ footer::before {
           <span id="liveBadgeText">Prochainement en direct</span>
         </div>
         <h3 class="live-title" id="liveTitle">Suivez nos cultes en direct</h3>
-        <p class="live-sub" id="liveSub">Tous les dimanches à 10h sur YouTube. Rediffusion disponible sur la chaîne.</p>
+        <p class="live-sub" id="liveSub">Cultes chaque dimanche à 10h, mercredi et vendredi à 18h.</p>
       </div>
-      <div class="live-cta">
+      <div class="live-cta" id="liveCtaWrap">
         <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener" class="btn-youtube">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
           <span id="liveCtaText">Voir sur YouTube</span>
         </a>
+      </div>
+      <div class="live-embed" id="liveEmbed" style="display:none;">
+        <iframe id="liveIframe" src="" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -2819,38 +2832,68 @@ if (jefcWrap && jefcDisplay) {
 }
 
 // ===== LIVE STATUS (heure de Bruxelles) =====
+// Services : dimanche 10h, mercredi 18h, vendredi 18h
+const SERVICES = [
+  { day: 0, hour: 10, endHour: 12, endMin: 30, label: 'Dimanche' },
+  { day: 3, hour: 18, endHour: 20, endMin: 0,  label: 'Mercredi' },
+  { day: 5, hour: 18, endHour: 20, endMin: 0,  label: 'Vendredi' },
+];
+
 function updateLiveStatus() {
-  const badge = document.getElementById('liveBadge');
-  const badgeText = document.getElementById('liveBadgeText');
-  const title = document.getElementById('liveTitle');
-  const sub = document.getElementById('liveSub');
-  const ctaText = document.getElementById('liveCtaText');
+  const badge      = document.getElementById('liveBadge');
+  const badgeText  = document.getElementById('liveBadgeText');
+  const title      = document.getElementById('liveTitle');
+  const sub        = document.getElementById('liveSub');
+  const ctaText    = document.getElementById('liveCtaText');
+  const liveEmbed  = document.getElementById('liveEmbed');
+  const liveIframe = document.getElementById('liveIframe');
 
   const nowStr = new Date().toLocaleString('en-US', { timeZone: 'Europe/Brussels' });
   const now = new Date(nowStr);
   const day = now.getDay();
   const hours = now.getHours();
   const minutes = now.getMinutes();
-  const isLiveNow = day === 0 && (hours === 10 || hours === 11 || (hours === 12 && minutes <= 30));
+  const totalMin = hours * 60 + minutes;
+
+  const isLiveNow = SERVICES.some(s =>
+    s.day === day &&
+    totalMin >= s.hour * 60 &&
+    totalMin < s.endHour * 60 + s.endMin
+  );
 
   if (isLiveNow) {
     badge.classList.remove('offline');
     badgeText.textContent = 'En direct maintenant';
     title.textContent = 'Le culte est en direct';
-    sub.textContent = 'Rejoignez-nous dès maintenant sur YouTube pour suivre le culte dominical.';
+    sub.textContent = 'Rejoignez-nous dès maintenant — le culte est diffusé sur notre chaîne.';
     ctaText.textContent = 'Regarder le live';
-  } else {
-    const next = new Date(now);
-    let daysUntilSunday = (7 - day) % 7;
-    if (day === 0 && hours >= 13) daysUntilSunday = 7;
-    if (day === 0 && hours < 10) daysUntilSunday = 0;
-    next.setDate(now.getDate() + daysUntilSunday);
-    next.setHours(10, 0, 0, 0);
 
-    const diff = next - now;
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const channelId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
+    if (channelId && liveEmbed && liveIframe) {
+      if (!liveIframe.src) {
+        liveIframe.src = `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1`;
+      }
+      liveEmbed.style.display = 'block';
+    }
+  } else {
+    if (liveEmbed) liveEmbed.style.display = 'none';
+    if (liveIframe) liveIframe.src = '';
+
+    let minDiff = Infinity;
+    let nextLabel = 'Dimanche';
+    for (const s of SERVICES) {
+      const next = new Date(now);
+      let daysUntil = (s.day - day + 7) % 7;
+      if (daysUntil === 0 && totalMin >= s.endHour * 60 + s.endMin) daysUntil = 7;
+      next.setDate(now.getDate() + daysUntil);
+      next.setHours(s.hour, 0, 0, 0);
+      const diff = next - now;
+      if (diff > 0 && diff < minDiff) { minDiff = diff; nextLabel = s.label; }
+    }
+
+    const d = Math.floor(minDiff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((minDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((minDiff % (1000 * 60 * 60)) / (1000 * 60));
 
     let countdown = '';
     if (d > 0) countdown = `${d} jour${d > 1 ? 's' : ''} et ${h}h`;
@@ -2858,9 +2901,9 @@ function updateLiveStatus() {
     else countdown = `${m} minute${m > 1 ? 's' : ''}`;
 
     badge.classList.add('offline');
-    badgeText.textContent = `Prochain culte dans ${countdown}`;
+    badgeText.textContent = `Prochain culte (${nextLabel}) dans ${countdown}`;
     title.textContent = 'Suivez nos cultes en direct';
-    sub.textContent = 'Tous les dimanches à 10h sur YouTube. Rediffusion disponible sur la chaîne.';
+    sub.textContent = 'Cultes chaque dimanche à 10h, mercredi et vendredi à 18h.';
     ctaText.textContent = 'Voir sur YouTube';
   }
 }
@@ -3036,6 +3079,9 @@ applyCmsContent();
     }
   }
 })();
+
+// Re-observer les éléments .reveal ajoutés dynamiquement par le CMS
+document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
 
 // ===== TRADUCTION FR / NL =====
 // Dictionnaire complet : chaque texte FR → traduction NL.
@@ -3329,6 +3375,7 @@ function applyLanguage(lang) {
   // Cela régénère les listes (annonces, navette, équipe) avec les versions FR ou _nl.
   if (CMS_DATA) {
     applyCmsContent();
+    document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
     // Re-collecter les textes originaux car le CMS vient de modifier le DOM
     collectAndStoreOriginals();
     collectAttrOriginals();
