@@ -116,12 +116,12 @@
     "adresse_ligne1": "Wijngaardveld 29",
     "adresse_ligne2": "9300 Alost (Aalst)",
     "youtube": "https://www.youtube.com/@CE_laFamilleChretienne",
-    "youtube_channel_id": "UCp4V6MSF87MGlw87fPdl-sg",
     "telephone": "",
     "facebook": "https://www.facebook.com/CentreEvangeliqueLaFamilleChretienne",
     "pays": "Belgique",
     "whatsapp": "",
     "instagram": "https://www.instagram.com/cefc.alost/",
+    "youtube_channel_id": "UCp4V6MSF87MGlw87fPdl-sg",
     "_commentaire": "Informations pratiques de l'eglise (adresse, telephone, email, reseaux sociaux).",
     "email": "contact@cefclabornealost.be"
   },
@@ -188,28 +188,7 @@
     "verset_reference": "Actes 4:12",
     "intro": "Nous sommes une église évangélique franco néerlandophone établie à Alost, en Belgique. Notre porte est ouverte à tous sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.",
     "actif": true,
-    "valeurs": [
-      {
-        "icone": "✝",
-        "titre": "La Parole",
-        "texte": "La Bible est notre fondement et notre guide pour toute décision et tout enseignement."
-      },
-      {
-        "icone": "🙏",
-        "titre": "La Prière",
-        "texte": "Nous croyons à la puissance de la prière et cherchons la face de Dieu ensemble."
-      },
-      {
-        "icone": "👨‍👩‍👧",
-        "titre": "La Famille",
-        "texte": "Chaque personne est accueillie, aimée et accompagnée dans son chemin de foi."
-      },
-      {
-        "icone": "🌍",
-        "titre": "L'Évangélisation",
-        "texte": "Nous partageons la bonne nouvelle avec notre ville et les nations."
-      }
-    ],
+    "valeurs": [],
     "titre": "Vision & Mission",
     "verset_texte": "<< Il n'y a de salut en aucun autre; car il n'y a sous le ciel aucun autre nom qui ait été donné parmi les hommes, par lequel nous devions être sauvés. »",
     "_commentaire": "Section Vision et Mission affichée sur le site. Mets 'actif' à false pour la masquer.",
