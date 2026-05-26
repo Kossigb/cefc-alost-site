@@ -618,6 +618,15 @@ section { scroll-margin-top: 80px; }
   color: var(--text-muted);
 }
 .annonce-card.important .annonce-description { color: rgba(227, 227, 235, 0.85); }
+.annonce-img {
+  display: none;
+  width: calc(100% + 52px);
+  height: 180px;
+  object-fit: cover;
+  margin: -28px -26px 20px;
+}
+.annonce-card.has-img { overflow: hidden; }
+.annonce-card.has-img .annonce-img { display: block; }
 
 /* ===== JEFC ===== */
 .jefc {
@@ -2210,6 +2219,7 @@ footer::before {
     <div class="annonces-list" data-cms-list="annonces.liste">
       <template data-cms-template>
         <div class="annonce-card reveal" data-cms-feature="important">
+          <img class="annonce-img" data-cms-img="image" alt="" loading="lazy" />
           <div class="annonce-flag" data-cms-show-if="important">
             <span class="dot"></span>
             <span data-i18n-static="A la une">À la une</span>
@@ -3055,6 +3065,13 @@ function applyCmsContent() {
       node.querySelectorAll('[data-cms-show-if]').forEach(el => {
         const flag = item[el.getAttribute('data-cms-show-if')];
         if (!flag) el.style.display = 'none';
+      });
+
+      // Images : data-cms-img="champ"
+      node.querySelectorAll('[data-cms-img]').forEach(img => {
+        const key = img.getAttribute('data-cms-img');
+        const v = item[key];
+        if (v) { img.src = v; node.classList.add('has-img'); }
       });
 
       // Icônes : data-cms-icon (icône SVG selon le jour)

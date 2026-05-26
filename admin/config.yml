@@ -9,9 +9,6 @@ public_folder: "/img/uploads"
 # Langue de l'interface admin
 locale: 'fr'
 
-# Champs réutilisables masqués — à inclure dans chaque collection pour ne pas écraser les autres données
-# (Netlify CMS réécrit tout le fichier à chaque sauvegarde)
-
 collections:
 
   # ========================================
@@ -36,8 +33,10 @@ collections:
                   - { label: "Heure (ex: 10h00)", name: "heure", widget: "string" }
                   - { label: "Nom du culte (FR)", name: "nom", widget: "string" }
                   - { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" }
+                  - { label: "Nom du culte (EN)", name: "nom_en", widget: "string", required: false }
                   - { label: "Description (FR)", name: "description", widget: "text" }
                   - { label: "Description (NL)", name: "description_nl", widget: "text" }
+                  - { label: "Description (EN)", name: "description_en", widget: "text", required: false }
               - label: "Etude biblique du mercredi"
                 name: "mercredi"
                 widget: "object"
@@ -45,8 +44,10 @@ collections:
                   - { label: "Heure (ex: 18h00)", name: "heure", widget: "string" }
                   - { label: "Nom du culte (FR)", name: "nom", widget: "string" }
                   - { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" }
+                  - { label: "Nom du culte (EN)", name: "nom_en", widget: "string", required: false }
                   - { label: "Description (FR)", name: "description", widget: "text" }
                   - { label: "Description (NL)", name: "description_nl", widget: "text" }
+                  - { label: "Description (EN)", name: "description_en", widget: "text", required: false }
               - label: "Jeune & Priere du vendredi"
                 name: "vendredi"
                 widget: "object"
@@ -54,8 +55,10 @@ collections:
                   - { label: "Heure (ex: 18h00-20h00)", name: "heure", widget: "string" }
                   - { label: "Nom du culte (FR)", name: "nom", widget: "string" }
                   - { label: "Nom du culte (NL)", name: "nom_nl", widget: "string" }
+                  - { label: "Nom du culte (EN)", name: "nom_en", widget: "string", required: false }
                   - { label: "Description (FR)", name: "description", widget: "text" }
                   - { label: "Description (NL)", name: "description_nl", widget: "text" }
+                  - { label: "Description (EN)", name: "description_en", widget: "text", required: false }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "navette", widget: "hidden" }
@@ -120,12 +123,20 @@ collections:
                 widget: "list"
                 hint: "Ajoutez, modifiez ou supprimez des annonces. Les annonces importantes s'affichent en bleu nuit."
                 fields:
+                  - label: "Photo illustrative (optionnel)"
+                    name: "image"
+                    widget: "image"
+                    required: false
+                    hint: "Image affichée en haut de la carte d'annonce. Taille recommandée : 800×400px."
                   - { label: "Titre (FR)", name: "titre", widget: "string" }
                   - { label: "Titre (NL)", name: "titre_nl", widget: "string", required: false }
+                  - { label: "Titre (EN)", name: "titre_en", widget: "string", required: false }
                   - { label: "Date (FR) — ex: Dimanche 14 juin 2026", name: "date", widget: "string" }
                   - { label: "Date (NL)", name: "date_nl", widget: "string", required: false }
+                  - { label: "Date (EN)", name: "date_en", widget: "string", required: false }
                   - { label: "Description (FR)", name: "description", widget: "text" }
                   - { label: "Description (NL)", name: "description_nl", widget: "text", required: false }
+                  - { label: "Description (EN)", name: "description_en", widget: "text", required: false }
                   - { label: "Mettre en avant ? (fond bleu nuit)", name: "important", widget: "boolean", default: false }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
@@ -160,9 +171,11 @@ collections:
               - { label: "Afficher la banniere ?", name: "active", widget: "boolean", default: false }
               - { label: "Texte de la banniere (FR)", name: "texte", widget: "string", required: false, hint: "Ex: Grande celebration le 14 juin — Tous invites !" }
               - { label: "Texte de la banniere (NL)", name: "texte_nl", widget: "string", required: false }
+              - { label: "Texte de la banniere (EN)", name: "texte_en", widget: "string", required: false }
               - { label: "Lien (optionnel)", name: "lien", widget: "string", required: false, hint: "Ex: #annonces ou une URL externe" }
               - { label: "Texte du lien (FR)", name: "lien_texte", widget: "string", required: false, hint: "Ex: En savoir plus" }
               - { label: "Texte du lien (NL)", name: "lien_texte_nl", widget: "string", required: false }
+              - { label: "Texte du lien (EN)", name: "lien_texte_en", widget: "string", required: false }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
           - { label: "_", name: "navette", widget: "hidden" }
@@ -198,6 +211,7 @@ collections:
               - { label: "Titre du message (FR)", name: "titre", widget: "string", default: "Un message du pasteur" }
               - { label: "Message (FR)", name: "message", widget: "text", required: false, hint: "Le message s'affichera en citation sur le site" }
               - { label: "Message (NL)", name: "message_nl", widget: "text", required: false }
+              - { label: "Message (EN)", name: "message_en", widget: "text", required: false }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
@@ -238,6 +252,7 @@ collections:
                   - { label: "Role / Anciennete", name: "role", widget: "string", required: false, hint: "Ex: Membre depuis 3 ans" }
                   - { label: "Temoignage (FR)", name: "texte", widget: "text" }
                   - { label: "Temoignage (NL)", name: "texte_nl", widget: "text", required: false }
+                  - { label: "Temoignage (EN)", name: "texte_en", widget: "text", required: false }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
@@ -269,18 +284,22 @@ collections:
             fields:
               - { label: "Point de depart (FR)", name: "depart", widget: "string" }
               - { label: "Point de depart (NL)", name: "depart_nl", widget: "string" }
+              - { label: "Point de depart (EN)", name: "depart_en", widget: "string", required: false }
               - { label: "Point d'arrivee (FR)", name: "arrivee", widget: "string" }
               - { label: "Point d'arrivee (NL)", name: "arrivee_nl", widget: "string" }
+              - { label: "Point d'arrivee (EN)", name: "arrivee_en", widget: "string", required: false }
               - label: "Creneaux horaires"
                 name: "creneaux"
                 widget: "list"
                 fields:
                   - { label: "Jour (FR)", name: "jour", widget: "string" }
                   - { label: "Jour (NL)", name: "jour_nl", widget: "string" }
+                  - { label: "Jour (EN)", name: "jour_en", widget: "string", required: false }
                   - { label: "Horaire (FR)", name: "horaire", widget: "string" }
                   - { label: "Horaire (NL)", name: "horaire_nl", widget: "string" }
                   - { label: "Description (FR)", name: "description", widget: "text" }
                   - { label: "Description (NL)", name: "description_nl", widget: "text" }
+                  - { label: "Description (EN)", name: "description_en", widget: "text", required: false }
                   - { label: "Mettre en avant ?", name: "principal", widget: "boolean", default: false }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
@@ -320,6 +339,7 @@ collections:
                   - { label: "Nom complet", name: "nom", widget: "string" }
                   - { label: "Role (FR)", name: "role", widget: "string" }
                   - { label: "Role (NL)", name: "role_nl", widget: "string" }
+                  - { label: "Role (EN)", name: "role_en", widget: "string", required: false }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
@@ -356,8 +376,10 @@ collections:
                   - { label: "Identifiant technique (ne pas changer)", name: "id", widget: "string" }
                   - { label: "Nom (FR)", name: "nom", widget: "string" }
                   - { label: "Nom (NL)", name: "nom_nl", widget: "string" }
+                  - { label: "Nom (EN)", name: "nom_en", widget: "string", required: false }
                   - { label: "Description courte (FR)", name: "description", widget: "text" }
                   - { label: "Description courte (NL)", name: "description_nl", widget: "text" }
+                  - { label: "Description courte (EN)", name: "description_en", widget: "text", required: false }
                   - label: "Photo de couverture"
                     name: "photo"
                     widget: "image"
@@ -401,6 +423,7 @@ collections:
               - { label: "Lien Facebook", name: "facebook", widget: "string", required: false, hint: "URL complete de la page Facebook" }
               - { label: "Numero WhatsApp (ex: +32xxx)", name: "whatsapp", widget: "string", required: false, hint: "Numero avec indicatif international. Sera utilise pour le lien wa.me/" }
               - { label: "Lien Instagram", name: "instagram", widget: "string", required: false }
+              - { label: "ID chaine YouTube (pour le live automatique)", name: "youtube_channel_id", widget: "string", required: false, hint: "Ex: UCp4V6MSF87MGlw87fPdl-sg — Paramètres YouTube Studio > Chaîne > Avancé" }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
@@ -431,8 +454,12 @@ collections:
             widget: "object"
             hint: "Le verset qui s'affiche en bas de chaque page."
             fields:
-              - { label: "Texte du verset (avec guillemets)", name: "verset_texte", widget: "string", hint: "Ex: « Car nous sommes tous un seul corps en Christ. »" }
-              - { label: "Reference du verset", name: "verset_reference", widget: "string", hint: "Ex: Romains 12 : 5" }
+              - { label: "Texte du verset (FR)", name: "verset_texte", widget: "string", hint: "Ex: « Car nous sommes tous un seul corps en Christ. »" }
+              - { label: "Texte du verset (NL)", name: "verset_texte_nl", widget: "string", required: false }
+              - { label: "Texte du verset (EN)", name: "verset_texte_en", widget: "string", required: false }
+              - { label: "Reference du verset (FR)", name: "verset_reference", widget: "string", hint: "Ex: Romains 12 : 5" }
+              - { label: "Reference du verset (NL)", name: "verset_reference_nl", widget: "string", required: false, hint: "Ex: Romeinen 12 : 5" }
+              - { label: "Reference du verset (EN)", name: "verset_reference_en", widget: "string", required: false, hint: "Ex: Romans 12 : 5" }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
@@ -463,10 +490,18 @@ collections:
             widget: "object"
             hint: "Texte principal affiché en grand sur la page d'accueil."
             fields:
-              - { label: "Texte de surtitre", name: "eyebrow", widget: "string", hint: "Ex: Centre Evangelique · Alost" }
-              - { label: "Titre — ligne 1", name: "titre_ligne1", widget: "string", hint: "Ex: La Famille" }
-              - { label: "Titre — ligne 2 (en italique)", name: "titre_ligne2", widget: "string", hint: "Ex: Chretienne" }
-              - { label: "Sous-titre", name: "sous_titre", widget: "text", hint: "Phrase d'accueil sous le titre principal" }
+              - { label: "Surtitre (FR)", name: "eyebrow", widget: "string", hint: "Ex: Bienvenue au" }
+              - { label: "Surtitre (NL)", name: "eyebrow_nl", widget: "string", required: false, hint: "Ex: Welkom bij" }
+              - { label: "Surtitre (EN)", name: "eyebrow_en", widget: "string", required: false, hint: "Ex: Welcome to" }
+              - { label: "Titre — ligne 1 (FR)", name: "titre_ligne1", widget: "string", hint: "Ex: Centre Évangélique" }
+              - { label: "Titre — ligne 1 (NL)", name: "titre_ligne1_nl", widget: "string", required: false }
+              - { label: "Titre — ligne 1 (EN)", name: "titre_ligne1_en", widget: "string", required: false }
+              - { label: "Titre — ligne 2 (FR, en italique)", name: "titre_ligne2", widget: "string", hint: "Ex: La Famille Chrétienne" }
+              - { label: "Titre — ligne 2 (NL)", name: "titre_ligne2_nl", widget: "string", required: false }
+              - { label: "Titre — ligne 2 (EN)", name: "titre_ligne2_en", widget: "string", required: false }
+              - { label: "Sous-titre (FR)", name: "sous_titre", widget: "text", hint: "Phrase d'accueil sous le titre principal" }
+              - { label: "Sous-titre (NL)", name: "sous_titre_nl", widget: "text", required: false }
+              - { label: "Sous-titre (EN)", name: "sous_titre_en", widget: "text", required: false }
               - { label: "Texte bouton principal", name: "bouton_principal", widget: "string", default: "Nos horaires" }
               - { label: "Texte bouton secondaire", name: "bouton_secondaire", widget: "string", default: "Rejoindre le live" }
           - { label: "_", name: "banniere", widget: "hidden" }
@@ -499,23 +534,45 @@ collections:
             hint: "Section 'Qui sommes-nous' visible sur le site. Activez-la pour la rendre visible."
             fields:
               - { label: "Afficher la section ?", name: "actif", widget: "boolean", default: true }
-              - { label: "Surtitre (ex: Qui sommes-nous)", name: "eyebrow", widget: "string" }
-              - { label: "Titre de la section", name: "titre", widget: "string" }
-              - { label: "Texte d'introduction", name: "intro", widget: "text", hint: "Courte présentation de l'église pour les nouveaux visiteurs." }
-              - { label: "Titre Vision", name: "vision_titre", widget: "string", default: "Notre Vision" }
-              - { label: "Texte Vision", name: "vision_texte", widget: "text" }
-              - { label: "Titre Mission", name: "mission_titre", widget: "string", default: "Notre Mission" }
-              - { label: "Texte Mission", name: "mission_texte", widget: "text" }
+              - { label: "Surtitre (FR) — ex: Qui sommes-nous", name: "eyebrow", widget: "string" }
+              - { label: "Surtitre (NL)", name: "eyebrow_nl", widget: "string", required: false }
+              - { label: "Surtitre (EN)", name: "eyebrow_en", widget: "string", required: false }
+              - { label: "Titre de la section (FR)", name: "titre", widget: "string" }
+              - { label: "Titre de la section (NL)", name: "titre_nl", widget: "string", required: false }
+              - { label: "Titre de la section (EN)", name: "titre_en", widget: "string", required: false }
+              - { label: "Texte d'introduction (FR)", name: "intro", widget: "text", hint: "Courte présentation de l'église pour les nouveaux visiteurs." }
+              - { label: "Texte d'introduction (NL)", name: "intro_nl", widget: "text", required: false }
+              - { label: "Texte d'introduction (EN)", name: "intro_en", widget: "text", required: false }
+              - { label: "Titre Vision (FR)", name: "vision_titre", widget: "string", default: "Notre Vision" }
+              - { label: "Titre Vision (NL)", name: "vision_titre_nl", widget: "string", required: false }
+              - { label: "Titre Vision (EN)", name: "vision_titre_en", widget: "string", required: false }
+              - { label: "Texte Vision (FR)", name: "vision_texte", widget: "text" }
+              - { label: "Texte Vision (NL)", name: "vision_texte_nl", widget: "text", required: false }
+              - { label: "Texte Vision (EN)", name: "vision_texte_en", widget: "text", required: false }
+              - { label: "Titre Mission (FR)", name: "mission_titre", widget: "string", default: "Notre Mission" }
+              - { label: "Titre Mission (NL)", name: "mission_titre_nl", widget: "string", required: false }
+              - { label: "Titre Mission (EN)", name: "mission_titre_en", widget: "string", required: false }
+              - { label: "Texte Mission (FR)", name: "mission_texte", widget: "text" }
+              - { label: "Texte Mission (NL)", name: "mission_texte_nl", widget: "text", required: false }
+              - { label: "Texte Mission (EN)", name: "mission_texte_en", widget: "text", required: false }
               - label: "Valeurs (4 maximum)"
                 name: "valeurs"
                 widget: "list"
                 max: 4
                 fields:
-                  - { label: "Icône (emoji)", name: "icone", widget: "string", hint: "Ex: ✝ 🙏 👨‍👩‍👧 🌍" }
-                  - { label: "Titre de la valeur", name: "titre", widget: "string" }
-                  - { label: "Description courte", name: "texte", widget: "text" }
-              - { label: "Verset biblique (avec guillemets)", name: "verset_texte", widget: "string" }
-              - { label: "Référence du verset", name: "verset_reference", widget: "string" }
+                  - { label: "Icône (parole / priere / famille / evangelisation)", name: "icone", widget: "string", hint: "Mots-clés : parole, priere, famille, evangelisation" }
+                  - { label: "Titre de la valeur (FR)", name: "titre", widget: "string" }
+                  - { label: "Titre de la valeur (NL)", name: "titre_nl", widget: "string", required: false }
+                  - { label: "Titre de la valeur (EN)", name: "titre_en", widget: "string", required: false }
+                  - { label: "Description courte (FR)", name: "texte", widget: "text" }
+                  - { label: "Description courte (NL)", name: "texte_nl", widget: "text", required: false }
+                  - { label: "Description courte (EN)", name: "texte_en", widget: "text", required: false }
+              - { label: "Verset biblique (FR)", name: "verset_texte", widget: "string" }
+              - { label: "Verset biblique (NL)", name: "verset_texte_nl", widget: "string", required: false }
+              - { label: "Verset biblique (EN)", name: "verset_texte_en", widget: "string", required: false }
+              - { label: "Référence du verset (FR)", name: "verset_reference", widget: "string" }
+              - { label: "Référence du verset (NL)", name: "verset_reference_nl", widget: "string", required: false }
+              - { label: "Référence du verset (EN)", name: "verset_reference_en", widget: "string", required: false }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
