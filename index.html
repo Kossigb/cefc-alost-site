@@ -1,3841 +1,581 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CEFC Alost — Centre Évangélique La Famille Chrétienne</title>
-<meta name="description" content="Centre Évangélique La Famille Chrétienne à Alost. Cultes dominicaux, étude biblique, jeûne & prière, navette gratuite, JEFC jeunesse. Bienvenue dans la famille !" />
-<meta name="theme-color" content="#1A1B3E" />
-<meta property="og:title" content="CEFC Alost — La Famille Chrétienne" />
-<meta property="og:description" content="Vous êtes les bienvenus dans notre famille. Ensemble dans la foi, la prière et la fraternité." />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://cefclabornealost9300.netlify.app/cefc-logo.png" />
-<meta property="og:url" content="https://cefclabornealost9300.netlify.app/" />
-<link rel="canonical" href="https://cefclabornealost9300.netlify.app/" />
-<link rel="icon" type="image/png" href="cefc-logo.png" />
-
-<!-- Netlify Identity widget : permet aux invités cliquant sur un lien d'invitation
-     d'arriver sur l'admin sans avoir à recopier le token manuellement -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
-      }
-    });
-  }
-</script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
-<style>
-:root {
-  --night:        #1A1B3E;
-  --night-deep:   #0A0A21;
-  --night-soft:   #2A2B5A;
-  --silver:       #E3E3EB;
-  --silver-mid:   #BAB9C7;
-  --silver-soft:  #F7F7FA;
-  --text-dark:    #1A1B3E;
-  --text-muted:   #6B6B7E;
-  --live:         #E24B4A;
-  --serif:        'Fraunces', Georgia, serif;
-  --sans:         'Inter', -apple-system, sans-serif;
-  --maxw:         1200px;
-  --radius:       12px;
-  --radius-lg:    20px;
-  --ease:         cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body {
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--text-dark);
-  background: #fff;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-img { max-width: 100%; display: block; }
-a { color: inherit; text-decoration: none; }
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
-
-/* ===== NAV ===== */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 18px 32px;
-  display: flex; align-items: center; justify-content: space-between;
-  transition: background 0.4s, backdrop-filter 0.4s, padding 0.4s;
-}
-.nav.scrolled {
-  background: rgba(10, 10, 33, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 12px 32px;
-}
-.nav-brand {
-  display: flex; align-items: center; gap: 12px;
-  color: var(--silver);
-}
-.nav-brand-mark {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-  background: rgba(227, 227, 235, 0.06);
-  flex-shrink: 0;
-}
-.nav-brand-mark img {
-  width: 100%; height: 100%;
-  object-fit: contain;
-  display: block;
-}
-.nav-brand-text { line-height: 1.1; }
-.nav-brand-text strong { font-weight: 500; font-size: 14px; letter-spacing: 0.02em; display: block; }
-.nav-brand-text span { font-family: var(--serif); font-style: italic; font-size: 11px; opacity: 0.6; }
-
-.nav-links { display: flex; gap: 28px; align-items: center; font-size: 13px; }
-.nav-links a {
-  color: rgba(227, 227, 235, 0.75);
-  transition: color 0.2s;
-  letter-spacing: 0.01em;
-}
-.nav-links a:hover { color: var(--silver); }
-.nav-live {
-  display: inline-flex; align-items: center; gap: 6px;
-  color: var(--live);
-  padding: 6px 12px;
-  border: 1px solid rgba(226, 75, 74, 0.4);
-  border-radius: 999px;
-  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
-  transition: all 0.2s;
-}
-.nav-live:hover { background: rgba(226, 75, 74, 0.15); }
-.nav-live .dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--live);
-  animation: pulse-dot 1.6s ease-in-out infinite;
-}
-@keyframes pulse-dot {
-  0% { box-shadow: 0 0 0 0 rgba(226, 75, 74, 0.7); }
-  70% { box-shadow: 0 0 0 9px rgba(226, 75, 74, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(226, 75, 74, 0); }
-}
-
-.nav-toggle { display: none; color: var(--silver); width: 32px; height: 32px; }
-.nav-toggle span {
-  display: block; height: 1.5px; background: var(--silver); margin: 6px 0;
-  transition: transform 0.3s, opacity 0.3s;
-}
-.nav-toggle.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-.nav-toggle.open span:nth-child(2) { opacity: 0; }
-.nav-toggle.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
-
-/* ===== HERO ===== */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  background: var(--night);
-  color: var(--silver);
-  display: flex; flex-direction: column;
-  overflow: hidden;
-  padding: 120px 24px 0;
-}
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(227, 227, 235, 0.08), transparent 60%),
-    radial-gradient(ellipse 500px 400px at 85% 70%, rgba(186, 185, 199, 0.06), transparent 60%);
-  pointer-events: none;
-}
-.hero::after {
-  content: ''; position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(227, 227, 235, 0.08) 1px, transparent 0);
-  background-size: 36px 36px;
-  opacity: 0.5;
-  pointer-events: none;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-}
-
-.hero-inner {
-  position: relative;
-  max-width: 880px; margin: auto;
-  text-align: center;
-  z-index: 3;
-  flex: 1;
-  display: flex; flex-direction: column; justify-content: center;
-  padding-bottom: 80px;
-}
-
-.hero-eyebrow {
-  display: inline-block;
-  padding: 7px 16px;
-  border: 0.5px solid rgba(227, 227, 235, 0.35);
-  border-radius: 999px;
-  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--silver); opacity: 0.85;
-  background: rgba(10, 10, 33, 0.4);
-  margin-bottom: 36px;
-  align-self: center;
-  opacity: 0;
-  animation: fade-up 0.9s var(--ease) 0.3s forwards;
-}
-.hero h1 {
-  font-family: var(--serif);
-  font-size: clamp(48px, 9vw, 96px);
-  font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.025em;
-  margin-bottom: 24px;
-  opacity: 0;
-  animation: fade-up 1s var(--ease) 0.5s forwards;
-}
-.hero h1 .accent {
-  font-style: italic;
-  font-weight: 400;
-  background: linear-gradient(180deg, #FFFFFF 0%, var(--silver-mid) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-}
-.hero-sub {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(16px, 2vw, 19px);
-  color: rgba(227, 227, 235, 0.7);
-  max-width: 520px; margin: 0 auto 44px;
-  line-height: 1.6;
-  opacity: 0;
-  animation: fade-up 1s var(--ease) 0.7s forwards;
-}
-.hero-cta {
-  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-  opacity: 0;
-  animation: fade-up 1s var(--ease) 0.9s forwards;
-}
-.btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 14px 26px;
-  border-radius: 8px;
-  font-size: 14px; font-weight: 500;
-  letter-spacing: 0.01em;
-  transition: transform 0.25s var(--ease), background 0.25s, border-color 0.25s, box-shadow 0.25s;
-}
-.btn-primary {
-  background: var(--silver);
-  color: var(--night);
-}
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(227, 227, 235, 0.18); }
-.btn-ghost {
-  background: rgba(227, 227, 235, 0.06);
-  color: var(--silver);
-  border: 0.5px solid rgba(227, 227, 235, 0.35);
-}
-.btn-ghost:hover { background: rgba(227, 227, 235, 0.12); border-color: rgba(227, 227, 235, 0.6); transform: translateY(-2px); }
-
-.hero-divider {
-  margin-top: 64px;
-  display: flex; align-items: center; justify-content: center; gap: 18px;
-  opacity: 0;
-  animation: fade-up 1s var(--ease) 1.1s forwards;
-}
-.hero-divider .line {
-  height: 1px; width: 80px;
-  background: linear-gradient(90deg, transparent, rgba(227, 227, 235, 0.4));
-}
-.hero-divider .line.right {
-  background: linear-gradient(90deg, rgba(227, 227, 235, 0.4), transparent);
-}
-.hero-divider svg { opacity: 0.65; }
-
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ===== MARQUEE ===== */
-.ticker-bar {
-  background: #07071a;
-  border-top: 1px solid rgba(227,227,235,0.07);
-  border-bottom: 1px solid rgba(227,227,235,0.07);
-  display: flex;
-  align-items: stretch;
-  height: 46px;
-  overflow: hidden;
-  position: relative;
-}
-.ticker-label {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 20px 0 22px;
-  border-right: 1px solid rgba(227,227,235,0.1);
-  z-index: 3;
-  background: #07071a;
-}
-.ticker-label-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #a78bfa;
-  box-shadow: 0 0 6px rgba(167,139,250,0.8);
-  animation: ticker-pulse 2s ease-in-out infinite;
-}
-@keyframes ticker-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.8); }
-}
-.ticker-label-text {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(227,227,235,0.55);
-}
-.ticker-scroll-wrap {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.ticker-fade-left {
-  position: absolute; left: 0; top: 0; bottom: 0;
-  width: 60px;
-  background: linear-gradient(90deg, #07071a 30%, transparent);
-  z-index: 2;
-  pointer-events: none;
-}
-.ticker-fade-right {
-  position: absolute; right: 0; top: 0; bottom: 0;
-  width: 60px;
-  background: linear-gradient(270deg, #07071a 30%, transparent);
-  z-index: 2;
-  pointer-events: none;
-}
-.ticker-track {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  gap: 0;
-  animation: ticker-scroll 40s linear infinite;
-  will-change: transform;
-}
-.ticker-track:hover { animation-play-state: paused; }
-@keyframes ticker-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-.ticker-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 32px;
-  font-size: 12px;
-  font-weight: 450;
-  letter-spacing: 0.04em;
-  color: rgba(227,227,235,0.78);
-}
-.ticker-item-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #a78bfa;
-  opacity: 0.85;
-}
-.ticker-sep {
-  display: inline-block;
-  width: 1px;
-  height: 16px;
-  background: rgba(227,227,235,0.12);
-  flex-shrink: 0;
-}
-
-/* ===== SECTION GENERIC ===== */
-section { scroll-margin-top: 80px; }
-.container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
-.eyebrow {
-  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-  display: block;
-}
-.section-title {
-  font-family: var(--serif);
-  font-size: clamp(30px, 4.5vw, 44px);
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--text-dark);
-  margin-bottom: 16px;
-}
-.section-title .accent {
-  font-style: italic;
-  color: var(--night-soft);
-}
-.section-head { text-align: center; margin-bottom: 56px; }
-
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
-.reveal.in { opacity: 1; transform: translateY(0); }
-
-/* ===== SERVICES ===== */
-.services { padding: 120px 0 80px; background: #fff; }
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-.service-card {
-  background: #fff;
-  border: 0.5px solid rgba(26, 27, 62, 0.18);
-  border-radius: var(--radius-lg);
-  padding: 36px 28px;
-  text-align: center;
-  position: relative;
-  transition: transform 0.35s var(--ease), border-color 0.3s, box-shadow 0.35s;
-}
-.service-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--night);
-  box-shadow: 0 24px 48px -12px rgba(26, 27, 62, 0.12);
-}
-.service-card.featured {
-  background: var(--night);
-  color: var(--silver);
-  border-color: var(--night);
-}
-.service-card.featured:hover {
-  box-shadow: 0 24px 48px -12px rgba(26, 27, 62, 0.4);
-}
-.service-tag {
-  position: absolute; top: 16px; right: 18px;
-  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(227, 227, 235, 0.55);
-}
-.service-icon {
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  background: rgba(26, 27, 62, 0.06);
-  display: inline-flex; align-items: center; justify-content: center;
-  margin-bottom: 22px;
-  color: var(--night);
-}
-.service-card.featured .service-icon {
-  background: rgba(227, 227, 235, 0.12);
-  color: var(--silver);
-}
-.service-day {
-  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-.service-card.featured .service-day { color: rgba(227, 227, 235, 0.7); }
-.service-time {
-  font-family: var(--serif);
-  font-size: 38px; font-weight: 500;
-  line-height: 1;
-  margin-bottom: 12px;
-}
-.service-name {
-  font-size: 14px;
-  color: var(--text-muted);
-}
-.service-card.featured .service-name { color: rgba(227, 227, 235, 0.8); }
-.service-desc {
-  margin-top: 14px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--text-muted);
-}
-.service-card.featured .service-desc { color: rgba(227, 227, 235, 0.65); }
-
-/* ===== LIVE BLOCK ===== */
-.live-block { padding: 40px 0 80px; }
-.live-card {
-  background: var(--night);
-  color: var(--silver);
-  border-radius: var(--radius-lg);
-  padding: 48px 40px;
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 32px;
-  align-items: center;
-}
-.live-card::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 80% 30%, rgba(226, 75, 74, 0.12), transparent 50%);
-  pointer-events: none;
-}
-.live-info { position: relative; z-index: 2; }
-.live-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
-  background: rgba(226, 75, 74, 0.18);
-  color: #ff8a89;
-  border: 0.5px solid rgba(226, 75, 74, 0.4);
-  margin-bottom: 16px;
-}
-.live-badge.offline {
-  background: rgba(227, 227, 235, 0.08);
-  color: rgba(227, 227, 235, 0.75);
-  border-color: rgba(227, 227, 235, 0.2);
-}
-.live-badge .dot {
-  width: 7px; height: 7px; border-radius: 50%; background: var(--live);
-  animation: pulse-dot 1.6s ease-in-out infinite;
-}
-.live-badge.offline .dot { background: rgba(227, 227, 235, 0.6); animation: none; }
-.live-title {
-  font-family: var(--serif);
-  font-size: clamp(26px, 3.5vw, 34px);
-  font-weight: 500;
-  line-height: 1.15;
-  margin-bottom: 8px;
-  letter-spacing: -0.01em;
-}
-.live-sub {
-  color: rgba(227, 227, 235, 0.7);
-  font-size: 15px;
-  margin-bottom: 0;
-}
-.live-cta { position: relative; z-index: 2; }
-.btn-youtube {
-  background: var(--silver);
-  color: var(--night);
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 16px 28px;
-  border-radius: 8px;
-  font-size: 14px; font-weight: 500;
-  transition: transform 0.25s var(--ease), box-shadow 0.25s;
-}
-.btn-youtube:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(227, 227, 235, 0.2); }
-.live-embed {
-  grid-column: 1 / -1;
-  border-radius: 12px;
-  overflow: hidden;
-  aspect-ratio: 16 / 9;
-  background: #000;
-}
-.live-embed iframe { width: 100%; height: 100%; display: block; border: none; }
-
-/* ===== ANNONCES ===== */
-.annonces {
-  padding: 80px 0 0;
-  background: #fff;
-}
-.annonces-empty { display: none; }
-.annonces-list[data-empty="true"] ~ .annonces-empty { display: block; }
-.annonces.empty-section { display: none; }
-.annonces .container { max-width: 980px; }
-.annonces-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  margin-top: 36px;
-}
-.annonce-card {
-  background: var(--silver-soft);
-  border: 0.5px solid rgba(26, 27, 62, 0.12);
-  border-radius: var(--radius-lg);
-  padding: 28px 26px;
-  position: relative;
-  transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.3s;
-}
-.annonce-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--night);
-  box-shadow: 0 16px 32px -12px rgba(26, 27, 62, 0.12);
-}
-.annonce-card.important {
-  background: var(--night);
-  color: var(--silver);
-  border-color: var(--night);
-}
-.annonce-card.important:hover {
-  box-shadow: 0 20px 40px -12px rgba(26, 27, 62, 0.4);
-}
-.annonce-flag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  font-weight: 500;
-  margin-bottom: 14px;
-  background: rgba(26, 27, 62, 0.08);
-  color: var(--text-dark);
-}
-.annonce-card.important .annonce-flag {
-  background: rgba(227, 227, 235, 0.15);
-  color: var(--silver);
-}
-.annonce-flag .dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--night);
-}
-.annonce-card.important .annonce-flag .dot {
-  background: var(--silver);
-  animation: pulse-dot 1.6s ease-in-out infinite;
-}
-.annonce-date {
-  font-family: var(--serif);
-  font-size: 13px;
-  font-style: italic;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-}
-.annonce-card.important .annonce-date { color: rgba(227, 227, 235, 0.7); }
-.annonce-titre {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  margin-bottom: 10px;
-  line-height: 1.25;
-}
-.annonce-description {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text-muted);
-}
-.annonce-card.important .annonce-description { color: rgba(227, 227, 235, 0.85); }
-
-/* ===== JEFC ===== */
-.jefc {
-  background: var(--night-deep);
-  color: var(--silver);
-  padding: 120px 0;
-  position: relative;
-  overflow: hidden;
-}
-.jefc::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(227, 227, 235, 0.06) 1px, transparent 0);
-  background-size: 40px 40px;
-  opacity: 0.6;
-  pointer-events: none;
-}
-.jefc-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 64px;
-  align-items: center;
-  position: relative;
-  z-index: 2;
-}
-.jefc-display {
-  position: relative;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(80px, 14vw, 180px);
-  font-weight: 500;
-  line-height: 0.9;
-  letter-spacing: -0.04em;
-  display: inline-block;
-  z-index: 1;
-}
-.jefc-display-wrap {
-  position: relative;
-  display: inline-block;
-  isolation: isolate;
-  padding: 20px 30px 40px;
-}
-/* Halo doux derrière le logo qui pulse au rythme */
-.jefc-display-wrap::before {
-  content: '';
-  position: absolute;
-  inset: -10% -5%;
-  background: radial-gradient(ellipse at center,
-    rgba(227, 227, 235, 0.12) 0%,
-    rgba(227, 227, 235, 0.05) 35%,
-    transparent 70%);
-  pointer-events: none;
-  z-index: -1;
-  animation: jefc-halo 4s ease-in-out infinite;
-}
-@keyframes jefc-halo {
-  0%, 100% { opacity: 0.5; transform: scale(0.95); }
-  50%      { opacity: 1;   transform: scale(1.08); }
-}
-/* Soulignement lumineux qui se construit après l'apparition */
-.jefc-display-wrap::after {
-  content: '';
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 2px;
-  width: 0;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--silver) 20%,
-    #FFFFFF 50%,
-    var(--silver) 80%,
-    transparent 100%);
-  filter: drop-shadow(0 0 8px rgba(227, 227, 235, 0.6));
-  transition: width 1.2s var(--ease) 1.2s;
-  pointer-events: none;
-}
-.jefc-display-wrap.in::after { width: 75%; }
-
-/* Animation lettre par lettre : apparition néon avec glow qui s'allume */
-.jefc-letter {
-  display: inline-block;
-  color: rgba(227, 227, 235, 0.15);
-  text-shadow: none;
-  opacity: 0;
-  transform: translateY(30px) scale(0.85);
-  transition:
-    color 0.6s var(--ease),
-    text-shadow 0.6s var(--ease),
-    transform 0.9s var(--ease),
-    opacity 0.7s var(--ease);
-  animation: none;
-}
-.jefc-display.in .jefc-letter {
-  opacity: 1;
-  color: #FFFFFF;
-  transform: translateY(0) scale(1);
-  text-shadow:
-    0 0 1px rgba(255, 255, 255, 0.9),
-    0 0 8px rgba(227, 227, 235, 0.5),
-    0 0 18px rgba(227, 227, 235, 0.4),
-    0 0 32px rgba(186, 185, 199, 0.3);
-  animation: jefc-flicker 6s ease-in-out infinite;
-}
-.jefc-display.in .jefc-letter:nth-child(1) { transition-delay: 0.15s; animation-delay: 1.5s; }
-.jefc-display.in .jefc-letter:nth-child(2) { transition-delay: 0.35s; animation-delay: 1.7s; }
-.jefc-display.in .jefc-letter:nth-child(3) { transition-delay: 0.55s; animation-delay: 1.9s; }
-.jefc-display.in .jefc-letter:nth-child(4) { transition-delay: 0.75s; animation-delay: 2.1s; }
-
-/* Flicker doux et permanent : variation subtile du glow comme un néon réel */
-@keyframes jefc-flicker {
-  0%, 100% {
-    text-shadow:
-      0 0 1px rgba(255, 255, 255, 0.9),
-      0 0 8px rgba(227, 227, 235, 0.5),
-      0 0 18px rgba(227, 227, 235, 0.4),
-      0 0 32px rgba(186, 185, 199, 0.3);
-  }
-  50% {
-    text-shadow:
-      0 0 1px rgba(255, 255, 255, 1),
-      0 0 12px rgba(255, 255, 255, 0.7),
-      0 0 28px rgba(227, 227, 235, 0.6),
-      0 0 48px rgba(186, 185, 199, 0.5);
-  }
-}
-
-/* Léger flottement continu de l'ensemble */
-.jefc-display.in {
-  animation: jefc-float 5s ease-in-out infinite;
-  animation-delay: 1.2s;
-}
-@keyframes jefc-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
-}
-
-.jefc-display-sub {
-  font-family: var(--sans);
-  font-style: normal;
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(227, 227, 235, 0.55);
-  margin-top: 18px;
-  display: block;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.8s var(--ease) 1.5s, transform 0.8s var(--ease) 1.5s;
-}
-.jefc-display-wrap.in .jefc-display-sub { opacity: 1; transform: translateY(0); }
-.jefc-tag {
-  display: inline-block;
-  padding: 6px 14px;
-  border: 0.5px solid rgba(227, 227, 235, 0.3);
-  border-radius: 999px;
-  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--silver);
-  margin-bottom: 20px;
-}
-.jefc-title {
-  font-family: var(--serif);
-  font-size: clamp(28px, 3.5vw, 36px);
-  font-weight: 500;
-  line-height: 1.2;
-  margin-bottom: 18px;
-  letter-spacing: -0.01em;
-}
-.jefc-text {
-  color: rgba(227, 227, 235, 0.75);
-  font-size: 15px;
-  line-height: 1.7;
-  margin-bottom: 28px;
-}
-.jefc-meta {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-  padding: 24px 0;
-  border-top: 0.5px solid rgba(227, 227, 235, 0.15);
-  border-bottom: 0.5px solid rgba(227, 227, 235, 0.15);
-}
-.jefc-meta-item-label {
-  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(227, 227, 235, 0.5);
-  margin-bottom: 4px;
-}
-.jefc-meta-item-val {
-  font-family: var(--serif);
-  font-size: 18px;
-  color: var(--silver);
-}
-
-/* ===== NAVETTE ===== */
-.navette {
-  padding: 120px 0;
-  background: var(--silver-soft);
-  position: relative;
-  overflow: hidden;
-}
-.navette::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(26, 27, 62, 0.08), transparent);
-}
-.navette-hero {
-  background: var(--night);
-  color: var(--silver);
-  border-radius: var(--radius-lg);
-  padding: 56px 48px;
-  margin-bottom: 32px;
-  position: relative;
-  overflow: hidden;
-}
-.navette-hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 500px 300px at 80% 30%, rgba(227, 227, 235, 0.10), transparent 60%),
-    radial-gradient(ellipse 400px 300px at 20% 70%, rgba(186, 185, 199, 0.06), transparent 60%);
-  pointer-events: none;
-}
-.navette-hero::after {
-  content: '';
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(227, 227, 235, 0.08) 1px, transparent 0);
-  background-size: 32px 32px;
-  opacity: 0.4;
-  pointer-events: none;
-}
-.navette-hero-inner {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 32px;
-  align-items: center;
-}
-.navette-hero-text { max-width: 480px; }
-.navette-hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 12px;
-  border: 0.5px solid rgba(227, 227, 235, 0.3);
-  border-radius: 999px;
-  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--silver);
-  margin-bottom: 18px;
-  background: rgba(10, 10, 33, 0.4);
-}
-.navette-hero-eyebrow .badge-free {
-  background: var(--silver);
-  color: var(--night);
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  font-size: 9px;
-}
-.navette-hero h2 {
-  font-family: var(--serif);
-  font-size: clamp(30px, 4vw, 42px);
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 14px;
-}
-.navette-hero h2 .accent {
-  font-style: italic;
-  background: linear-gradient(180deg, #FFFFFF 0%, var(--silver-mid) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.navette-hero p {
-  color: rgba(227, 227, 235, 0.75);
-  font-size: 15px;
-  line-height: 1.6;
-  margin-bottom: 0;
-}
-
-/* Schéma animé du trajet */
-.navette-map {
-  width: 280px;
-  height: 200px;
-  position: relative;
-  flex-shrink: 0;
-}
-.navette-map svg { width: 100%; height: 100%; overflow: visible; }
-.navette-map .route-path {
-  stroke: rgba(227, 227, 235, 0.35);
-  stroke-width: 1.5;
-  stroke-dasharray: 5 5;
-  fill: none;
-  animation: route-dash-flow 30s linear infinite;
-}
-@keyframes route-dash-flow {
-  to { stroke-dashoffset: -200; }
-}
-.navette-map .stop-circle {
-  fill: var(--silver);
-  stroke: rgba(227, 227, 235, 0.3);
-  stroke-width: 4;
-}
-.navette-map .stop-circle-inner {
-  fill: var(--night);
-}
-.navette-map .stop-label {
-  fill: var(--silver);
-  font-family: var(--sans);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  text-anchor: middle;
-}
-.navette-map .stop-label-secondary {
-  fill: rgba(227, 227, 235, 0.5);
-  font-family: var(--sans);
-  font-size: 8px;
-  font-weight: 400;
-  text-anchor: middle;
-}
-.navette-map .pulse-ring {
-  fill: none;
-  stroke: var(--silver);
-  stroke-width: 1;
-  opacity: 0;
-  transform-origin: center;
-  animation: stop-pulse 3s ease-out infinite;
-}
-@keyframes stop-pulse {
-  0%   { r: 8; opacity: 0.7; }
-  100% { r: 22; opacity: 0; }
-}
-.navette-map .bus-icon {
-  fill: var(--silver);
-  filter: drop-shadow(0 0 8px rgba(227, 227, 235, 0.4));
-  offset-rotate: auto;
-  animation: bus-travel 8s ease-in-out infinite;
-}
-@keyframes bus-travel {
-  0%   { offset-distance: 0%; opacity: 0; }
-  5%   { opacity: 1; }
-  45%  { offset-distance: 100%; opacity: 1; }
-  50%  { offset-distance: 100%; opacity: 0; }
-  55%  { offset-distance: 0%; opacity: 0; }
-  60%  { opacity: 1; }
-  100% { offset-distance: 100%; opacity: 1; }
-}
-
-/* Timeline horaires */
-.navette-timeline {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-.navette-slot {
-  background: #fff;
-  border: 0.5px solid rgba(26, 27, 62, 0.1);
-  border-radius: var(--radius-lg);
-  padding: 28px 24px;
-  position: relative;
-  transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.3s;
-}
-.navette-slot:hover {
-  transform: translateY(-4px);
-  border-color: var(--night);
-  box-shadow: 0 16px 32px -12px rgba(26, 27, 62, 0.12);
-}
-.navette-slot-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: var(--silver-soft);
-  border: 0.5px solid rgba(26, 27, 62, 0.1);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 16px;
-  color: var(--night);
-}
-.navette-slot-day {
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-.navette-slot-time {
-  font-family: var(--serif);
-  font-size: 28px;
-  font-weight: 500;
-  color: var(--text-dark);
-  margin-bottom: 8px;
-  letter-spacing: -0.01em;
-  line-height: 1;
-}
-.navette-slot-detail {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-.navette-slot.featured {
-  background: linear-gradient(180deg, #fff 0%, var(--silver-soft) 100%);
-}
-.navette-slot.featured::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 28px; height: 28px;
-  border-top: 0.5px solid var(--night);
-  border-left: 0.5px solid var(--night);
-  border-top-left-radius: var(--radius-lg);
-}
-.navette-slot.featured::after {
-  content: '';
-  position: absolute;
-  bottom: 0; right: 0;
-  width: 28px; height: 28px;
-  border-bottom: 0.5px solid var(--night);
-  border-right: 0.5px solid var(--night);
-  border-bottom-right-radius: var(--radius-lg);
-}
-
-.navette-cta-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 28px;
-  font-size: 13px;
-  color: var(--text-muted);
-  font-style: italic;
-  flex-wrap: wrap;
-  text-align: center;
-}
-.navette-cta-row svg { color: var(--night); flex-shrink: 0; }
-
-/* ===== DEPARTEMENTS ===== */
-.depts { padding: 120px 0; background: #fff; }
-.depts-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  perspective: 1200px;
-}
-.dept-card {
-  background: var(--night);
-  border: 0.5px solid rgba(26, 27, 62, 0.15);
-  border-radius: var(--radius);
-  padding: 0;
-  position: relative;
-  transition: transform 0.4s var(--ease), border-color 0.3s, box-shadow 0.4s, background 0.3s;
-  cursor: pointer;
-  min-height: 320px;
-  display: flex; flex-direction: column;
-  transform-style: preserve-3d;
-  will-change: transform;
-  font-family: inherit;
-  text-align: left;
-  color: var(--silver);
-  width: 100%;
-  overflow: hidden;
-}
-.dept-card.large { grid-column: span 2; min-height: 360px; }
-.dept-card:hover {
-  border-color: var(--night);
-  box-shadow: 0 24px 48px -12px rgba(26, 27, 62, 0.4), 0 0 0 1px rgba(26, 27, 62, 0.08);
-}
-.dept-card-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: transform 0.7s var(--ease), filter 0.5s;
-  filter: brightness(0.6) saturate(0.95);
-  z-index: 0;
-}
-.dept-card:hover .dept-card-bg {
-  transform: scale(1.05);
-  filter: brightness(0.7) saturate(1.05);
-}
-.dept-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(10, 10, 33, 0.3) 0%,
-    rgba(10, 10, 33, 0.55) 50%,
-    rgba(10, 10, 33, 0.92) 100%
-  );
-  z-index: 1;
-  transition: opacity 0.4s;
-}
-.dept-card-bg.placeholder {
-  background: linear-gradient(135deg, var(--night) 0%, var(--night-soft) 100%);
-}
-.dept-card-bg.placeholder::after {
-  content: '';
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(227, 227, 235, 0.08) 1px, transparent 0);
-  background-size: 28px 28px;
-  opacity: 0.5;
-}
-.dept-card-glare {
-  position: absolute; inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle 250px at var(--gx, 50%) var(--gy, 50%), rgba(227, 227, 235, 0.25), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  mix-blend-mode: overlay;
-  z-index: 3;
-}
-.dept-card:hover .dept-card-glare { opacity: 0.7; }
-.dept-card-content {
-  position: relative;
-  z-index: 2;
-  padding: 24px 24px 22px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  flex: 1;
-}
-.dept-card .dept-icon,
-.dept-card .dept-name,
-.dept-card .dept-desc,
-.dept-card .dept-arrow { transition: transform 0.4s var(--ease); }
-.dept-icon {
-  width: 44px; height: 44px;
-  border-radius: 10px;
-  background: rgba(227, 227, 235, 0.15);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: var(--silver);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: auto;
-  border: 0.5px solid rgba(227, 227, 235, 0.2);
-}
-.dept-card:hover .dept-icon { transform: translateZ(50px) scale(1.08) rotate(-4deg); }
-.dept-name {
-  font-family: var(--serif);
-  font-size: 24px;
-  font-weight: 500;
-  margin-top: 100px;
-  margin-bottom: 6px;
-  letter-spacing: -0.01em;
-  color: var(--silver);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-}
-.dept-card.large .dept-name { font-size: 28px; }
-.dept-desc {
-  font-size: 13px;
-  color: rgba(227, 227, 235, 0.85);
-  line-height: 1.55;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
-  max-width: 90%;
-}
-.dept-card:hover .dept-name,
-.dept-card:hover .dept-desc { transform: translateZ(40px); }
-.dept-arrow {
-  position: absolute;
-  bottom: 22px; right: 22px;
-  color: var(--silver);
-  opacity: 0.65;
-  z-index: 2;
-}
-.dept-card:hover .dept-arrow {
-  transform: translate(4px, -4px) translateZ(40px);
-  opacity: 1;
-}
-
-/* ===== MODALE DEPARTEMENT ===== */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(10, 10, 33, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 1000;
-  display: flex; align-items: center; justify-content: center;
-  padding: 24px;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.35s var(--ease), visibility 0.35s;
-}
-.modal-overlay.open { opacity: 1; visibility: visible; }
-.modal {
-  background: #fff;
-  border-radius: var(--radius-lg);
-  width: 100%;
-  max-width: 560px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  transform: scale(0.92) translateY(20px);
-  transition: transform 0.45s var(--ease);
-  box-shadow: 0 30px 80px -20px rgba(10, 10, 33, 0.5);
-}
-.modal-overlay.open .modal { transform: scale(1) translateY(0); }
-.modal-header {
-  background: var(--night);
-  color: var(--silver);
-  padding: 36px 36px 28px;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  position: relative;
-  overflow: hidden;
-}
-.modal-header::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(227, 227, 235, 0.08) 1px, transparent 0);
-  background-size: 24px 24px;
-  opacity: 0.5;
-  pointer-events: none;
-}
-.modal-header > * { position: relative; z-index: 2; }
-.modal-icon {
-  width: 56px; height: 56px;
-  border-radius: 12px;
-  background: rgba(227, 227, 235, 0.12);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 18px;
-  border: 0.5px solid rgba(227, 227, 235, 0.2);
-}
-.modal-eyebrow {
-  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(227, 227, 235, 0.6);
-  margin-bottom: 6px;
-}
-.modal-title {
-  font-family: var(--serif);
-  font-size: 28px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  margin-bottom: 8px;
-}
-.modal-sub {
-  font-size: 14px;
-  color: rgba(227, 227, 235, 0.75);
-  line-height: 1.55;
-}
-.modal-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: rgba(227, 227, 235, 0.1);
-  color: var(--silver);
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s, transform 0.2s;
-  z-index: 3;
-}
-.modal-close:hover { background: rgba(227, 227, 235, 0.2); transform: rotate(90deg); }
-.modal-body { padding: 32px 36px 36px; }
-.modal-cta-row {
-  display: flex; flex-direction: column; gap: 12px;
-  margin-bottom: 24px;
-}
-.modal-cta {
-  background: var(--night);
-  color: var(--silver);
-  padding: 16px 22px;
-  border-radius: var(--radius);
-  font-size: 15px; font-weight: 500;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  width: 100%;
-  transition: transform 0.25s var(--ease), background 0.25s;
-  text-align: left;
-}
-.modal-cta:hover { background: var(--night-soft); transform: translateX(4px); }
-.modal-cta-secondary {
-  background: var(--silver-soft);
-  color: var(--text-dark);
-  border: 0.5px solid rgba(26, 27, 62, 0.12);
-  padding: 16px 22px;
-  border-radius: var(--radius);
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  width: 100%;
-  transition: border-color 0.25s, background 0.25s;
-  text-align: left;
-}
-.modal-cta-secondary:hover { border-color: var(--night); background: #fff; }
-
-.modal-form {
-  display: none;
-  flex-direction: column;
-  gap: 16px;
-  animation: form-in 0.4s var(--ease);
-}
-.modal-form.active { display: flex; }
-@keyframes form-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.form-back {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-  transition: color 0.2s, gap 0.2s;
-  align-self: flex-start;
-}
-.form-back:hover { color: var(--night); gap: 10px; }
-.form-row { display: flex; flex-direction: column; gap: 6px; }
-.form-row label {
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-.form-row label .req { color: var(--live); }
-.form-row input,
-.form-row textarea,
-.form-row select {
-  font-family: inherit;
-  font-size: 14px;
-  padding: 12px 14px;
-  border: 0.5px solid rgba(26, 27, 62, 0.2);
-  border-radius: 8px;
-  background: #fff;
-  color: var(--text-dark);
-  transition: border-color 0.2s, box-shadow 0.2s;
-  width: 100%;
-}
-.form-row input:focus,
-.form-row textarea:focus,
-.form-row select:focus {
-  outline: none;
-  border-color: var(--night);
-  box-shadow: 0 0 0 3px rgba(26, 27, 62, 0.08);
-}
-.form-row textarea { min-height: 90px; resize: vertical; }
-.form-row-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.form-checkbox-group {
-  display: flex; flex-wrap: wrap; gap: 8px;
-}
-.form-check {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 14px;
-  border: 0.5px solid rgba(26, 27, 62, 0.2);
-  border-radius: 999px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: #fff;
-  user-select: none;
-}
-.form-check input { display: none; }
-.form-check.selected {
-  background: var(--night);
-  color: var(--silver);
-  border-color: var(--night);
-}
-.form-submit {
-  background: var(--night);
-  color: var(--silver);
-  padding: 14px 22px;
-  border-radius: 8px;
-  font-size: 14px; font-weight: 500;
-  margin-top: 8px;
-  transition: transform 0.2s, background 0.2s;
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-}
-.form-submit:hover:not(:disabled) { background: var(--night-soft); transform: translateY(-2px); }
-.form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.form-success {
-  text-align: center;
-  padding: 20px 0;
-  display: none;
-  animation: form-in 0.5s var(--ease);
-}
-.form-success.active { display: block; }
-.form-success-icon {
-  width: 64px; height: 64px;
-  border-radius: 50%;
-  background: var(--night);
-  color: var(--silver);
-  display: inline-flex; align-items: center; justify-content: center;
-  margin-bottom: 18px;
-  animation: success-pop 0.6s var(--ease);
-}
-@keyframes success-pop {
-  0% { transform: scale(0); }
-  60% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-.form-success h3 {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-.form-success p {
-  color: var(--text-muted);
-  font-size: 14px;
-  line-height: 1.55;
-  max-width: 380px;
-  margin: 0 auto 20px;
-}
-
-/* ===== CONTACT ===== */
-.contact {
-  padding: 120px 0;
-  background: var(--silver-soft);
-}
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 56px;
-}
-.contact-col h3 {
-  font-family: var(--serif);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-}
-.contact-address {
-  font-family: var(--serif);
-  font-size: 28px;
-  line-height: 1.35;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: var(--text-dark);
-  margin-bottom: 18px;
-}
-.contact-link {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 14px;
-  color: var(--night);
-  border-bottom: 1px solid rgba(26, 27, 62, 0.3);
-  padding-bottom: 2px;
-  transition: border-color 0.2s, gap 0.2s;
-}
-.contact-link:hover { border-color: var(--night); gap: 12px; }
-
-.secretary-card {
-  background: #fff;
-  border-radius: var(--radius);
-  padding: 24px;
-  display: flex; gap: 16px; align-items: center;
-  margin-bottom: 24px;
-  border: 0.5px solid rgba(26, 27, 62, 0.1);
-}
-.secretary-avatar {
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  background: var(--night);
-  color: var(--silver);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 0.05em;
-  flex-shrink: 0;
-}
-.secretary-info-name { font-weight: 500; font-size: 15px; color: var(--text-dark); }
-.secretary-info-role { font-size: 13px; color: var(--text-muted); }
-
-.contact-yt-card {
-  background: var(--night);
-  color: var(--silver);
-  padding: 24px;
-  border-radius: var(--radius);
-}
-.contact-yt-card-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
-.contact-yt-card-sub { font-size: 13px; color: rgba(227, 227, 235, 0.7); margin-bottom: 14px; line-height: 1.5; }
-.contact-yt-card a {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 13px;
-  color: var(--silver);
-  border-bottom: 1px solid rgba(227, 227, 235, 0.4);
-  padding-bottom: 2px;
-  transition: gap 0.2s;
-}
-.contact-yt-card a:hover { gap: 12px; }
-
-/* ===== BANNIERE RDV PASTEUR ===== */
-.pastor-banner {
-  position: relative;
-  padding: 100px 24px;
-  background: var(--night);
-  color: var(--silver);
-  text-align: center;
-  overflow: hidden;
-}
-.pastor-banner::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 600px 400px at 30% 30%, rgba(227, 227, 235, 0.10), transparent 60%),
-    radial-gradient(ellipse 500px 400px at 70% 70%, rgba(186, 185, 199, 0.06), transparent 60%);
-  pointer-events: none;
-}
-.pastor-banner::after {
-  content: '';
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(227, 227, 235, 0.08) 1px, transparent 0);
-  background-size: 36px 36px;
-  opacity: 0.4;
-  pointer-events: none;
-  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-}
-.pastor-banner-inner {
-  position: relative;
-  z-index: 2;
-  max-width: 720px;
-  margin: 0 auto;
-}
-.pastor-eyebrow {
-  display: inline-block;
-  padding: 6px 14px;
-  border: 0.5px solid rgba(227, 227, 235, 0.3);
-  border-radius: 999px;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--silver);
-  margin-bottom: 24px;
-  background: rgba(10, 10, 33, 0.4);
-}
-.pastor-title {
-  font-family: var(--serif);
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 16px;
-  color: var(--silver);
-}
-.pastor-title .accent {
-  font-style: italic;
-  background: linear-gradient(180deg, #FFFFFF 0%, var(--silver-mid) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.pastor-sub {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(15px, 1.8vw, 17px);
-  color: rgba(227, 227, 235, 0.7);
-  max-width: 560px;
-  margin: 0 auto 36px;
-  line-height: 1.55;
-}
-.pastor-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 28px;
-  background: var(--silver);
-  color: var(--night);
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  transition: transform 0.25s var(--ease), box-shadow 0.25s;
-}
-.pastor-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(227, 227, 235, 0.2);
-}
-.pastor-meta {
-  display: flex;
-  gap: 28px;
-  justify-content: center;
-  margin-top: 32px;
-  flex-wrap: wrap;
-  font-size: 13px;
-  color: rgba(227, 227, 235, 0.65);
-}
-.pastor-meta-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* ===== GALERIE PHOTOS ===== */
-.galerie { padding: 120px 0 80px; background: var(--silver-soft); }
-.gallery-wrap {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-  background: #0a0a21;
-  aspect-ratio: 4 / 3;
-  max-height: 600px;
-}
-.gallery-track {
-  display: flex;
-  height: 100%;
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-.gallery-slide {
-  flex: 0 0 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
-.gallery-slide img {
-  width: 100%; height: 100%;
-  object-fit: contain;
-  display: block;
-}
-.gallery-slide-caption {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  background: linear-gradient(0deg, rgba(10,10,33,0.75) 0%, transparent 100%);
-  padding: 40px 28px 22px;
-  color: var(--silver);
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 15px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s, transform 0.5s;
-}
-.gallery-slide.active .gallery-slide-caption { opacity: 1; transform: translateY(0); }
-
-.gallery-placeholder {
-  flex: 0 0 100%;
-  height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 16px;
-  color: rgba(227,227,235,0.3);
-}
-.gallery-placeholder svg { opacity: 0.25; }
-.gallery-placeholder p { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
-
-.gallery-nav {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  background: rgba(10,10,33,0.55);
-  border: 0.5px solid rgba(227,227,235,0.25);
-  color: var(--silver);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 10;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-}
-.gallery-nav:hover { background: rgba(10,10,33,0.85); border-color: rgba(227,227,235,0.6); }
-.gallery-prev { left: 16px; }
-.gallery-next { right: 16px; }
-.gallery-prev:hover { transform: translateY(-50%) translateX(-2px); }
-.gallery-next:hover { transform: translateY(-50%) translateX(2px); }
-
-.gallery-dots {
-  position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 8px; z-index: 10;
-}
-.gallery-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: rgba(227,227,235,0.4);
-  transition: background 0.3s, transform 0.3s;
-  cursor: pointer; border: none;
-}
-.gallery-dot.active { background: var(--silver); transform: scale(1.3); }
-
-.gallery-counter {
-  position: absolute; top: 16px; right: 16px;
-  background: rgba(10,10,33,0.55);
-  backdrop-filter: blur(8px);
-  color: var(--silver);
-  font-size: 12px; letter-spacing: 0.1em;
-  padding: 5px 12px; border-radius: 999px;
-  border: 0.5px solid rgba(227,227,235,0.2);
-  z-index: 10;
-}
-
-@media (max-width: 640px) {
-  .galerie { padding: 80px 0 60px; }
-  .gallery-wrap { aspect-ratio: 4/3; max-height: 320px; }
-  .gallery-nav { width: 38px; height: 38px; }
-}
-
-/* ===== VISION & MISSION ===== */
-.vision {
-  padding: 120px 0;
-  background: var(--night);
-  position: relative;
-  overflow: hidden;
-}
-.vision::before {
-  content: '';
-  position: absolute;
-  top: -160px; left: 50%; transform: translateX(-50%);
-  width: 900px; height: 900px;
-  background: radial-gradient(circle, rgba(90,60,180,0.09) 0%, transparent 68%);
-  pointer-events: none;
-}
-.vision .section-head { text-align: center; margin-bottom: 48px; }
-.vision .section-title { color: var(--silver); }
-.vision-lead {
-  text-align: center;
-  max-width: 620px;
-  margin: 0 auto 64px;
-  color: rgba(227,227,235,0.62);
-  font-size: 1.05rem;
-  line-height: 1.85;
-}
-.vision-vm-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 48px;
-}
-@media (max-width: 640px) { .vision-vm-grid { grid-template-columns: 1fr; } }
-.vision-card {
-  background: rgba(227,227,235,0.04);
-  border: 1px solid rgba(227,227,235,0.09);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem 2rem;
-  transition: border-color 0.3s, background 0.3s;
-}
-.vision-card:hover {
-  border-color: rgba(227,227,235,0.2);
-  background: rgba(227,227,235,0.07);
-}
-.vision-card-icon {
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  border: 1px solid rgba(227,227,235,0.14);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-}
-.vision-card h3 {
-  font-family: var(--serif);
-  font-size: 1.35rem;
-  color: var(--silver);
-  margin-bottom: 0.9rem;
-  font-style: italic;
-}
-.vision-card p {
-  color: rgba(227,227,235,0.62);
-  line-height: 1.85;
-  font-size: 0.97rem;
-}
-.vision-valeurs-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 56px;
-}
-@media (max-width: 860px) { .vision-valeurs-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .vision-valeurs-grid { grid-template-columns: 1fr; } }
-.valeur-item {
-  background: rgba(227,227,235,0.03);
-  border: 1px solid rgba(227,227,235,0.07);
-  border-radius: 12px;
-  padding: 1.5rem 1.25rem;
-  text-align: center;
-  transition: border-color 0.3s, background 0.3s;
-}
-.valeur-item:hover {
-  border-color: rgba(227,227,235,0.15);
-  background: rgba(227,227,235,0.06);
-}
-.valeur-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
-.valeur-item h4 {
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--silver);
-  margin-bottom: 0.5rem;
-}
-.valeur-item p {
-  font-size: 0.85rem;
-  color: rgba(227,227,235,0.48);
-  line-height: 1.65;
-}
-.vision-verse {
-  text-align: center;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.2rem;
-  color: rgba(227,227,235,0.75);
-  margin: 0 auto;
-  max-width: 560px;
-  padding: 0;
-  border: none;
-}
-.vision-verse cite {
-  display: block;
-  margin-top: 0.75rem;
-  font-style: normal;
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(227,227,235,0.3);
-  font-family: var(--sans);
-}
-
-/* ===== LANGUAGE SWITCHER ===== */
-.lang-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  background: rgba(227, 227, 235, 0.08);
-  border: 0.5px solid rgba(227, 227, 235, 0.2);
-  border-radius: 999px;
-  padding: 3px;
-  margin-left: 8px;
-}
-.lang-switch button {
-  padding: 5px 11px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: rgba(227, 227, 235, 0.6);
-  border-radius: 999px;
-  transition: all 0.2s;
-  font-family: inherit;
-  cursor: pointer;
-}
-.lang-switch button.active {
-  background: var(--silver);
-  color: var(--night);
-}
-.lang-switch button:not(.active):hover {
-  color: var(--silver);
-}
-
-/* ===== FOOTER ===== */
-footer {
-  background: var(--night-deep);
-  color: var(--silver);
-  padding: 100px 24px 32px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-footer::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(227, 227, 235, 0.05) 1px, transparent 0);
-  background-size: 40px 40px;
-  pointer-events: none;
-}
-.footer-inner { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
-.footer-verse {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(20px, 2.5vw, 26px);
-  line-height: 1.5;
-  color: var(--silver);
-  margin-bottom: 12px;
-  letter-spacing: -0.005em;
-}
-.footer-verse-ref {
-  font-family: var(--serif);
-  font-size: 14px;
-  color: rgba(227, 227, 235, 0.55);
-  margin-bottom: 60px;
-}
-.footer-links {
-  display: flex; gap: 36px; justify-content: center; flex-wrap: wrap;
-  margin-bottom: 48px;
-  font-size: 13px;
-}
-.footer-links a {
-  color: rgba(227, 227, 235, 0.7);
-  transition: color 0.2s;
-  letter-spacing: 0.02em;
-}
-.footer-links a:hover { color: var(--silver); }
-.footer-divider {
-  height: 0.5px;
-  background: rgba(227, 227, 235, 0.15);
-  margin-bottom: 28px;
-}
-.footer-meta {
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
-  font-size: 12px;
-  color: rgba(227, 227, 235, 0.5);
-}
-.footer-meta strong { color: var(--silver); font-weight: 500; }
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-  .nav-links { display: none; position: fixed; top: 0; right: 0; width: 80%; max-width: 320px; height: 100vh; background: var(--night-deep); flex-direction: column; padding: 100px 32px; gap: 24px; transform: translateX(100%); transition: transform 0.3s var(--ease); }
-  .nav-links.open { display: flex; transform: translateX(0); }
-  .nav-toggle { display: block; z-index: 101; position: relative; }
-  .services-grid { grid-template-columns: 1fr; }
-  .live-card { grid-template-columns: 1fr; padding: 36px 28px; }
-  .jefc-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
-  .jefc-display { font-size: clamp(80px, 22vw, 140px); }
-  .jefc-meta { grid-template-columns: 1fr; gap: 16px; }
-  .navette-hero-inner { grid-template-columns: 1fr; gap: 32px; }
-  .navette-hero { padding: 36px 28px; }
-  .navette-map { width: 100%; max-width: 320px; margin: 0 auto; }
-  .navette-timeline { grid-template-columns: 1fr; gap: 12px; }
-  .depts-grid { grid-template-columns: 1fr; }
-  .dept-card.large { grid-column: span 1; }
-  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-  .nav { padding: 14px 20px; }
-  .hero { padding-top: 100px; }
-  .services, .jefc, .navette, .depts, .contact { padding: 80px 0; }
-  .modal-header { padding: 28px 24px 22px; }
-  .modal-body { padding: 24px; }
-  .form-row-grid { grid-template-columns: 1fr; }
-  .modal-title { font-size: 22px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<!-- ===== NAV ===== -->
-<nav class="nav" id="nav" aria-label="Navigation principale">
-  <a href="#accueil" class="nav-brand">
-    <div class="nav-brand-mark">
-      <img src="cefc-logo.png" alt="Logo CEFC" />
-    </div>
-    <div class="nav-brand-text">
-      <strong>CEFC</strong>
-      <span>La Famille Chrétienne</span>
-    </div>
-  </a>
-  <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-  <div class="nav-links" id="navLinks">
-    <a href="#accueil" data-i18n="nav.home">Accueil</a>
-    <a href="#services" data-i18n="nav.services">Services</a>
-    <a href="#jeunesse" data-i18n="nav.youth">Jeunesse</a>
-    <a href="#navette" data-i18n="nav.shuttle">Navette</a>
-    <a href="#departements" data-i18n="nav.depts">Départements</a>
-    <a href="#contact" data-i18n="nav.contact">Contact</a>
-    <a href="https://www.youtube.com/@CE_laFamilleChretienne" class="nav-live" target="_blank" rel="noopener">
-      <span class="dot"></span> <span data-i18n="nav.live">Live</span>
-    </a>
-    <div class="lang-switch" role="group" aria-label="Langue / Taal">
-      <button type="button" data-lang="fr" class="active">FR</button>
-      <button type="button" data-lang="nl">NL</button>
-    </div>
-  </div>
-</nav>
-
-<!-- ===== HERO ===== -->
-<header class="hero" id="accueil">
-  <div class="hero-inner">
-    <span class="hero-eyebrow" data-i18n="hero.eyebrow" data-cms="hero.eyebrow">Centre Évangélique · Alost</span>
-    <h1><span data-i18n="hero.title.1" data-cms="hero.titre_ligne1">Centre Évangélique</span> <span class="accent" data-i18n="hero.title.2" data-cms="hero.titre_ligne2">La Famille Chrétienne</span></h1>
-    <p class="hero-sub" data-i18n="hero.sub" data-cms="hero.sous_titre">Vous êtes les bienvenus dans notre famille.<br>Ensemble dans la foi, la prière et la fraternité.</p>
-    <div class="hero-cta">
-      <a href="#services" class="btn btn-primary">
-        <span data-i18n="hero.cta.hours">Nos horaires</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-      <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener" class="btn btn-ghost">
-        <svg width="12" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
-        <span data-i18n="hero.cta.live">Rejoindre le live</span>
-      </a>
-    </div>
-    <div class="hero-divider" aria-hidden="true">
-      <span class="line"></span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2v20M5 9h14"/></svg>
-      <span class="line right"></span>
-    </div>
-  </div>
-
-  <div class="ticker-bar" aria-hidden="true">
-    <div class="ticker-label">
-      <span class="ticker-label-dot"></span>
-      <span class="ticker-label-text">Infos</span>
-    </div>
-    <div class="ticker-scroll-wrap">
-      <div class="ticker-fade-left"></div>
-      <div class="ticker-track">
-        <!-- set 1 -->
-        <span class="ticker-item"><span class="ticker-item-label">Dimanche</span>Culte principal · 10h00</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><span class="ticker-item-label">Mercredi</span>Étude biblique · 18h00</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><span class="ticker-item-label">Vendredi</span>Jeûne &amp; prière · 18h00</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><span class="ticker-item-label">Navette</span>Gratuite depuis la Gare d'Alost</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><span class="ticker-item-label">JEFC</span>Jeunesse · toutes les 2 semaines</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item">Bienvenue dans la famille</span>
-        <span class="ticker-sep"></span>
-        <!-- set 2 (copie pour boucle infinie) -->
-        <span class="ticker-item"><span class="ticker-item-label">Dimanche</span>Culte principal · 10h00</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><span class="ticker-item-label">Mercredi</span>Étude biblique · 18h00</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><span class="ticker-item-label">Vendredi</span>Jeûne &amp; prière · 18h00</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><span class="ticker-item-label">Navette</span>Gratuite depuis la Gare d'Alost</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><span class="ticker-item-label">JEFC</span>Jeunesse · toutes les 2 semaines</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item">Bienvenue dans la famille</span>
-        <span class="ticker-sep"></span>
-      </div>
-        <span class="ticker-item">
-          <span class="ticker-item-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
-          Bienvenue dans la famille
-        </span>
-        <span class="ticker-sep"></span>
-      </div>
-      <div class="ticker-fade-right"></div>
-    </div>
-  </div>
-</header>
-
-<!-- ===== VISION & MISSION ===== -->
-<section class="vision" id="vision">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow" id="vm-eyebrow">Qui sommes-nous</span>
-      <h2 class="section-title">Notre <span class="accent" id="vm-titre-accent">Vision & Mission</span></h2>
-    </div>
-    <p class="vision-lead reveal" id="vm-lead">Nous sommes une église évangélique francophone établie à Alost, en Belgique. Notre porte est ouverte à tous — sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.</p>
-
-    <div class="vision-vm-grid">
-      <div class="vision-card reveal">
-        <div class="vision-card-icon">✦</div>
-        <h3 id="vm-vision-titre">Notre Vision</h3>
-        <p id="vm-vision-texte">Être un lieu de transformation spirituelle où chaque personne découvre son identité en Christ et rayonne cette foi dans sa famille, sa ville et au-delà des frontières.</p>
-      </div>
-      <div class="vision-card reveal">
-        <div class="vision-card-icon">◎</div>
-        <h3 id="vm-mission-titre">Notre Mission</h3>
-        <p id="vm-mission-texte">Annoncer l'Évangile de Jésus-Christ, faire des disciples, bâtir une communauté de foi vivante et unie, et servir notre prochain avec amour et compassion.</p>
-      </div>
-    </div>
-
-    <div class="vision-valeurs-grid" id="vm-valeurs">
-      <div class="valeur-item reveal">
-        <div class="valeur-icon">✝</div>
-        <h4>La Parole</h4>
-        <p>La Bible est notre fondement et notre guide pour toute décision.</p>
-      </div>
-      <div class="valeur-item reveal">
-        <div class="valeur-icon">🙏</div>
-        <h4>La Prière</h4>
-        <p>Nous croyons à la puissance de la prière et cherchons la face de Dieu ensemble.</p>
-      </div>
-      <div class="valeur-item reveal">
-        <div class="valeur-icon">👨‍👩‍👧</div>
-        <h4>La Famille</h4>
-        <p>Chaque personne est accueillie, aimée et accompagnée dans son chemin.</p>
-      </div>
-      <div class="valeur-item reveal">
-        <div class="valeur-icon">🌍</div>
-        <h4>L'Évangélisation</h4>
-        <p>Nous partageons la bonne nouvelle avec notre ville et les nations.</p>
-      </div>
-    </div>
-
-    <blockquote class="vision-verse reveal">
-      <span id="vm-verset-texte">« Allez, faites de toutes les nations des disciples. »</span>
-      <cite id="vm-verset-ref">Matthieu 28 : 19</cite>
-    </blockquote>
-  </div>
-</section>
-
-<!-- ===== SERVICES ===== -->
-<section class="services" id="services">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow" data-i18n="services.eyebrow">Rassemblements</span>
-      <h2 class="section-title"><span data-i18n="services.title.1">Venez</span> <span class="accent" data-i18n="services.title.2">comme vous êtes</span></h2>
-      <p style="color: var(--text-muted); max-width: 540px; margin: 0 auto;" data-i18n="services.sub">Trois rendez-vous hebdomadaires pour grandir ensemble dans la foi.</p>
-    </div>
-
-    <div class="services-grid">
-      <div class="service-card featured reveal">
-        <span class="service-tag">Principal</span>
-        <div class="service-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-        </div>
-        <div class="service-day">Dimanche</div>
-        <div class="service-time" data-cms="horaires.dimanche.heure">10h00</div>
-        <div class="service-name" data-cms="horaires.dimanche.nom">Culte principal</div>
-        <p class="service-desc" data-cms="horaires.dimanche.description">Adoration, prédication et communion fraternelle. Le rendez-vous central de notre communauté.</p>
-      </div>
-
-      <div class="service-card reveal" style="transition-delay: 0.1s;">
-        <div class="service-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        </div>
-        <div class="service-day">Mercredi</div>
-        <div class="service-time" data-cms="horaires.mercredi.heure">18h00</div>
-        <div class="service-name" data-cms="horaires.mercredi.nom">Étude biblique</div>
-        <p class="service-desc" data-cms="horaires.mercredi.description">Approfondissement de la Parole dans un cadre intime et interactif.</p>
-      </div>
-
-      <div class="service-card reveal" style="transition-delay: 0.2s;">
-        <div class="service-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-        </div>
-        <div class="service-day">Vendredi</div>
-        <div class="service-time" data-cms="horaires.vendredi.heure">18h00</div>
-        <div class="service-name" data-cms="horaires.vendredi.nom">Jeûne &amp; prière</div>
-        <p class="service-desc" data-cms="horaires.vendredi.description">Une soirée consacrée à l'intercession et à la recherche de la face de Dieu.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== LIVE BLOCK ===== -->
-<section class="live-block">
-  <div class="container">
-    <div class="live-card reveal">
-      <div class="live-info">
-        <div class="live-badge offline" id="liveBadge">
-          <span class="dot"></span>
-          <span id="liveBadgeText">Prochainement en direct</span>
-        </div>
-        <h3 class="live-title" id="liveTitle">Suivez nos cultes en direct</h3>
-        <p class="live-sub" id="liveSub">Cultes chaque dimanche à 10h, mercredi et vendredi à 18h.</p>
-      </div>
-      <div class="live-cta" id="liveCtaWrap">
-        <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener" class="btn-youtube">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
-          <span id="liveCtaText">Voir sur YouTube</span>
-        </a>
-      </div>
-      <div class="live-embed" id="liveEmbed" style="display:none;">
-        <iframe id="liveIframe" src="" frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== GALERIE PHOTOS CULTE ===== -->
-<section class="galerie" id="galerie">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow" data-cms="photos_culte.eyebrow">Photos</span>
-      <h2 class="section-title">Moments de <span class="accent" data-cms="photos_culte.titre">culte</span></h2>
-      <p style="color:var(--text-muted);max-width:540px;margin:0 auto;" data-cms="photos_culte.sous_titre">Retrouvez les moments forts de nos rassemblements dominicaux.</p>
-    </div>
-    <div class="gallery-wrap reveal" id="galleryWrap">
-      <div class="gallery-track" id="galleryTrack"></div>
-      <button class="gallery-nav gallery-prev" id="galleryPrev" aria-label="Photo précédente">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <button class="gallery-nav gallery-next" id="galleryNext" aria-label="Photo suivante">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-      <div class="gallery-dots" id="galleryDots"></div>
-      <div class="gallery-counter" id="galleryCounter" style="display:none;">1 / 1</div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== ANNONCES (rendues depuis contenu.json) ===== -->
-<section class="annonces" id="annonces">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow" data-i18n="annonces.eyebrow">À ne pas manquer</span>
-      <h2 class="section-title"><span data-i18n="annonces.title.1">Annonces</span> <span class="accent" data-i18n="annonces.title.2">& événements</span></h2>
-    </div>
-    <div class="annonces-list" data-cms-list="annonces.liste">
-      <template data-cms-template>
-        <div class="annonce-card reveal" data-cms-feature="important">
-          <div class="annonce-flag" data-cms-show-if="important">
-            <span class="dot"></span>
-            <span data-i18n-static="A la une">À la une</span>
-          </div>
-          <div class="annonce-date" data-cms-field="date">Date</div>
-          <h3 class="annonce-titre" data-cms-field="titre">Titre de l'annonce</h3>
-          <p class="annonce-description" data-cms-field="description">Description</p>
-        </div>
-      </template>
-    </div>
-  </div>
-</section>
-
-<!-- ===== JEFC ===== -->
-<section class="jefc" id="jeunesse">
-  <div class="container">
-    <div class="jefc-grid">
-      <div class="reveal" style="text-align: center;">
-        <div class="jefc-display-wrap">
-          <div class="jefc-display" id="jefcDisplay" aria-label="JEFC"><span class="jefc-letter">J</span><span class="jefc-letter">E</span><span class="jefc-letter">F</span><span class="jefc-letter">C</span></div>
-          <span class="jefc-display-sub">Jeunesse · La Famille Chrétienne</span>
-        </div>
-      </div>
-      <div class="reveal" style="transition-delay: 0.15s;">
-        <span class="jefc-tag">Toutes les 2 semaines</span>
-        <h2 class="jefc-title">Un espace de foi, de croissance et de fraternité.</h2>
-        <p class="jefc-text">La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.</p>
-        <div class="jefc-meta">
-          <div>
-            <div class="jefc-meta-item-label">Fréquence</div>
-            <div class="jefc-meta-item-val">Toutes les 2 semaines</div>
-          </div>
-          <div>
-            <div class="jefc-meta-item-label">Lieu</div>
-            <div class="jefc-meta-item-val">Wijngaardveld 29</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== NAVETTE ===== -->
-<section class="navette" id="navette">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Service gratuit</span>
-      <h2 class="section-title">Une <span class="accent">navette</span> pour vous</h2>
-      <p style="color: var(--text-muted); max-width: 540px; margin: 0 auto;">Un mini-bus est mis à votre disposition pour faciliter votre venue à l'église.</p>
-    </div>
-
-    <!-- Hero navette : trajet animé Gare ↔ Église -->
-    <div class="navette-hero reveal">
-      <div class="navette-hero-inner">
-        <div class="navette-hero-text">
-          <span class="navette-hero-eyebrow">
-            <span class="badge-free">Gratuit</span>
-            <span>Aucune réservation</span>
-          </span>
-          <h2><span class="accent">Gare d'Alost</span> ↔ Wijngaardveld 29</h2>
-          <p>Un mini-bus assure la liaison entre la gare et notre lieu de culte. Montez simplement à bord aux horaires indiqués — le service est entièrement gratuit et ouvert à tous.</p>
-        </div>
-
-        <!-- Schéma SVG du trajet avec bus animé -->
-        <div class="navette-map" aria-hidden="true">
-          <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
-            <!-- Trajet pointillé avec courbe douce -->
-            <path id="busRoute" class="route-path" d="M 30 60 Q 70 30 140 90 T 250 140" />
-
-            <!-- Arrêt 1 : Gare -->
-            <g transform="translate(30, 60)">
-              <circle class="pulse-ring" cx="0" cy="0" r="8"/>
-              <circle class="stop-circle" cx="0" cy="0" r="9"/>
-              <circle class="stop-circle-inner" cx="0" cy="0" r="4"/>
-            </g>
-            <text class="stop-label" x="30" y="35">GARE</text>
-            <text class="stop-label-secondary" x="30" y="48">D'ALOST</text>
-
-            <!-- Arrêt 2 : Église -->
-            <g transform="translate(250, 140)">
-              <circle class="pulse-ring" cx="0" cy="0" r="8" style="animation-delay: 1.5s;"/>
-              <circle class="stop-circle" cx="0" cy="0" r="9"/>
-              <circle class="stop-circle-inner" cx="0" cy="0" r="4"/>
-            </g>
-            <text class="stop-label" x="250" y="170">ÉGLISE</text>
-            <text class="stop-label-secondary" x="250" y="183">WIJNGAARDVELD 29</text>
-
-            <!-- Bus qui suit le tracé (offset-path) -->
-            <g class="bus-icon" style="offset-path: path('M 30 60 Q 70 30 140 90 T 250 140'); offset-rotate: auto;">
-              <g transform="translate(-12, -7)">
-                <rect x="0" y="2" width="22" height="10" rx="2.5"/>
-                <rect x="2" y="4" width="4" height="3.5" fill="rgba(26, 27, 62, 0.85)"/>
-                <rect x="8" y="4" width="4" height="3.5" fill="rgba(26, 27, 62, 0.85)"/>
-                <rect x="14" y="4" width="4" height="3.5" fill="rgba(26, 27, 62, 0.85)"/>
-                <circle cx="5" cy="13" r="2" fill="rgba(26, 27, 62, 0.9)"/>
-                <circle cx="17" cy="13" r="2" fill="rgba(26, 27, 62, 0.9)"/>
-              </g>
-            </g>
-          </svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- Timeline horaires (rendu depuis contenu.json) -->
-    <div class="navette-timeline" data-cms-list="navette.creneaux">
-      <!-- Template (sera dupliqué pour chaque creneau) -->
-      <template data-cms-template>
-        <div class="navette-slot reveal" data-cms-feature="featured">
-          <div class="navette-slot-icon" data-cms-icon></div>
-          <div class="navette-slot-day" data-cms-field="jour">Jour</div>
-          <div class="navette-slot-time" data-cms-field="horaire">Heure</div>
-          <p class="navette-slot-detail" data-cms-field="description">Description</p>
-        </div>
-      </template>
-      <!-- Fallback statique au cas où le JSON ne charge pas -->
-      <div class="navette-slot reveal featured" style="transition-delay: 0.05s;">
-        <div class="navette-slot-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-        </div>
-        <div class="navette-slot-day">Dimanche</div>
-        <div class="navette-slot-time">9h — 10h</div>
-        <p class="navette-slot-detail">Navettes continues entre la gare et l'église avant le culte principal.</p>
-      </div>
-      <div class="navette-slot reveal" style="transition-delay: 0.1s;">
-        <div class="navette-slot-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        </div>
-        <div class="navette-slot-day">Mercredi</div>
-        <div class="navette-slot-time">17h10</div>
-        <p class="navette-slot-detail">Départ depuis la Gare d'Alost vers l'église pour l'étude biblique.</p>
-      </div>
-      <div class="navette-slot reveal" style="transition-delay: 0.15s;">
-        <div class="navette-slot-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-        </div>
-        <div class="navette-slot-day">Vendredi</div>
-        <div class="navette-slot-time">17h10</div>
-        <p class="navette-slot-detail">Départ depuis la Gare d'Alost vers l'église pour le jeûne &amp; la prière.</p>
-      </div>
-    </div>
-
-    <div class="navette-cta-row reveal">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>Pas de réservation nécessaire — montez simplement à bord aux horaires indiqués.</span>
-    </div>
-  </div>
-</section>
-
-<!-- ===== DEPARTEMENTS ===== -->
-<section class="depts" id="departements">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Organisation</span>
-      <h2 class="section-title">Nos <span class="accent">départements</span></h2>
-      <p style="color: var(--text-muted); max-width: 540px; margin: 0 auto;">Neuf équipes au service de l'excellence dans la maison de Dieu.</p>
-    </div>
-
-    <div class="depts-grid">
-      <button type="button" class="dept-card large reveal" data-dept="technique">
-        <div class="dept-card-bg" style="background-image: url('img/dept/technique.jpg');"></div>
-        <div class="dept-card-overlay"></div>
-        <span class="dept-card-glare"></span>
-        <div class="dept-card-content">
-          <div class="dept-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></div>
-          <div class="dept-name">Technique</div>
-          <p class="dept-desc">Son, écrans, photographie &amp; diffusion. L'équipe qui rend chaque culte visible et audible.</p>
-        </div>
-        <svg class="dept-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </button>
-
-      <button type="button" class="dept-card reveal" style="transition-delay: 0.05s;" data-dept="media">
-        <div class="dept-card-bg" style="background-image: url('img/dept/media.jpg');"></div>
-        <div class="dept-card-overlay"></div>
-        <span class="dept-card-glare"></span>
-        <div class="dept-card-content">
-          <div class="dept-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7zM14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/></svg></div>
-          <div class="dept-name">Média</div>
-          <p class="dept-desc">Réseaux sociaux &amp; communication.</p>
-        </div>
-        <svg class="dept-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </button>
-
-      <button type="button" class="dept-card reveal" style="transition-delay: 0.1s;" data-dept="chorale">
-        <div class="dept-card-bg" style="background-image: url('img/dept/chorale.jpg');"></div>
-        <div class="dept-card-overlay"></div>
-        <span class="dept-card-glare"></span>
-        <div class="dept-card-content">
-          <div class="dept-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
-          <div class="dept-name">Chorale</div>
-          <p class="dept-desc">Louange &amp; adoration musicale.</p>
-        </div>
-        <svg class="dept-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </button>
-
-      <button type="button" class="dept-card reveal" style="transition-delay: 0.15s;" data-dept="ecodim">
-        <div class="dept-card-bg" style="background-image: url('img/dept/ecodim.jpg');"></div>
-        <div class="dept-card-overlay"></div>
-        <span class="dept-card-glare"></span>
-        <div class="dept-card-content">
-          <div class="dept-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-          <div class="dept-name">Écodim</div>
-          <p class="dept-desc">École du dimanche pour enfants.</p>
-        </div>
-        <svg class="dept-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </button>
-
-      <button type="button" class="dept-card large reveal" style="transition-delay: 0.2s;" data-dept="accueil">
-        <div class="dept-card-bg" style="background-image: url('img/dept/accueil.jpg');"></div>
-        <div class="dept-card-overlay"></div>
-        <span class="dept-card-glare"></span>
-        <div class="dept-card-content">
-          <div class="dept-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17a4 4 0 0 1-8 0V8c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2v9z"/><path d="M11 8h6c1.1 0 2 .9 2 2v6"/><path d="M19 16l3-3-3-3"/></svg></div>
-          <div class="dept-name">Accueil</div>
-          <p class="dept-desc">Hospitalité &amp; intégration. Les premières mains tendues à toute personne qui franchit la porte.</p>
-        </div>
-        <svg class="dept-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </button>
-
-      <button type="button" class="dept-card reveal" style="transition-delay: 0.25s;" data-dept="intercesseurs">
-        <div class="dept-card-bg" style="background-image: url('img/dept/intercesseurs.jpg');"></div>
-        <div class="dept-card-overlay"></div>
-        <span class="dept-card-glare"></span>
-        <div class="dept-card-content">
-          <div class="dept-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-          <div class="dept-name">Intercesseurs</div>
-          <p class="dept-desc">Équipe de prière &amp; intercession.</p>
-        </div>
-        <svg class="dept-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </button>
-
-      <button type="button" class="dept-card reveal" style="transition-delay: 0.3s;" data-dept="traducteurs">
-        <div class="dept-card-bg" style="background-image: url('img/dept/traducteurs.jpg');"></div>
-        <div class="dept-card-overlay"></div>
-        <span class="dept-card-glare"></span>
-        <div class="dept-card-content">
-          <div class="dept-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/></svg></div>
-          <div class="dept-name">Traducteurs</div>
-          <p class="dept-desc">Traduction simultanée.</p>
-        </div>
-        <svg class="dept-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </button>
-
-      <button type="button" class="dept-card reveal" style="transition-delay: 0.35s;" data-dept="solidarite">
-        <div class="dept-card-bg placeholder"></div>
-        <div class="dept-card-overlay"></div>
-        <span class="dept-card-glare"></span>
-        <div class="dept-card-content">
-          <div class="dept-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 14h1v4"/><path d="M16 2v4M8 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div>
-          <div class="dept-name">Solidarité</div>
-          <p class="dept-desc">Aide sociale &amp; fraternelle.</p>
-        </div>
-        <svg class="dept-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </button>
-
-      <button type="button" class="dept-card reveal" style="transition-delay: 0.4s;" data-dept="surface">
-        <div class="dept-card-bg placeholder"></div>
-        <div class="dept-card-overlay"></div>
-        <span class="dept-card-glare"></span>
-        <div class="dept-card-content">
-          <div class="dept-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 7 18.2l1.9-5.8L4 8.8h6.1z"/></svg></div>
-          <div class="dept-name">Techniciens de surface</div>
-          <p class="dept-desc">Propreté &amp; entretien des locaux.</p>
-        </div>
-        <svg class="dept-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- ===== CONTACT ===== -->
-<section class="contact" id="contact">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Nous rejoindre</span>
-      <h2 class="section-title">Contact &amp; <span class="accent">adresse</span></h2>
-    </div>
-
-    <div class="contact-grid">
-      <div class="contact-col reveal">
-        <h3>Adresse</h3>
-        <div class="contact-address">Wijngaardveld 29<br>9300 Alost (Aalst)<br>Belgique</div>
-        <a href="https://maps.google.com/?q=Wijngaardveld+29,+9300+Aalst" target="_blank" rel="noopener" class="contact-link">
-          Voir sur la carte
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-        </a>
-      </div>
-
-      <div class="contact-col reveal" style="transition-delay: 0.1s;">
-        <h3 data-i18n="contact.team">Équipe pastorale</h3>
-        <div data-cms-list="equipe_pastorale.membres" class="team-list">
-          <template data-cms-template>
-            <div class="secretary-card">
-              <div class="secretary-avatar" data-cms-field="initiales">XX</div>
-              <div>
-                <div class="secretary-info-name" data-cms-field="nom">Nom</div>
-                <div class="secretary-info-role" data-cms-field="role">Rôle</div>
-              </div>
-            </div>
-          </template>
-          <!-- Fallback statique -->
-          <div class="secretary-card">
-            <div class="secretary-avatar">GK</div>
-            <div>
-              <div class="secretary-info-name">Pasteur Guy KOBI</div>
-              <div class="secretary-info-role" data-i18n="contact.pastor.role">Pasteur principal</div>
-            </div>
-          </div>
-          <div class="secretary-card">
-            <div class="secretary-avatar">MM</div>
-            <div>
-              <div class="secretary-info-name">Mimi Mbenza</div>
-              <div class="secretary-info-role" data-i18n="contact.pastor.wife.role">Épouse du pasteur</div>
-            </div>
-          </div>
-          <div class="secretary-card">
-            <div class="secretary-avatar">SM</div>
-            <div>
-              <div class="secretary-info-name">Safi Mudiri</div>
-              <div class="secretary-info-role" data-i18n="contact.secretary.role">Secrétaire de l'église</div>
-            </div>
-          </div>
-        </div>
-        <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6; margin-bottom: 32px;" data-i18n="contact.note">Pour toute demande, adressez-vous à notre secrétaire d'église. Le pasteur reçoit uniquement sur rendez-vous.</p>
-
-        <div class="contact-yt-card">
-          <div class="contact-yt-card-title" data-i18n="contact.yt.title">Culte en ligne</div>
-          <p class="contact-yt-card-sub" data-i18n="contact.yt.sub">Retrouvez nos cultes en direct et en rediffusion sur notre chaîne YouTube.</p>
-          <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener">
-            @CE_laFamilleChretienne
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== MODALE DEPARTEMENT ===== -->
-<div class="modal-overlay" id="deptModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
-  <div class="modal" role="document">
-    <button class="modal-close" id="modalClose" aria-label="Fermer">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-
-    <div class="modal-header">
-      <div class="modal-icon" id="modalIcon"></div>
-      <div class="modal-eyebrow">Département</div>
-      <h3 class="modal-title" id="modalTitle">—</h3>
-      <p class="modal-sub" id="modalSub">—</p>
-    </div>
-
-    <div class="modal-body">
-      <!-- Vue choix -->
-      <div id="modalChoice">
-        <div class="modal-cta-row">
-          <button type="button" class="modal-cta" id="btnJoin">
-            <span>Voulez-vous nous rejoindre ?</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </button>
-          <button type="button" class="modal-cta-secondary" id="btnInfo">
-            <span>En savoir plus / Poser une question</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </button>
-        </div>
-        <p style="font-size: 12px; color: var(--text-muted); text-align: center; line-height: 1.5;">
-          Tous les départements sont ouverts à ceux qui souhaitent servir avec un cœur disponible.
-        </p>
-      </div>
-
-      <!-- Vue formulaire -->
-      <form class="modal-form" id="modalForm" novalidate name="candidature-departement" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="candidature-departement" />
-        <input type="hidden" name="departement" id="f-dept" />
-        <p style="display:none;"><label>Ne pas remplir : <input name="bot-field" /></label></p>
-        <button type="button" class="form-back" id="formBack">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Retour
-        </button>
-
-        <div class="form-row-grid">
-          <div class="form-row">
-            <label for="f-prenom">Prénom <span class="req">*</span></label>
-            <input type="text" id="f-prenom" name="prenom" required autocomplete="given-name" />
-          </div>
-          <div class="form-row">
-            <label for="f-nom">Nom <span class="req">*</span></label>
-            <input type="text" id="f-nom" name="nom" required autocomplete="family-name" />
-          </div>
-        </div>
-
-        <div class="form-row-grid">
-          <div class="form-row">
-            <label for="f-email">E-mail <span class="req">*</span></label>
-            <input type="email" id="f-email" name="email" required autocomplete="email" />
-          </div>
-          <div class="form-row">
-            <label for="f-tel">Téléphone</label>
-            <input type="tel" id="f-tel" name="tel" autocomplete="tel" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <label for="f-age">Tranche d'âge</label>
-          <select id="f-age" name="age">
-            <option value="">— Sélectionner —</option>
-            <option>Moins de 18 ans</option>
-            <option>18 – 25 ans</option>
-            <option>26 – 35 ans</option>
-            <option>36 – 50 ans</option>
-            <option>Plus de 50 ans</option>
-          </select>
-        </div>
-
-        <!-- Question dynamique selon le département -->
-        <div class="form-row" id="dynamicRow">
-          <label id="dynamicLabel">Vos compétences ou intérêts</label>
-          <div class="form-checkbox-group" id="dynamicChecks"></div>
-        </div>
-
-        <div class="form-row">
-          <label for="f-message">Un mot pour vous présenter</label>
-          <textarea id="f-message" name="message" placeholder="Parlez-nous brièvement de vous, de votre motivation, de votre disponibilité…"></textarea>
-        </div>
-
-        <button type="submit" class="form-submit" id="formSubmit">
-          Envoyer ma candidature
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </button>
-        <p style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 4px;">
-          Vous serez recontacté par le secrétariat dans les meilleurs délais.
-        </p>
-      </form>
-
-      <!-- Vue formulaire question -->
-      <form class="modal-form" id="modalQuestionForm" novalidate name="question-departement" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="question-departement" />
-        <input type="hidden" name="departement" id="q-dept" />
-        <p style="display:none;"><label>Ne pas remplir : <input name="bot-field" /></label></p>
-        <button type="button" class="form-back" id="questionBack">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Retour
-        </button>
-
-        <div style="background: var(--silver-soft); border-radius: 8px; padding: 12px 14px; margin-bottom: 4px; font-size: 13px; color: var(--text-muted); line-height: 1.5;">
-          Une question sur ce département ? Le responsable vous répondra personnellement.
-        </div>
-
-        <div class="form-row-grid">
-          <div class="form-row">
-            <label for="q-prenom">Prénom <span class="req">*</span></label>
-            <input type="text" id="q-prenom" name="prenom" required autocomplete="given-name" />
-          </div>
-          <div class="form-row">
-            <label for="q-nom">Nom</label>
-            <input type="text" id="q-nom" name="nom" autocomplete="family-name" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <label for="q-email">E-mail <span class="req">*</span></label>
-          <input type="email" id="q-email" name="email" required autocomplete="email" />
-        </div>
-
-        <div class="form-row">
-          <label for="q-sujet">Sujet</label>
-          <select id="q-sujet" name="sujet">
-            <option value="">— Sélectionner —</option>
-            <option>Comprendre le rôle du département</option>
-            <option>Disponibilités et engagement</option>
-            <option>Compétences requises</option>
-            <option>Témoigner / partager une idée</option>
-            <option>Autre</option>
-          </select>
-        </div>
-
-        <div class="form-row">
-          <label for="q-message">Votre question <span class="req">*</span></label>
-          <textarea id="q-message" name="message" required placeholder="Posez votre question librement…"></textarea>
-        </div>
-
-        <button type="submit" class="form-submit" id="questionSubmit">
-          Envoyer ma question
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </button>
-        <p style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 4px;">
-          Vous recevrez une réponse à l'adresse indiquée.
-        </p>
-      </form>
-
-      <!-- Vue succès -->
-      <div class="form-success" id="formSuccess">
-        <div class="form-success-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-        </div>
-        <h3>Merci pour votre demande !</h3>
-        <p>Votre candidature a bien été enregistrée. Le secrétariat vous recontactera prochainement. Que Dieu vous bénisse.</p>
-        <button type="button" class="form-submit" id="successClose" style="background: var(--silver-soft); color: var(--text-dark);">
-          Fermer
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== BANNIERE RDV PASTEUR ===== -->
-<section class="pastor-banner" id="rdv-pasteur">
-  <div class="pastor-banner-inner reveal">
-    <span class="pastor-eyebrow" data-i18n="pastor.eyebrow">Sur rendez-vous</span>
-    <h2 class="pastor-title">
-      <span data-i18n="pastor.title.1">Rendez-vous avec</span> <span class="accent" data-i18n="pastor.title.2">le Pasteur</span>
-    </h2>
-    <p class="pastor-sub" data-i18n="pastor.sub">Un temps d'écoute, de prière et d'accompagnement personnel avec le Pasteur Guy KOBI. Les consultations se font uniquement sur rendez-vous, via le secrétariat.</p>
-    <a href="#contact" class="pastor-cta" id="pastorCta" data-i18n="pastor.cta">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Demander un rendez-vous
-    </a>
-    <div class="pastor-meta">
-      <span class="pastor-meta-item">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        <span data-i18n="pastor.via">Via le secrétariat</span>
-      </span>
-      <span class="pastor-meta-item">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span data-i18n="pastor.confidential">Strictement confidentiel</span>
-      </span>
-    </div>
-  </div>
-</section>
-
-<!-- ===== FOOTER ===== -->
-<footer>
-  <div class="footer-inner">
-    <p class="footer-verse">« Car nous sommes tous un seul corps en Christ. »</p>
-    <p class="footer-verse-ref">Romains 12 : 5</p>
-
-    <div class="footer-links">
-      <a href="#services">Horaires</a>
-      <a href="#jeunesse">JEFC</a>
-      <a href="#navette">Navette</a>
-      <a href="#departements">Départements</a>
-      <a href="#contact">Contact</a>
-      <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener">YouTube</a>
-    </div>
-
-    <div style="display:flex; gap:20px; justify-content:center; margin-bottom:40px;">
-      <!-- YouTube -->
-      <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener"
-         style="width:42px;height:42px;border-radius:50%;background:rgba(227,227,235,0.08);border:0.5px solid rgba(227,227,235,0.2);display:inline-flex;align-items:center;justify-content:center;color:rgba(227,227,235,0.7);transition:background 0.2s,color 0.2s;"
-         aria-label="YouTube"
-         onmouseover="this.style.background='rgba(227,227,235,0.18)';this.style.color='#E3E3EB';"
-         onmouseout="this.style.background='rgba(227,227,235,0.08)';this.style.color='rgba(227,227,235,0.7)';">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
-      </a>
-      <!-- Facebook -->
-      <a href="https://www.facebook.com/CentreEvangeliqueLaFamilleChretienne" target="_blank" rel="noopener"
-         style="width:42px;height:42px;border-radius:50%;background:rgba(227,227,235,0.08);border:0.5px solid rgba(227,227,235,0.2);display:inline-flex;align-items:center;justify-content:center;color:rgba(227,227,235,0.7);transition:background 0.2s,color 0.2s;"
-         aria-label="Facebook"
-         onmouseover="this.style.background='rgba(227,227,235,0.18)';this.style.color='#E3E3EB';"
-         onmouseout="this.style.background='rgba(227,227,235,0.08)';this.style.color='rgba(227,227,235,0.7)';">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-      </a>
-      <!-- WhatsApp -->
-      <a href="https://wa.me/32000000000" target="_blank" rel="noopener"
-         style="width:42px;height:42px;border-radius:50%;background:rgba(227,227,235,0.08);border:0.5px solid rgba(227,227,235,0.2);display:inline-flex;align-items:center;justify-content:center;color:rgba(227,227,235,0.7);transition:background 0.2s,color 0.2s;"
-         aria-label="WhatsApp"
-         onmouseover="this.style.background='rgba(227,227,235,0.18)';this.style.color='#E3E3EB';"
-         onmouseout="this.style.background='rgba(227,227,235,0.08)';this.style.color='rgba(227,227,235,0.7)';">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-      </a>
-    </div>
-
-    <div class="footer-divider"></div>
-
-    <div class="footer-meta">
-      <div>© 2026 CEFC – Alost. Tous droits réservés.</div>
-      <div>Centre Évangélique · La Famille Chrétienne</div>
-    </div>
-  </div>
-</footer>
-
-<script>
-// ===== NAV SCROLL =====
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 40) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
-}, { passive: true });
-
-// ===== MOBILE MENU =====
-const navToggle = document.getElementById('navToggle');
-const navLinks = document.getElementById('navLinks');
-navToggle.addEventListener('click', () => {
-  const open = navLinks.classList.toggle('open');
-  navToggle.classList.toggle('open', open);
-  navToggle.setAttribute('aria-expanded', open);
-});
-navLinks.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => {
-    navLinks.classList.remove('open');
-    navToggle.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', false);
-  });
-});
-
-// ===== REVEAL ON SCROLL =====
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      io.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-// ===== ANIMATION LOGO JEFC =====
-const jefcWrap = document.querySelector('.jefc-display-wrap');
-const jefcDisplay = document.getElementById('jefcDisplay');
-if (jefcWrap && jefcDisplay) {
-  const jefcIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        jefcDisplay.classList.add('in');
-        jefcWrap.classList.add('in');
-        jefcIO.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.4 });
-  jefcIO.observe(jefcWrap);
-}
-
-// ===== LIVE STATUS (heure de Bruxelles) =====
-// Services : dimanche 10h, mercredi 18h, vendredi 18h
-const SERVICES = [
-  { day: 0, hour: 10, endHour: 12, endMin: 30, label: 'Dimanche' },
-  { day: 3, hour: 18, endHour: 20, endMin: 0,  label: 'Mercredi' },
-  { day: 5, hour: 18, endHour: 20, endMin: 0,  label: 'Vendredi' },
-];
-
-function updateLiveStatus() {
-  const badge      = document.getElementById('liveBadge');
-  const badgeText  = document.getElementById('liveBadgeText');
-  const title      = document.getElementById('liveTitle');
-  const sub        = document.getElementById('liveSub');
-  const ctaText    = document.getElementById('liveCtaText');
-  const liveEmbed  = document.getElementById('liveEmbed');
-  const liveIframe = document.getElementById('liveIframe');
-
-  const nowStr = new Date().toLocaleString('en-US', { timeZone: 'Europe/Brussels' });
-  const now = new Date(nowStr);
-  const day = now.getDay();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const totalMin = hours * 60 + minutes;
-
-  const isLiveNow = SERVICES.some(s =>
-    s.day === day &&
-    totalMin >= s.hour * 60 &&
-    totalMin < s.endHour * 60 + s.endMin
-  );
-
-  if (isLiveNow) {
-    badge.classList.remove('offline');
-    badgeText.textContent = 'En direct maintenant';
-    title.textContent = 'Le culte est en direct';
-    sub.textContent = 'Rejoignez-nous dès maintenant — le culte est diffusé sur notre chaîne.';
-    ctaText.textContent = 'Regarder le live';
-
-    const channelId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
-    if (channelId && liveEmbed && liveIframe) {
-      if (!liveIframe.src) {
-        liveIframe.src = `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1`;
-      }
-      liveEmbed.style.display = 'block';
-    }
-  } else {
-    if (liveEmbed) liveEmbed.style.display = 'none';
-    if (liveIframe) liveIframe.src = '';
-
-    let minDiff = Infinity;
-    let nextLabel = 'Dimanche';
-    for (const s of SERVICES) {
-      const next = new Date(now);
-      let daysUntil = (s.day - day + 7) % 7;
-      if (daysUntil === 0 && totalMin >= s.endHour * 60 + s.endMin) daysUntil = 7;
-      next.setDate(now.getDate() + daysUntil);
-      next.setHours(s.hour, 0, 0, 0);
-      const diff = next - now;
-      if (diff > 0 && diff < minDiff) { minDiff = diff; nextLabel = s.label; }
-    }
-
-    const d = Math.floor(minDiff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((minDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((minDiff % (1000 * 60 * 60)) / (1000 * 60));
-
-    let countdown = '';
-    if (d > 0) countdown = `${d} jour${d > 1 ? 's' : ''} et ${h}h`;
-    else if (h > 0) countdown = `${h}h${m.toString().padStart(2, '0')}`;
-    else countdown = `${m} minute${m > 1 ? 's' : ''}`;
-
-    badge.classList.add('offline');
-    badgeText.textContent = `Prochain culte (${nextLabel}) dans ${countdown}`;
-    title.textContent = 'Suivez nos cultes en direct';
-    sub.textContent = 'Cultes chaque dimanche à 10h, mercredi et vendredi à 18h.';
-    ctaText.textContent = 'Voir sur YouTube';
-  }
-}
-updateLiveStatus();
-setInterval(updateLiveStatus, 60000);
-
-// ===== MOTEUR CMS — chargement de contenu.json =====
-// Synchrone via XMLHttpRequest pour que tout soit en place avant le reste du JS
-// (notamment avant la collecte des textes pour la traduction NL).
-let CMS_DATA = null;
-function loadCmsContentSync() {
-  try {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'contenu.json', false); // synchrone
-    xhr.overrideMimeType('application/json');
-    xhr.send(null);
-    if (xhr.status === 200 || xhr.status === 0) {
-      CMS_DATA = JSON.parse(xhr.responseText);
-      return true;
-    }
-  } catch (e) {
-    console.warn('CMS : impossible de charger contenu.json — utilisation des valeurs par défaut.', e);
-  }
-  return false;
-}
-
-// Récupère une valeur dans CMS_DATA par chemin "horaires.dimanche.heure"
-function getCmsValue(path) {
-  if (!CMS_DATA) return null;
-  return path.split('.').reduce((o, k) => (o && k in o) ? o[k] : null, CMS_DATA);
-}
-
-// Détermine la langue cible AU MOMENT du remplissage.
-// Si NL et qu'une variante "_nl" existe, on l'utilise ; sinon on retombe sur FR.
-function pickLangValue(obj, fieldName) {
-  if (typeof obj !== 'object' || obj === null) return obj;
-  const wantNL = (() => {
-    try { return localStorage.getItem('cefcLang') === 'nl'; } catch (e) { return false; }
-  })();
-  if (wantNL && (fieldName + '_nl') in obj) return obj[fieldName + '_nl'];
-  return obj[fieldName];
-}
-
-function applyCmsContent() {
-  if (!CMS_DATA) return;
-
-  // 1. Champs simples : data-cms="path.to.field"
-  document.querySelectorAll('[data-cms]').forEach(el => {
-    const path = el.getAttribute('data-cms');
-    const parts = path.split('.');
-    const lastKey = parts[parts.length - 1];
-    const parent = parts.slice(0, -1).join('.');
-    const parentObj = parent ? getCmsValue(parent) : CMS_DATA;
-    if (parentObj && typeof parentObj === 'object') {
-      const v = pickLangValue(parentObj, lastKey);
-      if (v !== null && v !== undefined) el.textContent = v;
-    }
-  });
-
-  // 2. Listes répétées : data-cms-list="path.to.array" avec un <template> à l'intérieur
-  document.querySelectorAll('[data-cms-list]').forEach(container => {
-    const path = container.getAttribute('data-cms-list');
-    const arr = getCmsValue(path);
-    if (!Array.isArray(arr)) return;
-
-    const tpl = container.querySelector('template[data-cms-template]');
-    if (!tpl) return;
-
-    // Vide le conteneur sauf le template
-    Array.from(container.children).forEach(child => {
-      if (child !== tpl) child.remove();
-    });
-
-    if (arr.length === 0) {
-      container.setAttribute('data-empty', 'true');
-      // Cache la section parente si elle a la classe .annonces et qu'elle est vide
-      const parentSection = container.closest('section.annonces');
-      if (parentSection) parentSection.classList.add('empty-section');
-      return;
-    }
-    container.removeAttribute('data-empty');
-    const parentSection = container.closest('section.annonces');
-    if (parentSection) parentSection.classList.remove('empty-section');
-
-    arr.forEach((item, i) => {
-      const node = tpl.content.firstElementChild.cloneNode(true);
-
-      // Délai d'animation décalé pour le reveal stagger
-      const currentDelay = node.style.transitionDelay;
-      if (!currentDelay) node.style.transitionDelay = (0.05 + i * 0.05) + 's';
-
-      // Remplir les champs data-cms-field
-      node.querySelectorAll('[data-cms-field]').forEach(f => {
-        const key = f.getAttribute('data-cms-field');
-        const v = pickLangValue(item, key);
-        if (v !== null && v !== undefined) f.textContent = v;
-      });
-
-      // Classe conditionnelle : data-cms-feature="className" + champ booléen "principal" ou "important"
-      const featClass = node.getAttribute('data-cms-feature');
-      if (featClass) {
-        // On regarde si l'item a un booléen "principal" ou "important" ou featClass directement
-        const flag = item[featClass] === true || item.principal === true || item.important === true;
-        if (flag) node.classList.add(featClass);
-      }
-
-      // Affichage conditionnel : data-cms-show-if="champ"
-      node.querySelectorAll('[data-cms-show-if]').forEach(el => {
-        const flag = item[el.getAttribute('data-cms-show-if')];
-        if (!flag) el.style.display = 'none';
-      });
-
-      // Icônes : data-cms-icon (icône SVG selon le jour)
-      node.querySelectorAll('[data-cms-icon]').forEach(el => {
-        const day = (item.jour || '').toLowerCase();
-        let svg = '';
-        if (day.includes('dimanche') || day.includes('zondag')) {
-          svg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
-        } else if (day.includes('mercredi') || day.includes('woensdag')) {
-          svg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
-        } else if (day.includes('vendredi') || day.includes('vrijdag')) {
-          svg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>';
-        }
-        if (svg) el.innerHTML = svg;
-      });
-
-      // Pour les départements : photo en background-image
-      if (path === 'departements.liste' && item.photo) {
-        const bg = node.querySelector('.dept-card-bg');
-        if (bg) {
-          bg.style.backgroundImage = `url('img/dept/${item.photo}')`;
-          bg.classList.remove('placeholder');
-        }
-      }
-
-      container.appendChild(node);
-    });
-  });
-}
-
-loadCmsContentSync();
-applyCmsContent();
-
-// ===== VISION & MISSION — rendu depuis contenu.json =====
-(function() {
-  const vm = CMS_DATA && CMS_DATA.vision_mission;
-  if (!vm) return;
-  const section = document.getElementById('vision');
-  if (!section) return;
-  if (vm.actif === false) { section.style.display = 'none'; return; }
-
-  const setText = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
-  setText('vm-eyebrow',       vm.eyebrow);
-  setText('vm-titre-accent',  vm.titre);
-  setText('vm-lead',          vm.intro);
-  setText('vm-vision-titre',  vm.vision_titre);
-  setText('vm-vision-texte',  vm.vision_texte);
-  setText('vm-mission-titre', vm.mission_titre);
-  setText('vm-mission-texte', vm.mission_texte);
-  setText('vm-verset-texte',  vm.verset_texte);
-  setText('vm-verset-ref',    vm.verset_reference);
-
-  if (vm.valeurs && vm.valeurs.length) {
-    const grid = document.getElementById('vm-valeurs');
-    if (grid) {
-      grid.innerHTML = '';
-      vm.valeurs.forEach(v => {
-        const d = document.createElement('div');
-        d.className = 'valeur-item reveal';
-        d.innerHTML = `<div class="valeur-icon">${v.icone || '✦'}</div><h4>${v.titre || ''}</h4><p>${v.texte || ''}</p>`;
-        grid.appendChild(d);
-      });
-    }
-  }
-})();
-
-// Re-observer les éléments .reveal ajoutés dynamiquement par le CMS
-document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
-
-// ===== TRADUCTION FR / NL =====
-// Dictionnaire complet : chaque texte FR → traduction NL.
-// On parcourt le DOM et on remplace tous les nœuds texte qui matchent.
-const TRANSLATIONS_NL = {
-  // NAV
-  "Accueil": "Welkom",
-  "Services": "Diensten",
-  "Jeunesse": "Jeugd",
-  "Navette": "Pendeldienst",
-  "Départements": "Afdelingen",
-  "Contact": "Contact",
-  "Live": "Live",
-
-  // HERO
-  "2016 — 2026 · Centre Évangélique · Alost": "2016 — 2026 · Evangelisch Centrum · Aalst",
-  "10 ans": "10 jaar",
-  "de Grâce": "van Genade",
-  "Célébrons ensemble dix années de fidélité divine.": "Laten we samen tien jaar goddelijke trouw vieren.",
-  "Vous êtes les bienvenus dans la famille.": "U bent welkom in de familie.",
-  "Nos horaires": "Onze uren",
-  "Rejoindre le live": "Live volgen",
-
-  // MARQUEE
-  "Culte dominical 10h": "Zondagsdienst 10u",
-  "Étude biblique mercredi 18h": "Bijbelstudie woensdag 18u",
-  "Jeûne & prière vendredi 18h": "Vasten & gebed vrijdag 18u",
-  "Navette gratuite depuis la gare d'Alost": "Gratis pendeldienst vanaf station Aalst",
-  "JEFC — jeunesse toutes les 2 semaines": "JEFC — jeugd om de 2 weken",
-  "2016 – 2026 · 10 ans de Grâce": "2016 – 2026 · 10 jaar van Genade",
-
-  // SERVICES
-  "Rassemblements": "Bijeenkomsten",
-  "Venez": "Kom",
-  "comme vous êtes": "zoals u bent",
-  "Trois rendez-vous hebdomadaires pour grandir ensemble dans la foi.": "Drie wekelijkse momenten om samen te groeien in geloof.",
-  "Principal": "Hoofd",
-  "Dimanche": "Zondag",
-  "Mercredi": "Woensdag",
-  "Vendredi": "Vrijdag",
-  "Culte principal": "Hoofddienst",
-  "Étude biblique": "Bijbelstudie",
-  "Jeûne & prière": "Vasten & gebed",
-  "Adoration, prédication et communion fraternelle. Le rendez-vous central de notre communauté.": "Aanbidding, prediking en broederlijke gemeenschap. Het centrale moment van onze gemeenschap.",
-  "Approfondissement de la Parole dans un cadre intime et interactif.": "Verdieping van het Woord in een intieme en interactieve sfeer.",
-  "Une soirée consacrée à l'intercession et à la recherche de la face de Dieu.": "Een avond gewijd aan voorbede en het zoeken van Gods aangezicht.",
-
-  // LIVE BLOCK
-  "Prochainement en direct": "Binnenkort live",
-  "En direct maintenant": "Nu live",
-  "Le culte est en direct": "De dienst is live",
-  "Suivez nos cultes en direct": "Volg onze diensten live",
-  "Tous les dimanches à 10h sur YouTube. Rediffusion disponible sur la chaîne.": "Elke zondag om 10u op YouTube. Herhaling beschikbaar op het kanaal.",
-  "Rejoignez-nous dès maintenant sur YouTube pour suivre le culte dominical.": "Sluit u nu bij ons aan op YouTube voor de zondagsdienst.",
-  "Voir sur YouTube": "Bekijk op YouTube",
-  "Regarder le live": "Bekijk live",
-
-  // JEFC
-  "Toutes les 2 semaines": "Om de 2 weken",
-  "Un espace de foi, de croissance et de fraternité.": "Een plek van geloof, groei en broederschap.",
-  "La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.":
-    "JEFC komt om de twee weken samen voor een moment van delen, onderwijs en aanbidding aangepast aan de jeugd van onze gemeenschap.",
-  "Fréquence": "Frequentie",
-  "Lieu": "Locatie",
-
-  // NAVETTE
-  "Service gratuit": "Gratis dienst",
-  "Une": "Een",
-  "navette": "pendeldienst",
-  "pour vous": "voor u",
-  "Un mini-bus est mis à votre disposition pour faciliter votre venue. Aucune réservation nécessaire — montez simplement à bord.":
-    "Een minibus staat tot uw beschikking om uw komst te vergemakkelijken. Geen reservering nodig — stap gewoon in.",
-  "Navette église": "Pendeldienst kerk",
-  "Gratuit": "Gratis",
-  "Gare d'Alost": "Station Aalst",
-  "Wijngaardveld 29": "Wijngaardveld 29",
-  "Mer. & Ven.": "Woe. & Vrij.",
-  "17h10 depuis la gare": "17u10 vanaf het station",
-  "9h – 10h, navettes continues": "9u – 10u, doorlopende ritten",
-  "Pas de réservation. Montez simplement à bord.": "Geen reservering. Stap gewoon in.",
-
-  // DEPARTEMENTS
-  "Organisation": "Organisatie",
-  "Nos": "Onze",
-  "départements": "afdelingen",
-  "Neuf équipes au service de l'excellence dans la maison de Dieu.": "Negen teams in dienst van uitmuntendheid in het huis van God.",
-  "Technique": "Techniek",
-  "Son, écrans, photographie & diffusion. L'équipe qui rend chaque culte visible et audible.":
-    "Geluid, schermen, fotografie & uitzending. Het team dat elke dienst zichtbaar en hoorbaar maakt.",
-  "Média": "Media",
-  "Réseaux sociaux & communication.": "Sociale media & communicatie.",
-  "Chorale": "Koor",
-  "Louange & adoration musicale.": "Lofzang & muzikale aanbidding.",
-  "Écodim": "Zondagsschool",
-  "École du dimanche pour enfants.": "Zondagsschool voor kinderen.",
-  "Hospitalité & intégration. Les premières mains tendues à toute personne qui franchit la porte.":
-    "Gastvrijheid & integratie. De eerste uitgestoken handen voor wie binnenkomt.",
-  "Intercesseurs": "Voorbidders",
-  "Équipe de prière & intercession.": "Gebedsteam & voorbede.",
-  "Traducteurs": "Vertalers",
-  "Traduction simultanée.": "Simultaanvertaling.",
-  "Solidarité": "Solidariteit",
-  "Aide sociale & fraternelle.": "Sociale & broederlijke hulp.",
-  "Techniciens de surface": "Schoonmaakdienst",
-  "Propreté & entretien des locaux.": "Netheid & onderhoud van de lokalen.",
-
-  // MODALE
-  "Département": "Afdeling",
-  "Voulez-vous nous rejoindre ?": "Wilt u zich bij ons aansluiten?",
-  "En savoir plus / Poser une question": "Meer weten / Een vraag stellen",
-  "Tous les départements sont ouverts à ceux qui souhaitent servir avec un cœur disponible.":
-    "Alle afdelingen staan open voor wie met een beschikbaar hart wil dienen.",
-  "Retour": "Terug",
-  "Prénom": "Voornaam",
-  "Nom": "Naam",
-  "E-mail": "E-mail",
-  "Téléphone": "Telefoon",
-  "Tranche d'âge": "Leeftijdsgroep",
-  "— Sélectionner —": "— Selecteer —",
-  "Moins de 18 ans": "Onder 18 jaar",
-  "18 – 25 ans": "18 – 25 jaar",
-  "26 – 35 ans": "26 – 35 jaar",
-  "36 – 50 ans": "36 – 50 jaar",
-  "Plus de 50 ans": "Meer dan 50 jaar",
-  "Vos compétences ou intérêts": "Uw vaardigheden of interesses",
-  "Un mot pour vous présenter": "Een woordje om uzelf voor te stellen",
-  "Parlez-nous brièvement de vous, de votre motivation, de votre disponibilité…":
-    "Vertel ons kort over uzelf, uw motivatie en uw beschikbaarheid…",
-  "Envoyer ma candidature": "Mijn aanvraag versturen",
-  "Vous serez recontacté par le secrétariat dans les meilleurs délais.":
-    "U wordt zo spoedig mogelijk gecontacteerd door het secretariaat.",
-  "Une question sur ce département ? Le responsable vous répondra personnellement.":
-    "Een vraag over deze afdeling? De verantwoordelijke beantwoordt u persoonlijk.",
-  "Sujet": "Onderwerp",
-  "Comprendre le rôle du département": "De rol van de afdeling begrijpen",
-  "Disponibilités et engagement": "Beschikbaarheid en engagement",
-  "Compétences requises": "Vereiste vaardigheden",
-  "Témoigner / partager une idée": "Getuigen / een idee delen",
-  "Autre": "Andere",
-  "Votre question": "Uw vraag",
-  "Posez votre question librement…": "Stel uw vraag vrijuit…",
-  "Envoyer ma question": "Mijn vraag versturen",
-  "Vous recevrez une réponse à l'adresse indiquée.": "U ontvangt een antwoord op het opgegeven adres.",
-  "Merci pour votre demande !": "Bedankt voor uw aanvraag!",
-  "Votre candidature a bien été enregistrée. Le secrétariat vous recontactera prochainement. Que Dieu vous bénisse.":
-    "Uw aanvraag is goed geregistreerd. Het secretariaat zal u binnenkort contacteren. Moge God u zegenen.",
-  "Question envoyée !": "Vraag verzonden!",
-  "Votre message a bien été transmis au responsable. Vous recevrez une réponse dans les meilleurs délais.":
-    "Uw bericht is goed doorgegeven aan de verantwoordelijke. U ontvangt zo spoedig mogelijk een antwoord.",
-  "Fermer": "Sluiten",
-
-  // CONTACT
-  "Nous rejoindre": "Sluit u aan",
-  "Contact &": "Contact &",
-  "adresse": "adres",
-  "Adresse": "Adres",
-  "Voir sur la carte": "Bekijk op de kaart",
-  "Équipe pastorale": "Pastoraal team",
-  "Pasteur Guy KOBI": "Pastor Guy KOBI",
-  "Pasteur principal": "Hoofdpastor",
-  "Safi Mudiri": "Safi Mudiri",
-  "Secrétaire de l'église": "Secretaresse van de kerk",
-  "Pour toute demande, adressez-vous à notre secrétaire d'église. Le pasteur reçoit uniquement sur rendez-vous.":
-    "Voor elke vraag kunt u zich richten tot onze secretaresse. De pastor ontvangt enkel op afspraak.",
-  "Culte en ligne": "Online dienst",
-  "Retrouvez nos cultes en direct et en rediffusion sur notre chaîne YouTube.":
-    "Bekijk onze diensten live en in herhaling op ons YouTube-kanaal.",
-
-  // PASTOR BANNER
-  "Sur rendez-vous": "Op afspraak",
-  "Rendez-vous avec": "Afspraak met",
-  "le Pasteur": "de Pastor",
-  "Un temps d'écoute, de prière et d'accompagnement personnel avec le Pasteur Guy KOBI. Les consultations se font uniquement sur rendez-vous, via le secrétariat.":
-    "Een moment van luisteren, gebed en persoonlijke begeleiding met Pastor Guy KOBI. Consultaties gebeuren enkel op afspraak, via het secretariaat.",
-  "Demander un rendez-vous": "Een afspraak aanvragen",
-  "Via le secrétariat": "Via het secretariaat",
-  "Strictement confidentiel": "Strikt vertrouwelijk",
-
-  // FOOTER
-  "« Car nous sommes tous un seul corps en Christ. »": "« Want wij zijn allen één lichaam in Christus. »",
-  "Romains 12 : 5": "Romeinen 12 : 5",
-  "Horaires": "Uren",
-  "© 2026 CEFC – Alost. Tous droits réservés.": "© 2026 CEFC – Aalst. Alle rechten voorbehouden.",
-  "10 ans de Grâce": "10 jaar van Genade",
-  "· 10 ans de Grâce": "· 10 jaar van Genade",
-
-  // BRAND
-  "La Famille Chrétienne": "De Christelijke Familie",
-  "Jeunesse · La Famille Chrétienne": "Jeugd · De Christelijke Familie",
-
-  // ADRESSE
-  "9300 Alost (Aalst)": "9300 Aalst",
-  "Belgique": "België",
-
-  // EQUIPE PASTORALE
-  "Mimi Mbenza": "Mimi Mbenza",
-  "Épouse du pasteur": "Echtgenote van de pastor",
-
-  // NAVETTE NOUVELLE VERSION
-  "Un mini-bus est mis à votre disposition pour faciliter votre venue à l'église.":
-    "Een minibus staat tot uw beschikking om uw komst naar de kerk te vergemakkelijken.",
-  "Aucune réservation": "Geen reservering",
-  "↔ Wijngaardveld 29": "↔ Wijngaardveld 29",
-  "Un mini-bus assure la liaison entre la gare et notre lieu de culte. Montez simplement à bord aux horaires indiqués — le service est entièrement gratuit et ouvert à tous.":
-    "Een minibus verzorgt de verbinding tussen het station en onze plaats van eredienst. Stap gewoon in op de aangegeven tijden — de dienst is volledig gratis en open voor iedereen.",
-  "9h — 10h": "9u — 10u",
-  "Navettes continues entre la gare et l'église avant le culte principal.":
-    "Doorlopende ritten tussen het station en de kerk vóór de hoofddienst.",
-  "Départ depuis la Gare d'Alost vers l'église pour l'étude biblique.":
-    "Vertrek vanaf station Aalst naar de kerk voor de bijbelstudie.",
-  "Départ depuis la Gare d'Alost vers l'église pour le jeûne & la prière.":
-    "Vertrek vanaf station Aalst naar de kerk voor vasten & gebed.",
-  "Pas de réservation nécessaire — montez simplement à bord aux horaires indiqués.":
-    "Geen reservering nodig — stap gewoon in op de aangegeven tijden.",
-
-  // SCHEMA NAVETTE SVG (labels en majuscules)
-  "GARE": "STATION",
-  "D'ALOST": "AALST",
-  "ÉGLISE": "KERK",
-  "WIJNGAARDVELD 29": "WIJNGAARDVELD 29",
-
-  // HORAIRES SERVICES
-  "10h00": "10u00",
-  "18h00": "18u00",
-  "17h10": "17u10",
-
-  // YOUTUBE
-  "YouTube": "YouTube",
-  "@CE_laFamilleChretienne": "@CE_laFamilleChretienne",
-
-  // ANNONCES
-  "À ne pas manquer": "Niet te missen",
-  "Annonces": "Aankondigingen",
-  "& événements": "& evenementen",
-  "À la une": "Uitgelicht",
-};
-
-// Stockage des textes FR originaux pour pouvoir revenir en arrière
-const originalTexts = new WeakMap();
-
-function collectAndStoreOriginals() {
-  // On parcourt tous les nœuds texte du body
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-    acceptNode(node) {
-      // Skip vide, scripts, styles, code
-      const t = node.nodeValue.trim();
-      if (!t) return NodeFilter.FILTER_REJECT;
-      const p = node.parentElement;
-      if (!p) return NodeFilter.FILTER_REJECT;
-      const tag = p.tagName;
-      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
-      return NodeFilter.FILTER_ACCEPT;
-    }
-  });
-  const nodes = [];
-  let n;
-  while ((n = walker.nextNode())) nodes.push(n);
-  nodes.forEach(node => {
-    if (!originalTexts.has(node)) {
-      originalTexts.set(node, node.nodeValue);
-    }
-  });
-  return nodes;
-}
-
-// Aussi : certains textes sont dans des attributs (placeholder, value, aria-label, title)
-const TRANSLATABLE_ATTRS = ['placeholder', 'aria-label', 'title', 'value'];
-const originalAttrs = new WeakMap();
-
-function collectAttrOriginals() {
-  document.querySelectorAll('[placeholder], [aria-label], [title], input[type="submit"][value], input[type="button"][value]').forEach(el => {
-    if (!originalAttrs.has(el)) {
-      const obj = {};
-      TRANSLATABLE_ATTRS.forEach(attr => {
-        const v = el.getAttribute(attr);
-        if (v) obj[attr] = v;
-      });
-      originalAttrs.set(el, obj);
-    }
-  });
-}
-
-function applyLanguage(lang) {
-  const isNL = lang === 'nl';
-  const dict = TRANSLATIONS_NL;
-
-  // Persister la langue AVANT toute opération (le CMS lit cette valeur)
-  try { localStorage.setItem('cefcLang', lang); } catch (e) {}
-
-  // 0) Ré-appliquer le contenu CMS dans la bonne langue (utilise localStorage qu'on vient de set)
-  // Cela régénère les listes (annonces, navette, équipe) avec les versions FR ou _nl.
-  if (CMS_DATA) {
-    applyCmsContent();
-    document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
-    // Re-collecter les textes originaux car le CMS vient de modifier le DOM
-    collectAndStoreOriginals();
-    collectAttrOriginals();
-  }
-
-  // 1) Texte des nœuds via le dictionnaire (pour les textes statiques restants)
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-    acceptNode(node) {
-      const t = node.nodeValue.trim();
-      if (!t) return NodeFilter.FILTER_REJECT;
-      const p = node.parentElement;
-      if (!p) return NodeFilter.FILTER_REJECT;
-      const tag = p.tagName;
-      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
-      return NodeFilter.FILTER_ACCEPT;
-    }
-  });
-  let node;
-  while ((node = walker.nextNode())) {
-    const original = originalTexts.get(node);
-    if (!original) continue;
-    if (isNL) {
-      const trimmed = original.trim();
-      if (dict[trimmed]) {
-        // Préserve les espaces autour
-        const leading = original.match(/^\s*/)[0];
-        const trailing = original.match(/\s*$/)[0];
-        node.nodeValue = leading + dict[trimmed] + trailing;
-      } else {
-        node.nodeValue = original; // pas de traduction connue, on garde
-      }
-    } else {
-      node.nodeValue = original;
-    }
-  }
-
-  // 2) Attributs (placeholder, aria-label, title, value)
-  document.querySelectorAll('[placeholder], [aria-label], [title], input[type="submit"][value], input[type="button"][value]').forEach(el => {
-    const orig = originalAttrs.get(el);
-    if (!orig) return;
-    TRANSLATABLE_ATTRS.forEach(attr => {
-      if (!orig[attr]) return;
-      if (isNL && dict[orig[attr]]) {
-        el.setAttribute(attr, dict[orig[attr]]);
-      } else {
-        el.setAttribute(attr, orig[attr]);
-      }
-    });
-  });
-
-  // 3) Lang attribute on <html>
-  document.documentElement.lang = isNL ? 'nl' : 'fr';
-
-  // 4) Update boutons actifs
-  document.querySelectorAll('.lang-switch button').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.lang === lang);
-  });
-}
-
-// Init i18n
-collectAndStoreOriginals();
-collectAttrOriginals();
-const savedLang = (() => {
-  try { return localStorage.getItem('cefcLang'); } catch (e) { return null; }
-})();
-if (savedLang === 'nl') applyLanguage('nl');
-
-// Click handlers
-document.querySelectorAll('.lang-switch button').forEach(btn => {
-  btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
-});
-
-// ===== BOUTON RDV PASTEUR : ouvre un mailto pré-rempli =====
-const pastorCta = document.getElementById('pastorCta');
-if (pastorCta) {
-  pastorCta.addEventListener('click', (e) => {
-    e.preventDefault();
-    const isNL = document.documentElement.lang === 'nl';
-    const subject = encodeURIComponent(isNL
-      ? 'Aanvraag afspraak met Pastor Guy KOBI'
-      : 'Demande de rendez-vous avec le Pasteur Guy KOBI');
-    const body = encodeURIComponent(isNL ?
-`Beste,
-
-Ik wens een persoonlijke afspraak aan te vragen met Pastor Guy KOBI.
-
-Voornaam :
-Naam :
-Telefoon :
-E-mail :
-
-Voorgestelde datum / tijdstip :
-Onderwerp van de afspraak :
-
-Met vriendelijke groet,
-
-— Verzonden vanaf de website CEFC Aalst`
-    :
-`Bonjour,
-
-Je souhaite prendre un rendez-vous personnel avec le Pasteur Guy KOBI.
-
-Prénom :
-Nom :
-Téléphone :
-E-mail :
-
-Date / créneau souhaité :
-Objet du rendez-vous :
-
-Bien à vous,
-
-— Envoyé depuis le site CEFC Alost`);
-    window.location.href = `mailto:contact@cefclabornealost.be?subject=${subject}&body=${body}`;
-  });
-}
-
-// ===== TILT 3D SUR LES CARTES DEPARTEMENTS =====
-const isFinePointer = window.matchMedia('(pointer: fine)').matches;
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-if (isFinePointer && !reducedMotion) {
-  document.querySelectorAll('.dept-card').forEach(card => {
-    const glare = card.querySelector('.dept-card-glare');
-    let raf = null;
-
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const cx = rect.width / 2;
-      const cy = rect.height / 2;
-      const rx = ((y - cy) / cy) * -8;
-      const ry = ((x - cx) / cx) * 8;
-
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px)`;
-        if (glare) {
-          glare.style.setProperty('--gx', x + 'px');
-          glare.style.setProperty('--gy', y + 'px');
-        }
-      });
-    });
-
-    card.addEventListener('mouseleave', () => {
-      if (raf) cancelAnimationFrame(raf);
-      card.style.transform = '';
-    });
-  });
-}
-
-// ===== MODALE DEPARTEMENT =====
-const DEPT_DATA = {
-  technique: {
-    name: 'Technique',
-    sub: 'Son, écrans, photographie & diffusion. Vous avez un sens du détail technique et aimez servir dans l\'ombre ? Cette équipe est faite pour vous.',
-    iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>',
-    dynLabel: 'Domaines qui vous intéressent',
-    dynOptions: ['Sonorisation', 'Photographie', 'Régie vidéo', 'Streaming / live', 'Écrans / projection', 'Aucune expérience, à former']
-  },
-  media: {
-    name: 'Média',
-    sub: 'Réseaux sociaux, vidéo, design : aidez à porter le message au-delà des murs de l\'église.',
-    iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7zM14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/></svg>',
-    dynLabel: 'Vos compétences',
-    dynOptions: ['Vidéo / montage', 'Graphisme', 'Rédaction', 'Réseaux sociaux', 'Communication']
-  },
-  chorale: {
-    name: 'Chorale',
-    sub: 'Louange et adoration musicale. Une oreille, une voix, un instrument à mettre au service du Seigneur ?',
-    iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
-    dynLabel: 'Votre rôle souhaité',
-    dynOptions: ['Chant — soprano', 'Chant — alto', 'Chant — ténor', 'Chant — basse', 'Piano / clavier', 'Guitare', 'Basse', 'Batterie', 'Autre instrument']
-  },
-  ecodim: {
-    name: 'Écodim',
-    sub: 'École du dimanche pour enfants. Vous aimez transmettre la Parole aux plus petits avec patience et créativité ?',
-    iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
-    dynLabel: 'Tranche d\'âge préférée',
-    dynOptions: ['Tout-petits (3-5 ans)', 'Enfants (6-9 ans)', 'Pré-ados (10-12 ans)', 'Indifférent']
-  },
-  accueil: {
-    name: 'Accueil',
-    sub: 'Vous êtes la première personne qu\'un visiteur rencontre. Sourire, écoute et chaleur sont vos outils principaux.',
-    iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17a4 4 0 0 1-8 0V8c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2v9z"/><path d="M11 8h6c1.1 0 2 .9 2 2v6"/><path d="M19 16l3-3-3-3"/></svg>',
-    dynLabel: 'Vos disponibilités',
-    dynOptions: ['Dimanche matin', 'Mercredi soir', 'Vendredi soir', 'Événements ponctuels']
-  },
-  intercesseurs: {
-    name: 'Intercesseurs',
-    sub: 'Le ministère de la prière au cœur de l\'église. Persévérance, discrétion et passion pour la présence de Dieu.',
-    iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
-    dynLabel: 'Votre expérience dans la prière',
-    dynOptions: ['Débutant, à former', 'Pratique régulière', 'Engagé depuis plusieurs années', 'Ministère prophétique']
-  },
-  traducteurs: {
-    name: 'Traducteurs',
-    sub: 'Traduction simultanée. Donnez accès à la Parole à toutes les personnes présentes, quelle que soit leur langue.',
-    iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/></svg>',
-    dynLabel: 'Langues maîtrisées',
-    dynOptions: ['Français', 'Néerlandais', 'Anglais', 'Lingala', 'Swahili', 'Espagnol', 'Portugais', 'Autre']
-  },
-  solidarite: {
-    name: 'Solidarité',
-    sub: 'Aide sociale et fraternelle. Le bras concret de l\'amour de Christ envers les plus fragiles de notre communauté.',
-    iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 14h1v4"/><path d="M16 2v4M8 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/></svg>',
-    dynLabel: 'Comment souhaitez-vous aider ?',
-    dynOptions: ['Visites aux malades', 'Aide alimentaire', 'Soutien financier ponctuel', 'Écoute & accompagnement', 'Logistique / transport']
-  },
-  surface: {
-    name: 'Techniciens de surface',
-    sub: 'Propreté et entretien des locaux. Un service humble mais essentiel : l\'église doit toujours être un lieu digne pour la rencontre.',
-    iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 7 18.2l1.9-5.8L4 8.8h6.1z"/></svg>',
-    dynLabel: 'Vos disponibilités',
-    dynOptions: ['Avant les cultes', 'Après les cultes', 'En semaine', 'Grand ménage périodique']
-  }
-};
-
-const modal = document.getElementById('deptModal');
-const modalChoice = document.getElementById('modalChoice');
-const modalForm = document.getElementById('modalForm');
-const modalQuestionForm = document.getElementById('modalQuestionForm');
-const modalSuccess = document.getElementById('formSuccess');
-const modalIcon = document.getElementById('modalIcon');
-const modalTitle = document.getElementById('modalTitle');
-const modalSub = document.getElementById('modalSub');
-const dynLabel = document.getElementById('dynamicLabel');
-const dynChecks = document.getElementById('dynamicChecks');
-const successHeading = modalSuccess.querySelector('h3');
-const successText = modalSuccess.querySelector('p');
-let currentDept = null;
-
-function showView(view) {
-  modalChoice.style.display = view === 'choice' ? 'block' : 'none';
-  modalForm.classList.toggle('active', view === 'form');
-  modalQuestionForm.classList.toggle('active', view === 'question');
-  modalSuccess.classList.toggle('active', view === 'success');
-}
-
-function openModal(deptKey) {
-  const data = DEPT_DATA[deptKey];
-  if (!data) return;
-  currentDept = deptKey;
-
-  modalIcon.innerHTML = data.iconSvg;
-  modalTitle.textContent = data.name;
-  modalSub.textContent = data.sub;
-  dynLabel.textContent = data.dynLabel;
-
-  dynChecks.innerHTML = data.dynOptions.map(opt => `
-    <label class="form-check">
-      <input type="checkbox" name="competence" value="${opt}" />
-      ${opt}
-    </label>
-  `).join('');
-  dynChecks.querySelectorAll('.form-check').forEach(label => {
-    label.addEventListener('click', (e) => {
-      if (e.target.tagName !== 'INPUT') {
-        const cb = label.querySelector('input');
-        cb.checked = !cb.checked;
-      }
-      label.classList.toggle('selected', label.querySelector('input').checked);
-    });
-  });
-
-  modalForm.reset();
-  modalQuestionForm.reset();
-  const fDept = document.getElementById('f-dept');
-  const qDept = document.getElementById('q-dept');
-  if (fDept) fDept.value = data.name;
-  if (qDept) qDept.value = data.name;
-  showView('choice');
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  modal.classList.remove('open');
-  modal.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-  currentDept = null;
-}
-
-document.querySelectorAll('.dept-card').forEach(card => {
-  card.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal(card.dataset.dept);
-  });
-});
-
-document.getElementById('modalClose').addEventListener('click', closeModal);
-modal.addEventListener('click', (e) => {
-  if (e.target === modal) closeModal();
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-});
-
-document.getElementById('btnJoin').addEventListener('click', () => showView('form'));
-document.getElementById('btnInfo').addEventListener('click', () => showView('question'));
-document.getElementById('formBack').addEventListener('click', () => showView('choice'));
-document.getElementById('questionBack').addEventListener('click', () => showView('choice'));
-document.getElementById('successClose').addEventListener('click', closeModal);
-
-// Soumission formulaire candidature — envoi par mailto au secrétariat (pas de backend)
-modalForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const data = new FormData(modalForm);
-  const competences = Array.from(modalForm.querySelectorAll('input[name="competence"]:checked')).map(c => c.value);
-  const deptName = DEPT_DATA[currentDept]?.name || '';
-
-  const subject = encodeURIComponent(`Candidature département ${deptName} — ${data.get('prenom')} ${data.get('nom')}`);
-  const lines = [
-    `Département souhaité : ${deptName}`,
-    ``,
-    `Prénom : ${data.get('prenom') || ''}`,
-    `Nom : ${data.get('nom') || ''}`,
-    `E-mail : ${data.get('email') || ''}`,
-    `Téléphone : ${data.get('tel') || ''}`,
-    `Tranche d'âge : ${data.get('age') || ''}`,
-    ``,
-    `${DEPT_DATA[currentDept]?.dynLabel || 'Compétences/intérêts'} : ${competences.join(', ') || '—'}`,
-    ``,
-    `Présentation :`,
-    `${data.get('message') || '—'}`,
-    ``,
-    `— Envoyé depuis le site CEFC Alost`
-  ];
-  const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = `mailto:contact@cefclabornealost.be?subject=${subject}&body=${body}`;
-
-  successHeading.textContent = 'Merci pour votre demande !';
-  successText.textContent = 'Votre candidature a bien été enregistrée. Le secrétariat vous recontactera prochainement. Que Dieu vous bénisse.';
-  showView('success');
-});
-
-// Soumission formulaire question
-modalQuestionForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const data = new FormData(modalQuestionForm);
-  const deptName = DEPT_DATA[currentDept]?.name || '';
-
-  const subject = encodeURIComponent(`Question — département ${deptName}${data.get('sujet') ? ' · ' + data.get('sujet') : ''}`);
-  const lines = [
-    `Département concerné : ${deptName}`,
-    `Sujet : ${data.get('sujet') || '—'}`,
-    ``,
-    `De : ${data.get('prenom') || ''} ${data.get('nom') || ''}`,
-    `E-mail : ${data.get('email') || ''}`,
-    ``,
-    `Question :`,
-    `${data.get('message') || '—'}`,
-    ``,
-    `— Envoyé depuis le site CEFC Alost`
-  ];
-  const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = `mailto:contact@cefclabornealost.be?subject=${subject}&body=${body}`;
-
-  successHeading.textContent = 'Question envoyée !';
-  successText.textContent = 'Votre message a bien été transmis au responsable. Vous recevrez une réponse dans les meilleurs délais.';
-  showView('success');
-});
-
-// ===== GALERIE PHOTOS CULTE =====
-// Charge photos_culte.json (fichier dédié, mis à jour par l'admin)
-(function() {
-  const track   = document.getElementById('galleryTrack');
-  const dotsWrap= document.getElementById('galleryDots');
-  const counter = document.getElementById('galleryCounter');
-  const prevBtn = document.getElementById('galleryPrev');
-  const nextBtn = document.getElementById('galleryNext');
-  if (!track) return;
-
-  function buildGallery(rawPhotos) {
-    // Accepte ["/img/uploads/photo.jpg", ...] ou [{url: "...", legende: "..."}]
-    const validPhotos = (rawPhotos || [])
-      .map(p => typeof p === 'string' ? { url: p, legende: '', date: '' } : p)
-      .filter(p => p && p.url && p.url.trim());
-
-    if (validPhotos.length === 0) {
-      track.innerHTML = `
-        <div class="gallery-placeholder">
-          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <p>Photos à venir</p>
-        </div>`;
-      prevBtn.style.display = 'none';
-      nextBtn.style.display = 'none';
-      return;
-    }
-
-    let current = 0;
-    let autoTimer = null;
-
-    validPhotos.forEach((p, i) => {
-      const slide = document.createElement('div');
-      slide.className = 'gallery-slide' + (i === 0 ? ' active' : '');
-      slide.innerHTML = `
-        <img src="${p.url}" alt="${p.legende || ''}" loading="${i === 0 ? 'eager' : 'lazy'}" />
-        ${p.legende ? `<div class="gallery-slide-caption">${p.legende}${p.date ? ' · ' + p.date : ''}</div>` : ''}`;
-      track.appendChild(slide);
-
-    const dot = document.createElement('button');
-    dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', `Photo ${i+1}`);
-    dot.addEventListener('click', () => goTo(i));
-    dotsWrap.appendChild(dot);
-  });
-
-  if (validPhotos.length > 1) {
-    counter.style.display = '';
-    counter.textContent = `1 / ${validPhotos.length}`;
-  } else {
-    prevBtn.style.display = 'none';
-    nextBtn.style.display = 'none';
-  }
-
-  function goTo(n) {
-    const slides = track.querySelectorAll('.gallery-slide');
-    const dots   = dotsWrap.querySelectorAll('.gallery-dot');
-    slides[current].classList.remove('active');
-    dots[current].classList.remove('active');
-    current = (n + validPhotos.length) % validPhotos.length;
-    slides[current].classList.add('active');
-    dots[current].classList.add('active');
-    track.style.transform = `translateX(-${current * 100}%)`;
-    counter.textContent = `${current + 1} / ${validPhotos.length}`;
-  }
-
-  function startAuto() {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(() => goTo(current + 1), 3000);
-  }
-
-  prevBtn.addEventListener('click', () => { goTo(current - 1); startAuto(); });
-  nextBtn.addEventListener('click', () => { goTo(current + 1); startAuto(); });
-
-  const wrap = document.getElementById('galleryWrap');
-  wrap.addEventListener('mouseenter', () => clearInterval(autoTimer));
-  wrap.addEventListener('mouseleave', startAuto);
-
-  // Swipe tactile
-  let touchX = null;
-  wrap.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
-  wrap.addEventListener('touchend', e => {
-    if (touchX === null) return;
-    const dx = e.changedTouches[0].clientX - touchX;
-    if (Math.abs(dx) > 40) { goTo(dx < 0 ? current + 1 : current - 1); startAuto(); }
-    touchX = null;
-  }, { passive: true });
-
-  if (validPhotos.length > 1) startAuto();
-  } // end buildGallery
-
-  fetch('photos_culte.json')
-    .then(r => r.json())
-    .then(data => buildGallery(data.photos || []))
-    .catch(() => buildGallery([]));
-})();
-</script>
-</body>
-</html>
+commit ca39c4e44a81000970d599746f11e1845314306f
+Author: Claude <noreply@anthropic.com>
+Date:   Tue May 26 16:02:16 2026 +0000
+
+    Add EN language, fix NL translation, replace emoji icons with SVG in values section
+
+diff --git a/index.html b/index.html
+index f115cc1..c22f57d 100644
+--- a/index.html
++++ b/index.html
+@@ -1786,7 +1786,16 @@ section { scroll-margin-top: 80px; }
+   border-color: rgba(227,227,235,0.15);
+   background: rgba(227,227,235,0.06);
+ }
+-.valeur-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
++.valeur-icon {
++  width: 44px; height: 44px;
++  display: flex; align-items: center; justify-content: center;
++  border-radius: 10px;
++  background: rgba(227,227,235,0.06);
++  border: 1px solid rgba(227,227,235,0.12);
++  color: rgba(227,227,235,0.7);
++  margin-bottom: 1rem;
++  flex-shrink: 0;
++}
+ .valeur-item h4 {
+   font-size: 0.82rem;
+   font-weight: 700;
+@@ -1969,9 +1978,10 @@ footer::before {
+     <a href="https://www.youtube.com/@CE_laFamilleChretienne" class="nav-live" target="_blank" rel="noopener">
+       <span class="dot"></span> <span data-i18n="nav.live">Live</span>
+     </a>
+-    <div class="lang-switch" role="group" aria-label="Langue / Taal">
++    <div class="lang-switch" role="group" aria-label="Langue / Taal / Language">
+       <button type="button" data-lang="fr" class="active">FR</button>
+       <button type="button" data-lang="nl">NL</button>
++      <button type="button" data-lang="en">EN</button>
+     </div>
+   </div>
+ </nav>
+@@ -2069,22 +2079,22 @@ footer::before {
+ 
+     <div class="vision-valeurs-grid" id="vm-valeurs">
+       <div class="valeur-item reveal">
+-        <div class="valeur-icon">✝</div>
++        <div class="valeur-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+         <h4>La Parole</h4>
+         <p>La Bible est notre fondement et notre guide pour toute décision.</p>
+       </div>
+       <div class="valeur-item reveal">
+-        <div class="valeur-icon">🙏</div>
++        <div class="valeur-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M4 8h16"/></svg></div>
+         <h4>La Prière</h4>
+         <p>Nous croyons à la puissance de la prière et cherchons la face de Dieu ensemble.</p>
+       </div>
+       <div class="valeur-item reveal">
+-        <div class="valeur-icon">👨‍👩‍👧</div>
++        <div class="valeur-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+         <h4>La Famille</h4>
+         <p>Chaque personne est accueillie, aimée et accompagnée dans son chemin.</p>
+       </div>
+       <div class="valeur-item reveal">
+-        <div class="valeur-icon">🌍</div>
++        <div class="valeur-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+         <h4>L'Évangélisation</h4>
+         <p>Nous partageons la bonne nouvelle avec notre ville et les nations.</p>
+       </div>
+@@ -2832,12 +2842,55 @@ if (jefcWrap && jefcDisplay) {
+ }
+ 
+ // ===== LIVE STATUS (heure de Bruxelles) =====
+-// Services : dimanche 10h, mercredi 18h, vendredi 18h
+ const SERVICES = [
+-  { day: 0, hour: 10, endHour: 12, endMin: 30, label: 'Dimanche' },
+-  { day: 3, hour: 18, endHour: 20, endMin: 0,  label: 'Mercredi' },
+-  { day: 5, hour: 18, endHour: 20, endMin: 0,  label: 'Vendredi' },
++  { day: 0, hour: 10, endHour: 12, endMin: 30, key: 'sunday' },
++  { day: 3, hour: 18, endHour: 20, endMin: 0,  key: 'wednesday' },
++  { day: 5, hour: 18, endHour: 20, endMin: 0,  key: 'friday' },
+ ];
++const LIVE_STRINGS = {
++  fr: {
++    liveNow: 'En direct maintenant',
++    liveTitle: 'Le culte est en direct',
++    liveSub: 'Rejoignez-nous dès maintenant — le culte est diffusé sur notre chaîne.',
++    liveCta: 'Regarder le live',
++    offlineTitle: 'Suivez nos cultes en direct',
++    offlineSub: 'Cultes chaque dimanche à 10h, mercredi et vendredi à 18h.',
++    offlineCta: 'Voir sur YouTube',
++    next: (d, h, m, key) => {
++      const names = { sunday:'Dimanche', wednesday:'Mercredi', friday:'Vendredi' };
++      const t = d > 0 ? `${d} jour${d>1?'s':''} et ${h}h` : h > 0 ? `${h}h${String(m).padStart(2,'0')}` : `${m} min`;
++      return `Prochain culte (${names[key]}) dans ${t}`;
++    }
++  },
++  nl: {
++    liveNow: 'Nu live',
++    liveTitle: 'De dienst is live',
++    liveSub: 'Sluit u nu bij ons aan — de dienst is live op ons kanaal.',
++    liveCta: 'Bekijk live',
++    offlineTitle: 'Volg onze diensten live',
++    offlineSub: 'Diensten elke zondag om 10u, woensdag en vrijdag om 18u.',
++    offlineCta: 'Bekijk op YouTube',
++    next: (d, h, m, key) => {
++      const names = { sunday:'Zondag', wednesday:'Woensdag', friday:'Vrijdag' };
++      const t = d > 0 ? `${d} dag${d>1?'en':''} en ${h}u` : h > 0 ? `${h}u${String(m).padStart(2,'0')}` : `${m} min`;
++      return `Volgende dienst (${names[key]}) over ${t}`;
++    }
++  },
++  en: {
++    liveNow: 'Live now',
++    liveTitle: 'The service is live',
++    liveSub: 'Join us now — the service is streaming on our channel.',
++    liveCta: 'Watch live',
++    offlineTitle: 'Watch our services live',
++    offlineSub: 'Services every Sunday at 10am, Wednesday and Friday at 6pm.',
++    offlineCta: 'Watch on YouTube',
++    next: (d, h, m, key) => {
++      const names = { sunday:'Sunday', wednesday:'Wednesday', friday:'Friday' };
++      const t = d > 0 ? `${d} day${d>1?'s':''} and ${h}h` : h > 0 ? `${h}h${String(m).padStart(2,'0')}` : `${m} min`;
++      return `Next service (${names[key]}) in ${t}`;
++    }
++  }
++};
+ 
+ function updateLiveStatus() {
+   const badge      = document.getElementById('liveBadge');
+@@ -2848,63 +2901,50 @@ function updateLiveStatus() {
+   const liveEmbed  = document.getElementById('liveEmbed');
+   const liveIframe = document.getElementById('liveIframe');
+ 
++  const lang = (() => { try { return localStorage.getItem('cefcLang') || 'fr'; } catch(e) { return 'fr'; } })();
++  const s = LIVE_STRINGS[lang] || LIVE_STRINGS.fr;
++
+   const nowStr = new Date().toLocaleString('en-US', { timeZone: 'Europe/Brussels' });
+   const now = new Date(nowStr);
+   const day = now.getDay();
+-  const hours = now.getHours();
+-  const minutes = now.getMinutes();
+-  const totalMin = hours * 60 + minutes;
+-
+-  const isLiveNow = SERVICES.some(s =>
+-    s.day === day &&
+-    totalMin >= s.hour * 60 &&
+-    totalMin < s.endHour * 60 + s.endMin
++  const totalMin = now.getHours() * 60 + now.getMinutes();
++
++  const activeSvc = SERVICES.find(svc =>
++    svc.day === day && totalMin >= svc.hour * 60 && totalMin < svc.endHour * 60 + svc.endMin
+   );
+ 
+-  if (isLiveNow) {
++  if (activeSvc) {
+     badge.classList.remove('offline');
+-    badgeText.textContent = 'En direct maintenant';
+-    title.textContent = 'Le culte est en direct';
+-    sub.textContent = 'Rejoignez-nous dès maintenant — le culte est diffusé sur notre chaîne.';
+-    ctaText.textContent = 'Regarder le live';
+-
++    badgeText.textContent = s.liveNow;
++    title.textContent = s.liveTitle;
++    sub.textContent = s.liveSub;
++    ctaText.textContent = s.liveCta;
+     const channelId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
+     if (channelId && liveEmbed && liveIframe) {
+-      if (!liveIframe.src) {
+-        liveIframe.src = `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1`;
+-      }
++      if (!liveIframe.src) liveIframe.src = `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1`;
+       liveEmbed.style.display = 'block';
+     }
+   } else {
+     if (liveEmbed) liveEmbed.style.display = 'none';
+     if (liveIframe) liveIframe.src = '';
+-
+-    let minDiff = Infinity;
+-    let nextLabel = 'Dimanche';
+-    for (const s of SERVICES) {
+-      const next = new Date(now);
+-      let daysUntil = (s.day - day + 7) % 7;
+-      if (daysUntil === 0 && totalMin >= s.endHour * 60 + s.endMin) daysUntil = 7;
+-      next.setDate(now.getDate() + daysUntil);
+-      next.setHours(s.hour, 0, 0, 0);
+-      const diff = next - now;
+-      if (diff > 0 && diff < minDiff) { minDiff = diff; nextLabel = s.label; }
++    let minDiff = Infinity, nextKey = 'sunday';
++    for (const svc of SERVICES) {
++      const nx = new Date(now);
++      let du = (svc.day - day + 7) % 7;
++      if (du === 0 && totalMin >= svc.endHour * 60 + svc.endMin) du = 7;
++      nx.setDate(now.getDate() + du);
++      nx.setHours(svc.hour, 0, 0, 0);
++      const diff = nx - now;
++      if (diff > 0 && diff < minDiff) { minDiff = diff; nextKey = svc.key; }
+     }
+-
+-    const d = Math.floor(minDiff / (1000 * 60 * 60 * 24));
+-    const h = Math.floor((minDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+-    const m = Math.floor((minDiff % (1000 * 60 * 60)) / (1000 * 60));
+-
+-    let countdown = '';
+-    if (d > 0) countdown = `${d} jour${d > 1 ? 's' : ''} et ${h}h`;
+-    else if (h > 0) countdown = `${h}h${m.toString().padStart(2, '0')}`;
+-    else countdown = `${m} minute${m > 1 ? 's' : ''}`;
+-
++    const d = Math.floor(minDiff / 86400000);
++    const h = Math.floor((minDiff % 86400000) / 3600000);
++    const m = Math.floor((minDiff % 3600000) / 60000);
+     badge.classList.add('offline');
+-    badgeText.textContent = `Prochain culte (${nextLabel}) dans ${countdown}`;
+-    title.textContent = 'Suivez nos cultes en direct';
+-    sub.textContent = 'Cultes chaque dimanche à 10h, mercredi et vendredi à 18h.';
+-    ctaText.textContent = 'Voir sur YouTube';
++    badgeText.textContent = s.next(d, h, m, nextKey);
++    title.textContent = s.offlineTitle;
++    sub.textContent = s.offlineSub;
++    ctaText.textContent = s.offlineCta;
+   }
+ }
+ updateLiveStatus();
+@@ -2940,10 +2980,11 @@ function getCmsValue(path) {
+ // Si NL et qu'une variante "_nl" existe, on l'utilise ; sinon on retombe sur FR.
+ function pickLangValue(obj, fieldName) {
+   if (typeof obj !== 'object' || obj === null) return obj;
+-  const wantNL = (() => {
+-    try { return localStorage.getItem('cefcLang') === 'nl'; } catch (e) { return false; }
+-  })();
+-  if (wantNL && (fieldName + '_nl') in obj) return obj[fieldName + '_nl'];
++  const lang = (() => { try { return localStorage.getItem('cefcLang') || 'fr'; } catch(e) { return 'fr'; } })();
++  const suffix = lang !== 'fr' ? '_' + lang : null;
++  if (suffix && (fieldName + suffix) in obj && obj[fieldName + suffix] !== '' && obj[fieldName + suffix] != null) {
++    return obj[fieldName + suffix];
++  }
+   return obj[fieldName];
+ }
+ 
+@@ -3073,7 +3114,14 @@ applyCmsContent();
+       vm.valeurs.forEach(v => {
+         const d = document.createElement('div');
+         d.className = 'valeur-item reveal';
+-        d.innerHTML = `<div class="valeur-icon">${v.icone || '✦'}</div><h4>${v.titre || ''}</h4><p>${v.texte || ''}</p>`;
++        const SVG_ICONS = {
++          parole: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
++          priere: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M4 8h16"/></svg>`,
++          famille: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
++          evangelisation: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
++        };
++        const iconHtml = SVG_ICONS[v.icone] || `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/></svg>`;
++        d.innerHTML = `<div class="valeur-icon">${iconHtml}</div><h4>${v.titre || ''}</h4><p>${v.texte || ''}</p>`;
+         grid.appendChild(d);
+       });
+     }
+@@ -3317,6 +3365,241 @@ const TRANSLATIONS_NL = {
+   "Annonces": "Aankondigingen",
+   "& événements": "& evenementen",
+   "À la une": "Uitgelicht",
++
++  // LIVE BLOCK (nouvelles chaînes)
++  "Cultes chaque dimanche à 10h, mercredi et vendredi à 18h.": "Diensten elke zondag om 10u, woensdag en vrijdag om 18u.",
++  "Rejoignez-nous dès maintenant — le culte est diffusé sur notre chaîne.": "Sluit u nu bij ons aan — de dienst is live op ons kanaal.",
++
++  // VISION & MISSION
++  "Qui sommes-nous": "Wie zijn wij",
++  "Notre": "Onze",
++  "Vision & Mission": "Visie & Missie",
++  "Notre Vision": "Onze Visie",
++  "Notre Mission": "Onze Missie",
++  "La Parole": "Het Woord",
++  "La Prière": "Het Gebed",
++  "La Famille": "De Familie",
++  "L'Évangélisation": "De Evangelisatie",
++};
++
++// ===== TRADUCTIONS ANGLAISES =====
++const TRANSLATIONS_EN = {
++  // NAV
++  "Accueil": "Home",
++  "Services": "Services",
++  "Jeunesse": "Youth",
++  "Navette": "Shuttle",
++  "Départements": "Departments",
++  "Contact": "Contact",
++  "Live": "Live",
++
++  // HERO
++  "2016 — 2026 · Centre Évangélique · Alost": "2016 — 2026 · Evangelical Centre · Alost",
++  "10 ans": "10 years",
++  "de Grâce": "of Grace",
++  "Célébrons ensemble dix années de fidélité divine.": "Let us celebrate together ten years of divine faithfulness.",
++  "Vous êtes les bienvenus dans la famille.": "You are welcome in the family.",
++  "Nos horaires": "Our schedule",
++  "Rejoindre le live": "Join live",
++
++  // MARQUEE
++  "Culte dominical 10h": "Sunday service 10am",
++  "Étude biblique mercredi 18h": "Bible study Wednesday 6pm",
++  "Jeûne & prière vendredi 18h": "Fasting & prayer Friday 6pm",
++  "Navette gratuite depuis la gare d'Alost": "Free shuttle from Alost station",
++  "JEFC — jeunesse toutes les 2 semaines": "JEFC — youth every 2 weeks",
++  "2016 – 2026 · 10 ans de Grâce": "2016 – 2026 · 10 years of Grace",
++
++  // SERVICES
++  "Rassemblements": "Gatherings",
++  "Venez": "Come",
++  "comme vous êtes": "as you are",
++  "Trois rendez-vous hebdomadaires pour grandir ensemble dans la foi.": "Three weekly gatherings to grow together in faith.",
++  "Principal": "Main",
++  "Dimanche": "Sunday",
++  "Mercredi": "Wednesday",
++  "Vendredi": "Friday",
++  "Culte principal": "Main service",
++  "Étude biblique": "Bible study",
++  "Jeûne & prière": "Fasting & prayer",
++  "Adoration, prédication et communion fraternelle. Le rendez-vous central de notre communauté.": "Worship, preaching and brotherly fellowship. The central gathering of our community.",
++  "Approfondissement de la Parole dans un cadre intime et interactif.": "In-depth study of the Word in an intimate and interactive setting.",
++  "Une soirée consacrée à l'intercession et à la recherche de la face de Dieu.": "An evening dedicated to intercession and seeking the face of God.",
++
++  // LIVE BLOCK
++  "Prochainement en direct": "Coming live soon",
++  "En direct maintenant": "Live now",
++  "Le culte est en direct": "The service is live",
++  "Suivez nos cultes en direct": "Watch our services live",
++  "Cultes chaque dimanche à 10h, mercredi et vendredi à 18h.": "Services every Sunday at 10am, Wednesday and Friday at 6pm.",
++  "Rejoignez-nous dès maintenant — le culte est diffusé sur notre chaîne.": "Join us now — the service is streaming on our channel.",
++  "Tous les dimanches à 10h sur YouTube. Rediffusion disponible sur la chaîne.": "Every Sunday at 10am on YouTube. Replay available on the channel.",
++  "Voir sur YouTube": "Watch on YouTube",
++  "Regarder le live": "Watch live",
++
++  // VISION & MISSION
++  "Qui sommes-nous": "Who we are",
++  "Notre": "Our",
++  "Vision & Mission": "Vision & Mission",
++  "Notre Vision": "Our Vision",
++  "Notre Mission": "Our Mission",
++  "La Parole": "The Word",
++  "La Prière": "Prayer",
++  "La Famille": "Family",
++  "L'Évangélisation": "Evangelization",
++
++  // JEFC
++  "Toutes les 2 semaines": "Every 2 weeks",
++  "Un espace de foi, de croissance et de fraternité.": "A space of faith, growth and fellowship.",
++  "La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.":
++    "JEFC meets every two weeks for a time of sharing, teaching and worship adapted to the youth of our community.",
++  "Fréquence": "Frequency",
++  "Lieu": "Location",
++
++  // NAVETTE
++  "Service gratuit": "Free service",
++  "Une": "A",
++  "navette": "shuttle",
++  "pour vous": "for you",
++  "Un mini-bus est mis à votre disposition pour faciliter votre venue à l'église.": "A minibus is available to facilitate your journey to church.",
++  "Navette église": "Church shuttle",
++  "Gratuit": "Free",
++  "Aucune réservation": "No reservation",
++  "Gare d'Alost": "Alost station",
++  "Wijngaardveld 29": "Wijngaardveld 29",
++  "Mer. & Ven.": "Wed. & Fri.",
++  "17h10 depuis la gare": "17:10 from the station",
++  "9h – 10h, navettes continues": "9am – 10am, continuous runs",
++  "Pas de réservation. Montez simplement à bord.": "No reservation. Simply board the bus.",
++  "Un mini-bus assure la liaison entre la gare et notre lieu de culte. Montez simplement à bord aux horaires indiqués — le service est entièrement gratuit et ouvert à tous.":
++    "A minibus connects the station to our place of worship. Simply board at the indicated times — the service is entirely free and open to all.",
++  "9h — 10h": "9am — 10am",
++  "Navettes continues entre la gare et l'église avant le culte principal.": "Continuous runs between the station and the church before the main service.",
++  "Départ depuis la Gare d'Alost vers l'église pour l'étude biblique.": "Departure from Alost station to the church for Bible study.",
++  "Départ depuis la Gare d'Alost vers l'église pour le jeûne & la prière.": "Departure from Alost station to the church for fasting & prayer.",
++  "Pas de réservation nécessaire — montez simplement à bord aux horaires indiqués.": "No reservation needed — simply board at the indicated times.",
++  "GARE": "STATION",
++  "D'ALOST": "ALOST",
++  "ÉGLISE": "CHURCH",
++
++  // DEPARTEMENTS
++  "Organisation": "Organisation",
++  "Nos": "Our",
++  "départements": "departments",
++  "Neuf équipes au service de l'excellence dans la maison de Dieu.": "Nine teams serving excellence in the house of God.",
++  "Technique": "Technical",
++  "Son, écrans, photographie & diffusion. L'équipe qui rend chaque culte visible et audible.":
++    "Sound, screens, photography & broadcasting. The team that makes every service visible and audible.",
++  "Média": "Media",
++  "Réseaux sociaux & communication.": "Social media & communication.",
++  "Chorale": "Choir",
++  "Louange & adoration musicale.": "Praise & musical worship.",
++  "Écodim": "Sunday school",
++  "École du dimanche pour enfants.": "Sunday school for children.",
++  "Hospitalité & intégration. Les premières mains tendues à toute personne qui franchit la porte.":
++    "Hospitality & integration. The first hands extended to every person who walks through the door.",
++  "Intercesseurs": "Intercessors",
++  "Équipe de prière & intercession.": "Prayer & intercession team.",
++  "Traducteurs": "Translators",
++  "Traduction simultanée.": "Simultaneous translation.",
++  "Solidarité": "Solidarity",
++  "Aide sociale & fraternelle.": "Social & brotherly support.",
++  "Techniciens de surface": "Cleaning team",
++  "Propreté & entretien des locaux.": "Cleanliness & maintenance of the premises.",
++
++  // MODALE DEPT
++  "Département": "Department",
++  "Voulez-vous nous rejoindre ?": "Would you like to join us?",
++  "En savoir plus / Poser une question": "Learn more / Ask a question",
++  "Tous les départements sont ouverts à ceux qui souhaitent servir avec un cœur disponible.":
++    "All departments are open to those who wish to serve with a willing heart.",
++  "Retour": "Back",
++  "Prénom": "First name",
++  "Nom": "Last name",
++  "E-mail": "E-mail",
++  "Téléphone": "Phone",
++  "Tranche d'âge": "Age group",
++  "— Sélectionner —": "— Select —",
++  "Moins de 18 ans": "Under 18",
++  "18 – 25 ans": "18 – 25 years",
++  "26 – 35 ans": "26 – 35 years",
++  "36 – 50 ans": "36 – 50 years",
++  "Plus de 50 ans": "Over 50",
++  "Vos compétences ou intérêts": "Your skills or interests",
++  "Un mot pour vous présenter": "A few words about yourself",
++  "Parlez-nous brièvement de vous, de votre motivation, de votre disponibilité…": "Tell us briefly about yourself, your motivation and your availability…",
++  "Envoyer ma candidature": "Submit my application",
++  "Vous serez recontacté par le secrétariat dans les meilleurs délais.": "You will be contacted by the secretariat as soon as possible.",
++  "Une question sur ce département ? Le responsable vous répondra personnellement.": "A question about this department? The manager will answer you personally.",
++  "Sujet": "Subject",
++  "Comprendre le rôle du département": "Understand the department's role",
++  "Disponibilités et engagement": "Availability and commitment",
++  "Compétences requises": "Required skills",
++  "Témoigner / partager une idée": "Share a testimony / idea",
++  "Autre": "Other",
++  "Votre question": "Your question",
++  "Posez votre question librement…": "Ask your question freely…",
++  "Envoyer ma question": "Send my question",
++  "Vous recevrez une réponse à l'adresse indiquée.": "You will receive a reply at the address provided.",
++  "Merci pour votre demande !": "Thank you for your request!",
++  "Votre candidature a bien été enregistrée. Le secrétariat vous recontactera prochainement. Que Dieu vous bénisse.":
++    "Your application has been registered. The secretariat will contact you soon. God bless you.",
++  "Question envoyée !": "Question sent!",
++  "Votre message a bien été transmis au responsable. Vous recevrez une réponse dans les meilleurs délais.":
++    "Your message has been forwarded to the manager. You will receive a reply as soon as possible.",
++  "Fermer": "Close",
++
++  // CONTACT
++  "Nous rejoindre": "Join us",
++  "Contact &": "Contact &",
++  "adresse": "address",
++  "Adresse": "Address",
++  "Voir sur la carte": "View on map",
++  "Équipe pastorale": "Pastoral team",
++  "Pasteur Guy KOBI": "Pastor Guy KOBI",
++  "Pasteur principal": "Senior pastor",
++  "Safi Mudiri": "Safi Mudiri",
++  "Secrétaire de l'église": "Church secretary",
++  "Pour toute demande, adressez-vous à notre secrétaire d'église. Le pasteur reçoit uniquement sur rendez-vous.":
++    "For any request, contact our church secretary. The pastor receives by appointment only.",
++  "Culte en ligne": "Online service",
++  "Retrouvez nos cultes en direct et en rediffusion sur notre chaîne YouTube.": "Watch our services live and on replay on our YouTube channel.",
++
++  // RENDEZ-VOUS PASTEUR
++  "Sur rendez-vous": "By appointment",
++  "Rendez-vous avec": "Appointment with",
++  "le Pasteur": "the Pastor",
++  "Un temps d'écoute, de prière et d'accompagnement personnel avec le Pasteur Guy KOBI. Les consultations se font uniquement sur rendez-vous, via le secrétariat.":
++    "A time of listening, prayer and personal guidance with Pastor Guy KOBI. Consultations are by appointment only, through the secretariat.",
++  "Demander un rendez-vous": "Request an appointment",
++  "Via le secrétariat": "Through the secretariat",
++  "Strictement confidentiel": "Strictly confidential",
++
++  // FOOTER
++  "« Car nous sommes tous un seul corps en Christ. »": "« For we are all one body in Christ. »",
++  "Romains 12 : 5": "Romans 12 : 5",
++  "Horaires": "Schedule",
++  "© 2026 CEFC – Alost. Tous droits réservés.": "© 2026 CEFC – Alost. All rights reserved.",
++  "10 ans de Grâce": "10 years of Grace",
++  "· 10 ans de Grâce": "· 10 years of Grace",
++
++  // BRAND
++  "La Famille Chrétienne": "The Christian Family",
++  "Jeunesse · La Famille Chrétienne": "Youth · The Christian Family",
++
++  // ADRESSE
++  "9300 Alost (Aalst)": "9300 Alost (Aalst)",
++  "Belgique": "Belgium",
++
++  // EQUIPE
++  "Mimi Mbenza": "Mimi Mbenza",
++  "Épouse du pasteur": "Pastor's wife",
++
++  // ANNONCES
++  "À ne pas manquer": "Not to be missed",
++  "Annonces": "Announcements",
++  "& événements": "& events",
++  "À la une": "Featured",
+ };
+ 
+ // Stockage des textes FR originaux pour pouvoir revenir en arrière
+@@ -3365,23 +3648,23 @@ function collectAttrOriginals() {
+ }
+ 
+ function applyLanguage(lang) {
+-  const isNL = lang === 'nl';
+-  const dict = TRANSLATIONS_NL;
++  const dict = lang === 'nl' ? TRANSLATIONS_NL : lang === 'en' ? TRANSLATIONS_EN : null;
+ 
+   // Persister la langue AVANT toute opération (le CMS lit cette valeur)
+   try { localStorage.setItem('cefcLang', lang); } catch (e) {}
+ 
+-  // 0) Ré-appliquer le contenu CMS dans la bonne langue (utilise localStorage qu'on vient de set)
+-  // Cela régénère les listes (annonces, navette, équipe) avec les versions FR ou _nl.
++  // 0) Ré-appliquer le contenu CMS dans la bonne langue
+   if (CMS_DATA) {
+     applyCmsContent();
+     document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
+-    // Re-collecter les textes originaux car le CMS vient de modifier le DOM
+     collectAndStoreOriginals();
+     collectAttrOriginals();
+   }
+ 
+-  // 1) Texte des nœuds via le dictionnaire (pour les textes statiques restants)
++  // 1) Mettre à jour le bloc live dans la nouvelle langue
++  updateLiveStatus();
++
++  // 2) Texte des nœuds via le dictionnaire
+   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+     acceptNode(node) {
+       const t = node.nodeValue.trim();
+@@ -3397,39 +3680,32 @@ function applyLanguage(lang) {
+   while ((node = walker.nextNode())) {
+     const original = originalTexts.get(node);
+     if (!original) continue;
+-    if (isNL) {
++    if (dict) {
+       const trimmed = original.trim();
+       if (dict[trimmed]) {
+-        // Préserve les espaces autour
+-        const leading = original.match(/^\s*/)[0];
++        const leading  = original.match(/^\s*/)[0];
+         const trailing = original.match(/\s*$/)[0];
+         node.nodeValue = leading + dict[trimmed] + trailing;
+       } else {
+-        node.nodeValue = original; // pas de traduction connue, on garde
++        node.nodeValue = original;
+       }
+     } else {
+-      node.nodeValue = original;
++      node.nodeValue = original; // FR : restaure l'original
+     }
+   }
+ 
+-  // 2) Attributs (placeholder, aria-label, title, value)
++  // 3) Attributs (placeholder, aria-label, title, value)
+   document.querySelectorAll('[placeholder], [aria-label], [title], input[type="submit"][value], input[type="button"][value]').forEach(el => {
+     const orig = originalAttrs.get(el);
+     if (!orig) return;
+     TRANSLATABLE_ATTRS.forEach(attr => {
+       if (!orig[attr]) return;
+-      if (isNL && dict[orig[attr]]) {
+-        el.setAttribute(attr, dict[orig[attr]]);
+-      } else {
+-        el.setAttribute(attr, orig[attr]);
+-      }
++      el.setAttribute(attr, (dict && dict[orig[attr]]) ? dict[orig[attr]] : orig[attr]);
+     });
+   });
+ 
+-  // 3) Lang attribute on <html>
+-  document.documentElement.lang = isNL ? 'nl' : 'fr';
+-
+-  // 4) Update boutons actifs
++  // 4) Lang attribute + boutons actifs
++  document.documentElement.lang = lang;
+   document.querySelectorAll('.lang-switch button').forEach(btn => {
+     btn.classList.toggle('active', btn.dataset.lang === lang);
+   });
+@@ -3441,7 +3717,7 @@ collectAttrOriginals();
+ const savedLang = (() => {
+   try { return localStorage.getItem('cefcLang'); } catch (e) { return null; }
+ })();
+-if (savedLang === 'nl') applyLanguage('nl');
++if (savedLang && savedLang !== 'fr') applyLanguage(savedLang);
+ 
+ // Click handlers
+ document.querySelectorAll('.lang-switch button').forEach(btn => {
