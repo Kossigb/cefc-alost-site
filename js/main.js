@@ -5,6 +5,11 @@ window.addEventListener('scroll', () => {
   else nav.classList.remove('scrolled');
 }, { passive: true });
 
+// On inner pages, nav is always visible (not transparent)
+if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+  nav.classList.add('scrolled');
+}
+
 // ===== MOBILE MENU =====
 const navToggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
