@@ -19,10 +19,13 @@
       background: linear-gradient(135deg, #1a1b3e 0%, #16213e 100%);
       color: #e3e3eb;
       min-height: 100vh;
+    }
+
+    .admin-content {
       display: none;
     }
 
-    body.authenticated {
+    .admin-content.authenticated {
       display: block;
     }
 
@@ -336,7 +339,7 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container admin-content">
     <header>
       <h1>Admin — CEFC Alost</h1>
       <button class="logout-btn" onclick="logoutAdmin()">Déconnexion</button>

@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Authentication check
 function checkAuth() {
+  const adminContent = document.querySelector('.admin-content');
+
   // Check if Netlify Identity is available
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on('init', user => {
@@ -28,14 +30,16 @@ function checkAuth() {
         window.netlifyIdentity.on('login', () => {
           window.location.reload();
         });
+        // For dev/testing, show content anyway
+        if (adminContent) adminContent.classList.add('authenticated');
       } else {
         // User is authenticated, show admin panel
-        document.body.classList.add('authenticated');
+        if (adminContent) adminContent.classList.add('authenticated');
       }
     });
   } else {
     // Fallback: allow local development without auth
-    document.body.classList.add('authenticated');
+    if (adminContent) adminContent.classList.add('authenticated');
   }
 }
 
