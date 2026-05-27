@@ -63,7 +63,53 @@ collections:
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 2. BANNIERE EN HAUT DU SITE
+  # 2. LIVE — LECTEUR VIDEO
+  # ========================================
+  - name: "live"
+    label: "🔴 Live — Lecteur vidéo"
+    files:
+      - name: "live_data"
+        label: "Diffusion en direct"
+        file: "contenu.json"
+        fields:
+          - label: "Lecteur vidéo en direct"
+            name: "live"
+            widget: "object"
+            hint: >
+              Avant la diffusion : activez et collez l'URL YouTube.
+              Après la diffusion : désactivez (le lecteur disparaît du site).
+            fields:
+              - { label: "Afficher le lecteur sur le site ?", name: "actif", widget: "boolean", default: false }
+              - label: "URL YouTube du live"
+                name: "url"
+                widget: "string"
+                required: false
+                hint: "Collez l'URL du live YouTube. Ex: https://www.youtube.com/watch?v=abc123 ou https://youtu.be/abc123"
+              - { label: "Titre affiché (FR)", name: "titre", widget: "string", required: false, default: "Le culte est en direct" }
+              - { label: "Titre affiché (NL)", name: "titre_nl", widget: "string", required: false }
+              - { label: "Titre affiché (EN)", name: "titre_en", widget: "string", required: false }
+              - { label: "Sous-titre (FR)", name: "sous_titre", widget: "string", required: false }
+              - { label: "Sous-titre (NL)", name: "sous_titre_nl", widget: "string", required: false }
+              - { label: "Sous-titre (EN)", name: "sous_titre_en", widget: "string", required: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 3. BANNIERE EN HAUT DU SITE
   # ========================================
   - name: "banniere"
     label: "🔔 Bannière d'annonce"

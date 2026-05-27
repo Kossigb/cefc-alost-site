@@ -259,6 +259,13 @@
   <!-- Quick actions -->
   <p class="section-label">Actions rapides</p>
   <div class="quick-actions">
+    <a class="qa-card" style="border-color:var(--red)" href="/admin/#/collections/live">
+      <div class="qa-icon" style="background:var(--red-soft)">🔴</div>
+      <div>
+        <div class="qa-label">Démarrer le live</div>
+        <div class="qa-sub">Activer le lecteur vidéo sur le site</div>
+      </div>
+    </a>
     <a class="qa-card" href="/admin/#/collections/annonces">
       <div class="qa-icon">📢</div>
       <div>
@@ -280,18 +287,18 @@
         <div class="qa-sub">Activer ou modifier l'annonce en haut</div>
       </div>
     </a>
-    <a class="qa-card" href="/admin/#/collections/message_pasteur">
-      <div class="qa-icon">✉️</div>
-      <div>
-        <div class="qa-label">Message du pasteur</div>
-        <div class="qa-sub">Activer ou modifier le message</div>
-      </div>
-    </a>
   </div>
 
   <!-- Live status -->
   <p class="section-label">Fonctionnalités activables</p>
   <div class="status-grid" id="statusGrid">
+    <a class="status-card" href="/admin/#/collections/live">
+      <div class="status-dot" id="dotLive"></div>
+      <div>
+        <div class="status-name">Lecteur live</div>
+        <div class="status-val" id="valLive">Chargement…</div>
+      </div>
+    </a>
     <a class="status-card" href="/admin/#/collections/banniere">
       <div class="status-dot" id="dotBanniere"></div>
       <div>
@@ -325,6 +332,14 @@
   <!-- All sections -->
   <p class="section-label">Toutes les sections</p>
   <div class="sections-grid">
+    <a class="section-card" href="/admin/#/collections/live">
+      <div class="section-emoji">🔴</div>
+      <div>
+        <div class="section-info-name">Live — Lecteur vidéo</div>
+        <div class="section-info-desc">Activer/désactiver le lecteur YouTube</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
     <a class="section-card" href="/admin/#/collections/annonces">
       <div class="section-emoji">📢</div>
       <div>
@@ -504,6 +519,12 @@
     fetch('/contenu.json?_=' + Date.now())
       .then(r => r.json())
       .then(data => {
+        const lv = data.live || {};
+        setStatus('dotLive', 'valLive',
+          !!(lv.actif && lv.url),
+          lv.url ? 'En direct · ' + lv.url.slice(0, 35) + (lv.url.length > 35 ? '…' : '') : 'Actif (sans URL)',
+          'Lecteur désactivé');
+
         const b = data.banniere || {};
         setStatus('dotBanniere', 'valBanniere',
           !!b.active,
@@ -530,10 +551,10 @@
           'Masquée');
       })
       .catch(() => {
-        ['dotBanniere','dotMessage','dotTemoignages','dotVision'].forEach(id => {
+        ['dotLive','dotBanniere','dotMessage','dotTemoignages','dotVision'].forEach(id => {
           document.getElementById(id).className = 'status-dot dot-off';
         });
-        ['valBanniere','valMessage','valTemoignages','valVision'].forEach(id => {
+        ['valLive','valBanniere','valMessage','valTemoignages','valVision'].forEach(id => {
           document.getElementById(id).textContent = 'Impossible de charger';
         });
       });

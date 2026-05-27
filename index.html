@@ -533,6 +533,21 @@ section { scroll-margin-top: 80px; }
   background: #000;
 }
 .live-embed iframe { width: 100%; height: 100%; display: block; border: none; }
+/* Quand le lecteur est actif : carte en colonne unique */
+.live-card--on {
+  grid-template-columns: 1fr;
+}
+.live-card--on .live-info { margin-bottom: 4px; }
+.live-card--on .live-cta {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 16px;
+}
+.live-card--on .btn-youtube {
+  font-size: 13px;
+  padding: 9px 18px;
+  opacity: 0.85;
+}
 
 /* ===== ANNONCES ===== */
 .annonces {
@@ -2902,6 +2917,42 @@ const LIVE_STRINGS = {
   }
 };
 
+function youtubeEmbedUrl(url) {
+  if (!url) return '';
+  const m = url.match(/[?&]v=([^&]+)/);
+  if (m) return `https://www.youtube.com/embed/${m[1]}?autoplay=1&rel=0`;
+  const s = url.match(/youtu\.be\/([^?&#]+)/);
+  if (s) return `https://www.youtube.com/embed/${s[1]}?autoplay=1&rel=0`;
+  const lv = url.match(/youtube\.com\/live\/([^?&#]+)/);
+  if (lv) return `https://www.youtube.com/embed/${lv[1]}?autoplay=1&rel=0`;
+  if (url.includes('youtube.com/embed/')) return url;
+  // Fallback : chaîne live
+  const ch = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
+  if (ch) return `https://www.youtube.com/embed/live_stream?channel=${ch}&autoplay=1`;
+  return '';
+}
+
+function activateLiveEmbed(embedUrl, titleText, subText, ctaLabel) {
+  const badge      = document.getElementById('liveBadge');
+  const badgeText  = document.getElementById('liveBadgeText');
+  const title      = document.getElementById('liveTitle');
+  const sub        = document.getElementById('liveSub');
+  const ctaText    = document.getElementById('liveCtaText');
+  const liveEmbed  = document.getElementById('liveEmbed');
+  const liveIframe = document.getElementById('liveIframe');
+  const liveCard   = liveEmbed && liveEmbed.closest('.live-card');
+  const lang = (() => { try { return localStorage.getItem('cefcLang') || 'fr'; } catch(e) { return 'fr'; } })();
+  const s = LIVE_STRINGS[lang] || LIVE_STRINGS.fr;
+  badge.classList.remove('offline');
+  badgeText.textContent = s.liveNow;
+  if (title) title.textContent = titleText || s.liveTitle;
+  if (sub) sub.textContent = subText || s.liveSub;
+  if (ctaText) ctaText.textContent = ctaLabel || s.liveCta;
+  if (liveIframe && !liveIframe.src) liveIframe.src = embedUrl;
+  if (liveEmbed) liveEmbed.style.display = 'block';
+  if (liveCard) liveCard.classList.add('live-card--on');
+}
+
 function updateLiveStatus() {
   const badge      = document.getElementById('liveBadge');
   const badgeText  = document.getElementById('liveBadgeText');
@@ -2910,10 +2961,24 @@ function updateLiveStatus() {
   const ctaText    = document.getElementById('liveCtaText');
   const liveEmbed  = document.getElementById('liveEmbed');
   const liveIframe = document.getElementById('liveIframe');
+  const liveCard   = liveEmbed && liveEmbed.closest('.live-card');
 
   const lang = (() => { try { return localStorage.getItem('cefcLang') || 'fr'; } catch(e) { return 'fr'; } })();
   const s = LIVE_STRINGS[lang] || LIVE_STRINGS.fr;
 
+  // 1. Priorité : champ admin CMS "live"
+  const cmsLive = CMS_DATA && CMS_DATA.live;
+  if (cmsLive && cmsLive.actif && cmsLive.url) {
+    const embedUrl = youtubeEmbedUrl(cmsLive.url);
+    const liveTitle = (cmsLive['titre_' + lang] || cmsLive.titre) || s.liveTitle;
+    const liveSub   = (cmsLive['sous_titre_' + lang] || cmsLive.sous_titre) || s.liveSub;
+    if (embedUrl) {
+      activateLiveEmbed(embedUrl, liveTitle, liveSub, s.liveCta);
+      return;
+    }
+  }
+
+  // 2. Secours : détection par heure (Bruxelles)
   const nowStr = new Date().toLocaleString('en-US', { timeZone: 'Europe/Brussels' });
   const now = new Date(nowStr);
   const day = now.getDay();
@@ -2924,38 +2989,44 @@ function updateLiveStatus() {
   );
 
   if (activeSvc) {
-    badge.classList.remove('offline');
-    badgeText.textContent = s.liveNow;
-    title.textContent = s.liveTitle;
-    sub.textContent = s.liveSub;
-    ctaText.textContent = s.liveCta;
     const channelId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
-    if (channelId && liveEmbed && liveIframe) {
-      if (!liveIframe.src) liveIframe.src = `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1`;
-      liveEmbed.style.display = 'block';
+    if (channelId) {
+      activateLiveEmbed(
+        `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1`,
+        s.liveTitle, s.liveSub, s.liveCta
+      );
+    } else {
+      badge.classList.remove('offline');
+      badgeText.textContent = s.liveNow;
+      if (title) title.textContent = s.liveTitle;
+      if (sub) sub.textContent = s.liveSub;
+      if (ctaText) ctaText.textContent = s.liveCta;
     }
-  } else {
-    if (liveEmbed) liveEmbed.style.display = 'none';
-    if (liveIframe) liveIframe.src = '';
-    let minDiff = Infinity, nextKey = 'sunday';
-    for (const svc of SERVICES) {
-      const nx = new Date(now);
-      let du = (svc.day - day + 7) % 7;
-      if (du === 0 && totalMin >= svc.endHour * 60 + svc.endMin) du = 7;
-      nx.setDate(now.getDate() + du);
-      nx.setHours(svc.hour, 0, 0, 0);
-      const diff = nx - now;
-      if (diff > 0 && diff < minDiff) { minDiff = diff; nextKey = svc.key; }
-    }
-    const d = Math.floor(minDiff / 86400000);
-    const h = Math.floor((minDiff % 86400000) / 3600000);
-    const m = Math.floor((minDiff % 3600000) / 60000);
-    badge.classList.add('offline');
-    badgeText.textContent = s.next(d, h, m, nextKey);
-    title.textContent = s.offlineTitle;
-    sub.textContent = s.offlineSub;
-    ctaText.textContent = s.offlineCta;
+    return;
   }
+
+  // 3. Hors direct : affichage du prochain culte
+  if (liveEmbed) liveEmbed.style.display = 'none';
+  if (liveIframe) liveIframe.src = '';
+  if (liveCard) liveCard.classList.remove('live-card--on');
+  let minDiff = Infinity, nextKey = 'sunday';
+  for (const svc of SERVICES) {
+    const nx = new Date(now);
+    let du = (svc.day - day + 7) % 7;
+    if (du === 0 && totalMin >= svc.endHour * 60 + svc.endMin) du = 7;
+    nx.setDate(now.getDate() + du);
+    nx.setHours(svc.hour, 0, 0, 0);
+    const diff = nx - now;
+    if (diff > 0 && diff < minDiff) { minDiff = diff; nextKey = svc.key; }
+  }
+  const d = Math.floor(minDiff / 86400000);
+  const h = Math.floor((minDiff % 86400000) / 3600000);
+  const m = Math.floor((minDiff % 3600000) / 60000);
+  badge.classList.add('offline');
+  badgeText.textContent = s.next(d, h, m, nextKey);
+  if (title) title.textContent = s.offlineTitle;
+  if (sub) sub.textContent = s.offlineSub;
+  if (ctaText) ctaText.textContent = s.offlineCta;
 }
 updateLiveStatus();
 setInterval(updateLiveStatus, 60000);

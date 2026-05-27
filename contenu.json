@@ -326,6 +326,17 @@
     "frequence_en": "Every 2 weeks",
     "lieu": "Wijngaardveld 29"
   },
+  "live": {
+    "_commentaire": "Lecteur vidéo affiché sur le site. Activez 'actif' et collez l'URL YouTube avant la diffusion. Désactivez après.",
+    "actif": false,
+    "url": "",
+    "titre": "Le culte est en direct",
+    "titre_nl": "De dienst is nu live",
+    "titre_en": "The service is live",
+    "sous_titre": "Rejoignez-nous dès maintenant.",
+    "sous_titre_nl": "Sluit u nu bij ons aan.",
+    "sous_titre_en": "Join us now."
+  },
   "seo": {
     "_commentaire": "Référencement du site (titre, description affichés dans Google et les réseaux sociaux).",
     "meta_title": "CEFC Alost — La Famille Chrétienne",
