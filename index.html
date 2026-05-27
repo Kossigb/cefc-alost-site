@@ -2956,6 +2956,9 @@ function activateLiveEmbed(embedUrl, titleText, subText, ctaLabel) {
   if (title) title.textContent = titleText || s.liveTitle;
   if (sub) sub.textContent = subText || s.liveSub;
   if (ctaText) ctaText.textContent = ctaLabel || s.liveCta;
+  const ctaLink = ctaText && ctaText.closest('a');
+  const chId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
+  if (ctaLink && chId) ctaLink.href = `https://www.youtube.com/channel/${chId}/live`;
   if (liveIframe && !liveIframe.src) liveIframe.src = embedUrl;
   if (liveEmbed) liveEmbed.style.display = 'block';
   if (liveCard) liveCard.classList.add('live-card--on');
@@ -2963,7 +2966,10 @@ function activateLiveEmbed(embedUrl, titleText, subText, ctaLabel) {
   // on affiche un bouton direct vers YouTube après 6 secondes
   const fallback = document.getElementById('liveFallback');
   const fallbackLink = document.getElementById('liveFallbackLink');
-  const watchUrl = (CMS_DATA && CMS_DATA.live && CMS_DATA.live.url) || embedUrl;
+  const chId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
+  const watchUrl = chId
+    ? `https://www.youtube.com/channel/${chId}/live`
+    : ((CMS_DATA && CMS_DATA.live && CMS_DATA.live.url) || embedUrl);
   if (fallbackLink) fallbackLink.href = watchUrl;
   // L'iframe YouTube peut charger une page noire si l'embedding est désactivé sur la vidéo.
   // On ne peut pas détecter ça en cross-origin, donc on affiche toujours le fallback après 8s.
@@ -2988,9 +2994,14 @@ function updateLiveStatus() {
   const s = LIVE_STRINGS[lang] || LIVE_STRINGS.fr;
 
   // 1. Priorité : champ admin CMS "live"
-  const cmsLive = CMS_DATA && CMS_DATA.live;
-  if (cmsLive && cmsLive.actif && cmsLive.url) {
-    const embedUrl = youtubeEmbedUrl(cmsLive.url);
+  const cmsLive   = CMS_DATA && CMS_DATA.live;
+  const channelId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
+  if (cmsLive && cmsLive.actif) {
+    // Utilise le live de la chaîne si l'ID est disponible (pas besoin de changer l'URL à chaque live)
+    const origin = encodeURIComponent(location.origin);
+    const embedUrl = channelId
+      ? `https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1&mute=1&rel=0&origin=${origin}`
+      : youtubeEmbedUrl(cmsLive.url);
     const liveTitle = (cmsLive['titre_' + lang] || cmsLive.titre) || s.liveTitle;
     const liveSub   = (cmsLive['sous_titre_' + lang] || cmsLive.sous_titre) || s.liveSub;
     if (embedUrl) {
