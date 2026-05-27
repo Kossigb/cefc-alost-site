@@ -18,29 +18,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderDivers();
 });
 
-// Authentication check
+// Authentication check - no blocking, page is always visible
 function checkAuth() {
-  const adminContent = document.querySelector('.admin-content');
-
-  // Check if Netlify Identity is available
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on('init', user => {
-      if (!user) {
-        // Show login prompt if not authenticated
-        window.netlifyIdentity.on('login', () => {
-          window.location.reload();
-        });
-        // For dev/testing, show content anyway
-        if (adminContent) adminContent.classList.add('authenticated');
-      } else {
-        // User is authenticated, show admin panel
-        if (adminContent) adminContent.classList.add('authenticated');
-      }
-    });
-  } else {
-    // Fallback: allow local development without auth
-    if (adminContent) adminContent.classList.add('authenticated');
-  }
+  // Netlify Identity handles login via popup, no need to hide content
 }
 
 // Load content from JSON
