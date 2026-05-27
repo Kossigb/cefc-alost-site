@@ -2956,17 +2956,14 @@ function activateLiveEmbed(embedUrl, titleText, subText, ctaLabel) {
   if (title) title.textContent = titleText || s.liveTitle;
   if (sub) sub.textContent = subText || s.liveSub;
   if (ctaText) ctaText.textContent = ctaLabel || s.liveCta;
-  const ctaLink = ctaText && ctaText.closest('a');
   const chId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
+  const ctaLink = ctaText && ctaText.closest('a');
   if (ctaLink && chId) ctaLink.href = `https://www.youtube.com/channel/${chId}/live`;
   if (liveIframe && !liveIframe.src) liveIframe.src = embedUrl;
   if (liveEmbed) liveEmbed.style.display = 'block';
   if (liveCard) liveCard.classList.add('live-card--on');
-  // Fallback : si YouTube bloque l'embed (embedding désactivé sur la vidéo),
-  // on affiche un bouton direct vers YouTube après 6 secondes
   const fallback = document.getElementById('liveFallback');
   const fallbackLink = document.getElementById('liveFallbackLink');
-  const chId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
   const watchUrl = chId
     ? `https://www.youtube.com/channel/${chId}/live`
     : ((CMS_DATA && CMS_DATA.live && CMS_DATA.live.url) || embedUrl);
