@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dons &amp; Offrandes — CEFC Alost</title>
+<meta name="description" content="Soutenez le ministère de la CEFC Alost par vos dîmes, offrandes et dons spéciaux. Votre libéralité permet à l'église de poursuivre sa mission." />
+<meta name="theme-color" content="#1A1B3E" />
+<meta property="og:title" content="Dons &amp; Offrandes — CEFC Alost" />
+<meta property="og:description" content="Votre offrande est un acte de foi et de gratitude envers Dieu. Dîme, libéralité et dons spéciaux." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://cefclabornealost9300.netlify.app/cefc-logo.png" />
+<meta property="og:url" content="https://cefclabornealost9300.netlify.app/dons.html" />
+<link rel="canonical" href="https://cefclabornealost9300.netlify.app/dons.html" />
+<link rel="icon" href="/cefc-logo.png" type="image/png" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Netlify Identity widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) { window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; }); }
+    });
+  }
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ===== PAGE-SPECIFIC STYLES: DONS ===== */
+
+/* Hero / page header */
+.dons-hero {
+  background: var(--silver-soft);
+  padding: 140px 24px 80px;
+  text-align: center;
+}
+.dons-hero .eyebrow { color: var(--text-muted); margin-bottom: 14px; }
+.dons-hero .section-title { color: var(--text-dark); }
+.dons-hero-sub {
+  max-width: 580px;
+  margin: 0 auto;
+  color: var(--text-muted);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.7;
+}
+
+/* Cards section */
+.dons-types {
+  background: #fff;
+  padding: 80px 24px;
+}
+.dons-types-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.dons-card {
+  background: #fff;
+  border: 1px solid rgba(26, 27, 62, 0.08);
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: 0 4px 24px rgba(26, 27, 62, 0.06);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.dons-card:hover {
+  box-shadow: 0 8px 40px rgba(26, 27, 62, 0.10);
+  transform: translateY(-3px);
+}
+.dons-card-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: var(--silver-soft);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+  color: var(--night);
+}
+.dons-card h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+.dons-card p {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.dons-card-ref {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-dark);
+  opacity: 0.65;
+  border-left: 2px solid rgba(26, 27, 62, 0.15);
+  padding-left: 12px;
+  line-height: 1.5;
+}
+
+/* How to give — dark section */
+.dons-how {
+  background: var(--night);
+  padding: 80px 24px;
+  color: var(--silver);
+}
+.dons-how .section-head .eyebrow { color: rgba(227, 227, 235, 0.55); }
+.dons-how .section-title { color: var(--silver); }
+.dons-how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.dons-how-card {
+  background: rgba(227, 227, 235, 0.04);
+  border: 0.5px solid rgba(227, 227, 235, 0.14);
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 0 0 1px rgba(227, 227, 235, 0.04) inset;
+  transition: background 0.3s, border-color 0.3s;
+}
+.dons-how-card:hover {
+  background: rgba(227, 227, 235, 0.07);
+  border-color: rgba(227, 227, 235, 0.22);
+}
+.dons-how-card-num {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 500;
+  color: rgba(227, 227, 235, 0.18);
+  line-height: 1;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+}
+.dons-how-card h3 {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--silver);
+  margin-bottom: 10px;
+}
+.dons-how-card p {
+  font-size: 14px;
+  color: rgba(227, 227, 235, 0.6);
+  line-height: 1.65;
+}
+.dons-how-card .dons-note {
+  font-size: 12px;
+  color: rgba(227, 227, 235, 0.4);
+  margin-top: 10px;
+  font-style: italic;
+}
+.dons-how-card-soon {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 10px;
+  border: 0.5px solid rgba(227, 227, 235, 0.2);
+  border-radius: 999px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(227, 227, 235, 0.4);
+}
+
+/* Verse banner */
+.dons-verse {
+  background: var(--night-deep);
+  padding: 72px 24px;
+  text-align: center;
+  color: var(--silver);
+}
+.dons-verse-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(18px, 2.8vw, 26px);
+  font-weight: 400;
+  max-width: 680px;
+  margin: 0 auto 16px;
+  line-height: 1.55;
+  color: rgba(227, 227, 235, 0.9);
+}
+.dons-verse-ref {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(227, 227, 235, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dons-types-grid { grid-template-columns: 1fr; }
+  .dons-how-grid { grid-template-columns: 1fr; }
+  .dons-card { padding: 28px 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav" id="nav" aria-label="Navigation principale">
+  <a href="/" class="nav-brand">
+    <div class="nav-brand-mark"><img src="/cefc-logo.png" alt="Logo CEFC" /></div>
+    <div class="nav-brand-text"><strong>CEFC</strong><span>La Famille Chrétienne</span></div>
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <a href="/" data-i18n="nav.home">Accueil</a>
+    <a href="/services.html" data-i18n="nav.services">Services</a>
+    <a href="/jeunesse.html" data-i18n="nav.youth">Jeunesse</a>
+    <a href="/navette.html" data-i18n="nav.shuttle">Navette</a>
+    <a href="/departements.html" data-i18n="nav.depts">Départements</a>
+    <a href="/dons.html" data-i18n="nav.dons">Dons</a>
+    <a href="/contact.html" data-i18n="nav.contact">Contact</a>
+    <a href="https://www.youtube.com/@CE_laFamilleChretienne" class="nav-live" target="_blank" rel="noopener">
+      <span class="dot"></span> <span data-i18n="nav.live">Live</span>
+    </a>
+    <div class="lang-switch" role="group" aria-label="Langue / Taal / Language">
+      <button type="button" data-lang="fr" class="active">FR</button>
+      <button type="button" data-lang="nl">NL</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== SECTION 1 : HERO ===== -->
+<section class="dons-hero" id="dons-hero">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Donner avec joie</span>
+      <h1 class="section-title">Libéralité · Dîme · <span class="accent">Dons Spéciaux</span></h1>
+    </div>
+    <p class="dons-hero-sub reveal" style="transition-delay:0.1s;">
+      Votre offrande est un acte de foi et de gratitude envers Dieu. Elle permet à l'église de poursuivre sa mission et de bénir la communauté.
+    </p>
+  </div>
+</section>
+
+<!-- ===== SECTION 2 : TYPES DE DONS ===== -->
+<section class="dons-types" id="dons-types">
+  <div class="container">
+    <div class="dons-types-grid">
+
+      <!-- Carte 1 : Dîme & Libéralité -->
+      <div class="dons-card reveal">
+        <div class="dons-card-icon" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="2" x2="12" y2="22" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+          </svg>
+        </div>
+        <h3>La Dîme &amp; Libéralité</h3>
+        <p>La dîme est le dixième de nos revenus remis à Dieu avec foi. La libéralité va au-delà et reflète un cœur généreux. Ces offrandes soutiennent le ministère de l'église et le travail pastoral.</p>
+        <blockquote class="dons-card-ref">
+          Malachie 3 : 10 — « Apportez toutes les dîmes dans la maison du trésor... »
+        </blockquote>
+      </div>
+
+      <!-- Carte 2 : Dons Spéciaux -->
+      <div class="dons-card reveal" style="transition-delay:0.1s;">
+        <div class="dons-card-icon" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+        <h3>Dons Spéciaux</h3>
+        <p>Les dons spéciaux sont des offrandes ponctuelles pour des besoins particuliers : projets de construction, missions, aide aux familles dans le besoin, événements de l'église.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 3 : COMMENT DONNER ===== -->
+<section class="dons-how" id="comment-donner">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Modalités</span>
+      <h2 class="section-title">Comment donner&nbsp;?</h2>
+    </div>
+    <div class="dons-how-grid">
+
+      <!-- Méthode 1 -->
+      <div class="dons-how-card reveal">
+        <div class="dons-how-card-num">01</div>
+        <h3>En personne</h3>
+        <p>Lors des cultes, lors du moment de la collecte. Un moment solennel pour remettre votre offrande au Seigneur avec toute la communauté.</p>
+      </div>
+
+      <!-- Méthode 2 -->
+      <div class="dons-how-card reveal" style="transition-delay:0.1s;">
+        <div class="dons-how-card-num">02</div>
+        <h3>Virement bancaire</h3>
+        <p>Coordonnées disponibles auprès du secrétariat.</p>
+        <p class="dons-note">Pour recevoir les coordonnées bancaires, contactez le secrétariat.</p>
+      </div>
+
+      <!-- Méthode 3 -->
+      <div class="dons-how-card reveal" style="transition-delay:0.2s;">
+        <div class="dons-how-card-num">03</div>
+        <h3>En ligne</h3>
+        <p>Une solution de don en ligne est en cours de préparation pour faciliter votre générosité à distance.</p>
+        <span class="dons-how-card-soon">Bientôt disponible</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 4 : VERSET BANNIÈRE ===== -->
+<section class="dons-verse" id="dons-verset">
+  <div class="reveal">
+    <p class="dons-verse-text">
+      « Que chacun donne comme il l'a résolu en son cœur, sans tristesse ni contrainte, car Dieu aime celui qui donne avec joie. »
+    </p>
+    <p class="dons-verse-ref">2 Corinthiens 9 : 7</p>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <p class="footer-verse">« Car nous sommes tous un seul corps en Christ. »</p>
+    <p class="footer-verse-ref">Romains 12 : 5</p>
+    <div class="footer-links">
+      <a href="/services.html">Horaires</a>
+      <a href="/jeunesse.html">JEFC — Jeunesse Évangélique</a>
+      <a href="/navette.html">Navette</a>
+      <a href="/departements.html">Départements</a>
+      <a href="/dons.html">Dons</a>
+      <a href="/contact.html">Contact</a>
+      <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener">YouTube</a>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-meta">
+      <div>© 2026 CEFC – Alost. Tous droits réservés.</div>
+      <div>Centre Évangélique · La Famille Chrétienne</div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
