@@ -5,463 +5,642 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin — CEFC Alost</title>
   <link rel="icon" type="image/png" href="../cefc-logo.png" />
-  <!-- Netlify Identity for authentication -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --bg: #0f1123;
+      --bg2: #171a2e;
+      --bg3: #1e2240;
+      --border: rgba(255,255,255,0.08);
+      --purple: #7c3aed;
+      --purple-light: #9d6ff5;
+      --green: #10b981;
+      --red: #ef4444;
+      --orange: #f59e0b;
+      --text: #e8e8f0;
+      --text2: #9ca3af;
+      --fr: #3b82f6;
+      --nl: #f59e0b;
+      --en: #10b981;
+      --radius: 10px;
     }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height:100vh; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #1a1b3e 0%, #16213e 100%);
-      color: #e3e3eb;
+    /* ── LOGIN ── */
+    #login-screen {
+      display: flex; align-items: center; justify-content: center;
       min-height: 100vh;
+      background: linear-gradient(135deg, #0f1123 0%, #1a1b3e 100%);
+    }
+    .login-box {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 48px 40px; width: 380px; max-width: 95vw;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    }
+    .login-logo { display:flex; align-items:center; gap:12px; margin-bottom:32px; }
+    .login-logo img { width:44px; height:44px; border-radius:8px; }
+    .login-logo span { font-size:20px; font-weight:700; }
+    .login-box h2 { font-size:22px; margin-bottom:8px; }
+    .login-box p { color:var(--text2); font-size:14px; margin-bottom:28px; }
+    .login-box input {
+      width:100%; padding:12px 14px; background:var(--bg3); border:1px solid var(--border);
+      border-radius:8px; color:var(--text); font-size:15px; margin-bottom:14px;
+    }
+    .login-box input:focus { outline:none; border-color:var(--purple); }
+    .login-btn {
+      width:100%; padding:13px; background:var(--purple); color:#fff; border:none;
+      border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; transition:background .2s;
+    }
+    .login-btn:hover { background:var(--purple-light); }
+    .login-error {
+      background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.3);
+      color:#fca5a5; padding:10px 14px; border-radius:8px; font-size:13px;
+      margin-top:14px; display:none;
     }
 
-    .admin-content {
-      display: block;
-    }
+    /* ── LAYOUT ── */
+    #admin-app { display:none; height:100vh; overflow:hidden; }
+    #admin-app.open { display:flex; }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 230px; min-width:230px; background:var(--bg2);
+      border-right:1px solid var(--border);
+      display:flex; flex-direction:column;
+      overflow-y:auto;
     }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 40px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(227, 227, 235, 0.2);
+    .sidebar-head {
+      padding:20px 16px 12px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; gap:10px;
     }
-
-    h1 {
-      font-size: 28px;
-      font-weight: 600;
+    .sidebar-head img { width:32px; height:32px; border-radius:6px; }
+    .sidebar-head span { font-weight:700; font-size:15px; }
+    .sidebar-head small { display:block; color:var(--text2); font-size:11px; }
+    nav { flex:1; padding:8px 0; }
+    .nav-item {
+      display:flex; align-items:center; gap:10px;
+      padding:10px 16px; font-size:14px; cursor:pointer;
+      border-radius:8px; margin:1px 8px; transition:background .15s;
+      color:var(--text2); user-select:none;
     }
-
+    .nav-item:hover { background:var(--bg3); color:var(--text); }
+    .nav-item.active { background:var(--bg3); color:var(--text); font-weight:600; }
+    .nav-item .icon { font-size:16px; width:20px; text-align:center; }
+    .nav-sep { height:1px; background:var(--border); margin:8px 16px; }
+    .sidebar-footer { padding:12px 16px; border-top:1px solid var(--border); }
     .logout-btn {
-      background: #7c3aed;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background 0.2s;
+      display:flex; align-items:center; gap:8px; width:100%; padding:9px 12px;
+      background:transparent; border:1px solid var(--border); border-radius:8px;
+      color:var(--text2); font-size:13px; cursor:pointer; transition:.2s;
     }
+    .logout-btn:hover { background:var(--bg3); color:var(--text); }
 
-    .logout-btn:hover {
-      background: #6d28d9;
+    /* ── MAIN ── */
+    .main { flex:1; overflow-y:auto; background:var(--bg); }
+    .main-inner { max-width:900px; margin:0 auto; padding:32px 24px 80px; }
+    .page { display:none; }
+    .page.active { display:block; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid var(--border);
     }
-
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(227, 227, 235, 0.1);
+    .topbar h1 { font-size:22px; font-weight:700; }
+    .topbar p { color:var(--text2); font-size:13px; margin-top:3px; }
+    .save-btn {
+      display:flex; align-items:center; gap:8px; padding:10px 20px;
+      background:var(--purple); color:#fff; border:none; border-radius:8px;
+      font-size:14px; font-weight:600; cursor:pointer; transition:background .2s; white-space:nowrap;
     }
+    .save-btn:hover { background:var(--purple-light); }
 
-    .tab-btn {
-      padding: 10px 18px;
-      background: transparent;
-      color: #9ca3af;
-      border: none;
-      border-bottom: 2px solid transparent;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s;
-      white-space: nowrap;
+    /* ── FORM ELEMENTS ── */
+    .card {
+      background:var(--bg2); border:1px solid var(--border);
+      border-radius:var(--radius); padding:20px; margin-bottom:16px;
     }
-
-    .tab-btn:hover {
-      color: #e3e3eb;
+    .card-title { font-size:15px; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .card-title .badge {
+      font-size:11px; padding:2px 8px; border-radius:20px; font-weight:500;
     }
+    .badge-green { background:rgba(16,185,129,.15); color:#6ee7b7; }
+    .badge-red { background:rgba(239,68,68,.15); color:#fca5a5; }
 
-    .tab-btn.active {
-      color: #e3e3eb;
-      border-bottom-color: #7c3aed;
+    .lang-tabs { display:flex; gap:4px; margin-bottom:16px; }
+    .lang-tab {
+      padding:5px 14px; border-radius:20px; font-size:12px; font-weight:600;
+      cursor:pointer; border:1px solid var(--border); background:transparent;
+      color:var(--text2); transition:.15s;
     }
+    .lang-tab.active-fr { background:rgba(59,130,246,.15); color:#93c5fd; border-color:rgba(59,130,246,.3); }
+    .lang-tab.active-nl { background:rgba(245,158,11,.15); color:#fcd34d; border-color:rgba(245,158,11,.3); }
+    .lang-tab.active-en { background:rgba(16,185,129,.15); color:#6ee7b7; border-color:rgba(16,185,129,.3); }
 
-    .tab-content {
-      display: none;
+    .field { margin-bottom:14px; }
+    .field label { display:block; font-size:12px; font-weight:600; text-transform:uppercase; color:var(--text2); margin-bottom:5px; }
+    .field label .lang { display:inline-block; font-size:10px; font-weight:700; padding:1px 6px; border-radius:4px; margin-left:5px; vertical-align:middle; }
+    .lang-fr { background:rgba(59,130,246,.2); color:#93c5fd; }
+    .lang-nl { background:rgba(245,158,11,.2); color:#fcd34d; }
+    .lang-en { background:rgba(16,185,129,.2); color:#6ee7b7; }
+
+    input[type=text], input[type=password], input[type=email], input[type=url], textarea, select {
+      width:100%; padding:9px 12px; background:var(--bg3); border:1px solid var(--border);
+      border-radius:8px; color:var(--text); font-size:14px; font-family:inherit; transition:.15s;
     }
+    input:focus, textarea:focus, select:focus { outline:none; border-color:var(--purple); background:#202447; }
+    textarea { resize:vertical; min-height:80px; }
+    .field-hint { font-size:11px; color:var(--text2); margin-top:4px; }
 
-    .tab-content.active {
-      display: block;
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+
+    /* Toggle */
+    .toggle-row { display:flex; align-items:center; justify-content:space-between; }
+    .toggle-row label { font-size:14px; color:var(--text); font-weight:normal; text-transform:none; }
+    .toggle { position:relative; display:inline-block; width:44px; height:24px; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .toggle-slider {
+      position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0;
+      background:var(--bg3); border:1px solid var(--border); border-radius:24px; transition:.2s;
     }
-
-    .form-section {
-      background: rgba(227, 227, 235, 0.05);
-      border: 1px solid rgba(227, 227, 235, 0.1);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 20px;
+    .toggle-slider:before {
+      content:""; position:absolute; width:16px; height:16px; left:3px; bottom:3px;
+      background:var(--text2); border-radius:50%; transition:.2s;
     }
+    .toggle input:checked + .toggle-slider { background:var(--purple); border-color:var(--purple); }
+    .toggle input:checked + .toggle-slider:before { transform:translateX(20px); background:#fff; }
 
-    .form-group {
-      margin-bottom: 16px;
+    /* List items */
+    .list-item {
+      background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius);
+      padding:16px; margin-bottom:10px;
     }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: #9ca3af;
-      margin-bottom: 6px;
+    .list-item-head {
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
     }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="date"],
-    input[type="number"],
-    textarea,
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      background: rgba(227, 227, 235, 0.08);
-      border: 1px solid rgba(227, 227, 235, 0.2);
-      border-radius: 8px;
-      color: #e3e3eb;
-      font-size: 14px;
-      font-family: inherit;
-      transition: border-color 0.2s;
+    .list-item-head h4 { font-size:14px; font-weight:600; }
+    .btn-del {
+      padding:5px 10px; background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.2);
+      color:#fca5a5; border-radius:6px; font-size:12px; cursor:pointer; transition:.15s;
     }
-
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="date"]:focus,
-    input[type="number"]:focus,
-    textarea:focus,
-    select:focus {
-      outline: none;
-      border-color: #7c3aed;
-      background: rgba(227, 227, 235, 0.12);
+    .btn-del:hover { background:rgba(239,68,68,.2); }
+    .btn-add {
+      display:flex; align-items:center; gap:6px; padding:9px 16px;
+      background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.2);
+      color:#6ee7b7; border-radius:8px; font-size:13px; font-weight:600;
+      cursor:pointer; transition:.15s; margin-top:8px;
     }
+    .btn-add:hover { background:rgba(16,185,129,.2); }
 
-    textarea {
-      resize: vertical;
-      min-height: 100px;
+    /* Status toast */
+    #toast {
+      position:fixed; bottom:24px; right:24px; z-index:9999;
+      padding:12px 20px; border-radius:10px; font-size:14px; font-weight:500;
+      box-shadow:0 8px 32px rgba(0,0,0,.4); transform:translateY(80px); opacity:0;
+      transition:.3s cubic-bezier(.34,1.56,.64,1);
     }
+    #toast.show { transform:translateY(0); opacity:1; }
+    #toast.success { background:#064e3b; border:1px solid #065f46; color:#6ee7b7; }
+    #toast.error { background:#7f1d1d; border:1px solid #991b1b; color:#fca5a5; }
 
-    button {
-      padding: 10px 16px;
-      background: #7c3aed;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
+    /* Password change */
+    .pwd-box { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
 
-    button:hover {
-      background: #6d28d9;
-    }
-
-    button.secondary {
-      background: rgba(227, 227, 235, 0.1);
-      color: #e3e3eb;
-    }
-
-    button.secondary:hover {
-      background: rgba(227, 227, 235, 0.15);
-    }
-
-    button.danger {
-      background: #dc2626;
-    }
-
-    button.danger:hover {
-      background: #b91c1c;
-    }
-
-    .item-card {
-      background: rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(227, 227, 235, 0.1);
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-
-    .item-card h4 {
-      margin-bottom: 12px;
-      color: #e3e3eb;
-    }
-
-    .item-card.collapsed {
-      padding: 12px 16px;
-      cursor: pointer;
-    }
-
-    .item-card.collapsed:hover {
-      background: rgba(227, 227, 235, 0.08);
-    }
-
-    .item-card.collapsed h4 {
-      margin: 0;
-    }
-
-    .item-fields {
-      display: grid;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .item-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(227, 227, 235, 0.1);
-    }
-
-    .item-actions button {
-      flex: 1;
-      padding: 8px 12px;
-      font-size: 13px;
-    }
-
-    .status-message {
-      padding: 12px 16px;
-      background: rgba(34, 197, 94, 0.1);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      border-radius: 8px;
-      color: #86efac;
-      margin-bottom: 20px;
-      display: none;
-    }
-
-    .status-message.error {
-      background: rgba(220, 38, 38, 0.1);
-      border-color: rgba(220, 38, 38, 0.3);
-      color: #fca5a5;
-    }
-
-    .status-message.show {
-      display: block;
-    }
-
-    .save-area {
-      background: rgba(227, 227, 235, 0.05);
-      border: 1px solid rgba(227, 227, 235, 0.1);
-      border-radius: 12px;
-      padding: 24px;
-      margin-top: 40px;
-    }
-
-    .save-area h3 {
-      margin-bottom: 16px;
-      color: #e3e3eb;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .button-group button {
-      flex: 1;
-      min-width: 150px;
-    }
-
-    .helper-text {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-top: 4px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    @media (max-width: 768px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-
-      .item-actions {
-        flex-direction: column;
-      }
-
-      .button-group {
-        flex-direction: column;
+    /* Mobile */
+    @media (max-width:768px) {
+      .sidebar { display:none; }
+      .sidebar.mobile-open { display:flex; position:fixed; z-index:100; width:260px; height:100vh; }
+      .grid2, .grid3 { grid-template-columns:1fr; }
+      .main-inner { padding:16px 14px 80px; }
+      .mobile-nav-btn {
+        display:flex; position:fixed; bottom:16px; left:16px; z-index:99;
+        width:48px; height:48px; background:var(--purple); border:none;
+        border-radius:50%; align-items:center; justify-content:center;
+        font-size:22px; cursor:pointer; box-shadow:0 4px 16px rgba(124,58,237,.5);
       }
     }
-
-    .add-btn {
-      background: #16a765;
-      margin-bottom: 20px;
-    }
-
-    .add-btn:hover {
-      background: #15803d;
-    }
-
-    .info-box {
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 8px;
-      padding: 12px 16px;
-      color: #bfdbfe;
-      font-size: 13px;
-      margin-bottom: 16px;
-    }
-
-    .loading {
-      display: none;
-      text-align: center;
-      padding: 40px;
-      color: #9ca3af;
-    }
-
-    .loading.show {
-      display: block;
-    }
+    @media (min-width:769px) { .mobile-nav-btn { display:none; } }
   </style>
 </head>
 <body>
-  <div class="container admin-content">
-    <header>
-      <h1>Admin — CEFC Alost</h1>
-      <button class="logout-btn" onclick="logoutAdmin()">Déconnexion</button>
-    </header>
 
-    <div class="status-message" id="statusMsg"></div>
-
-    <div class="info-box" style="margin-bottom: 30px; background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.5);">
-      <strong>📝 Flux de travail:</strong> Modifiez le contenu ci-dessous → Cliquez "Enregistrer" → Téléchargez le JSON → Remplacez <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 3px;">contenu.json</code> à la racine → Commit & Push avec Git
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="../cefc-logo.png" alt="CEFC" />
+      <span>CEFC Alost</span>
     </div>
-
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="annonces">📢 Annonces</button>
-      <button class="tab-btn" data-tab="horaires">⏰ Horaires</button>
-      <button class="tab-btn" data-tab="live">📺 Live</button>
-      <button class="tab-btn" data-tab="messages">💬 Messages</button>
-      <button class="tab-btn" data-tab="jeunesse">👥 Jeunesse</button>
-      <button class="tab-btn" data-tab="departements">🏢 Depts</button>
-      <button class="tab-btn" data-tab="divers">⚙️ Divers</button>
-    </div>
-
-    <!-- ANNONCES TAB -->
-    <div class="tab-content active" id="annonces-tab">
-      <div class="info-box">
-        Gérez les annonces affichées sur la page d'accueil et autres sections.
-      </div>
-      <button class="add-btn" onclick="addNewAnnonce()">+ Ajouter une annonce</button>
-      <div id="annonces-list"></div>
-      <div class="save-area">
-        <h3>Enregistrer les modifications</h3>
-        <div class="button-group">
-          <button onclick="saveContent()">💾 Enregistrer</button>
-          <button class="secondary" onclick="downloadJSON('annonces')">⬇️ Télécharger JSON</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- HORAIRES TAB -->
-    <div class="tab-content" id="horaires-tab">
-      <div class="info-box">
-        Gérez les horaires des services et navette.
-      </div>
-      <div id="horaires-content"></div>
-      <div class="save-area">
-        <h3>Enregistrer les modifications</h3>
-        <div class="button-group">
-          <button onclick="saveContent()">💾 Enregistrer</button>
-          <button class="secondary" onclick="downloadJSON('all')">⬇️ Télécharger JSON</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- LIVE TAB -->
-    <div class="tab-content" id="live-tab">
-      <div class="info-box">
-        Gérez le statut du live et les liens YouTube.
-      </div>
-      <div id="live-content"></div>
-      <div class="save-area">
-        <h3>Enregistrer les modifications</h3>
-        <div class="button-group">
-          <button onclick="saveContent()">💾 Enregistrer</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- MESSAGES TAB -->
-    <div class="tab-content" id="messages-tab">
-      <div class="info-box">
-        Gérez les messages du pasteur et bannières.
-      </div>
-      <div id="messages-content"></div>
-      <div class="save-area">
-        <h3>Enregistrer les modifications</h3>
-        <div class="button-group">
-          <button onclick="saveContent()">💾 Enregistrer</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- JEUNESSE TAB -->
-    <div class="tab-content" id="jeunesse-tab">
-      <div class="info-box">
-        Gérez les informations JEFC (Jeunesse Évangélique).
-      </div>
-      <div id="jeunesse-content"></div>
-      <div class="save-area">
-        <h3>Enregistrer les modifications</h3>
-        <div class="button-group">
-          <button onclick="saveContent()">💾 Enregistrer</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- DEPARTEMENTS TAB -->
-    <div class="tab-content" id="departements-tab">
-      <div class="info-box">
-        Gérez les 9 départements de l'église.
-      </div>
-      <button class="add-btn" onclick="addNewDepartement()">+ Ajouter un département</button>
-      <div id="departements-list"></div>
-      <div class="save-area">
-        <h3>Enregistrer les modifications</h3>
-        <div class="button-group">
-          <button onclick="saveContent()">💾 Enregistrer</button>
-          <button class="secondary" onclick="downloadJSON('departements')">⬇️ Télécharger JSON</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- DIVERS TAB -->
-    <div class="tab-content" id="divers-tab">
-      <div class="info-box">
-        Gérez les autres contenus (vision, mission, équipe, footer, etc.).
-      </div>
-      <div id="divers-content"></div>
-      <div class="save-area">
-        <h3>Enregistrer les modifications</h3>
-        <div class="button-group">
-          <button onclick="saveContent()">💾 Enregistrer</button>
-          <button class="secondary" onclick="downloadAllJSON()">⬇️ Télécharger tout en JSON</button>
-        </div>
-      </div>
-    </div>
+    <h2>Espace administrateur</h2>
+    <p>Connectez-vous pour gérer le contenu du site.</p>
+    <input type="text" id="login-user" placeholder="Identifiant" autocomplete="username" />
+    <input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password" />
+    <button class="login-btn" onclick="doLogin()">Se connecter</button>
+    <div class="login-error" id="login-error">Identifiant ou mot de passe incorrect.</div>
   </div>
+</div>
 
-  <script src="admin.js"></script>
+<!-- ══════════════ APP ══════════════ -->
+<div id="admin-app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <img src="../cefc-logo.png" alt="CEFC" />
+      <div>
+        <span>CEFC Admin</span>
+        <small id="admin-username">Administrateur</small>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-item active" data-page="accueil"><span class="icon">🏠</span> Accueil (Hero)</div>
+      <div class="nav-item" data-page="annonces"><span class="icon">📢</span> Annonces</div>
+      <div class="nav-item" data-page="horaires"><span class="icon">⏰</span> Horaires</div>
+      <div class="nav-item" data-page="live"><span class="icon">📺</span> Live</div>
+      <div class="nav-item" data-page="navette"><span class="icon">🚌</span> Navette</div>
+      <div class="nav-sep"></div>
+      <div class="nav-item" data-page="jefc"><span class="icon">👥</span> Jeunesse (JEFC)</div>
+      <div class="nav-item" data-page="departements"><span class="icon">🏢</span> Départements</div>
+      <div class="nav-item" data-page="vision"><span class="icon">🎯</span> Vision & Mission</div>
+      <div class="nav-item" data-page="equipe"><span class="icon">👨‍💼</span> Équipe pastorale</div>
+      <div class="nav-sep"></div>
+      <div class="nav-item" data-page="banniere"><span class="icon">🎗️</span> Bannière</div>
+      <div class="nav-item" data-page="temoignages"><span class="icon">💬</span> Témoignages</div>
+      <div class="nav-item" data-page="infos"><span class="icon">ℹ️</span> Infos & Réseaux</div>
+      <div class="nav-item" data-page="footer"><span class="icon">🦶</span> Footer</div>
+      <div class="nav-item" data-page="seo"><span class="icon">🔍</span> SEO</div>
+      <div class="nav-sep"></div>
+      <div class="nav-item" data-page="parametres"><span class="icon">⚙️</span> Paramètres</div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()"><span>🚪</span> Déconnexion</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="main-inner">
+
+      <!-- ── ACCUEIL ── -->
+      <div class="page active" id="page-accueil">
+        <div class="topbar">
+          <div><h1>🏠 Accueil (Hero)</h1><p>Section de bienvenue en haut de la page d'accueil</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Texte d'introduction</div>
+          <div class="field"><label>Eyebrow <span class="lang lang-fr">FR</span></label><input type="text" data-path="hero.eyebrow" /></div>
+          <div class="grid2">
+            <div class="field"><label>Eyebrow <span class="lang lang-nl">NL</span></label><input type="text" data-path="hero.eyebrow_nl" /></div>
+            <div class="field"><label>Eyebrow <span class="lang lang-en">EN</span></label><input type="text" data-path="hero.eyebrow_en" /></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Titre (2 lignes)</div>
+          <div class="grid2">
+            <div class="field"><label>Ligne 1 <span class="lang lang-fr">FR</span></label><input type="text" data-path="hero.titre_ligne1" /></div>
+            <div class="field"><label>Ligne 2 <span class="lang lang-fr">FR</span></label><input type="text" data-path="hero.titre_ligne2" /></div>
+            <div class="field"><label>Ligne 1 <span class="lang lang-nl">NL</span></label><input type="text" data-path="hero.titre_ligne1_nl" /></div>
+            <div class="field"><label>Ligne 2 <span class="lang lang-nl">NL</span></label><input type="text" data-path="hero.titre_ligne2_nl" /></div>
+            <div class="field"><label>Ligne 1 <span class="lang lang-en">EN</span></label><input type="text" data-path="hero.titre_ligne1_en" /></div>
+            <div class="field"><label>Ligne 2 <span class="lang lang-en">EN</span></label><input type="text" data-path="hero.titre_ligne2_en" /></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Sous-titre</div>
+          <div class="field"><label>Sous-titre <span class="lang lang-fr">FR</span></label><textarea data-path="hero.sous_titre"></textarea></div>
+          <div class="field"><label>Sous-titre <span class="lang lang-nl">NL</span></label><textarea data-path="hero.sous_titre_nl"></textarea></div>
+          <div class="field"><label>Sous-titre <span class="lang lang-en">EN</span></label><textarea data-path="hero.sous_titre_en"></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Boutons</div>
+          <div class="grid2">
+            <div class="field"><label>Bouton principal <span class="lang lang-fr">FR</span></label><input type="text" data-path="hero.bouton_principal" /></div>
+            <div class="field"><label>Bouton secondaire <span class="lang lang-fr">FR</span></label><input type="text" data-path="hero.bouton_secondaire" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ANNONCES ── -->
+      <div class="page" id="page-annonces">
+        <div class="topbar">
+          <div><h1>📢 Annonces</h1><p>Événements et annonces affichés sur le site</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div id="annonces-list"></div>
+        <button class="btn-add" onclick="addAnnonce()">+ Ajouter une annonce</button>
+      </div>
+
+      <!-- ── HORAIRES ── -->
+      <div class="page" id="page-horaires">
+        <div class="topbar">
+          <div><h1>⏰ Horaires des cultes</h1><p>Les 3 services hebdomadaires</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div id="horaires-content"></div>
+      </div>
+
+      <!-- ── LIVE ── -->
+      <div class="page" id="page-live">
+        <div class="topbar">
+          <div><h1>📺 Live YouTube</h1><p>Gestion du stream en direct</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Statut du live</div>
+          <div class="toggle-row">
+            <label>Activer le live (affiche le lecteur vidéo sur le site)</label>
+            <label class="toggle"><input type="checkbox" data-path="live.actif" /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Lien YouTube</div>
+          <div class="field"><label>URL de la vidéo en direct</label><input type="url" data-path="live.url" placeholder="https://www.youtube.com/watch?v=..." /><div class="field-hint">Colle l'URL YouTube de la diffusion en direct avant de commencer</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Textes</div>
+          <div class="grid2">
+            <div class="field"><label>Titre <span class="lang lang-fr">FR</span></label><input type="text" data-path="live.titre" /></div>
+            <div class="field"><label>Sous-titre <span class="lang lang-fr">FR</span></label><input type="text" data-path="live.sous_titre" /></div>
+            <div class="field"><label>Titre <span class="lang lang-nl">NL</span></label><input type="text" data-path="live.titre_nl" /></div>
+            <div class="field"><label>Sous-titre <span class="lang lang-nl">NL</span></label><input type="text" data-path="live.sous_titre_nl" /></div>
+            <div class="field"><label>Titre <span class="lang lang-en">EN</span></label><input type="text" data-path="live.titre_en" /></div>
+            <div class="field"><label>Sous-titre <span class="lang lang-en">EN</span></label><input type="text" data-path="live.sous_titre_en" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NAVETTE ── -->
+      <div class="page" id="page-navette">
+        <div class="topbar">
+          <div><h1>🚌 Navette gratuite</h1><p>Horaires et arrêts de la navette</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Point de départ</div>
+          <div class="grid3">
+            <div class="field"><label>Départ <span class="lang lang-fr">FR</span></label><input type="text" data-path="navette.depart" /></div>
+            <div class="field"><label>Départ <span class="lang lang-nl">NL</span></label><input type="text" data-path="navette.depart_nl" /></div>
+            <div class="field"><label>Départ <span class="lang lang-en">EN</span></label><input type="text" data-path="navette.depart_en" /></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Destination</div>
+          <div class="grid3">
+            <div class="field"><label>Arrivée <span class="lang lang-fr">FR</span></label><input type="text" data-path="navette.arrivee" /></div>
+            <div class="field"><label>Arrivée <span class="lang lang-nl">NL</span></label><input type="text" data-path="navette.arrivee_nl" /></div>
+            <div class="field"><label>Arrivée <span class="lang lang-en">EN</span></label><input type="text" data-path="navette.arrivee_en" /></div>
+          </div>
+        </div>
+        <div class="card-title" style="margin:16px 0 8px">Créneaux de navette</div>
+        <div id="navette-list"></div>
+        <button class="btn-add" onclick="addNavette()">+ Ajouter un créneau</button>
+      </div>
+
+      <!-- ── JEFC ── -->
+      <div class="page" id="page-jefc">
+        <div class="topbar">
+          <div><h1>👥 Jeunesse JEFC</h1><p>Section Jeunesse Évangélique La Famille Chrétienne</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Tag / Badge</div>
+          <div class="grid3">
+            <div class="field"><label>Tag <span class="lang lang-fr">FR</span></label><input type="text" data-path="jefc.tag" /></div>
+            <div class="field"><label>Tag <span class="lang lang-nl">NL</span></label><input type="text" data-path="jefc.tag_nl" /></div>
+            <div class="field"><label>Tag <span class="lang lang-en">EN</span></label><input type="text" data-path="jefc.tag_en" /></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Titre</div>
+          <div class="field"><label>Titre <span class="lang lang-fr">FR</span></label><input type="text" data-path="jefc.titre" /></div>
+          <div class="field"><label>Titre <span class="lang lang-nl">NL</span></label><input type="text" data-path="jefc.titre_nl" /></div>
+          <div class="field"><label>Titre <span class="lang lang-en">EN</span></label><input type="text" data-path="jefc.titre_en" /></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Texte de présentation</div>
+          <div class="field"><label>Texte <span class="lang lang-fr">FR</span></label><textarea data-path="jefc.texte"></textarea></div>
+          <div class="field"><label>Texte <span class="lang lang-nl">NL</span></label><textarea data-path="jefc.texte_nl"></textarea></div>
+          <div class="field"><label>Texte <span class="lang lang-en">EN</span></label><textarea data-path="jefc.texte_en"></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Fréquence & Lieu</div>
+          <div class="grid2">
+            <div class="field"><label>Fréquence <span class="lang lang-fr">FR</span></label><input type="text" data-path="jefc.frequence" /></div>
+            <div class="field"><label>Lieu</label><input type="text" data-path="jefc.lieu" /></div>
+            <div class="field"><label>Fréquence <span class="lang lang-nl">NL</span></label><input type="text" data-path="jefc.frequence_nl" /></div>
+            <div class="field"><label>Fréquence <span class="lang lang-en">EN</span></label><input type="text" data-path="jefc.frequence_en" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DÉPARTEMENTS ── -->
+      <div class="page" id="page-departements">
+        <div class="topbar">
+          <div><h1>🏢 Départements</h1><p>Les équipes de service de l'église</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div id="dept-list"></div>
+        <button class="btn-add" onclick="addDept()">+ Ajouter un département</button>
+      </div>
+
+      <!-- ── VISION & MISSION ── -->
+      <div class="page" id="page-vision">
+        <div class="topbar">
+          <div><h1>🎯 Vision & Mission</h1><p>Section "Qui sommes-nous"</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="toggle-row">
+            <label>Afficher la section Vision & Mission</label>
+            <label class="toggle"><input type="checkbox" data-path="vision_mission.actif" /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Introduction</div>
+          <div class="field"><label>Intro <span class="lang lang-fr">FR</span></label><textarea data-path="vision_mission.intro"></textarea></div>
+          <div class="field"><label>Intro <span class="lang lang-nl">NL</span></label><textarea data-path="vision_mission.intro_nl"></textarea></div>
+          <div class="field"><label>Intro <span class="lang lang-en">EN</span></label><textarea data-path="vision_mission.intro_en"></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Notre Vision</div>
+          <div class="field"><label>Texte vision <span class="lang lang-fr">FR</span></label><textarea data-path="vision_mission.vision_texte"></textarea></div>
+          <div class="field"><label>Texte vision <span class="lang lang-nl">NL</span></label><textarea data-path="vision_mission.vision_texte_nl"></textarea></div>
+          <div class="field"><label>Texte vision <span class="lang lang-en">EN</span></label><textarea data-path="vision_mission.vision_texte_en"></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Notre Mission</div>
+          <div class="field"><label>Texte mission <span class="lang lang-fr">FR</span></label><textarea data-path="vision_mission.mission_texte"></textarea></div>
+          <div class="field"><label>Texte mission <span class="lang lang-nl">NL</span></label><textarea data-path="vision_mission.mission_texte_nl"></textarea></div>
+          <div class="field"><label>Texte mission <span class="lang lang-en">EN</span></label><textarea data-path="vision_mission.mission_texte_en"></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Verset biblique</div>
+          <div class="field"><label>Verset <span class="lang lang-fr">FR</span></label><textarea data-path="vision_mission.verset_texte"></textarea></div>
+          <div class="field"><label>Verset <span class="lang lang-nl">NL</span></label><textarea data-path="vision_mission.verset_texte_nl"></textarea></div>
+          <div class="field"><label>Verset <span class="lang lang-en">EN</span></label><textarea data-path="vision_mission.verset_texte_en"></textarea></div>
+          <div class="grid3">
+            <div class="field"><label>Référence <span class="lang lang-fr">FR</span></label><input type="text" data-path="vision_mission.verset_reference" /></div>
+            <div class="field"><label>Référence <span class="lang lang-nl">NL</span></label><input type="text" data-path="vision_mission.verset_reference_nl" /></div>
+            <div class="field"><label>Référence <span class="lang lang-en">EN</span></label><input type="text" data-path="vision_mission.verset_reference_en" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ÉQUIPE ── -->
+      <div class="page" id="page-equipe">
+        <div class="topbar">
+          <div><h1>👨‍💼 Équipe pastorale</h1><p>Membres de l'équipe affichés sur la page Contact</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div id="equipe-list"></div>
+        <button class="btn-add" onclick="addMembre()">+ Ajouter un membre</button>
+      </div>
+
+      <!-- ── BANNIÈRE ── -->
+      <div class="page" id="page-banniere">
+        <div class="topbar">
+          <div><h1>🎗️ Bannière d'annonce</h1><p>Bannière affichée en haut du site</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="toggle-row">
+            <label>Activer la bannière</label>
+            <label class="toggle"><input type="checkbox" data-path="banniere.active" /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Texte de la bannière</div>
+          <div class="field"><label>Texte <span class="lang lang-fr">FR</span></label><input type="text" data-path="banniere.texte" /></div>
+          <div class="field"><label>Texte <span class="lang lang-nl">NL</span></label><input type="text" data-path="banniere.texte_nl" /></div>
+          <div class="field"><label>Texte <span class="lang lang-en">EN</span></label><input type="text" data-path="banniere.texte_en" /></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Lien (optionnel)</div>
+          <div class="field"><label>URL du lien</label><input type="url" data-path="banniere.lien" placeholder="https://..." /></div>
+          <div class="grid3">
+            <div class="field"><label>Texte du lien <span class="lang lang-fr">FR</span></label><input type="text" data-path="banniere.lien_texte" /></div>
+            <div class="field"><label>Texte du lien <span class="lang lang-nl">NL</span></label><input type="text" data-path="banniere.lien_texte_nl" /></div>
+            <div class="field"><label>Texte du lien <span class="lang lang-en">EN</span></label><input type="text" data-path="banniere.lien_texte_en" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TÉMOIGNAGES ── -->
+      <div class="page" id="page-temoignages">
+        <div class="topbar">
+          <div><h1>💬 Témoignages</h1><p>Témoignages de membres de l'église</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="toggle-row">
+            <label>Afficher la section témoignages</label>
+            <label class="toggle"><input type="checkbox" data-path="temoignages.actif" /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+        <div id="temoignages-list"></div>
+        <button class="btn-add" onclick="addTemoignage()">+ Ajouter un témoignage</button>
+      </div>
+
+      <!-- ── INFOS ── -->
+      <div class="page" id="page-infos">
+        <div class="topbar">
+          <div><h1>ℹ️ Infos & Réseaux sociaux</h1><p>Coordonnées et liens réseaux</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Adresse</div>
+          <div class="grid2">
+            <div class="field"><label>Ligne 1</label><input type="text" data-path="infos.adresse_ligne1" /></div>
+            <div class="field"><label>Ligne 2</label><input type="text" data-path="infos.adresse_ligne2" /></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Contact</div>
+          <div class="grid2">
+            <div class="field"><label>Email</label><input type="email" data-path="infos.email" /></div>
+            <div class="field"><label>Téléphone</label><input type="text" data-path="infos.telephone" /></div>
+            <div class="field"><label>WhatsApp (format: +32...)</label><input type="text" data-path="infos.whatsapp" /></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Réseaux sociaux</div>
+          <div class="field"><label>YouTube</label><input type="url" data-path="infos.youtube" /></div>
+          <div class="field"><label>Facebook</label><input type="url" data-path="infos.facebook" /></div>
+          <div class="field"><label>Instagram</label><input type="url" data-path="infos.instagram" /></div>
+        </div>
+      </div>
+
+      <!-- ── FOOTER ── -->
+      <div class="page" id="page-footer">
+        <div class="topbar">
+          <div><h1>🦶 Footer</h1><p>Bas de page — verset biblique</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Verset biblique</div>
+          <div class="field"><label>Texte <span class="lang lang-fr">FR</span></label><input type="text" data-path="footer.verset_texte" /></div>
+          <div class="field"><label>Texte <span class="lang lang-nl">NL</span></label><input type="text" data-path="footer.verset_texte_nl" /></div>
+          <div class="field"><label>Texte <span class="lang lang-en">EN</span></label><input type="text" data-path="footer.verset_texte_en" /></div>
+          <div class="grid3">
+            <div class="field"><label>Référence <span class="lang lang-fr">FR</span></label><input type="text" data-path="footer.verset_reference" /></div>
+            <div class="field"><label>Référence <span class="lang lang-nl">NL</span></label><input type="text" data-path="footer.verset_reference_nl" /></div>
+            <div class="field"><label>Référence <span class="lang lang-en">EN</span></label><input type="text" data-path="footer.verset_reference_en" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEO ── -->
+      <div class="page" id="page-seo">
+        <div class="topbar">
+          <div><h1>🔍 SEO & Réseaux sociaux</h1><p>Titre et description dans Google</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Balises SEO</div>
+          <div class="field"><label>Titre (affiché dans Google)</label><input type="text" data-path="seo.meta_title" /><div class="field-hint">Idéalement 50–60 caractères</div></div>
+          <div class="field"><label>Description</label><textarea data-path="seo.meta_description"></textarea><div class="field-hint">Idéalement 150–160 caractères</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Aperçu réseaux sociaux (Open Graph)</div>
+          <div class="field"><label>Titre OG</label><input type="text" data-path="seo.og_title" /></div>
+          <div class="field"><label>Description OG</label><textarea data-path="seo.og_description"></textarea></div>
+        </div>
+      </div>
+
+      <!-- ── PARAMÈTRES ── -->
+      <div class="page" id="page-parametres">
+        <div class="topbar">
+          <div><h1>⚙️ Paramètres admin</h1><p>Gérer l'accès et le mot de passe</p></div>
+        </div>
+        <div class="card pwd-box">
+          <div class="card-title">Changer le mot de passe</div>
+          <div class="field"><label>Identifiant</label><input type="text" id="new-username" placeholder="Nouvel identifiant" /></div>
+          <div class="field"><label>Nouveau mot de passe</label><input type="password" id="new-pass" placeholder="Nouveau mot de passe" /></div>
+          <div class="field"><label>Confirmer le mot de passe</label><input type="password" id="confirm-pass" placeholder="Répéter le mot de passe" /></div>
+          <button class="save-btn" style="margin-top:8px" onclick="changePassword()">Enregistrer les identifiants</button>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div class="card-title">Exporter le contenu</div>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">
+            Après avoir enregistré vos modifications, téléchargez le fichier <code>contenu.json</code>, puis remplacez-le dans votre dépôt Git et faites un commit.
+          </p>
+          <button class="btn-add" onclick="downloadJSON()">⬇️ Télécharger contenu.json</button>
+        </div>
+      </div>
+
+    </div><!-- /main-inner -->
+  </main>
+
+</div><!-- /admin-app -->
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Mobile menu button -->
+<button class="mobile-nav-btn" onclick="toggleSidebar()">☰</button>
+
+<script src="admin.js"></script>
 </body>
 </html>
