@@ -57,9 +57,9 @@
 }
 .dons-types-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 .dons-card {
@@ -198,7 +198,10 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .dons-types-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
   .dons-types-grid { grid-template-columns: 1fr; }
   .dons-how-grid { grid-template-columns: 1fr; }
   .dons-card { padding: 28px 22px; }
@@ -279,6 +282,20 @@
         <p>Les dons spéciaux sont des offrandes ponctuelles pour des besoins particuliers : projets de construction, missions, aide aux familles dans le besoin, événements de l'église.</p>
       </div>
 
+      <!-- Carte 3 : Solidarité -->
+      <div class="dons-card reveal" style="transition-delay:0.2s;">
+        <div class="dons-card-icon" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3>Solidarité</h3>
+        <p>Le fonds de solidarité permet à l'église de soutenir les membres dans le besoin, les familles en difficulté et les actions sociales de la communauté.</p>
+        <blockquote class="dons-card-ref">
+          Compte bancaire — Solidarité :<br><strong>BE42 3632 0186 8154</strong>
+        </blockquote>
+      </div>
+
     </div>
   </div>
 </section>
@@ -303,8 +320,10 @@
       <div class="dons-how-card reveal" style="transition-delay:0.1s;">
         <div class="dons-how-card-num">02</div>
         <h3>Virement bancaire</h3>
-        <p>Coordonnées disponibles auprès du secrétariat.</p>
-        <p class="dons-note">Pour recevoir les coordonnées bancaires, contactez le secrétariat.</p>
+        <p style="margin-bottom:8px;">Dîme, Libéralité &amp; Dons spéciaux</p>
+        <p class="dons-note" style="font-style:normal;font-weight:600;letter-spacing:0.04em;font-size:13px;color:rgba(227,227,235,0.85);">BE97 3631 6425 1049</p>
+        <p style="margin-top:14px;margin-bottom:8px;">Solidarité</p>
+        <p class="dons-note" style="font-style:normal;font-weight:600;letter-spacing:0.04em;font-size:13px;color:rgba(227,227,235,0.85);">BE42 3632 0186 8154</p>
       </div>
 
       <!-- Méthode 3 -->

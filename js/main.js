@@ -23,6 +23,18 @@ navLinks.querySelectorAll('a').forEach(a => {
   });
 });
 
+// ===== ACTIVE NAV LINK =====
+(function() {
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  document.querySelectorAll('.nav-links a[href]').forEach(a => {
+    const href = a.getAttribute('href').replace(/\/$/, '') || '/';
+    if (href === path || (path === '' && href === '/')) {
+      a.classList.add('nav-current');
+      a.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+
 // ===== REVEAL ON SCROLL =====
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
@@ -128,8 +140,8 @@ function activateLiveEmbed(embedUrl, titleText, subText, ctaLabel) {
   const liveCard   = liveEmbed && liveEmbed.closest('.live-card');
   const lang = (() => { try { return localStorage.getItem('cefcLang') || 'fr'; } catch(e) { return 'fr'; } })();
   const s = LIVE_STRINGS[lang] || LIVE_STRINGS.fr;
-  badge.classList.remove('offline');
-  badgeText.textContent = s.liveNow;
+  if (badge) badge.classList.remove('offline');
+  if (badgeText) badgeText.textContent = s.liveNow;
   if (title) title.textContent = titleText || s.liveTitle;
   if (sub) sub.textContent = subText || s.liveSub;
   if (ctaText) ctaText.textContent = ctaLabel || s.liveCta;
@@ -191,8 +203,8 @@ function updateLiveStatus() {
         s.liveTitle, s.liveSub, s.liveCta
       );
     } else {
-      badge.classList.remove('offline');
-      badgeText.textContent = s.liveNow;
+      if (badge) badge.classList.remove('offline');
+      if (badgeText) badgeText.textContent = s.liveNow;
       if (title) title.textContent = s.liveTitle;
       if (sub) sub.textContent = s.liveSub;
       if (ctaText) ctaText.textContent = s.liveCta;
@@ -217,8 +229,8 @@ function updateLiveStatus() {
   const d = Math.floor(minDiff / 86400000);
   const h = Math.floor((minDiff % 86400000) / 3600000);
   const m = Math.floor((minDiff % 3600000) / 60000);
-  badge.classList.add('offline');
-  badgeText.textContent = s.next(d, h, m, nextKey);
+  if (badge) badge.classList.add('offline');
+  if (badgeText) badgeText.textContent = s.next(d, h, m, nextKey);
   if (title) title.textContent = s.offlineTitle;
   if (sub) sub.textContent = s.offlineSub;
   if (ctaText) ctaText.textContent = s.offlineCta;
@@ -507,6 +519,24 @@ const I18N = {
     "contact.eyebrow": "Sluit u aan",
     "contact.title.1": "Contact &",
     "contact.title.2": "adres",
+    "faq.eyebrow": "Veelgestelde vragen",
+    "faq.title.1": "Heeft u",
+    "faq.title.2": "vragen?",
+    "faq.intro": "Hier vindt u antwoorden op de meest gestelde vragen. Aarzel niet om ons te contacteren als u niet vindt wat u zoekt.",
+    "faq.q1": "Waar vinden de diensten plaats?",
+    "faq.a1": "De diensten vinden plaats aan <strong>Wijngaardveld 29, 9300 Aalst</strong>. U bent welkom — geen inschrijving nodig, kom gewoon!",
+    "faq.q2": "Wat zijn de uren van de diensten?",
+    "faq.a2": "Wij komen samen elke <strong>zondag om 10u</strong>, en ook op <strong>woensdag en vrijdag om 18u</strong> voor gebed en bijbelstudie.",
+    "faq.q3": "Is er een gratis pendeldienst?",
+    "faq.a3": "Ja! Wij bieden een <strong>gratis pendeldienst</strong> aan. Raadpleeg de pagina Pendeldienst voor de haltes en tijden.",
+    "faq.q4": "Worden de diensten online uitgezonden?",
+    "faq.a4": "Ja! Onze diensten zijn live te bekijken op ons <strong>YouTube-kanaal — CE La Famille Chrétienne</strong>. U kunt ook de replay's bekijken.",
+    "faq.q5": "Hoe sluit ik me aan bij een afdeling?",
+    "faq.a5": "Ga naar de pagina <strong>Afdelingen</strong>, kies het team dat bij u past en vul het kandidatuurformulier in. De verantwoordelijke neemt contact met u op.",
+    "faq.q6": "Hoe doe ik een gift aan de kerk?",
+    "faq.a6": "U kunt een gift doen in persoon tijdens de diensten, of via bankoverschrijving. De volledige coördinaten staan op de pagina <strong>Giften</strong>.",
+    "faq.q7": "Ik heb nog een vraag — wie kan ik contacteren?",
+    "faq.a7": "Contacteer ons via de pagina <strong>Contact</strong> of schrijf ons op <a href='mailto:cefclaborne@gmail.com' class='faq-link'>cefclaborne@gmail.com</a>. Wij antwoorden zo snel mogelijk.",
   },
   en: {
     "nav.home": "Home",
@@ -580,6 +610,24 @@ const I18N = {
     "contact.eyebrow": "Join us",
     "contact.title.1": "Contact &",
     "contact.title.2": "address",
+    "faq.eyebrow": "Frequently asked questions",
+    "faq.title.1": "Do you have",
+    "faq.title.2": "questions?",
+    "faq.intro": "Here are answers to the most common questions. Don't hesitate to contact us if you can't find what you're looking for.",
+    "faq.q1": "Where do services take place?",
+    "faq.a1": "Services are held at <strong>Wijngaardveld 29, 9300 Alost (Aalst)</strong>. You are welcome — no registration needed, just come!",
+    "faq.q2": "What are the service times?",
+    "faq.a2": "We gather every <strong>Sunday at 10am</strong>, as well as <strong>Wednesday and Friday at 6pm</strong> for prayer and Bible study.",
+    "faq.q3": "Is there a free shuttle?",
+    "faq.a3": "Yes! We offer a <strong>free shuttle service</strong>. Check the Shuttle page for stops and pick-up times.",
+    "faq.q4": "Are services broadcast online?",
+    "faq.a4": "Yes! Our services are streamed live on our <strong>YouTube channel — CE La Famille Chrétienne</strong>. You can also watch replays anytime.",
+    "faq.q5": "How do I join a service department?",
+    "faq.a5": "Visit the <strong>Departments</strong> page, choose the team that fits you and fill in the application form. The team leader will get in touch.",
+    "faq.q6": "How can I make a donation to the church?",
+    "faq.a6": "You can give in person during services, or by bank transfer. Full details are available on the <strong>Giving</strong> page.",
+    "faq.q7": "I have another question — who should I contact?",
+    "faq.a7": "Contact us via the <strong>Contact</strong> page or email us at <a href='mailto:cefclaborne@gmail.com' class='faq-link'>cefclaborne@gmail.com</a>. We respond as quickly as possible.",
   }
 };
 
@@ -1385,6 +1433,7 @@ const DEPT_DATA = {
 };
 
 const modal = document.getElementById('deptModal');
+if (modal) {
 const modalChoice = document.getElementById('modalChoice');
 const modalForm = document.getElementById('modalForm');
 const modalQuestionForm = document.getElementById('modalQuestionForm');
@@ -1529,6 +1578,7 @@ modalQuestionForm.addEventListener('submit', (e) => {
   successText.textContent = 'Votre message a bien été transmis au responsable. Vous recevrez une réponse dans les meilleurs délais.';
   showView('success');
 });
+} // end if (modal)
 
 // ===== GALERIE PHOTOS CULTE =====
 // Charge photos_culte.json (fichier dédié, mis à jour par l'admin)
