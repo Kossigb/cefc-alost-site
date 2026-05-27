@@ -3028,8 +3028,8 @@ function updateLiveStatus() {
   if (sub) sub.textContent = s.offlineSub;
   if (ctaText) ctaText.textContent = s.offlineCta;
 }
-updateLiveStatus();
-setInterval(updateLiveStatus, 60000);
+// NE PAS appeler updateLiveStatus() ici — CMS_DATA n'est pas encore chargé.
+// L'appel est fait après loadCmsContentSync() ci-dessous.
 
 // ===== MOTEUR CMS — chargement de contenu.json =====
 // Synchrone via XMLHttpRequest pour que tout soit en place avant le reste du JS
@@ -3175,6 +3175,10 @@ function applyCmsContent() {
 
 loadCmsContentSync();
 applyCmsContent();
+
+// Live status — doit être après loadCmsContentSync() pour que CMS_DATA soit disponible
+updateLiveStatus();
+setInterval(updateLiveStatus, 60000);
 
 // SEO meta tags depuis CMS
 (function() {
