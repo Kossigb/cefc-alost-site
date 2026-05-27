@@ -2193,10 +2193,17 @@ footer::before {
           <span id="liveCtaText">Voir sur YouTube</span>
         </a>
       </div>
-      <div class="live-embed" id="liveEmbed" style="display:none;">
+      <div class="live-embed" id="liveEmbed" style="display:none; position:relative;">
         <iframe id="liveIframe" src="" frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <div id="liveFallback" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.75); align-items:center; justify-content:center; border-radius:12px; flex-direction:column; gap:12px;">
+          <p style="color:#fff; margin:0; font-size:14px; opacity:0.8;">La vidéo ne s'affiche pas&nbsp;?</p>
+          <a id="liveFallbackLink" href="#" target="_blank" rel="noopener"
+            style="background:#FF0000; color:#fff; padding:14px 28px; border-radius:8px; font-weight:700; font-size:16px; text-decoration:none;">
+            ▶ Regarder sur YouTube
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -2919,16 +2926,17 @@ const LIVE_STRINGS = {
 
 function youtubeEmbedUrl(url) {
   if (!url) return '';
+  const origin = encodeURIComponent(location.origin);
+  const params = `autoplay=1&rel=0&origin=${origin}`;
   const m = url.match(/[?&]v=([^&]+)/);
-  if (m) return `https://www.youtube.com/embed/${m[1]}?autoplay=1&rel=0`;
+  if (m) return `https://www.youtube.com/embed/${m[1]}?${params}`;
   const s = url.match(/youtu\.be\/([^?&#]+)/);
-  if (s) return `https://www.youtube.com/embed/${s[1]}?autoplay=1&rel=0`;
+  if (s) return `https://www.youtube.com/embed/${s[1]}?${params}`;
   const lv = url.match(/youtube\.com\/live\/([^?&#]+)/);
-  if (lv) return `https://www.youtube.com/embed/${lv[1]}?autoplay=1&rel=0`;
+  if (lv) return `https://www.youtube.com/embed/${lv[1]}?${params}`;
   if (url.includes('youtube.com/embed/')) return url;
-  // Fallback : chaîne live
   const ch = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
-  if (ch) return `https://www.youtube.com/embed/live_stream?channel=${ch}&autoplay=1`;
+  if (ch) return `https://www.youtube.com/embed/live_stream?channel=${ch}&autoplay=1&origin=${origin}`;
   return '';
 }
 
@@ -2951,6 +2959,19 @@ function activateLiveEmbed(embedUrl, titleText, subText, ctaLabel) {
   if (liveIframe && !liveIframe.src) liveIframe.src = embedUrl;
   if (liveEmbed) liveEmbed.style.display = 'block';
   if (liveCard) liveCard.classList.add('live-card--on');
+  // Fallback : si YouTube bloque l'embed (embedding désactivé sur la vidéo),
+  // on affiche un bouton direct vers YouTube après 6 secondes
+  const fallback = document.getElementById('liveFallback');
+  const fallbackLink = document.getElementById('liveFallbackLink');
+  const watchUrl = (CMS_DATA && CMS_DATA.live && CMS_DATA.live.url) || embedUrl;
+  if (fallbackLink) fallbackLink.href = watchUrl;
+  // L'iframe YouTube peut charger une page noire si l'embedding est désactivé sur la vidéo.
+  // On ne peut pas détecter ça en cross-origin, donc on affiche toujours le fallback après 8s.
+  if (fallback) {
+    setTimeout(function() {
+      if (document.contains(fallback)) fallback.style.display = 'flex';
+    }, 8000);
+  }
 }
 
 function updateLiveStatus() {
