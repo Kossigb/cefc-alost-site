@@ -74,6 +74,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   letter-spacing: 0.01em;
 }
 .nav-links a:hover { color: var(--silver); }
+.nav-links a.nav-current { color: var(--silver); font-weight: 600; }
 .nav-live {
   display: inline-flex; align-items: center; gap: 6px;
   color: var(--live);

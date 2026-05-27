@@ -23,6 +23,18 @@ navLinks.querySelectorAll('a').forEach(a => {
   });
 });
 
+// ===== ACTIVE NAV LINK =====
+(function() {
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  document.querySelectorAll('.nav-links a[href]').forEach(a => {
+    const href = a.getAttribute('href').replace(/\/$/, '') || '/';
+    if (href === path || (path === '' && href === '/')) {
+      a.classList.add('nav-current');
+      a.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+
 // ===== REVEAL ON SCROLL =====
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
