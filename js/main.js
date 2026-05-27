@@ -1,14 +1,11 @@
 // ===== NAV SCROLL =====
 const nav = document.getElementById('nav');
+const isInnerPage = window.location.pathname !== '/' && window.location.pathname !== '/index.html';
 window.addEventListener('scroll', () => {
   if (window.scrollY > 40) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
+  else if (!isInnerPage) nav.classList.remove('scrolled');
 }, { passive: true });
-
-// On inner pages, nav is always visible (not transparent)
-if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
-  nav.classList.add('scrolled');
-}
+if (isInnerPage) nav.classList.add('scrolled');
 
 // ===== MOBILE MENU =====
 const navToggle = document.getElementById('navToggle');
