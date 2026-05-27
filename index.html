@@ -2927,7 +2927,7 @@ const LIVE_STRINGS = {
 function youtubeEmbedUrl(url) {
   if (!url) return '';
   const origin = encodeURIComponent(location.origin);
-  const params = `autoplay=1&rel=0&origin=${origin}`;
+  const params = `autoplay=1&mute=1&rel=0&origin=${origin}`;
   const m = url.match(/[?&]v=([^&]+)/);
   if (m) return `https://www.youtube.com/embed/${m[1]}?${params}`;
   const s = url.match(/youtu\.be\/([^?&#]+)/);
