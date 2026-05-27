@@ -3,41 +3,466 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin · CEFC Alost</title>
+  <title>Admin — CEFC Alost</title>
   <link rel="icon" type="image/png" href="../cefc-logo.png" />
-  <!-- Decap CMS (anciennement Netlify CMS) -->
+  <!-- Netlify Identity for authentication -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1b3e 0%, #16213e 100%);
+      color: #e3e3eb;
+      min-height: 100vh;
+      display: none;
+    }
+
+    body.authenticated {
+      display: block;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(227, 227, 235, 0.2);
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .logout-btn {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: #6d28d9;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(227, 227, 235, 0.1);
+    }
+
+    .tab-btn {
+      padding: 10px 18px;
+      background: transparent;
+      color: #9ca3af;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: #e3e3eb;
+    }
+
+    .tab-btn.active {
+      color: #e3e3eb;
+      border-bottom-color: #7c3aed;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-section {
+      background: rgba(227, 227, 235, 0.05);
+      border: 1px solid rgba(227, 227, 235, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(227, 227, 235, 0.08);
+      border: 1px solid rgba(227, 227, 235, 0.2);
+      border-radius: 8px;
+      color: #e3e3eb;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="date"]:focus,
+    input[type="number"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #7c3aed;
+      background: rgba(227, 227, 235, 0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      padding: 10px 16px;
+      background: #7c3aed;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #6d28d9;
+    }
+
+    button.secondary {
+      background: rgba(227, 227, 235, 0.1);
+      color: #e3e3eb;
+    }
+
+    button.secondary:hover {
+      background: rgba(227, 227, 235, 0.15);
+    }
+
+    button.danger {
+      background: #dc2626;
+    }
+
+    button.danger:hover {
+      background: #b91c1c;
+    }
+
+    .item-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(227, 227, 235, 0.1);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .item-card h4 {
+      margin-bottom: 12px;
+      color: #e3e3eb;
+    }
+
+    .item-card.collapsed {
+      padding: 12px 16px;
+      cursor: pointer;
+    }
+
+    .item-card.collapsed:hover {
+      background: rgba(227, 227, 235, 0.08);
+    }
+
+    .item-card.collapsed h4 {
+      margin: 0;
+    }
+
+    .item-fields {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(227, 227, 235, 0.1);
+    }
+
+    .item-actions button {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .status-message {
+      padding: 12px 16px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 8px;
+      color: #86efac;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .status-message.error {
+      background: rgba(220, 38, 38, 0.1);
+      border-color: rgba(220, 38, 38, 0.3);
+      color: #fca5a5;
+    }
+
+    .status-message.show {
+      display: block;
+    }
+
+    .save-area {
+      background: rgba(227, 227, 235, 0.05);
+      border: 1px solid rgba(227, 227, 235, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 40px;
+    }
+
+    .save-area h3 {
+      margin-bottom: 16px;
+      color: #e3e3eb;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .button-group button {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .item-actions {
+        flex-direction: column;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+
+    .add-btn {
+      background: #16a765;
+      margin-bottom: 20px;
+    }
+
+    .add-btn:hover {
+      background: #15803d;
+    }
+
+    .info-box {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: #bfdbfe;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      color: #9ca3af;
+    }
+
+    .loading.show {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-  <!-- Raccourcis rapides (visibles après connexion) -->
-  <div id="uploadShortcut" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;display:none;flex-direction:column;gap:10px;align-items:flex-end">
-    <a href="/admin/dashboard.html"
-       style="display:inline-flex;align-items:center;gap:8px;background:#1a1f35;color:#e2e8f0;padding:10px 18px;border-radius:12px;text-decoration:none;font-family:sans-serif;font-weight:600;font-size:13px;box-shadow:0 4px 20px rgba(0,0,0,0.4);border:1px solid #252b42">
-      🏠 Tableau de bord
-    </a>
-    <a href="/admin/upload.html"
-       style="display:inline-flex;align-items:center;gap:8px;background:#7c3aed;color:white;padding:10px 18px;border-radius:12px;text-decoration:none;font-family:sans-serif;font-weight:600;font-size:13px;box-shadow:0 4px 20px rgba(0,0,0,0.4)">
-      📸 Upload photos (multi)
-    </a>
+  <div class="container">
+    <header>
+      <h1>Admin — CEFC Alost</h1>
+      <button class="logout-btn" onclick="logoutAdmin()">Déconnexion</button>
+    </header>
+
+    <div class="status-message" id="statusMsg"></div>
+
+    <div class="info-box" style="margin-bottom: 30px; background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.5);">
+      <strong>📝 Flux de travail:</strong> Modifiez le contenu ci-dessous → Cliquez "Enregistrer" → Téléchargez le JSON → Remplacez <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 3px;">contenu.json</code> à la racine → Commit & Push avec Git
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="annonces">📢 Annonces</button>
+      <button class="tab-btn" data-tab="horaires">⏰ Horaires</button>
+      <button class="tab-btn" data-tab="live">📺 Live</button>
+      <button class="tab-btn" data-tab="messages">💬 Messages</button>
+      <button class="tab-btn" data-tab="jeunesse">👥 Jeunesse</button>
+      <button class="tab-btn" data-tab="departements">🏢 Depts</button>
+      <button class="tab-btn" data-tab="divers">⚙️ Divers</button>
+    </div>
+
+    <!-- ANNONCES TAB -->
+    <div class="tab-content active" id="annonces-tab">
+      <div class="info-box">
+        Gérez les annonces affichées sur la page d'accueil et autres sections.
+      </div>
+      <button class="add-btn" onclick="addNewAnnonce()">+ Ajouter une annonce</button>
+      <div id="annonces-list"></div>
+      <div class="save-area">
+        <h3>Enregistrer les modifications</h3>
+        <div class="button-group">
+          <button onclick="saveContent()">💾 Enregistrer</button>
+          <button class="secondary" onclick="downloadJSON('annonces')">⬇️ Télécharger JSON</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HORAIRES TAB -->
+    <div class="tab-content" id="horaires-tab">
+      <div class="info-box">
+        Gérez les horaires des services et navette.
+      </div>
+      <div id="horaires-content"></div>
+      <div class="save-area">
+        <h3>Enregistrer les modifications</h3>
+        <div class="button-group">
+          <button onclick="saveContent()">💾 Enregistrer</button>
+          <button class="secondary" onclick="downloadJSON('all')">⬇️ Télécharger JSON</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE TAB -->
+    <div class="tab-content" id="live-tab">
+      <div class="info-box">
+        Gérez le statut du live et les liens YouTube.
+      </div>
+      <div id="live-content"></div>
+      <div class="save-area">
+        <h3>Enregistrer les modifications</h3>
+        <div class="button-group">
+          <button onclick="saveContent()">💾 Enregistrer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES TAB -->
+    <div class="tab-content" id="messages-tab">
+      <div class="info-box">
+        Gérez les messages du pasteur et bannières.
+      </div>
+      <div id="messages-content"></div>
+      <div class="save-area">
+        <h3>Enregistrer les modifications</h3>
+        <div class="button-group">
+          <button onclick="saveContent()">💾 Enregistrer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JEUNESSE TAB -->
+    <div class="tab-content" id="jeunesse-tab">
+      <div class="info-box">
+        Gérez les informations JEFC (Jeunesse Évangélique).
+      </div>
+      <div id="jeunesse-content"></div>
+      <div class="save-area">
+        <h3>Enregistrer les modifications</h3>
+        <div class="button-group">
+          <button onclick="saveContent()">💾 Enregistrer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPARTEMENTS TAB -->
+    <div class="tab-content" id="departements-tab">
+      <div class="info-box">
+        Gérez les 9 départements de l'église.
+      </div>
+      <button class="add-btn" onclick="addNewDepartement()">+ Ajouter un département</button>
+      <div id="departements-list"></div>
+      <div class="save-area">
+        <h3>Enregistrer les modifications</h3>
+        <div class="button-group">
+          <button onclick="saveContent()">💾 Enregistrer</button>
+          <button class="secondary" onclick="downloadJSON('departements')">⬇️ Télécharger JSON</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVERS TAB -->
+    <div class="tab-content" id="divers-tab">
+      <div class="info-box">
+        Gérez les autres contenus (vision, mission, équipe, footer, etc.).
+      </div>
+      <div id="divers-content"></div>
+      <div class="save-area">
+        <h3>Enregistrer les modifications</h3>
+        <div class="button-group">
+          <button onclick="saveContent()">💾 Enregistrer</button>
+          <button class="secondary" onclick="downloadAllJSON()">⬇️ Télécharger tout en JSON</button>
+        </div>
+      </div>
+    </div>
   </div>
-  <!-- Le CMS s'injecte ici -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    // Si l'utilisateur n'est pas connecté à Netlify Identity, on le redirige automatiquement
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
-        } else {
-          document.getElementById('uploadShortcut').style.display = 'block';
-        }
-      });
-      window.netlifyIdentity.on("login", () => {
-        document.getElementById('uploadShortcut').style.display = 'block';
-      });
-    }
-  </script>
+
+  <script src="admin.js"></script>
 </body>
 </html>
