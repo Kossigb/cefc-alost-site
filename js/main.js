@@ -443,6 +443,12 @@ const I18N = {
     "nav.depts": "Afdelingen",
     "nav.contact": "Contact",
     "nav.live": "Live",
+    "nav.dons": "Giften",
+    "anniv.banner.title": "Viert u uw verjaardag?",
+    "anniv.banner.sub": "Deel de datum met de familie van de kerk — wij vieren u graag!",
+    "anniv.banner.cta": "Mijn verjaardag delen",
+    "jefc.social.label": "Volg de JEFC",
+    "dons.eyebrow": "Geef met vreugde",
     "hero.eyebrow": "Welkom bij",
     "hero.title.1": "Evangelisch Centrum",
     "hero.title.2": "De Christelijke Familie",
@@ -510,6 +516,12 @@ const I18N = {
     "nav.depts": "Departments",
     "nav.contact": "Contact",
     "nav.live": "Live",
+    "nav.dons": "Giving",
+    "anniv.banner.title": "Celebrating your birthday?",
+    "anniv.banner.sub": "Share the date with the church family — we'd love to celebrate you!",
+    "anniv.banner.cta": "Share my birthday",
+    "jefc.social.label": "Follow JEFC",
+    "dons.eyebrow": "Give with joy",
     "hero.eyebrow": "Welcome to",
     "hero.title.1": "Evangelical Centre",
     "hero.title.2": "The Christian Family",
@@ -575,6 +587,14 @@ const I18N = {
 // On parcourt le DOM et on remplace tous les nœuds texte qui matchent.
 const TRANSLATIONS_NL = {
   // NAV
+  "Dons": "Giften",
+  "Anniversaires": "Verjaardagen",
+  // ANNIVERSARY BANNER
+  "Vous fêtez votre anniversaire ?": "Viert u uw verjaardag?",
+  "Partagez la date avec la famille de l'église — nous serons heureux de vous célébrer !": "Deel de datum met de familie van de kerk — wij vieren u graag!",
+  "Partager mon anniversaire": "Mijn verjaardag delen",
+  // JEFC SOCIAL
+  "Suivez la JEFC": "Volg de JEFC",
   "Accueil": "Welkom",
   "Services": "Diensten",
   "Jeunesse": "Jeugd",
@@ -836,6 +856,14 @@ const TRANSLATIONS_NL = {
 // ===== TRADUCTIONS ANGLAISES =====
 const TRANSLATIONS_EN = {
   // NAV
+  "Dons": "Giving",
+  "Anniversaires": "Birthdays",
+  // ANNIVERSARY BANNER
+  "Vous fêtez votre anniversaire ?": "Celebrating your birthday?",
+  "Partagez la date avec la famille de l'église — nous serons heureux de vous célébrer !": "Share the date with the church family — we'd love to celebrate you!",
+  "Partager mon anniversaire": "Share my birthday",
+  // JEFC SOCIAL
+  "Suivez la JEFC": "Follow JEFC",
   "Accueil": "Home",
   "Services": "Services",
   "Jeunesse": "Youth",
