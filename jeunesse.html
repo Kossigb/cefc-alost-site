@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jeunesse JEFC — CEFC Alost</title>
+<meta name="description" content="La JEFC (Jeunesse Évangélique La Famille Chrétienne) se réunit toutes les deux semaines à Alost. Un espace de foi, de croissance et de fraternité pour la jeunesse." />
+<meta name="theme-color" content="#1A1B3E" />
+<meta property="og:title" content="Jeunesse JEFC — CEFC Alost" />
+<meta property="og:description" content="Un espace de foi, de croissance et de fraternité pour la jeunesse évangélique." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://cefclabornealost9300.netlify.app/cefc-logo.png" />
+<meta property="og:url" content="https://cefclabornealost9300.netlify.app/jeunesse.html" />
+<link rel="canonical" href="https://cefclabornealost9300.netlify.app/jeunesse.html" />
+<link rel="icon" href="/cefc-logo.png" type="image/png" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Netlify Identity widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) { window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; }); }
+    });
+  }
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav" id="nav" aria-label="Navigation principale">
+  <a href="/" class="nav-brand">
+    <div class="nav-brand-mark">
+      <img src="/cefc-logo.png" alt="Logo CEFC" />
+    </div>
+    <div class="nav-brand-text">
+      <strong>CEFC</strong>
+      <span>La Famille Chrétienne</span>
+    </div>
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <a href="/" data-i18n="nav.home">Accueil</a>
+    <a href="/services.html" data-i18n="nav.services">Services</a>
+    <a href="/jeunesse.html" data-i18n="nav.youth">Jeunesse</a>
+    <a href="/navette.html" data-i18n="nav.shuttle">Navette</a>
+    <a href="/departements.html" data-i18n="nav.depts">Départements</a>
+    <a href="/contact.html" data-i18n="nav.contact">Contact</a>
+    <a href="https://www.youtube.com/@CE_laFamilleChretienne" class="nav-live" target="_blank" rel="noopener">
+      <span class="dot"></span> <span data-i18n="nav.live">Live</span>
+    </a>
+    <div class="lang-switch" role="group" aria-label="Langue / Taal / Language">
+      <button type="button" data-lang="fr" class="active">FR</button>
+      <button type="button" data-lang="nl">NL</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== JEFC ===== -->
+<section class="jefc" id="jeunesse">
+  <div class="container">
+    <div class="jefc-grid">
+      <div class="reveal" style="text-align: center;">
+        <div class="jefc-display-wrap">
+          <div class="jefc-display" id="jefcDisplay" aria-label="JEFC"><span class="jefc-letter">J</span><span class="jefc-letter">E</span><span class="jefc-letter">F</span><span class="jefc-letter">C</span></div>
+          <span class="jefc-display-sub" data-i18n="jefc.sub">Jeunesse Évangélique · La Famille Chrétienne</span>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay: 0.15s;">
+        <span class="jefc-tag" data-cms="jefc.tag">Toutes les 2 semaines</span>
+        <h2 class="jefc-title" data-cms="jefc.titre">Un espace de foi, de croissance et de fraternité.</h2>
+        <p class="jefc-text" data-cms="jefc.texte">La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.</p>
+        <div class="jefc-meta">
+          <div>
+            <div class="jefc-meta-item-label">Fréquence</div>
+            <div class="jefc-meta-item-val" data-cms="jefc.frequence">Toutes les 2 semaines</div>
+          </div>
+          <div>
+            <div class="jefc-meta-item-label">Lieu</div>
+            <div class="jefc-meta-item-val" data-cms="jefc.lieu">Wijngaardveld 29</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ANNONCES (rendues depuis contenu.json) ===== -->
+<section class="annonces" id="annonces">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="annonces.eyebrow">À ne pas manquer</span>
+      <h2 class="section-title"><span data-i18n="annonces.title.1">Annonces</span> <span class="accent" data-i18n="annonces.title.2">& événements</span></h2>
+    </div>
+    <div class="annonces-list" data-cms-list="annonces.liste">
+      <template data-cms-template>
+        <div class="annonce-card reveal" data-cms-feature="important">
+          <img class="annonce-img" data-cms-img="image" alt="" loading="lazy" />
+          <div class="annonce-flag" data-cms-show-if="important">
+            <span class="dot"></span>
+            <span data-i18n-static="A la une">À la une</span>
+          </div>
+          <div class="annonce-date" data-cms-field="date">Date</div>
+          <h3 class="annonce-titre" data-cms-field="titre">Titre de l'annonce</h3>
+          <p class="annonce-description" data-cms-field="description">Description</p>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <p class="footer-verse">« Car nous sommes tous un seul corps en Christ. »</p>
+    <p class="footer-verse-ref">Romains 12 : 5</p>
+
+    <div class="footer-links">
+      <a href="/services.html">Horaires</a>
+      <a href="/jeunesse.html">JEFC — Jeunesse Évangélique</a>
+      <a href="/navette.html">Navette</a>
+      <a href="/departements.html">Départements</a>
+      <a href="/contact.html">Contact</a>
+      <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener">YouTube</a>
+    </div>
+
+    <div style="display:flex; gap:20px; justify-content:center; margin-bottom:40px;">
+      <!-- YouTube -->
+      <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener"
+         style="width:42px;height:42px;border-radius:50%;background:rgba(227,227,235,0.08);border:0.5px solid rgba(227,227,235,0.2);display:inline-flex;align-items:center;justify-content:center;color:rgba(227,227,235,0.7);transition:background 0.2s,color 0.2s;"
+         aria-label="YouTube"
+         onmouseover="this.style.background='rgba(227,227,235,0.18)';this.style.color='#E3E3EB';"
+         onmouseout="this.style.background='rgba(227,227,235,0.08)';this.style.color='rgba(227,227,235,0.7)';">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
+      </a>
+      <!-- Facebook -->
+      <a href="https://www.facebook.com/CentreEvangeliqueLaFamilleChretienne" target="_blank" rel="noopener"
+         style="width:42px;height:42px;border-radius:50%;background:rgba(227,227,235,0.08);border:0.5px solid rgba(227,227,235,0.2);display:inline-flex;align-items:center;justify-content:center;color:rgba(227,227,235,0.7);transition:background 0.2s,color 0.2s;"
+         aria-label="Facebook"
+         onmouseover="this.style.background='rgba(227,227,235,0.18)';this.style.color='#E3E3EB';"
+         onmouseout="this.style.background='rgba(227,227,235,0.08)';this.style.color='rgba(227,227,235,0.7)';">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+      <!-- WhatsApp -->
+      <a href="https://wa.me/32000000000" target="_blank" rel="noopener"
+         style="width:42px;height:42px;border-radius:50%;background:rgba(227,227,235,0.08);border:0.5px solid rgba(227,227,235,0.2);display:inline-flex;align-items:center;justify-content:center;color:rgba(227,227,235,0.7);transition:background 0.2s,color 0.2s;"
+         aria-label="WhatsApp"
+         onmouseover="this.style.background='rgba(227,227,235,0.18)';this.style.color='#E3E3EB';"
+         onmouseout="this.style.background='rgba(227,227,235,0.08)';this.style.color='rgba(227,227,235,0.7)';">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      </a>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-meta">
+      <div>© 2026 CEFC – Alost. Tous droits réservés.</div>
+      <div>Centre Évangélique · La Famille Chrétienne</div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
