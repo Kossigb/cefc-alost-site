@@ -154,7 +154,7 @@
   "live": {
     "titre_nl": "De dienst is nu live",
     "sous_titre": "Rejoignez-nous dès maintenant.",
-    "actif": true,
+    "actif": false,
     "url": "https://www.youtube.com/watch?v=9KLSGdyRQlk",
     "sous_titre_nl": "Sluit u nu bij ons aan.",
     "titre": "Le culte est en direct",
@@ -165,8 +165,14 @@
   "photos_culte": {
     "_commentaire": "Photos du culte du dimanche affichees dans le carrousel.",
     "eyebrow": "Photos",
+    "eyebrow_nl": "Foto's",
+    "eyebrow_en": "Photos",
     "titre": "culte",
+    "titre_nl": "eredienst",
+    "titre_en": "worship",
     "sous_titre": "Retrouvez les moments forts de nos rassemblements dominicaux.",
+    "sous_titre_nl": "Ontdek de hoogtepunten van onze zondagse samenkomsten.",
+    "sous_titre_en": "Discover the highlights of our Sunday gatherings.",
     "photos": []
   },
   "horaires": {
