@@ -20,10 +20,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Authentication check
 function checkAuth() {
-  // Check if user is logged in via Netlify Identity
-  if (!window.netlifyIdentity || !window.netlifyIdentity.currentUser()) {
-    // Redirect to login if not authenticated
-    window.location.href = '/';
+  // Check if Netlify Identity is available
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', user => {
+      if (!user) {
+        // Show login prompt if not authenticated
+        window.netlifyIdentity.on('login', () => {
+          window.location.reload();
+        });
+      } else {
+        // User is authenticated, show admin panel
+        document.body.classList.add('authenticated');
+      }
+    });
+  } else {
+    // Fallback: allow local development without auth
+    document.body.classList.add('authenticated');
   }
 }
 
@@ -514,12 +526,13 @@ function updateDivers(section, field, value) {
 // Save content
 async function saveContent() {
   try {
-    // This would need a backend to actually save to the server
-    // For now, we'll just download it and instruct the user to commit
+    // Download the updated JSON file
     downloadAllJSON();
-    showStatus('Contenu prêt à être téléchargé. Remplacez contenu.json et commitez les changements.', 'success');
+
+    // Show clear instructions for the user
+    showStatus('✓ Contenu téléchargé! Remplacez contenu.json à la racine du site, puis commitez avec git.', 'success');
   } catch (error) {
-    showStatus('Erreur lors de la sauvegarde', 'error');
+    showStatus('Erreur: Impossible de télécharger le fichier', 'error');
     console.error('Error saving:', error);
   }
 }
@@ -562,7 +575,10 @@ function downloadFile(content, filename, type) {
 // Logout
 function logoutAdmin() {
   if (window.netlifyIdentity) {
-    window.netlifyIdentity.logout();
+    window.netlifyIdentity.logout().then(() => {
+      window.location.href = '/';
+    });
+  } else {
+    window.location.href = '/';
   }
-  window.location.href = '/';
 }
