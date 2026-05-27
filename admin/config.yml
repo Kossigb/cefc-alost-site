@@ -12,7 +12,164 @@ locale: 'fr'
 collections:
 
   # ========================================
-  # 1. HORAIRES DES CULTES
+  # 1. ANNONCES ET EVENEMENTS  (le + utilisé)
+  # ========================================
+  - name: "annonces"
+    label: "📢 Annonces et événements"
+    label_singular: "annonces"
+    files:
+      - name: "annonces_data"
+        label: "Annonces"
+        file: "contenu.json"
+        fields:
+          - label: "Annonces et evenements"
+            name: "annonces"
+            widget: "object"
+            fields:
+              - label: "Liste des annonces"
+                name: "liste"
+                widget: "list"
+                hint: "Ajoutez, modifiez ou supprimez des annonces. Les annonces importantes s'affichent en bleu nuit."
+                fields:
+                  - label: "Photo illustrative (optionnel)"
+                    name: "image"
+                    widget: "image"
+                    required: false
+                    hint: "Image affichée en haut de la carte d'annonce. Taille recommandée : 800×400px."
+                  - { label: "Titre (FR)", name: "titre", widget: "string" }
+                  - { label: "Titre (NL)", name: "titre_nl", widget: "string", required: false }
+                  - { label: "Titre (EN)", name: "titre_en", widget: "string", required: false }
+                  - { label: "Date (FR) — ex: Dimanche 14 juin 2026", name: "date", widget: "string" }
+                  - { label: "Date (NL)", name: "date_nl", widget: "string", required: false }
+                  - { label: "Date (EN)", name: "date_en", widget: "string", required: false }
+                  - { label: "Description (FR)", name: "description", widget: "text" }
+                  - { label: "Description (NL)", name: "description_nl", widget: "text", required: false }
+                  - { label: "Description (EN)", name: "description_en", widget: "text", required: false }
+                  - { label: "Mettre en avant ? (fond bleu nuit)", name: "important", widget: "boolean", default: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 2. BANNIERE EN HAUT DU SITE
+  # ========================================
+  - name: "banniere"
+    label: "🔔 Bannière d'annonce"
+    label_singular: "banniere"
+    files:
+      - name: "banniere_data"
+        label: "Bannière"
+        file: "contenu.json"
+        fields:
+          - label: "Banniere en haut du site"
+            name: "banniere"
+            widget: "object"
+            hint: "La bannière s'affiche tout en haut du site. Activez-la pour les annonces urgentes."
+            fields:
+              - { label: "Afficher la banniere ?", name: "active", widget: "boolean", default: false }
+              - { label: "Texte de la banniere (FR)", name: "texte", widget: "string", required: false, hint: "Ex: Grande celebration le 14 juin — Tous invites !" }
+              - { label: "Texte de la banniere (NL)", name: "texte_nl", widget: "string", required: false }
+              - { label: "Texte de la banniere (EN)", name: "texte_en", widget: "string", required: false }
+              - { label: "Lien (optionnel)", name: "lien", widget: "string", required: false, hint: "Ex: #annonces ou une URL externe" }
+              - { label: "Texte du lien (FR)", name: "lien_texte", widget: "string", required: false, hint: "Ex: En savoir plus" }
+              - { label: "Texte du lien (NL)", name: "lien_texte_nl", widget: "string", required: false }
+              - { label: "Texte du lien (EN)", name: "lien_texte_en", widget: "string", required: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 3. MESSAGE DU PASTEUR
+  # ========================================
+  - name: "message_pasteur"
+    label: "✉️ Message du Pasteur"
+    label_singular: "message"
+    files:
+      - name: "message_data"
+        label: "Message du Pasteur"
+        file: "contenu.json"
+        fields:
+          - label: "Message du Pasteur"
+            name: "message_pasteur"
+            widget: "object"
+            hint: "Affiche un encart avec un message du pasteur sur le site. Activez-le pour le rendre visible."
+            fields:
+              - { label: "Afficher le message ?", name: "actif", widget: "boolean", default: false }
+              - { label: "Nom de l'auteur", name: "auteur", widget: "string", default: "Pasteur Guy KOBI" }
+              - { label: "Titre du message", name: "titre", widget: "string", default: "Un message du pasteur" }
+              - { label: "Message (FR)", name: "message", widget: "text", required: false, hint: "Le message s'affichera en citation sur le site" }
+              - { label: "Message (NL)", name: "message_nl", widget: "text", required: false }
+              - { label: "Message (EN)", name: "message_en", widget: "text", required: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 4. PHOTOS DU CULTE (GALERIE)
+  # ========================================
+  - name: "photos_culte"
+    label: "📸 Photos du culte"
+    files:
+      - name: "photos_data"
+        label: "Galerie photos"
+        file: "photos_culte.json"
+        description: >
+          COMMENT AJOUTER PLUSIEURS PHOTOS EN UNE FOIS :
+          Utilisez le bouton flottant "📸 Upload photos" en bas à droite —
+          il permet de glisser-déposer toutes vos photos en une seule opération.
+        fields:
+          - label: "Photos du culte"
+            name: "photos"
+            widget: "list"
+            minimize_collapsed: true
+            collapsed: false
+            hint: >
+              ➕ Astuce : utilisez le bouton flottant "📸 Upload photos" pour uploader toutes vos photos
+              en même temps. Elles apparaîtront automatiquement dans la galerie.
+            field:
+              label: "Photo"
+              name: "url"
+              widget: "image"
+              hint: "Cliquez pour choisir une photo déjà uploadée ou en uploader une nouvelle"
+
+  # ========================================
+  # 5. HORAIRES DES CULTES
   # ========================================
   - name: "horaires"
     label: "🕐 Horaires des cultes"
@@ -71,112 +228,40 @@ collections:
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
           - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 2. PHOTOS DU CULTE (GALERIE)
+  # 6. JEFC — JEUNESSE
   # ========================================
-  - name: "photos_culte"
-    label: "📸 Photos du culte"
+  - name: "jefc"
+    label: "✝ JEFC — Jeunesse"
     files:
-      - name: "photos_data"
-        label: "Galerie photos"
-        file: "photos_culte.json"
-        description: >
-          COMMENT AJOUTER PLUSIEURS PHOTOS EN UNE FOIS :
-          1. Cliquez sur le bouton "Médias" (icône en haut à droite)
-          2. Cliquez "Téléverser une nouvelle ressource"
-          3. Sélectionnez TOUTES vos photos en même temps (Ctrl+clic ou Cmd+clic)
-          4. Revenez ici et ajoutez chaque photo dans la liste ci-dessous (elles sont déjà uploadées, cliquez juste Choisir)
-        fields:
-          - label: "Photos du culte"
-            name: "photos"
-            widget: "list"
-            minimize_collapsed: true
-            collapsed: false
-            hint: >
-              ➕ Astuce : uploadez d'abord TOUTES vos photos en cliquant sur l'icône 📁 Médias en haut à droite,
-              puis revenez ici et ajoutez-les une par une (elles seront déjà disponibles dans la bibliothèque, 1 clic par photo).
-            field:
-              label: "Photo"
-              name: "url"
-              widget: "image"
-              hint: "Cliquez pour choisir une photo déjà uploadée ou en uploader une nouvelle"
-
-  # ========================================
-  # 3. ANNONCES ET EVENEMENTS
-  # ========================================
-  - name: "annonces"
-    label: "📢 Annonces et événements"
-    label_singular: "annonces"
-    files:
-      - name: "annonces_data"
-        label: "Annonces"
+      - name: "jefc_data"
+        label: "Section Jeunesse (JEFC)"
         file: "contenu.json"
         fields:
-          - label: "Annonces et evenements"
-            name: "annonces"
+          - label: "Section JEFC"
+            name: "jefc"
             widget: "object"
+            hint: "Section 'Jeunesse' visible sur le site. Modifiez le titre, le texte et la fréquence."
             fields:
-              - label: "Liste des annonces"
-                name: "liste"
-                widget: "list"
-                hint: "Ajoutez, modifiez ou supprimez des annonces. Les annonces importantes s'affichent en bleu nuit."
-                fields:
-                  - label: "Photo illustrative (optionnel)"
-                    name: "image"
-                    widget: "image"
-                    required: false
-                    hint: "Image affichée en haut de la carte d'annonce. Taille recommandée : 800×400px."
-                  - { label: "Titre (FR)", name: "titre", widget: "string" }
-                  - { label: "Titre (NL)", name: "titre_nl", widget: "string", required: false }
-                  - { label: "Titre (EN)", name: "titre_en", widget: "string", required: false }
-                  - { label: "Date (FR) — ex: Dimanche 14 juin 2026", name: "date", widget: "string" }
-                  - { label: "Date (NL)", name: "date_nl", widget: "string", required: false }
-                  - { label: "Date (EN)", name: "date_en", widget: "string", required: false }
-                  - { label: "Description (FR)", name: "description", widget: "text" }
-                  - { label: "Description (NL)", name: "description_nl", widget: "text", required: false }
-                  - { label: "Description (EN)", name: "description_en", widget: "text", required: false }
-                  - { label: "Mettre en avant ? (fond bleu nuit)", name: "important", widget: "boolean", default: false }
+              - { label: "Etiquette fréquence (FR)", name: "tag", widget: "string", hint: "Ex: Toutes les 2 semaines", default: "Toutes les 2 semaines" }
+              - { label: "Etiquette fréquence (NL)", name: "tag_nl", widget: "string", required: false, hint: "Ex: Om de 2 weken" }
+              - { label: "Etiquette fréquence (EN)", name: "tag_en", widget: "string", required: false, hint: "Ex: Every 2 weeks" }
+              - { label: "Titre (FR)", name: "titre", widget: "string", hint: "Ex: Un espace de foi, de croissance et de fraternité." }
+              - { label: "Titre (NL)", name: "titre_nl", widget: "string", required: false }
+              - { label: "Titre (EN)", name: "titre_en", widget: "string", required: false }
+              - { label: "Texte de présentation (FR)", name: "texte", widget: "text" }
+              - { label: "Texte de présentation (NL)", name: "texte_nl", widget: "text", required: false }
+              - { label: "Texte de présentation (EN)", name: "texte_en", widget: "text", required: false }
+              - { label: "Fréquence — valeur (FR)", name: "frequence", widget: "string", hint: "Ex: Toutes les 2 semaines" }
+              - { label: "Fréquence — valeur (NL)", name: "frequence_nl", widget: "string", required: false }
+              - { label: "Fréquence — valeur (EN)", name: "frequence_en", widget: "string", required: false }
+              - { label: "Lieu", name: "lieu", widget: "string", hint: "Ex: Wijngaardveld 29" }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
-          - { label: "_", name: "horaires", widget: "hidden" }
-          - { label: "_", name: "navette", widget: "hidden" }
-          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "_", name: "departements", widget: "hidden" }
-          - { label: "_", name: "photos_culte", widget: "hidden" }
-          - { label: "_", name: "temoignages", widget: "hidden" }
-          - { label: "_", name: "message_pasteur", widget: "hidden" }
-          - { label: "_", name: "infos", widget: "hidden" }
-          - { label: "_", name: "footer", widget: "hidden" }
-          - { label: "_", name: "vision_mission", widget: "hidden" }
-          - { label: "_", name: "_GUIDE", widget: "hidden" }
-
-  # ========================================
-  # 4. BANNIERE EN HAUT DU SITE
-  # ========================================
-  - name: "banniere"
-    label: "🔔 Bannière d'annonce"
-    label_singular: "banniere"
-    files:
-      - name: "banniere_data"
-        label: "Bannière"
-        file: "contenu.json"
-        fields:
-          - label: "Banniere en haut du site"
-            name: "banniere"
-            widget: "object"
-            hint: "La bannière s'affiche tout en haut du site. Activez-la pour les annonces importantes."
-            fields:
-              - { label: "Afficher la banniere ?", name: "active", widget: "boolean", default: false }
-              - { label: "Texte de la banniere (FR)", name: "texte", widget: "string", required: false, hint: "Ex: Grande celebration le 14 juin — Tous invites !" }
-              - { label: "Texte de la banniere (NL)", name: "texte_nl", widget: "string", required: false }
-              - { label: "Texte de la banniere (EN)", name: "texte_en", widget: "string", required: false }
-              - { label: "Lien (optionnel)", name: "lien", widget: "string", required: false, hint: "Ex: #annonces ou une URL externe" }
-              - { label: "Texte du lien (FR)", name: "lien_texte", widget: "string", required: false, hint: "Ex: En savoir plus" }
-              - { label: "Texte du lien (NL)", name: "lien_texte_nl", widget: "string", required: false }
-              - { label: "Texte du lien (EN)", name: "lien_texte_en", widget: "string", required: false }
-          - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
           - { label: "_", name: "navette", widget: "hidden" }
           - { label: "_", name: "equipe_pastorale", widget: "hidden" }
@@ -188,46 +273,11 @@ collections:
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
           - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 5. MESSAGE DU PASTEUR
-  # ========================================
-  - name: "message_pasteur"
-    label: "✉️ Message du Pasteur"
-    label_singular: "message"
-    files:
-      - name: "message_data"
-        label: "Message du Pasteur"
-        file: "contenu.json"
-        fields:
-          - label: "Message du Pasteur"
-            name: "message_pasteur"
-            widget: "object"
-            hint: "Affiche un encart avec un message du pasteur sur le site. Activez-le pour le rendre visible."
-            fields:
-              - { label: "Afficher le message ?", name: "actif", widget: "boolean", default: false }
-              - { label: "Nom de l'auteur", name: "auteur", widget: "string", default: "Pasteur Guy KOBI" }
-              - { label: "Titre du message (FR)", name: "titre", widget: "string", default: "Un message du pasteur" }
-              - { label: "Message (FR)", name: "message", widget: "text", required: false, hint: "Le message s'affichera en citation sur le site" }
-              - { label: "Message (NL)", name: "message_nl", widget: "text", required: false }
-              - { label: "Message (EN)", name: "message_en", widget: "text", required: false }
-          - { label: "_", name: "hero", widget: "hidden" }
-          - { label: "_", name: "banniere", widget: "hidden" }
-          - { label: "_", name: "horaires", widget: "hidden" }
-          - { label: "_", name: "navette", widget: "hidden" }
-          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "_", name: "departements", widget: "hidden" }
-          - { label: "_", name: "photos_culte", widget: "hidden" }
-          - { label: "_", name: "annonces", widget: "hidden" }
-          - { label: "_", name: "temoignages", widget: "hidden" }
-          - { label: "_", name: "infos", widget: "hidden" }
-          - { label: "_", name: "footer", widget: "hidden" }
-          - { label: "_", name: "vision_mission", widget: "hidden" }
-          - { label: "_", name: "_GUIDE", widget: "hidden" }
-
-  # ========================================
-  # 6. TEMOIGNAGES
+  # 7. TEMOIGNAGES
   # ========================================
   - name: "temoignages"
     label: "💬 Témoignages"
@@ -265,10 +315,91 @@ collections:
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
           - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 7. NAVETTE GRATUITE
+  # 8. VISION & MISSION
+  # ========================================
+  - name: "vision_mission"
+    label: "✝ Vision & Mission"
+    files:
+      - name: "vision_mission_data"
+        label: "Vision & Mission"
+        file: "contenu.json"
+        fields:
+          - label: "Vision & Mission"
+            name: "vision_mission"
+            widget: "object"
+            hint: "Section 'Qui sommes-nous' visible sur le site. Activez-la pour la rendre visible."
+            fields:
+              - { label: "Afficher la section ?", name: "actif", widget: "boolean", default: true }
+              - { label: "Surtitre (FR) — ex: Qui sommes-nous", name: "eyebrow", widget: "string" }
+              - { label: "Surtitre (NL)", name: "eyebrow_nl", widget: "string", required: false }
+              - { label: "Surtitre (EN)", name: "eyebrow_en", widget: "string", required: false }
+              - { label: "Titre de la section (FR)", name: "titre", widget: "string" }
+              - { label: "Titre de la section (NL)", name: "titre_nl", widget: "string", required: false }
+              - { label: "Titre de la section (EN)", name: "titre_en", widget: "string", required: false }
+              - { label: "Texte d'introduction (FR)", name: "intro", widget: "text", hint: "Courte présentation de l'église pour les nouveaux visiteurs." }
+              - { label: "Texte d'introduction (NL)", name: "intro_nl", widget: "text", required: false }
+              - { label: "Texte d'introduction (EN)", name: "intro_en", widget: "text", required: false }
+              - { label: "Titre Vision (FR)", name: "vision_titre", widget: "string", default: "Notre Vision" }
+              - { label: "Titre Vision (NL)", name: "vision_titre_nl", widget: "string", required: false }
+              - { label: "Titre Vision (EN)", name: "vision_titre_en", widget: "string", required: false }
+              - { label: "Texte Vision (FR)", name: "vision_texte", widget: "text" }
+              - { label: "Texte Vision (NL)", name: "vision_texte_nl", widget: "text", required: false }
+              - { label: "Texte Vision (EN)", name: "vision_texte_en", widget: "text", required: false }
+              - { label: "Titre Mission (FR)", name: "mission_titre", widget: "string", default: "Notre Mission" }
+              - { label: "Titre Mission (NL)", name: "mission_titre_nl", widget: "string", required: false }
+              - { label: "Titre Mission (EN)", name: "mission_titre_en", widget: "string", required: false }
+              - { label: "Texte Mission (FR)", name: "mission_texte", widget: "text" }
+              - { label: "Texte Mission (NL)", name: "mission_texte_nl", widget: "text", required: false }
+              - { label: "Texte Mission (EN)", name: "mission_texte_en", widget: "text", required: false }
+              - label: "Valeurs (4 maximum)"
+                name: "valeurs"
+                widget: "list"
+                max: 4
+                fields:
+                  - label: "Icône"
+                    name: "icone"
+                    widget: "select"
+                    hint: "Choisissez l'icône qui correspond à cette valeur"
+                    options:
+                      - { label: "📖 La Parole", value: "parole" }
+                      - { label: "🙏 La Prière", value: "priere" }
+                      - { label: "👨‍👩‍👧 La Famille", value: "famille" }
+                      - { label: "✝️ L'Évangélisation", value: "evangelisation" }
+                  - { label: "Titre de la valeur (FR)", name: "titre", widget: "string" }
+                  - { label: "Titre de la valeur (NL)", name: "titre_nl", widget: "string", required: false }
+                  - { label: "Titre de la valeur (EN)", name: "titre_en", widget: "string", required: false }
+                  - { label: "Description courte (FR)", name: "texte", widget: "text" }
+                  - { label: "Description courte (NL)", name: "texte_nl", widget: "text", required: false }
+                  - { label: "Description courte (EN)", name: "texte_en", widget: "text", required: false }
+              - { label: "Verset biblique (FR)", name: "verset_texte", widget: "string" }
+              - { label: "Verset biblique (NL)", name: "verset_texte_nl", widget: "string", required: false }
+              - { label: "Verset biblique (EN)", name: "verset_texte_en", widget: "string", required: false }
+              - { label: "Référence du verset (FR)", name: "verset_reference", widget: "string" }
+              - { label: "Référence du verset (NL)", name: "verset_reference_nl", widget: "string", required: false }
+              - { label: "Référence du verset (EN)", name: "verset_reference_en", widget: "string", required: false }
+          - { label: "_", name: "hero", widget: "hidden" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 9. NAVETTE GRATUITE
   # ========================================
   - name: "navette"
     label: "🚌 Navette gratuite"
@@ -313,10 +444,58 @@ collections:
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
           - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 8. EQUIPE PASTORALE
+  # 10. PAGE D'ACCUEIL (HERO)
+  # ========================================
+  - name: "hero"
+    label: "🏠 Page d'accueil (Hero)"
+    label_singular: "hero"
+    files:
+      - name: "hero_data"
+        label: "Texte de la page d'accueil"
+        file: "contenu.json"
+        fields:
+          - label: "Section d'accueil"
+            name: "hero"
+            widget: "object"
+            hint: "Texte principal affiché en grand sur la page d'accueil."
+            fields:
+              - { label: "Surtitre (FR)", name: "eyebrow", widget: "string", hint: "Ex: Bienvenue au" }
+              - { label: "Surtitre (NL)", name: "eyebrow_nl", widget: "string", required: false, hint: "Ex: Welkom bij" }
+              - { label: "Surtitre (EN)", name: "eyebrow_en", widget: "string", required: false, hint: "Ex: Welcome to" }
+              - { label: "Titre — ligne 1 (FR)", name: "titre_ligne1", widget: "string", hint: "Ex: Centre Évangélique" }
+              - { label: "Titre — ligne 1 (NL)", name: "titre_ligne1_nl", widget: "string", required: false }
+              - { label: "Titre — ligne 1 (EN)", name: "titre_ligne1_en", widget: "string", required: false }
+              - { label: "Titre — ligne 2 (FR, en italique)", name: "titre_ligne2", widget: "string", hint: "Ex: La Famille Chrétienne" }
+              - { label: "Titre — ligne 2 (NL)", name: "titre_ligne2_nl", widget: "string", required: false }
+              - { label: "Titre — ligne 2 (EN)", name: "titre_ligne2_en", widget: "string", required: false }
+              - { label: "Sous-titre (FR)", name: "sous_titre", widget: "text", hint: "Phrase d'accueil sous le titre principal" }
+              - { label: "Sous-titre (NL)", name: "sous_titre_nl", widget: "text", required: false }
+              - { label: "Sous-titre (EN)", name: "sous_titre_en", widget: "text", required: false }
+              - { label: "Texte bouton principal", name: "bouton_principal", widget: "string", default: "Nos horaires" }
+              - { label: "Texte bouton secondaire", name: "bouton_secondaire", widget: "string", default: "Rejoindre le live" }
+          - { label: "_", name: "banniere", widget: "hidden" }
+          - { label: "_", name: "horaires", widget: "hidden" }
+          - { label: "_", name: "navette", widget: "hidden" }
+          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
+          - { label: "_", name: "departements", widget: "hidden" }
+          - { label: "_", name: "photos_culte", widget: "hidden" }
+          - { label: "_", name: "annonces", widget: "hidden" }
+          - { label: "_", name: "temoignages", widget: "hidden" }
+          - { label: "_", name: "message_pasteur", widget: "hidden" }
+          - { label: "_", name: "infos", widget: "hidden" }
+          - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
+          - { label: "_", name: "_GUIDE", widget: "hidden" }
+
+  # ========================================
+  # 11. EQUIPE PASTORALE
   # ========================================
   - name: "equipe"
     label: "👥 Equipe pastorale"
@@ -352,10 +531,12 @@ collections:
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
           - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 9. DEPARTEMENTS
+  # 12. DEPARTEMENTS
   # ========================================
   - name: "departements"
     label: "🏛️ Departements"
@@ -397,10 +578,12 @@ collections:
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
           - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 10. INFORMATIONS DE CONTACT
+  # 13. INFORMATIONS DE CONTACT
   # ========================================
   - name: "infos"
     label: "📍 Informations de contact"
@@ -421,8 +604,8 @@ collections:
               - { label: "E-mail de contact", name: "email", widget: "string", required: false }
               - { label: "Lien YouTube", name: "youtube", widget: "string", required: false, hint: "URL complete de la chaine YouTube" }
               - { label: "Lien Facebook", name: "facebook", widget: "string", required: false, hint: "URL complete de la page Facebook" }
+              - { label: "Lien Instagram", name: "instagram", widget: "string", required: false, hint: "URL complete du compte Instagram" }
               - { label: "Numero WhatsApp (ex: +32xxx)", name: "whatsapp", widget: "string", required: false, hint: "Numero avec indicatif international. Sera utilise pour le lien wa.me/" }
-              - { label: "Lien Instagram", name: "instagram", widget: "string", required: false }
               - { label: "ID chaine YouTube (pour le live automatique)", name: "youtube_channel_id", widget: "string", required: false, hint: "Ex: UCp4V6MSF87MGlw87fPdl-sg — Paramètres YouTube Studio > Chaîne > Avancé" }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
@@ -436,10 +619,12 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
           - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 11. FOOTER — VERSET BIBLIQUE
+  # 14. FOOTER — VERSET BIBLIQUE
   # ========================================
   - name: "footer"
     label: "📖 Verset du footer"
@@ -472,107 +657,29 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
+          - { label: "_", name: "seo", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }
 
   # ========================================
-  # 12. TEXTE HERO (PAGE D'ACCUEIL)
+  # 15. SEO — RÉFÉRENCEMENT
   # ========================================
-  - name: "hero"
-    label: "🏠 Page d'accueil (Hero)"
-    label_singular: "hero"
+  - name: "seo"
+    label: "🔍 SEO & Réseaux sociaux"
     files:
-      - name: "hero_data"
-        label: "Texte de la page d'accueil"
+      - name: "seo_data"
+        label: "Référencement et partage"
         file: "contenu.json"
         fields:
-          - label: "Section d'accueil"
-            name: "hero"
+          - label: "SEO et réseaux sociaux"
+            name: "seo"
             widget: "object"
-            hint: "Texte principal affiché en grand sur la page d'accueil."
+            hint: "Ces textes apparaissent dans Google et quand le site est partagé sur Facebook, WhatsApp, etc."
             fields:
-              - { label: "Surtitre (FR)", name: "eyebrow", widget: "string", hint: "Ex: Bienvenue au" }
-              - { label: "Surtitre (NL)", name: "eyebrow_nl", widget: "string", required: false, hint: "Ex: Welkom bij" }
-              - { label: "Surtitre (EN)", name: "eyebrow_en", widget: "string", required: false, hint: "Ex: Welcome to" }
-              - { label: "Titre — ligne 1 (FR)", name: "titre_ligne1", widget: "string", hint: "Ex: Centre Évangélique" }
-              - { label: "Titre — ligne 1 (NL)", name: "titre_ligne1_nl", widget: "string", required: false }
-              - { label: "Titre — ligne 1 (EN)", name: "titre_ligne1_en", widget: "string", required: false }
-              - { label: "Titre — ligne 2 (FR, en italique)", name: "titre_ligne2", widget: "string", hint: "Ex: La Famille Chrétienne" }
-              - { label: "Titre — ligne 2 (NL)", name: "titre_ligne2_nl", widget: "string", required: false }
-              - { label: "Titre — ligne 2 (EN)", name: "titre_ligne2_en", widget: "string", required: false }
-              - { label: "Sous-titre (FR)", name: "sous_titre", widget: "text", hint: "Phrase d'accueil sous le titre principal" }
-              - { label: "Sous-titre (NL)", name: "sous_titre_nl", widget: "text", required: false }
-              - { label: "Sous-titre (EN)", name: "sous_titre_en", widget: "text", required: false }
-              - { label: "Texte bouton principal", name: "bouton_principal", widget: "string", default: "Nos horaires" }
-              - { label: "Texte bouton secondaire", name: "bouton_secondaire", widget: "string", default: "Rejoindre le live" }
-          - { label: "_", name: "banniere", widget: "hidden" }
-          - { label: "_", name: "horaires", widget: "hidden" }
-          - { label: "_", name: "navette", widget: "hidden" }
-          - { label: "_", name: "equipe_pastorale", widget: "hidden" }
-          - { label: "_", name: "departements", widget: "hidden" }
-          - { label: "_", name: "photos_culte", widget: "hidden" }
-          - { label: "_", name: "annonces", widget: "hidden" }
-          - { label: "_", name: "temoignages", widget: "hidden" }
-          - { label: "_", name: "message_pasteur", widget: "hidden" }
-          - { label: "_", name: "infos", widget: "hidden" }
-          - { label: "_", name: "footer", widget: "hidden" }
-          - { label: "_", name: "vision_mission", widget: "hidden" }
-          - { label: "_", name: "_GUIDE", widget: "hidden" }
-
-  # ========================================
-  # 13. VISION & MISSION
-  # ========================================
-  - name: "vision_mission"
-    label: "✝ Vision & Mission"
-    files:
-      - name: "vision_mission_data"
-        label: "Vision & Mission"
-        file: "contenu.json"
-        fields:
-          - label: "Vision & Mission"
-            name: "vision_mission"
-            widget: "object"
-            hint: "Section 'Qui sommes-nous' visible sur le site. Activez-la pour la rendre visible."
-            fields:
-              - { label: "Afficher la section ?", name: "actif", widget: "boolean", default: true }
-              - { label: "Surtitre (FR) — ex: Qui sommes-nous", name: "eyebrow", widget: "string" }
-              - { label: "Surtitre (NL)", name: "eyebrow_nl", widget: "string", required: false }
-              - { label: "Surtitre (EN)", name: "eyebrow_en", widget: "string", required: false }
-              - { label: "Titre de la section (FR)", name: "titre", widget: "string" }
-              - { label: "Titre de la section (NL)", name: "titre_nl", widget: "string", required: false }
-              - { label: "Titre de la section (EN)", name: "titre_en", widget: "string", required: false }
-              - { label: "Texte d'introduction (FR)", name: "intro", widget: "text", hint: "Courte présentation de l'église pour les nouveaux visiteurs." }
-              - { label: "Texte d'introduction (NL)", name: "intro_nl", widget: "text", required: false }
-              - { label: "Texte d'introduction (EN)", name: "intro_en", widget: "text", required: false }
-              - { label: "Titre Vision (FR)", name: "vision_titre", widget: "string", default: "Notre Vision" }
-              - { label: "Titre Vision (NL)", name: "vision_titre_nl", widget: "string", required: false }
-              - { label: "Titre Vision (EN)", name: "vision_titre_en", widget: "string", required: false }
-              - { label: "Texte Vision (FR)", name: "vision_texte", widget: "text" }
-              - { label: "Texte Vision (NL)", name: "vision_texte_nl", widget: "text", required: false }
-              - { label: "Texte Vision (EN)", name: "vision_texte_en", widget: "text", required: false }
-              - { label: "Titre Mission (FR)", name: "mission_titre", widget: "string", default: "Notre Mission" }
-              - { label: "Titre Mission (NL)", name: "mission_titre_nl", widget: "string", required: false }
-              - { label: "Titre Mission (EN)", name: "mission_titre_en", widget: "string", required: false }
-              - { label: "Texte Mission (FR)", name: "mission_texte", widget: "text" }
-              - { label: "Texte Mission (NL)", name: "mission_texte_nl", widget: "text", required: false }
-              - { label: "Texte Mission (EN)", name: "mission_texte_en", widget: "text", required: false }
-              - label: "Valeurs (4 maximum)"
-                name: "valeurs"
-                widget: "list"
-                max: 4
-                fields:
-                  - { label: "Icône (parole / priere / famille / evangelisation)", name: "icone", widget: "string", hint: "Mots-clés : parole, priere, famille, evangelisation" }
-                  - { label: "Titre de la valeur (FR)", name: "titre", widget: "string" }
-                  - { label: "Titre de la valeur (NL)", name: "titre_nl", widget: "string", required: false }
-                  - { label: "Titre de la valeur (EN)", name: "titre_en", widget: "string", required: false }
-                  - { label: "Description courte (FR)", name: "texte", widget: "text" }
-                  - { label: "Description courte (NL)", name: "texte_nl", widget: "text", required: false }
-                  - { label: "Description courte (EN)", name: "texte_en", widget: "text", required: false }
-              - { label: "Verset biblique (FR)", name: "verset_texte", widget: "string" }
-              - { label: "Verset biblique (NL)", name: "verset_texte_nl", widget: "string", required: false }
-              - { label: "Verset biblique (EN)", name: "verset_texte_en", widget: "string", required: false }
-              - { label: "Référence du verset (FR)", name: "verset_reference", widget: "string" }
-              - { label: "Référence du verset (NL)", name: "verset_reference_nl", widget: "string", required: false }
-              - { label: "Référence du verset (EN)", name: "verset_reference_en", widget: "string", required: false }
+              - { label: "Titre de l'onglet (Google)", name: "meta_title", widget: "string", hint: "Ex: CEFC Alost — La Famille Chrétienne (max 60 caractères recommandé)" }
+              - { label: "Description Google", name: "meta_description", widget: "text", hint: "Texte affiché sous le titre dans Google. Max 155 caractères recommandé." }
+              - { label: "Titre pour réseaux sociaux (Facebook, WhatsApp…)", name: "og_title", widget: "string", hint: "Peut être identique au titre Google" }
+              - { label: "Description pour réseaux sociaux", name: "og_description", widget: "text", hint: "Texte affiché lors du partage du lien sur WhatsApp, Facebook, etc." }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
@@ -585,4 +692,6 @@ collections:
           - { label: "_", name: "message_pasteur", widget: "hidden" }
           - { label: "_", name: "infos", widget: "hidden" }
           - { label: "_", name: "footer", widget: "hidden" }
+          - { label: "_", name: "vision_mission", widget: "hidden" }
+          - { label: "_", name: "jefc", widget: "hidden" }
           - { label: "_", name: "_GUIDE", widget: "hidden" }

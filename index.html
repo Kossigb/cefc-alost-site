@@ -2244,17 +2244,17 @@ footer::before {
         </div>
       </div>
       <div class="reveal" style="transition-delay: 0.15s;">
-        <span class="jefc-tag">Toutes les 2 semaines</span>
-        <h2 class="jefc-title">Un espace de foi, de croissance et de fraternité.</h2>
-        <p class="jefc-text">La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.</p>
+        <span class="jefc-tag" data-cms="jefc.tag">Toutes les 2 semaines</span>
+        <h2 class="jefc-title" data-cms="jefc.titre">Un espace de foi, de croissance et de fraternité.</h2>
+        <p class="jefc-text" data-cms="jefc.texte">La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.</p>
         <div class="jefc-meta">
           <div>
             <div class="jefc-meta-item-label">Fréquence</div>
-            <div class="jefc-meta-item-val">Toutes les 2 semaines</div>
+            <div class="jefc-meta-item-val" data-cms="jefc.frequence">Toutes les 2 semaines</div>
           </div>
           <div>
             <div class="jefc-meta-item-label">Lieu</div>
-            <div class="jefc-meta-item-val">Wijngaardveld 29</div>
+            <div class="jefc-meta-item-val" data-cms="jefc.lieu">Wijngaardveld 29</div>
           </div>
         </div>
       </div>
@@ -3104,6 +3104,17 @@ function applyCmsContent() {
 
 loadCmsContentSync();
 applyCmsContent();
+
+// SEO meta tags depuis CMS
+(function() {
+  const seo = CMS_DATA && CMS_DATA.seo;
+  if (!seo) return;
+  const set = (sel, attr, val) => { const el = document.querySelector(sel); if (el && val) el.setAttribute(attr, val); };
+  if (seo.meta_title) document.title = seo.meta_title;
+  set('meta[name="description"]', 'content', seo.meta_description);
+  set('meta[property="og:title"]', 'content', seo.og_title);
+  set('meta[property="og:description"]', 'content', seo.og_description);
+})();
 
 // ===== VISION & MISSION — rendu depuis contenu.json =====
 (function() {

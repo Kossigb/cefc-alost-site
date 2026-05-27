@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau de bord · CEFC Admin</title>
+  <link rel="icon" type="image/png" href="../cefc-logo.png" />
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0d17;
+      --surface: #131624;
+      --surface2: #1a1f35;
+      --border: #252b42;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --accent: #7c3aed;
+      --accent-soft: rgba(124,58,237,0.12);
+      --green: #22c55e;
+      --green-soft: rgba(34,197,94,0.12);
+      --orange: #f59e0b;
+      --orange-soft: rgba(245,158,11,0.12);
+      --red: #ef4444;
+      --red-soft: rgba(239,68,68,0.12);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .header-brand img { width: 32px; height: 32px; border-radius: 8px; }
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .pill:hover { opacity: 0.8; }
+    .pill-ghost { color: var(--muted); border-color: var(--border); background: none; }
+    .pill-primary { background: var(--accent); color: white; }
+
+    /* ── Main ── */
+    .main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    /* ── Auth screen ── */
+    #authScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      text-align: center;
+      gap: 1rem;
+    }
+    #authScreen .lock { font-size: 3.5rem; }
+    #authScreen h2 { font-size: 1.4rem; }
+    #authScreen p { color: var(--muted); font-size: 0.9rem; }
+    .btn-login {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    .btn-login:hover { background: #6d28d9; }
+
+    /* ── Dashboard ── */
+    #dashboard { display: none; }
+
+    .greeting { margin-bottom: 2.5rem; }
+    .greeting h1 { font-size: 1.6rem; font-weight: 700; }
+    .greeting p { color: var(--muted); margin-top: 0.3rem; font-size: 0.92rem; }
+
+    /* Quick actions */
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.85rem;
+    }
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 2.5rem;
+    }
+    .qa-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.4rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .qa-card:hover { border-color: var(--accent); background: var(--surface2); }
+    .qa-icon {
+      font-size: 1.6rem;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-soft);
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .qa-card.green .qa-icon { background: var(--green-soft); }
+    .qa-card.orange .qa-icon { background: var(--orange-soft); }
+    .qa-label { font-weight: 600; font-size: 0.9rem; }
+    .qa-sub { color: var(--muted); font-size: 0.78rem; margin-top: 0.15rem; }
+
+    /* Status cards */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .status-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.15s;
+    }
+    .status-card:hover { border-color: var(--accent); }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-on { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .dot-off { background: var(--muted); }
+    .status-name { font-size: 0.85rem; font-weight: 500; }
+    .status-val { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+
+    /* All sections grid */
+    .sections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 0.75rem;
+    }
+    .section-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .section-card:hover { border-color: var(--accent); background: var(--surface2); }
+    .section-emoji { font-size: 1.3rem; width: 36px; text-align: center; flex-shrink: 0; }
+    .section-info-name { font-weight: 600; font-size: 0.87rem; }
+    .section-info-desc { color: var(--muted); font-size: 0.75rem; margin-top: 0.1rem; }
+    .section-arrow { margin-left: auto; color: var(--muted); font-size: 0.8rem; }
+
+    /* Footer */
+    .footer-bar {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      padding: 2.5rem 1rem 1.5rem;
+    }
+    .footer-bar a { color: var(--muted); text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .header { padding: 0 1rem; }
+      .main { padding: 1.5rem 1rem; }
+      .quick-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-brand">
+    <img src="../cefc-logo.png" alt="CEFC" onerror="this.style.display='none'" />
+    <span>CEFC Admin</span>
+  </div>
+  <div class="header-actions">
+    <a href="/" class="pill pill-ghost" target="_blank">Voir le site</a>
+    <button class="pill pill-ghost" id="logoutBtn" style="display:none" onclick="netlifyIdentity.logout()">Déconnexion</button>
+  </div>
+</header>
+
+<!-- Auth screen -->
+<div id="authScreen" class="main">
+  <div class="lock">🔒</div>
+  <h2>Connexion requise</h2>
+  <p>Connectez-vous pour accéder au tableau de bord.</p>
+  <button class="btn-login" onclick="netlifyIdentity.open('login')">Se connecter</button>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard" class="main">
+
+  <div class="greeting">
+    <h1>Bonjour 👋</h1>
+    <p>Que souhaitez-vous modifier aujourd'hui ?</p>
+  </div>
+
+  <!-- Quick actions -->
+  <p class="section-label">Actions rapides</p>
+  <div class="quick-actions">
+    <a class="qa-card" href="/admin/#/collections/annonces">
+      <div class="qa-icon">📢</div>
+      <div>
+        <div class="qa-label">Nouvelle annonce</div>
+        <div class="qa-sub">Ajouter ou modifier une annonce</div>
+      </div>
+    </a>
+    <a class="qa-card green" href="/admin/upload.html">
+      <div class="qa-icon">📸</div>
+      <div>
+        <div class="qa-label">Uploader des photos</div>
+        <div class="qa-sub">Galerie du culte — multi-upload</div>
+      </div>
+    </a>
+    <a class="qa-card orange" href="/admin/#/collections/banniere">
+      <div class="qa-icon">🔔</div>
+      <div>
+        <div class="qa-label">Bannière du site</div>
+        <div class="qa-sub">Activer ou modifier l'annonce en haut</div>
+      </div>
+    </a>
+    <a class="qa-card" href="/admin/#/collections/message_pasteur">
+      <div class="qa-icon">✉️</div>
+      <div>
+        <div class="qa-label">Message du pasteur</div>
+        <div class="qa-sub">Activer ou modifier le message</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Live status -->
+  <p class="section-label">Fonctionnalités activables</p>
+  <div class="status-grid" id="statusGrid">
+    <a class="status-card" href="/admin/#/collections/banniere">
+      <div class="status-dot" id="dotBanniere"></div>
+      <div>
+        <div class="status-name">Bannière</div>
+        <div class="status-val" id="valBanniere">Chargement…</div>
+      </div>
+    </a>
+    <a class="status-card" href="/admin/#/collections/message_pasteur">
+      <div class="status-dot" id="dotMessage"></div>
+      <div>
+        <div class="status-name">Message du pasteur</div>
+        <div class="status-val" id="valMessage">Chargement…</div>
+      </div>
+    </a>
+    <a class="status-card" href="/admin/#/collections/temoignages">
+      <div class="status-dot" id="dotTemoignages"></div>
+      <div>
+        <div class="status-name">Témoignages</div>
+        <div class="status-val" id="valTemoignages">Chargement…</div>
+      </div>
+    </a>
+    <a class="status-card" href="/admin/#/collections/vision_mission">
+      <div class="status-dot" id="dotVision"></div>
+      <div>
+        <div class="status-name">Vision & Mission</div>
+        <div class="status-val" id="valVision">Chargement…</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- All sections -->
+  <p class="section-label">Toutes les sections</p>
+  <div class="sections-grid">
+    <a class="section-card" href="/admin/#/collections/annonces">
+      <div class="section-emoji">📢</div>
+      <div>
+        <div class="section-info-name">Annonces et événements</div>
+        <div class="section-info-desc">Ajouter, modifier, supprimer des annonces</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/banniere">
+      <div class="section-emoji">🔔</div>
+      <div>
+        <div class="section-info-name">Bannière d'annonce</div>
+        <div class="section-info-desc">Texte urgent en haut du site</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/message_pasteur">
+      <div class="section-emoji">✉️</div>
+      <div>
+        <div class="section-info-name">Message du Pasteur</div>
+        <div class="section-info-desc">Encart de message pastoral</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/upload.html">
+      <div class="section-emoji">📸</div>
+      <div>
+        <div class="section-info-name">Photos du culte</div>
+        <div class="section-info-desc">Upload multi-photos pour la galerie</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/horaires">
+      <div class="section-emoji">🕐</div>
+      <div>
+        <div class="section-info-name">Horaires des cultes</div>
+        <div class="section-info-desc">Dimanche, mercredi, vendredi</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/jefc">
+      <div class="section-emoji">✝</div>
+      <div>
+        <div class="section-info-name">JEFC — Jeunesse</div>
+        <div class="section-info-desc">Texte et fréquence de la JEFC</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/temoignages">
+      <div class="section-emoji">💬</div>
+      <div>
+        <div class="section-info-name">Témoignages</div>
+        <div class="section-info-desc">Témoignages des membres</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/vision_mission">
+      <div class="section-emoji">✝</div>
+      <div>
+        <div class="section-info-name">Vision & Mission</div>
+        <div class="section-info-desc">Qui sommes-nous, valeurs, verset</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/navette">
+      <div class="section-emoji">🚌</div>
+      <div>
+        <div class="section-info-name">Navette gratuite</div>
+        <div class="section-info-desc">Horaires et créneaux</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/hero">
+      <div class="section-emoji">🏠</div>
+      <div>
+        <div class="section-info-name">Page d'accueil (Hero)</div>
+        <div class="section-info-desc">Grand titre et sous-titre</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/equipe">
+      <div class="section-emoji">👥</div>
+      <div>
+        <div class="section-info-name">Équipe pastorale</div>
+        <div class="section-info-desc">Membres et rôles</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/departements">
+      <div class="section-emoji">🏛️</div>
+      <div>
+        <div class="section-info-name">Départements</div>
+        <div class="section-info-desc">Noms, descriptions, photos</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/infos">
+      <div class="section-emoji">📍</div>
+      <div>
+        <div class="section-info-name">Contact & Réseaux sociaux</div>
+        <div class="section-info-desc">Adresse, email, YouTube, Facebook…</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/footer">
+      <div class="section-emoji">📖</div>
+      <div>
+        <div class="section-info-name">Verset du footer</div>
+        <div class="section-info-desc">Bas de page — verset biblique</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/#/collections/seo">
+      <div class="section-emoji">🔍</div>
+      <div>
+        <div class="section-info-name">SEO & Réseaux sociaux</div>
+        <div class="section-info-desc">Titre et description Google/WhatsApp</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+    <a class="section-card" href="/admin/">
+      <div class="section-emoji">⚙️</div>
+      <div>
+        <div class="section-info-name">Ouvrir l'éditeur complet</div>
+        <div class="section-info-desc">Interface Decap CMS complète</div>
+      </div>
+      <span class="section-arrow">›</span>
+    </a>
+  </div>
+
+</div>
+
+<div class="footer-bar">
+  CEFC Alost · Admin — <a href="/" target="_blank">Voir le site</a>
+</div>
+
+<script>
+  window.netlifyIdentity.on('init', user => {
+    if (user) showDashboard();
+    else showAuth();
+  });
+  window.netlifyIdentity.on('login', () => {
+    window.netlifyIdentity.close();
+    showDashboard();
+  });
+  window.netlifyIdentity.on('logout', () => {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'none';
+    showAuth();
+  });
+
+  function showAuth() {
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+
+  function showDashboard() {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('logoutBtn').style.display = 'inline-flex';
+    loadStatus();
+  }
+
+  function setStatus(dotId, valId, active, activeText, inactiveText) {
+    const dot = document.getElementById(dotId);
+    const val = document.getElementById(valId);
+    if (active) {
+      dot.className = 'status-dot dot-on';
+      val.textContent = activeText;
+    } else {
+      dot.className = 'status-dot dot-off';
+      val.textContent = inactiveText;
+    }
+  }
+
+  function loadStatus() {
+    fetch('/contenu.json?_=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        const b = data.banniere || {};
+        setStatus('dotBanniere', 'valBanniere',
+          !!b.active,
+          b.texte ? 'Active : « ' + b.texte.slice(0, 30) + (b.texte.length > 30 ? '…' : '') + ' »' : 'Active (sans texte)',
+          'Désactivée');
+
+        const m = data.message_pasteur || {};
+        setStatus('dotMessage', 'valMessage',
+          !!m.actif,
+          m.message ? 'Actif : « ' + m.message.slice(0, 30) + (m.message.length > 30 ? '…' : '') + ' »' : 'Actif (sans texte)',
+          'Désactivé');
+
+        const t = data.temoignages || {};
+        const nb = Array.isArray(t.liste) ? t.liste.length : 0;
+        setStatus('dotTemoignages', 'valTemoignages',
+          !!t.actif,
+          'Actif · ' + nb + ' témoignage' + (nb !== 1 ? 's' : ''),
+          'Désactivé · ' + nb + ' témoignage' + (nb !== 1 ? 's' : '') + ' en attente');
+
+        const v = data.vision_mission || {};
+        setStatus('dotVision', 'valVision',
+          !!v.actif,
+          'Visible sur le site',
+          'Masquée');
+      })
+      .catch(() => {
+        ['dotBanniere','dotMessage','dotTemoignages','dotVision'].forEach(id => {
+          document.getElementById(id).className = 'status-dot dot-off';
+        });
+        ['valBanniere','valMessage','valTemoignages','valVision'].forEach(id => {
+          document.getElementById(id).textContent = 'Impossible de charger';
+        });
+      });
+  }
+</script>
+</body>
+</html>
