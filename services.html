@@ -105,8 +105,123 @@
         <p class="service-desc" data-cms="horaires.vendredi.description">Une soirée consacrée à l'intercession et à la recherche de la face de Dieu.</p>
       </div>
     </div>
+
+    <!-- Carte adresse -->
+    <div class="address-card reveal" style="transition-delay:0.25s;">
+      <div class="address-card-inner">
+        <div class="address-card-left">
+          <div class="address-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <p class="address-label" data-i18n="services.address.label">Notre adresse</p>
+            <p class="address-line1">Wijngaardveld 29</p>
+            <p class="address-line2">9300 Alost (Aalst) · Belgique</p>
+          </div>
+        </div>
+        <div class="address-card-right">
+          <span class="address-shuttle-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span data-i18n="services.address.shuttle">Navette gratuite disponible</span>
+          </span>
+          <a href="https://maps.google.com/?q=Wijngaardveld+29+9300+Aalst+Belgique" target="_blank" rel="noopener" class="address-map-btn" data-i18n="services.address.map">
+            Voir sur la carte →
+          </a>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<style>
+.address-card {
+  margin-top: 32px;
+  background: var(--night);
+  border-radius: 18px;
+  border: 0.5px solid rgba(227,227,235,0.12);
+  overflow: hidden;
+}
+.address-card-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 36px;
+  flex-wrap: wrap;
+}
+.address-card-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.address-icon {
+  width: 48px; height: 48px; min-width: 48px;
+  border-radius: 12px;
+  background: rgba(227,227,235,0.07);
+  border: 0.5px solid rgba(227,227,235,0.15);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(227,227,235,0.7);
+}
+.address-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(227,227,235,0.4);
+  margin-bottom: 4px;
+}
+.address-line1 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--silver);
+  line-height: 1.3;
+}
+.address-line2 {
+  font-size: 13px;
+  color: rgba(227,227,235,0.5);
+  margin-top: 2px;
+}
+.address-card-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.address-shuttle-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(227,227,235,0.05);
+  border: 0.5px solid rgba(227,227,235,0.12);
+  border-radius: 999px;
+  font-size: 12px;
+  color: rgba(227,227,235,0.55);
+}
+.address-map-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 20px;
+  background: rgba(227,227,235,0.08);
+  border: 0.5px solid rgba(227,227,235,0.2);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--silver);
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.address-map-btn:hover {
+  background: rgba(227,227,235,0.14);
+  border-color: rgba(227,227,235,0.35);
+}
+@media (max-width: 640px) {
+  .address-card-inner { padding: 22px 20px; }
+  .address-card-right { width: 100%; }
+  .address-map-btn { flex: 1; justify-content: center; }
+}
+</style>
 
 <!-- ===== FOOTER ===== -->
 <footer>
