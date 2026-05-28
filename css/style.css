@@ -1713,6 +1713,7 @@ section { scroll-margin-top: 80px; }
 }
 .vision .section-head { text-align: center; margin-bottom: 48px; }
 .vision .section-title { color: var(--silver); }
+.vision .section-title .accent { color: var(--silver); }
 .vision-lead {
   text-align: center;
   max-width: 620px;
