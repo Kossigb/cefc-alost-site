@@ -1,80 +1,162 @@
 // ════════════════════════════════════════
 //  CEFC Alost — Admin Dashboard
+//  Auth: Netlify Identity (email + password)
 // ════════════════════════════════════════
-
-// ── IDENTIFIANTS PAR DÉFAUT ──
-// Pour changer : connecte-toi > Paramètres > Changer le mot de passe
-// Les identifiants sont stockés dans le navigateur (localStorage)
-const DEFAULT_USER = 'admin';
-const DEFAULT_PASS = 'cefc2026';
 
 let contenu = {};
 
 // ════════════ AUTH ════════════
 
-function getCredentials() {
-  return {
-    user: localStorage.getItem('cefc_admin_user') || DEFAULT_USER,
-    pass: localStorage.getItem('cefc_admin_pass') || DEFAULT_PASS
-  };
-}
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.netlifyIdentity) {
+    document.getElementById('login-screen').innerHTML = '<div style="color:#fca5a5;text-align:center;padding:40px">Netlify Identity non disponible.<br>Vérifiez votre connexion.</div>';
+    return;
+  }
 
-function doLogin() {
-  const user = document.getElementById('login-user').value.trim();
-  const pass = document.getElementById('login-pass').value;
-  const creds = getCredentials();
-  if (user === creds.user && pass === creds.pass) {
-    sessionStorage.setItem('cefc_auth', '1');
-    sessionStorage.setItem('cefc_user', user);
-    showApp();
-  } else {
-    document.getElementById('login-error').style.display = 'block';
-    document.getElementById('login-pass').value = '';
+  // If already logged in (page refresh), go straight to app
+  window.netlifyIdentity.on('init', user => {
+    if (user) showApp(user);
+  });
+
+  // After login popup
+  window.netlifyIdentity.on('login', user => {
+    window.netlifyIdentity.close();
+    showApp(user);
+  });
+
+  // After logout
+  window.netlifyIdentity.on('logout', () => {
+    document.getElementById('admin-app').classList.remove('open');
+    document.getElementById('login-screen').style.display = 'flex';
+  });
+});
+
+function openLogin() {
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.open('login');
   }
 }
 
 function doLogout() {
-  sessionStorage.removeItem('cefc_auth');
-  sessionStorage.removeItem('cefc_user');
-  location.reload();
+  if (window.netlifyIdentity) window.netlifyIdentity.logout();
 }
 
-function changePassword() {
-  const user = document.getElementById('new-username').value.trim();
-  const pass = document.getElementById('new-pass').value;
-  const conf = document.getElementById('confirm-pass').value;
-  if (!user || !pass) return toast('Identifiant et mot de passe requis.', 'error');
-  if (pass !== conf) return toast('Les mots de passe ne correspondent pas.', 'error');
-  localStorage.setItem('cefc_admin_user', user);
-  localStorage.setItem('cefc_admin_pass', pass);
-  toast('Identifiants mis à jour ! Reconnectez-vous lors de votre prochaine session.', 'success');
-  document.getElementById('new-username').value = '';
-  document.getElementById('new-pass').value = '';
-  document.getElementById('confirm-pass').value = '';
-}
-
-// Allow Enter key on login
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('login-pass').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doLogin();
-  });
-  document.getElementById('login-user').addEventListener('keydown', e => {
-    if (e.key === 'Enter') document.getElementById('login-pass').focus();
-  });
-
-  if (sessionStorage.getItem('cefc_auth') === '1') {
-    showApp();
-  }
-});
-
-async function showApp() {
+async function showApp(user) {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('admin-app').classList.add('open');
-  const u = sessionStorage.getItem('cefc_user') || 'Administrateur';
-  document.getElementById('admin-username').textContent = u;
+  document.getElementById('admin-username').textContent = user.email || 'Administrateur';
   setupNav();
   await loadContent();
   populateAll();
+  // Load users in background
+  loadUsers();
+  showCurrentUser(user);
+}
+
+// ════════════ USER MANAGEMENT ════════════
+
+function showCurrentUser(user) {
+  const el = document.getElementById('current-user-info');
+  if (!el) return;
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border-radius:8px">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">
+        ${(user.email || 'A')[0].toUpperCase()}
+      </div>
+      <div>
+        <div style="font-weight:600;color:var(--text)">${esc(user.email || '')}</div>
+        <div style="font-size:12px;color:var(--text2)">Administrateur connecté</div>
+      </div>
+    </div>`;
+}
+
+async function loadUsers() {
+  const el = document.getElementById('users-list');
+  if (!el) return;
+  const user = window.netlifyIdentity && window.netlifyIdentity.currentUser();
+  if (!user) return;
+
+  try {
+    const token = await user.jwt();
+    const res = await fetch('/.netlify/identity/admin/users?per_page=50', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error('not-admin');
+    const data = await res.json();
+    const users = data.users || [];
+    el.innerHTML = users.length === 0
+      ? '<p style="color:var(--text2);font-size:13px">Aucun utilisateur trouvé.</p>'
+      : users.map(u => `
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg3);border-radius:8px;margin-bottom:8px">
+            <div>
+              <div style="font-size:14px;font-weight:500">${esc(u.email)}</div>
+              <div style="font-size:11px;color:var(--text2)">${u.confirmed_at ? 'Compte actif' : 'Invitation en attente'}</div>
+            </div>
+            ${u.email !== user.email ? `<button class="btn-del" onclick="deleteUser('${u.id}','${esc(u.email)}')">Supprimer</button>` : '<span style="font-size:11px;color:var(--text2)">Vous</span>'}
+          </div>`).join('');
+  } catch (e) {
+    el.innerHTML = `<p style="font-size:13px;color:var(--text2)">
+      La liste des utilisateurs nécessite les droits admin Netlify.<br>
+      <a href="https://app.netlify.com/sites/cefclabornealost9300/identity" target="_blank"
+         style="color:var(--purple-light)">Gérer les utilisateurs sur Netlify →</a>
+    </p>`;
+  }
+}
+
+async function inviteUser() {
+  const email = document.getElementById('invite-email').value.trim();
+  const resultEl = document.getElementById('invite-result');
+  if (!email || !email.includes('@')) {
+    resultEl.style.display = 'block';
+    resultEl.style.background = 'rgba(239,68,68,.1)';
+    resultEl.style.border = '1px solid rgba(239,68,68,.2)';
+    resultEl.style.color = '#fca5a5';
+    resultEl.textContent = 'Entrez une adresse email valide.';
+    return;
+  }
+
+  const user = window.netlifyIdentity && window.netlifyIdentity.currentUser();
+  if (!user) return;
+
+  try {
+    const token = await user.jwt();
+    const res = await fetch('/.netlify/identity/admin/users', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, app_metadata: { roles: ['admin'] } })
+    });
+    if (!res.ok) throw new Error('api-error');
+    resultEl.style.display = 'block';
+    resultEl.style.background = 'rgba(16,185,129,.1)';
+    resultEl.style.border = '1px solid rgba(16,185,129,.2)';
+    resultEl.style.color = '#6ee7b7';
+    resultEl.textContent = `✓ Invitation envoyée à ${email}. La personne recevra un email pour créer son mot de passe.`;
+    document.getElementById('invite-email').value = '';
+    loadUsers();
+  } catch (e) {
+    resultEl.style.display = 'block';
+    resultEl.style.background = 'rgba(245,158,11,.1)';
+    resultEl.style.border = '1px solid rgba(245,158,11,.2)';
+    resultEl.style.color = '#fcd34d';
+    resultEl.innerHTML = `Droits insuffisants. <a href="https://app.netlify.com/sites/cefclabornealost9300/identity" target="_blank" style="color:inherit;text-decoration:underline">Inviter manuellement sur Netlify →</a>`;
+  }
+}
+
+async function deleteUser(id, email) {
+  if (!confirm(`Supprimer l'accès de ${email} ?`)) return;
+  const user = window.netlifyIdentity && window.netlifyIdentity.currentUser();
+  if (!user) return;
+  try {
+    const token = await user.jwt();
+    await fetch(`/.netlify/identity/admin/users/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    toast(`Accès supprimé pour ${email}`, 'success');
+    loadUsers();
+  } catch (e) {
+    toast('Erreur lors de la suppression.', 'error');
+  }
 }
 
 // ════════════ NAVIGATION ════════════

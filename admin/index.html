@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin — CEFC Alost</title>
   <link rel="icon" type="image/png" href="../cefc-logo.png" />
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
     :root {
       --bg: #0f1123;
@@ -34,29 +35,21 @@
     }
     .login-box {
       background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 16px; padding: 48px 40px; width: 380px; max-width: 95vw;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+      border-radius: 16px; padding: 48px 40px; width: 400px; max-width: 95vw;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5); text-align:center;
     }
-    .login-logo { display:flex; align-items:center; gap:12px; margin-bottom:32px; }
-    .login-logo img { width:44px; height:44px; border-radius:8px; }
-    .login-logo span { font-size:20px; font-weight:700; }
-    .login-box h2 { font-size:22px; margin-bottom:8px; }
-    .login-box p { color:var(--text2); font-size:14px; margin-bottom:28px; }
-    .login-box input {
-      width:100%; padding:12px 14px; background:var(--bg3); border:1px solid var(--border);
-      border-radius:8px; color:var(--text); font-size:15px; margin-bottom:14px;
-    }
-    .login-box input:focus { outline:none; border-color:var(--purple); }
+    .login-logo { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:32px; }
+    .login-logo img { width:48px; height:48px; border-radius:10px; }
+    .login-logo span { font-size:22px; font-weight:700; }
+    .login-box h2 { font-size:22px; margin-bottom:10px; }
+    .login-box p { color:var(--text2); font-size:14px; margin-bottom:32px; line-height:1.6; }
     .login-btn {
-      width:100%; padding:13px; background:var(--purple); color:#fff; border:none;
-      border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; transition:background .2s;
+      width:100%; padding:14px; background:var(--purple); color:#fff; border:none;
+      border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; transition:background .2s;
+      display:flex; align-items:center; justify-content:center; gap:10px;
     }
     .login-btn:hover { background:var(--purple-light); }
-    .login-error {
-      background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.3);
-      color:#fca5a5; padding:10px 14px; border-radius:8px; font-size:13px;
-      margin-top:14px; display:none;
-    }
+    .login-hint { color:var(--text2); font-size:12px; margin-top:16px; }
 
     /* ── LAYOUT ── */
     #admin-app { display:none; height:100vh; overflow:hidden; }
@@ -233,11 +226,12 @@
       <span>CEFC Alost</span>
     </div>
     <h2>Espace administrateur</h2>
-    <p>Connectez-vous pour gérer le contenu du site.</p>
-    <input type="text" id="login-user" placeholder="Identifiant" autocomplete="username" />
-    <input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password" />
-    <button class="login-btn" onclick="doLogin()">Se connecter</button>
-    <div class="login-error" id="login-error">Identifiant ou mot de passe incorrect.</div>
+    <p>Connectez-vous avec votre adresse email pour gérer le contenu du site.</p>
+    <button class="login-btn" id="login-btn" onclick="openLogin()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>
+      Se connecter avec mon email
+    </button>
+    <p class="login-hint">Première connexion ? Vérifiez votre email pour l'invitation.</p>
   </div>
 </div>
 
@@ -271,6 +265,7 @@
       <div class="nav-item" data-page="footer"><span class="icon">🦶</span> Footer</div>
       <div class="nav-item" data-page="seo"><span class="icon">🔍</span> SEO</div>
       <div class="nav-sep"></div>
+      <div class="nav-item" data-page="utilisateurs"><span class="icon">👤</span> Utilisateurs</div>
       <div class="nav-item" data-page="parametres"><span class="icon">⚙️</span> Paramètres</div>
     </nav>
     <div class="sidebar-footer">
@@ -609,22 +604,57 @@
         </div>
       </div>
 
+      <!-- ── UTILISATEURS ── -->
+      <div class="page" id="page-utilisateurs">
+        <div class="topbar">
+          <div><h1>👤 Gestion des utilisateurs</h1><p>Inviter et gérer les accès admin</p></div>
+        </div>
+        <div class="card" id="current-user-card">
+          <div class="card-title">Compte connecté</div>
+          <div id="current-user-info" style="font-size:14px;color:var(--text2)">Chargement...</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Inviter un nouvel administrateur</div>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:16px;">Un email d'invitation sera envoyé. La personne pourra créer son mot de passe.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="flex:1;min-width:220px">
+              <div class="field"><label>Adresse email</label><input type="email" id="invite-email" placeholder="prenom@email.com" /></div>
+            </div>
+            <div style="display:flex;align-items:flex-end;padding-bottom:14px">
+              <button class="save-btn" onclick="inviteUser()">✉️ Envoyer l'invitation</button>
+            </div>
+          </div>
+          <div id="invite-result" style="display:none;margin-top:12px;font-size:13px;padding:10px 14px;border-radius:8px"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Utilisateurs existants</div>
+          <div id="users-list"><p style="color:var(--text2);font-size:13px">Chargement...</p></div>
+          <button class="btn-add" style="margin-top:12px" onclick="loadUsers()">↺ Actualiser</button>
+        </div>
+        <div class="card" style="background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.2)">
+          <div class="card-title" style="color:#fcd34d">ℹ️ Gestion avancée</div>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Pour bloquer un accès ou gérer les rôles en détail, utilisez le tableau de bord Netlify.</p>
+          <a href="https://app.netlify.com/sites/cefclabornealost9300/identity" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);color:#fcd34d;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">
+            Ouvrir Netlify Identity →
+          </a>
+        </div>
+      </div>
+
       <!-- ── PARAMÈTRES ── -->
       <div class="page" id="page-parametres">
         <div class="topbar">
-          <div><h1>⚙️ Paramètres admin</h1><p>Gérer l'accès et le mot de passe</p></div>
+          <div><h1>⚙️ Paramètres</h1><p>Mon compte et export des données</p></div>
         </div>
-        <div class="card pwd-box">
-          <div class="card-title">Changer le mot de passe</div>
-          <div class="field"><label>Identifiant</label><input type="text" id="new-username" placeholder="Nouvel identifiant" /></div>
-          <div class="field"><label>Nouveau mot de passe</label><input type="password" id="new-pass" placeholder="Nouveau mot de passe" /></div>
-          <div class="field"><label>Confirmer le mot de passe</label><input type="password" id="confirm-pass" placeholder="Répéter le mot de passe" /></div>
-          <button class="save-btn" style="margin-top:8px" onclick="changePassword()">Enregistrer les identifiants</button>
+        <div class="card">
+          <div class="card-title">Mon compte</div>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Pour changer votre mot de passe, utilisez le lien reçu par email lors de votre inscription, ou cliquez ci-dessous.</p>
+          <button class="btn-add" onclick="window.netlifyIdentity && window.netlifyIdentity.open('email')">Changer mon mot de passe</button>
         </div>
         <div class="card" style="margin-top:16px">
           <div class="card-title">Exporter le contenu</div>
           <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">
-            Après avoir enregistré vos modifications, téléchargez le fichier <code>contenu.json</code>, puis remplacez-le dans votre dépôt Git et faites un commit.
+            Après avoir enregistré vos modifications, téléchargez <code style="background:var(--bg3);padding:2px 6px;border-radius:4px">contenu.json</code>, remplacez le fichier dans votre dépôt Git et faites un commit.
           </p>
           <button class="btn-add" onclick="downloadJSON()">⬇️ Télécharger contenu.json</button>
         </div>
