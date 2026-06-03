@@ -1,584 +1,614 @@
-// Admin Dashboard for CEFC Alost
-// Manages content editing and JSON persistence
+// ════════════════════════════════════════
+//  CEFC Alost — Admin Dashboard
+//  Auth: Netlify Identity | Save: GitHub API
+// ════════════════════════════════════════
 
-let contenu = {};
-let hasChanges = false;
+const REPO   = 'kossigb/cefc-alost-site';
+const BRANCH = 'main';
 
-// Initialize
-document.addEventListener('DOMContentLoaded', async () => {
-  checkAuth();
-  await loadContent();
-  setupTabButtons();
-  renderAnnonces();
-  renderHoraires();
-  renderLive();
-  renderMessages();
-  renderJeunesse();
-  renderDepartements();
-  renderDivers();
+let contenu    = {};
+let photosData = { photos: [] };
+
+// ════════════ AUTH ════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.netlifyIdentity) {
+    document.getElementById('login-screen').innerHTML =
+      '<div style="color:#fca5a5;text-align:center;padding:40px">Netlify Identity non disponible.<br>Vérifiez votre connexion.</div>';
+    return;
+  }
+  window.netlifyIdentity.on('init',  user => { if (user) showApp(user); });
+  window.netlifyIdentity.on('login', user => { window.netlifyIdentity.close(); showApp(user); });
+  window.netlifyIdentity.on('logout', () => {
+    document.getElementById('admin-app').classList.remove('open');
+    document.getElementById('login-screen').style.display = 'flex';
+  });
 });
 
-// Authentication check
-function checkAuth() {
-  // Check if Netlify Identity is available
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on('init', user => {
-      if (!user) {
-        // Show login prompt if not authenticated
-        window.netlifyIdentity.on('login', () => {
-          window.location.reload();
-        });
-      } else {
-        // User is authenticated, show admin panel
-        document.body.classList.add('authenticated');
-      }
+function openLogin() {
+  window.netlifyIdentity && window.netlifyIdentity.open('login');
+}
+
+function doLogout() {
+  window.netlifyIdentity && window.netlifyIdentity.logout();
+}
+
+async function showApp(user) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-app').classList.add('open');
+  document.getElementById('admin-username').textContent = user.email || 'Admin';
+  setupNav();
+  await Promise.all([loadContent(), loadPhotosData()]);
+  populateAll();
+  showCurrentUser(user);
+  loadUsers();
+  refreshTokenStatus();
+}
+
+// ════════════ GITHUB API ════════════
+
+function getGHToken() { return localStorage.getItem('cefc_gh_token') || ''; }
+function saveGHToken(t) { localStorage.setItem('cefc_gh_token', t.trim()); }
+
+async function ghGetSHA(path) {
+  const token = getGHToken();
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
     });
-  } else {
-    // Fallback: allow local development without auth
-    document.body.classList.add('authenticated');
+    if (!res.ok) return null;
+    return (await res.json()).sha;
+  } catch { return null; }
+}
+
+async function ghCommitText(path, content, message) {
+  const token = getGHToken();
+  if (!token) throw new Error('no-token');
+  const sha = await ghGetSHA(path);
+  const body = { message, branch: BRANCH, content: btoa(unescape(encodeURIComponent(content))) };
+  if (sha) body.sha = sha;
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.message || `Erreur ${res.status}`); }
+}
+
+async function ghCommitBinary(path, base64, message) {
+  const token = getGHToken();
+  if (!token) throw new Error('no-token');
+  const sha = await ghGetSHA(path);
+  const body = { message, branch: BRANCH, content: base64 };
+  if (sha) body.sha = sha;
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.message || `Erreur ${res.status}`); }
+}
+
+async function testAndSaveToken() {
+  const input = document.getElementById('gh-token-input');
+  const status = document.getElementById('gh-token-status');
+  const token = input.value.trim();
+  if (!token) { status.textContent = 'Entrez un token.'; status.style.color = '#fca5a5'; return; }
+  status.textContent = 'Vérification...'; status.style.color = 'var(--text2)';
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (res.ok) {
+      saveGHToken(token);
+      status.textContent = '✓ Token valide — connexion GitHub établie !';
+      status.style.color = '#6ee7b7';
+      input.value = '';
+      refreshTokenStatus();
+      toast('Token GitHub enregistré !', 'success');
+    } else {
+      status.textContent = '✗ Token invalide ou accès refusé.';
+      status.style.color = '#fca5a5';
+    }
+  } catch { status.textContent = '✗ Erreur réseau.'; status.style.color = '#fca5a5'; }
+}
+
+function refreshTokenStatus() {
+  const el = document.getElementById('gh-token-badge');
+  if (!el) return;
+  const t = getGHToken();
+  el.textContent = t ? '✓ Token configuré' : '⚠ Token non configuré';
+  el.style.color  = t ? '#6ee7b7' : '#fcd34d';
+}
+
+function clearToken() {
+  localStorage.removeItem('cefc_gh_token');
+  refreshTokenStatus();
+  toast('Token supprimé.', 'success');
+}
+
+// ════════════ SAVE ALL → GITHUB ════════════
+
+async function saveAll() {
+  document.querySelectorAll('[data-path]').forEach(el => {
+    setPath(contenu, el.dataset.path, el.type === 'checkbox' ? el.checked : el.value);
+  });
+  if (!getGHToken()) {
+    toast('⚠ Token GitHub requis — configurez-le dans ⚙ Paramètres.', 'error');
+    switchPage('parametres'); return;
+  }
+  const btns = document.querySelectorAll('.save-btn');
+  btns.forEach(b => { b._orig = b.textContent; b.textContent = '⏳ Publication…'; b.disabled = true; });
+  try {
+    await ghCommitText('contenu.json', JSON.stringify(contenu, null, 2), 'Mise à jour contenu via admin CEFC');
+    toast('✓ Modifications publiées ! Le site se met à jour automatiquement.', 'success');
+  } catch (e) {
+    toast(e.message === 'no-token' ? 'Token GitHub manquant.' : 'Erreur GitHub : ' + e.message, 'error');
+  } finally {
+    btns.forEach(b => { b.textContent = b._orig; b.disabled = false; });
   }
 }
 
-// Load content from JSON
+function switchPage(name) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const navEl = document.querySelector(`.nav-item[data-page="${name}"]`);
+  const pgEl  = document.getElementById(`page-${name}`);
+  if (navEl) navEl.classList.add('active');
+  if (pgEl)  pgEl.classList.add('active');
+}
+
+// ════════════ NAVIGATION ════════════
+
+function setupNav() {
+  document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+      document.getElementById('page-' + item.dataset.page).classList.add('active');
+      document.getElementById('sidebar').classList.remove('mobile-open');
+      // Lazy-load photos on first visit
+      if (item.dataset.page === 'photos') renderPhotosGrid();
+    });
+  });
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('mobile-open');
+}
+
+// ════════════ LOAD DATA ════════════
+
 async function loadContent() {
   try {
-    const response = await fetch('/contenu.json');
-    if (!response.ok) throw new Error('Failed to load contenu.json');
-    contenu = await response.json();
-  } catch (error) {
-    showStatus('Erreur: impossible de charger le contenu', 'error');
-    console.error('Error loading content:', error);
-  }
+    const r = await fetch('/contenu.json?t=' + Date.now());
+    contenu = await r.json();
+  } catch { toast('Impossible de charger contenu.json', 'error'); contenu = {}; }
 }
 
-// Tab switching
-function setupTabButtons() {
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tabName = btn.dataset.tab;
+async function loadPhotosData() {
+  try {
+    const r = await fetch('/photos_culte.json?t=' + Date.now());
+    photosData = await r.json();
+  } catch { photosData = { photos: [] }; }
+}
 
-      // Update active button
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+// ════════════ POPULATE FIELDS ════════════
 
-      // Update active content
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.getElementById(tabName + '-tab').classList.add('active');
-    });
+function populateAll() {
+  document.querySelectorAll('[data-path]').forEach(el => {
+    const val = getPath(contenu, el.dataset.path);
+    if (el.type === 'checkbox') el.checked = !!val;
+    else el.value = val || '';
+    el.addEventListener('input',  () => setPath(contenu, el.dataset.path, el.type === 'checkbox' ? el.checked : el.value));
+    el.addEventListener('change', () => setPath(contenu, el.dataset.path, el.type === 'checkbox' ? el.checked : el.value));
   });
+  renderAnnonces();
+  renderHoraires();
+  renderNavette();
+  renderDepts();
+  renderEquipe();
+  renderTemoignages();
 }
 
-// Status messages
-function showStatus(msg, type = 'success') {
-  const el = document.getElementById('statusMsg');
-  el.textContent = msg;
-  el.className = `status-message show ${type === 'error' ? 'error' : ''}`;
-  setTimeout(() => el.classList.remove('show'), 4000);
+// ════════════ HORAIRES ════════════
+
+function renderHoraires() {
+  const days = [
+    { key: 'dimanche', label: 'Dimanche', icon: '☀️' },
+    { key: 'mercredi', label: 'Mercredi', icon: '📖' },
+    { key: 'vendredi', label: 'Vendredi', icon: '🙏' }
+  ];
+  const el = document.getElementById('horaires-content');
+  el.innerHTML = days.map(d => {
+    const b = `horaires.${d.key}`;
+    return `
+    <div class="card">
+      <div class="card-title">${d.icon} ${d.label}</div>
+      <div class="field"><label>Heure</label><input type="text" data-path="${b}.heure" value="${esc(getPath(contenu,b+'.heure'))}" /></div>
+      <div class="grid3">
+        <div class="field"><label>Nom <span class="lang lang-fr">FR</span></label><input type="text" data-path="${b}.nom"    value="${esc(getPath(contenu,b+'.nom'))}" /></div>
+        <div class="field"><label>Nom <span class="lang lang-nl">NL</span></label><input type="text" data-path="${b}.nom_nl" value="${esc(getPath(contenu,b+'.nom_nl'))}" /></div>
+        <div class="field"><label>Nom <span class="lang lang-en">EN</span></label><input type="text" data-path="${b}.nom_en" value="${esc(getPath(contenu,b+'.nom_en'))}" /></div>
+      </div>
+      <div class="field"><label>Description <span class="lang lang-fr">FR</span></label><textarea data-path="${b}.description">${esc(getPath(contenu,b+'.description'))}</textarea></div>
+      <div class="field"><label>Description <span class="lang lang-nl">NL</span></label><textarea data-path="${b}.description_nl">${esc(getPath(contenu,b+'.description_nl'))}</textarea></div>
+      <div class="field"><label>Description <span class="lang lang-en">EN</span></label><textarea data-path="${b}.description_en">${esc(getPath(contenu,b+'.description_en'))}</textarea></div>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('[data-path]').forEach(bindField);
 }
 
-// ANNONCES SECTION
+// ════════════ ANNONCES ════════════
+
 function renderAnnonces() {
-  const list = document.getElementById('annonces-list');
-  if (!contenu.annonces || !contenu.annonces.liste) {
-    list.innerHTML = '<p>Pas d\'annonces</p>';
-    return;
-  }
-
-  list.innerHTML = contenu.annonces.liste.map((item, idx) => `
-    <div class="item-card" id="annonce-${idx}">
-      <h4>📌 ${item.titre || 'Sans titre'}</h4>
-      <div class="item-fields">
-        <div class="form-group">
-          <label>Titre</label>
-          <input type="text" value="${item.titre || ''}" onchange="updateAnnonce(${idx}, 'titre', this.value)">
-        </div>
-        <div class="form-group">
-          <label>Date</label>
-          <input type="text" value="${item.date || ''}" onchange="updateAnnonce(${idx}, 'date', this.value)">
-        </div>
-        <div class="form-group">
-          <label>Description</label>
-          <textarea onchange="updateAnnonce(${idx}, 'description', this.value)">${item.description || ''}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Image (URL ou chemin)</label>
-          <input type="text" value="${item.image || ''}" onchange="updateAnnonce(${idx}, 'image', this.value)">
-        </div>
-        <div class="form-group">
-          <label>
-            <input type="checkbox" ${item.important ? 'checked' : ''} onchange="updateAnnonce(${idx}, 'important', this.checked)">
-            À la une (important)
-          </label>
-        </div>
+  const list = contenu.annonces?.liste || [];
+  const el = document.getElementById('annonces-list');
+  if (!list.length) { el.innerHTML = '<p style="color:var(--text2);font-size:14px;margin-bottom:16px">Aucune annonce.</p>'; return; }
+  el.innerHTML = list.map((a, i) => `
+    <div class="list-item">
+      <div class="list-item-head"><h4>📌 ${esc(a.titre||'Sans titre')}</h4><button class="btn-del" onclick="removeAnnonce(${i})">🗑️ Supprimer</button></div>
+      <div class="grid2">
+        <div class="field"><label>Titre <span class="lang lang-fr">FR</span></label><input type="text" value="${esc(a.titre||'')}" onchange="contenu.annonces.liste[${i}].titre=this.value" /></div>
+        <div class="field"><label>Date</label><input type="text" value="${esc(a.date||'')}" placeholder="ex: 15 juin 2026" onchange="contenu.annonces.liste[${i}].date=this.value" /></div>
       </div>
-      <div class="item-actions">
-        <button class="danger" onclick="removeAnnonce(${idx})">🗑️ Supprimer</button>
+      <div class="field"><label>Description <span class="lang lang-fr">FR</span></label><textarea onchange="contenu.annonces.liste[${i}].description=this.value">${esc(a.description||'')}</textarea></div>
+      <div class="field"><label>Description <span class="lang lang-nl">NL</span></label><textarea onchange="contenu.annonces.liste[${i}].description_nl=this.value">${esc(a.description_nl||'')}</textarea></div>
+      <div class="field"><label>Description <span class="lang lang-en">EN</span></label><textarea onchange="contenu.annonces.liste[${i}].description_en=this.value">${esc(a.description_en||'')}</textarea></div>
+      <div class="field"><label>Image (URL)</label><input type="text" value="${esc(a.image||'')}" placeholder="/img/uploads/photo.jpg" onchange="contenu.annonces.liste[${i}].image=this.value" /></div>
+      <div class="toggle-row" style="margin-top:8px">
+        <label>À la une</label>
+        <label class="toggle"><input type="checkbox" ${a.important?'checked':''} onchange="contenu.annonces.liste[${i}].important=this.checked" /><span class="toggle-slider"></span></label>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
-
-function updateAnnonce(idx, field, value) {
+function addAnnonce() {
   if (!contenu.annonces) contenu.annonces = { liste: [] };
-  if (!contenu.annonces.liste[idx]) return;
-  contenu.annonces.liste[idx][field] = value;
-  hasChanges = true;
-}
-
-function removeAnnonce(idx) {
-  if (confirm('Supprimer cette annonce?')) {
-    contenu.annonces.liste.splice(idx, 1);
-    hasChanges = true;
-    renderAnnonces();
-  }
-}
-
-function addNewAnnonce() {
-  if (!contenu.annonces) contenu.annonces = { liste: [] };
-  contenu.annonces.liste.push({
-    titre: 'Nouvelle annonce',
-    date: new Date().toISOString().split('T')[0],
-    description: '',
-    image: '',
-    important: false
-  });
-  hasChanges = true;
+  contenu.annonces.liste.unshift({ titre:'Nouvelle annonce', date:'', description:'', description_nl:'', description_en:'', image:'', important:false });
   renderAnnonces();
 }
-
-// HORAIRES SECTION
-function renderHoraires() {
-  const content = document.getElementById('horaires-content');
-
-  if (!contenu.horaires) {
-    content.innerHTML = '<p>Pas de données horaires</p>';
-    return;
-  }
-
-  let html = `
-    <div class="form-section">
-      <h3>Services & Cultes</h3>
-      <div class="item-fields">
-  `;
-
-  if (contenu.horaires.liste) {
-    contenu.horaires.liste.forEach((service, idx) => {
-      html += `
-        <div class="item-card">
-          <h4>${service.jour || 'Sans jour'} — ${service.horaire || 'Sans horaire'}</h4>
-          <div class="item-fields">
-            <div class="grid-2">
-              <div class="form-group">
-                <label>Jour (FR)</label>
-                <input type="text" value="${service.jour || ''}" onchange="updateHoraire(${idx}, 'jour', this.value)">
-              </div>
-              <div class="form-group">
-                <label>Jour (NL)</label>
-                <input type="text" value="${service.jour_nl || ''}" onchange="updateHoraire(${idx}, 'jour_nl', this.value)">
-              </div>
-              <div class="form-group">
-                <label>Horaire</label>
-                <input type="text" value="${service.horaire || ''}" onchange="updateHoraire(${idx}, 'horaire', this.value)">
-              </div>
-              <div class="form-group">
-                <label>Horaire (NL)</label>
-                <input type="text" value="${service.horaire_nl || ''}" onchange="updateHoraire(${idx}, 'horaire_nl', this.value)">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Description (FR)</label>
-              <textarea onchange="updateHoraire(${idx}, 'description', this.value)">${service.description || ''}</textarea>
-            </div>
-            <div class="form-group">
-              <label>Description (NL)</label>
-              <textarea onchange="updateHoraire(${idx}, 'description_nl', this.value)">${service.description_nl || ''}</textarea>
-            </div>
-            <div class="item-actions">
-              <button class="danger" onclick="removeHoraire(${idx})">🗑️ Supprimer</button>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  html += `
-      </div>
-      <button class="add-btn" style="margin-top: 12px;" onclick="addNewHoraire()">+ Ajouter un créneau</button>
-    </div>
-  `;
-
-  content.innerHTML = html;
+function removeAnnonce(i) {
+  if (!confirm('Supprimer cette annonce ?')) return;
+  contenu.annonces.liste.splice(i, 1); renderAnnonces();
 }
 
-function updateHoraire(idx, field, value) {
-  if (!contenu.horaires) contenu.horaires = { liste: [] };
-  if (!contenu.horaires.liste[idx]) return;
-  contenu.horaires.liste[idx][field] = value;
-  hasChanges = true;
+// ════════════ NAVETTE ════════════
+
+function renderNavette() {
+  const list = contenu.navette?.creneaux || [];
+  const el = document.getElementById('navette-list');
+  el.innerHTML = list.map((c, i) => `
+    <div class="list-item">
+      <div class="list-item-head"><h4>🚌 ${esc(c.jour||'')} — ${esc(c.horaire||'')}</h4><button class="btn-del" onclick="removeNavette(${i})">🗑️</button></div>
+      <div class="grid3">
+        <div class="field"><label>Jour <span class="lang lang-fr">FR</span></label><input type="text" value="${esc(c.jour||'')}" onchange="contenu.navette.creneaux[${i}].jour=this.value" /></div>
+        <div class="field"><label>Jour <span class="lang lang-nl">NL</span></label><input type="text" value="${esc(c.jour_nl||'')}" onchange="contenu.navette.creneaux[${i}].jour_nl=this.value" /></div>
+        <div class="field"><label>Jour <span class="lang lang-en">EN</span></label><input type="text" value="${esc(c.jour_en||'')}" onchange="contenu.navette.creneaux[${i}].jour_en=this.value" /></div>
+        <div class="field"><label>Horaire <span class="lang lang-fr">FR</span></label><input type="text" value="${esc(c.horaire||'')}" onchange="contenu.navette.creneaux[${i}].horaire=this.value" /></div>
+        <div class="field"><label>Horaire <span class="lang lang-nl">NL</span></label><input type="text" value="${esc(c.horaire_nl||'')}" onchange="contenu.navette.creneaux[${i}].horaire_nl=this.value" /></div>
+        <div class="field"><label>Horaire <span class="lang lang-en">EN</span></label><input type="text" value="${esc(c.horaire_en||c.horaire||'')}" onchange="contenu.navette.creneaux[${i}].horaire_en=this.value" /></div>
+      </div>
+      <div class="field"><label>Description <span class="lang lang-fr">FR</span></label><textarea onchange="contenu.navette.creneaux[${i}].description=this.value">${esc(c.description||'')}</textarea></div>
+      <div class="field"><label>Description <span class="lang lang-nl">NL</span></label><textarea onchange="contenu.navette.creneaux[${i}].description_nl=this.value">${esc(c.description_nl||'')}</textarea></div>
+      <div class="field"><label>Description <span class="lang lang-en">EN</span></label><textarea onchange="contenu.navette.creneaux[${i}].description_en=this.value">${esc(c.description_en||'')}</textarea></div>
+    </div>`).join('');
+}
+function addNavette() {
+  if (!contenu.navette) contenu.navette = { creneaux: [] };
+  contenu.navette.creneaux.push({ jour:'Dimanche', jour_nl:'Zondag', jour_en:'Sunday', horaire:'', horaire_nl:'', horaire_en:'', description:'', description_nl:'', description_en:'', principal:true });
+  renderNavette();
+}
+function removeNavette(i) {
+  if (!confirm('Supprimer ce créneau ?')) return;
+  contenu.navette.creneaux.splice(i, 1); renderNavette();
 }
 
-function removeHoraire(idx) {
-  if (confirm('Supprimer ce créneau?')) {
-    contenu.horaires.liste.splice(idx, 1);
-    hasChanges = true;
-    renderHoraires();
-  }
+// ════════════ DÉPARTEMENTS ════════════
+
+function renderDepts() {
+  const list = contenu.departements?.liste || [];
+  const el = document.getElementById('dept-list');
+  if (!list.length) { el.innerHTML = ''; return; }
+  el.innerHTML = list.map((d, i) => `
+    <div class="list-item">
+      <div class="list-item-head"><h4>🏢 ${esc(d.nom||'Sans nom')}</h4><button class="btn-del" onclick="removeDept(${i})">🗑️ Supprimer</button></div>
+      <div class="grid2">
+        <div class="field"><label>ID</label><input type="text" value="${esc(d.id||'')}" onchange="contenu.departements.liste[${i}].id=this.value" /></div>
+        <div class="field"><label>Photo (fichier)</label><input type="text" value="${esc(d.photo||'')}" placeholder="chorale.jpg" onchange="contenu.departements.liste[${i}].photo=this.value" /></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><label>Nom <span class="lang lang-fr">FR</span></label><input type="text" value="${esc(d.nom||'')}" onchange="contenu.departements.liste[${i}].nom=this.value" /></div>
+        <div class="field"><label>Nom <span class="lang lang-nl">NL</span></label><input type="text" value="${esc(d.nom_nl||'')}" onchange="contenu.departements.liste[${i}].nom_nl=this.value" /></div>
+        <div class="field"><label>Nom <span class="lang lang-en">EN</span></label><input type="text" value="${esc(d.nom_en||'')}" onchange="contenu.departements.liste[${i}].nom_en=this.value" /></div>
+      </div>
+      <div class="field"><label>Description <span class="lang lang-fr">FR</span></label><textarea onchange="contenu.departements.liste[${i}].description=this.value">${esc(d.description||'')}</textarea></div>
+      <div class="field"><label>Description <span class="lang lang-nl">NL</span></label><textarea onchange="contenu.departements.liste[${i}].description_nl=this.value">${esc(d.description_nl||'')}</textarea></div>
+      <div class="field"><label>Description <span class="lang lang-en">EN</span></label><textarea onchange="contenu.departements.liste[${i}].description_en=this.value">${esc(d.description_en||'')}</textarea></div>
+    </div>`).join('');
 }
-
-function addNewHoraire() {
-  if (!contenu.horaires) contenu.horaires = { liste: [] };
-  contenu.horaires.liste.push({
-    jour: 'Dimanche',
-    jour_nl: 'Zondag',
-    jour_en: 'Sunday',
-    horaire: '10h00',
-    horaire_nl: '10u00',
-    horaire_en: '10:00 AM',
-    description: 'Nouvelle description',
-    description_nl: 'Nieuwe beschrijving',
-    description_en: 'New description',
-    principal: true
-  });
-  hasChanges = true;
-  renderHoraires();
-}
-
-// LIVE SECTION
-function renderLive() {
-  const content = document.getElementById('live-content');
-
-  if (!contenu.live) {
-    content.innerHTML = '<p>Pas de données live</p>';
-    return;
-  }
-
-  content.innerHTML = `
-    <div class="form-section">
-      <h3>Configuration du Live</h3>
-      <div class="form-group">
-        <label>URL YouTube Live</label>
-        <input type="text" value="${contenu.live.url || ''}" onchange="updateLive('url', this.value)">
-        <div class="helper-text">Ex: https://www.youtube.com/@CE_laFamilleChretienne</div>
-      </div>
-      <div class="form-group">
-        <label>Statut du Live</label>
-        <select onchange="updateLive('actif', this.value === 'true')">
-          <option value="false" ${!contenu.live.actif ? 'selected' : ''}>Inactif</option>
-          <option value="true" ${contenu.live.actif ? 'selected' : ''}>Actif</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Titre du Live</label>
-        <input type="text" value="${contenu.live.titre || ''}" onchange="updateLive('titre', this.value)">
-      </div>
-    </div>
-  `;
-}
-
-function updateLive(field, value) {
-  if (!contenu.live) contenu.live = {};
-  contenu.live[field] = value;
-  hasChanges = true;
-}
-
-// MESSAGES SECTION
-function renderMessages() {
-  const content = document.getElementById('messages-content');
-
-  let html = '<div class="form-section"><h3>Messages & Bannières</h3>';
-
-  if (contenu.message_pasteur) {
-    html += `
-      <h4>Message du Pasteur</h4>
-      <div class="form-group">
-        <label>Texte (FR)</label>
-        <textarea onchange="updateMessage('message_pasteur', 'texte', this.value)">${contenu.message_pasteur.texte || ''}</textarea>
-      </div>
-      <div class="form-group">
-        <label>Texte (NL)</label>
-        <textarea onchange="updateMessage('message_pasteur', 'texte_nl', this.value)">${contenu.message_pasteur.texte_nl || ''}</textarea>
-      </div>
-    `;
-  }
-
-  if (contenu.banniere) {
-    html += `
-      <h4 style="margin-top: 20px;">Bannière</h4>
-      <div class="form-group">
-        <label>Titre (FR)</label>
-        <input type="text" value="${contenu.banniere.titre || ''}" onchange="updateMessage('banniere', 'titre', this.value)">
-      </div>
-      <div class="form-group">
-        <label>Titre (NL)</label>
-        <input type="text" value="${contenu.banniere.titre_nl || ''}" onchange="updateMessage('banniere', 'titre_nl', this.value)">
-      </div>
-      <div class="form-group">
-        <label>Sous-titre (FR)</label>
-        <input type="text" value="${contenu.banniere.sous_titre || ''}" onchange="updateMessage('banniere', 'sous_titre', this.value)">
-      </div>
-      <div class="form-group">
-        <label>Sous-titre (NL)</label>
-        <input type="text" value="${contenu.banniere.sous_titre_nl || ''}" onchange="updateMessage('banniere', 'sous_titre_nl', this.value)">
-      </div>
-    `;
-  }
-
-  html += '</div>';
-  content.innerHTML = html;
-}
-
-function updateMessage(section, field, value) {
-  if (!contenu[section]) contenu[section] = {};
-  contenu[section][field] = value;
-  hasChanges = true;
-}
-
-// JEUNESSE SECTION
-function renderJeunesse() {
-  const content = document.getElementById('jeunesse-content');
-
-  if (!contenu.jefc) {
-    content.innerHTML = '<p>Pas de données JEFC</p>';
-    return;
-  }
-
-  content.innerHTML = `
-    <div class="form-section">
-      <h3>JEFC - Jeunesse Évangélique</h3>
-      <div class="form-group">
-        <label>Titre (FR)</label>
-        <input type="text" value="${contenu.jefc.titre || ''}" onchange="updateJeunesse('titre', this.value)">
-      </div>
-      <div class="form-group">
-        <label>Texte (FR)</label>
-        <textarea onchange="updateJeunesse('texte', this.value)">${contenu.jefc.texte || ''}</textarea>
-      </div>
-      <div class="form-group">
-        <label>Fréquence (FR)</label>
-        <input type="text" value="${contenu.jefc.frequence || ''}" onchange="updateJeunesse('frequence', this.value)">
-      </div>
-      <div class="form-group">
-        <label>Lieu</label>
-        <input type="text" value="${contenu.jefc.lieu || ''}" onchange="updateJeunesse('lieu', this.value)">
-      </div>
-    </div>
-  `;
-}
-
-function updateJeunesse(field, value) {
-  if (!contenu.jefc) contenu.jefc = {};
-  contenu.jefc[field] = value;
-  hasChanges = true;
-}
-
-// DEPARTEMENTS SECTION
-function renderDepartements() {
-  const list = document.getElementById('departements-list');
-  if (!contenu.departements || !contenu.departements.liste) {
-    list.innerHTML = '<p>Pas de départements</p>';
-    return;
-  }
-
-  list.innerHTML = contenu.departements.liste.map((item, idx) => `
-    <div class="item-card">
-      <h4>🏢 ${item.nom || 'Sans nom'}</h4>
-      <div class="item-fields">
-        <div class="grid-2">
-          <div class="form-group">
-            <label>ID</label>
-            <input type="text" value="${item.id || ''}" onchange="updateDeptField(${idx}, 'id', this.value)">
-          </div>
-          <div class="form-group">
-            <label>Nom (FR)</label>
-            <input type="text" value="${item.nom || ''}" onchange="updateDeptField(${idx}, 'nom', this.value)">
-          </div>
-        </div>
-        <div class="grid-2">
-          <div class="form-group">
-            <label>Nom (NL)</label>
-            <input type="text" value="${item.nom_nl || ''}" onchange="updateDeptField(${idx}, 'nom_nl', this.value)">
-          </div>
-          <div class="form-group">
-            <label>Nom (EN)</label>
-            <input type="text" value="${item.nom_en || ''}" onchange="updateDeptField(${idx}, 'nom_en', this.value)">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Description (FR)</label>
-          <textarea onchange="updateDeptField(${idx}, 'description', this.value)">${item.description || ''}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Description (NL)</label>
-          <textarea onchange="updateDeptField(${idx}, 'description_nl', this.value)">${item.description_nl || ''}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Description (EN)</label>
-          <textarea onchange="updateDeptField(${idx}, 'description_en', this.value)">${item.description_en || ''}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Photo (nom du fichier)</label>
-          <input type="text" value="${item.photo || ''}" onchange="updateDeptField(${idx}, 'photo', this.value)">
-          <div class="helper-text">Ex: technique.jpg</div>
-        </div>
-      </div>
-      <div class="item-actions">
-        <button class="danger" onclick="removeDeptement(${idx})">🗑️ Supprimer</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function updateDeptField(idx, field, value) {
+function addDept() {
   if (!contenu.departements) contenu.departements = { liste: [] };
-  if (!contenu.departements.liste[idx]) return;
-  contenu.departements.liste[idx][field] = value;
-  hasChanges = true;
+  contenu.departements.liste.push({ id:'nouveau', nom:'Nouveau', nom_nl:'Nieuw', nom_en:'New', description:'', description_nl:'', description_en:'', photo:'' });
+  renderDepts();
+}
+function removeDept(i) {
+  if (!confirm('Supprimer ce département ?')) return;
+  contenu.departements.liste.splice(i, 1); renderDepts();
 }
 
-function removeDeptement(idx) {
-  if (confirm('Supprimer ce département?')) {
-    contenu.departements.liste.splice(idx, 1);
-    hasChanges = true;
-    renderDepartements();
+// ════════════ ÉQUIPE ════════════
+
+function renderEquipe() {
+  const list = contenu.equipe_pastorale?.membres || [];
+  const el = document.getElementById('equipe-list');
+  el.innerHTML = list.map((m, i) => `
+    <div class="list-item">
+      <div class="list-item-head"><h4>👤 ${esc(m.nom||'Sans nom')}</h4><button class="btn-del" onclick="removeMembre(${i})">🗑️</button></div>
+      <div class="grid2">
+        <div class="field"><label>Nom complet</label><input type="text" value="${esc(m.nom||'')}" onchange="contenu.equipe_pastorale.membres[${i}].nom=this.value" /></div>
+        <div class="field"><label>Initiales</label><input type="text" value="${esc(m.initiales||'')}" onchange="contenu.equipe_pastorale.membres[${i}].initiales=this.value" /></div>
+        <div class="field"><label>Rôle <span class="lang lang-fr">FR</span></label><input type="text" value="${esc(m.role||'')}" onchange="contenu.equipe_pastorale.membres[${i}].role=this.value" /></div>
+        <div class="field"><label>Rôle <span class="lang lang-nl">NL</span></label><input type="text" value="${esc(m.role_nl||'')}" onchange="contenu.equipe_pastorale.membres[${i}].role_nl=this.value" /></div>
+        <div class="field"><label>Rôle <span class="lang lang-en">EN</span></label><input type="text" value="${esc(m.role_en||'')}" onchange="contenu.equipe_pastorale.membres[${i}].role_en=this.value" /></div>
+      </div>
+    </div>`).join('');
+}
+function addMembre() {
+  if (!contenu.equipe_pastorale) contenu.equipe_pastorale = { membres: [] };
+  contenu.equipe_pastorale.membres.push({ nom:'', initiales:'', role:'', role_nl:'', role_en:'' });
+  renderEquipe();
+}
+function removeMembre(i) {
+  if (!confirm('Supprimer ce membre ?')) return;
+  contenu.equipe_pastorale.membres.splice(i, 1); renderEquipe();
+}
+
+// ════════════ TÉMOIGNAGES ════════════
+
+function renderTemoignages() {
+  const list = contenu.temoignages?.liste || [];
+  const el = document.getElementById('temoignages-list');
+  el.innerHTML = list.map((t, i) => `
+    <div class="list-item">
+      <div class="list-item-head"><h4>💬 ${esc(t.prenom||'Sans nom')}</h4><button class="btn-del" onclick="removeTemoignage(${i})">🗑️</button></div>
+      <div class="grid2">
+        <div class="field"><label>Prénom</label><input type="text" value="${esc(t.prenom||'')}" onchange="contenu.temoignages.liste[${i}].prenom=this.value" /></div>
+        <div class="field"><label>Initiales</label><input type="text" value="${esc(t.initiales||'')}" onchange="contenu.temoignages.liste[${i}].initiales=this.value" /></div>
+        <div class="field"><label>Rôle</label><input type="text" value="${esc(t.role||'')}" placeholder="Membre depuis 2 ans" onchange="contenu.temoignages.liste[${i}].role=this.value" /></div>
+      </div>
+      <div class="field"><label>Témoignage <span class="lang lang-fr">FR</span></label><textarea onchange="contenu.temoignages.liste[${i}].texte=this.value">${esc(t.texte||'')}</textarea></div>
+      <div class="field"><label>Témoignage <span class="lang lang-nl">NL</span></label><textarea onchange="contenu.temoignages.liste[${i}].texte_nl=this.value">${esc(t.texte_nl||'')}</textarea></div>
+      <div class="field"><label>Témoignage <span class="lang lang-en">EN</span></label><textarea onchange="contenu.temoignages.liste[${i}].texte_en=this.value">${esc(t.texte_en||'')}</textarea></div>
+    </div>`).join('');
+}
+function addTemoignage() {
+  if (!contenu.temoignages) contenu.temoignages = { actif:false, liste:[] };
+  contenu.temoignages.liste.push({ prenom:'', initiales:'', role:'', texte:'', texte_nl:'', texte_en:'' });
+  renderTemoignages();
+}
+function removeTemoignage(i) {
+  if (!confirm('Supprimer ce témoignage ?')) return;
+  contenu.temoignages.liste.splice(i, 1); renderTemoignages();
+}
+
+// ════════════ PHOTOS CULTE ════════════
+
+function renderPhotosGrid() {
+  const el = document.getElementById('photos-grid');
+  if (!el) return;
+  const photos = photosData.photos || [];
+  const count = document.getElementById('photos-count');
+  if (count) count.textContent = photos.length + ' photo(s)';
+
+  if (!photos.length) {
+    el.innerHTML = '<p style="color:var(--text2);font-size:14px">Aucune photo. Utilisez le bouton ci-dessus pour en ajouter.</p>';
+    return;
   }
+  el.innerHTML =
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">' +
+    photos.map((p, i) => `
+      <div style="position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--bg3)">
+        <img src="${esc(p.url)}" loading="lazy"
+             style="width:100%;height:100%;object-fit:cover;display:block" />
+        <button onclick="deletePhoto(${i})" title="Supprimer"
+          style="position:absolute;top:5px;right:5px;width:28px;height:28px;border-radius:50%;
+                 background:rgba(0,0,0,0.75);border:none;color:#fca5a5;font-size:16px;
+                 cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:4px 6px;background:rgba(0,0,0,0.7)">
+          <input type="text" value="${esc(p.legende||'')}" placeholder="Légende…"
+            style="width:100%;background:transparent;border:none;color:#fff;font-size:11px;outline:none"
+            onchange="photosData.photos[${i}].legende=this.value" />
+        </div>
+      </div>`).join('') + '</div>';
 }
 
-function addNewDepartement() {
-  if (!contenu.departements) contenu.departements = { liste: [] };
-  contenu.departements.liste.push({
-    id: 'new-dept',
-    nom: 'Nouveau Département',
-    nom_nl: 'Nieuwe Afdeling',
-    nom_en: 'New Department',
-    description: 'Description...',
-    description_nl: 'Beschrijving...',
-    description_en: 'Description...',
-    photo: 'placeholder.jpg'
-  });
-  hasChanges = true;
-  renderDepartements();
-}
+async function handlePhotoUpload(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  if (!getGHToken()) { toast('Token GitHub requis. Configurez-le dans ⚙ Paramètres.', 'error'); return; }
 
-// DIVERS SECTION
-function renderDivers() {
-  const content = document.getElementById('divers-content');
+  const prog = document.getElementById('upload-progress');
+  prog.style.display = 'block';
+  let done = 0;
 
-  let html = `
-    <div class="form-section">
-      <h3>Vision & Mission</h3>
-  `;
-
-  if (contenu.vision_mission) {
-    html += `
-      <div class="form-group">
-        <label>Vision (FR)</label>
-        <textarea onchange="updateDivers('vision_mission', 'vision', this.value)">${contenu.vision_mission.vision || ''}</textarea>
-      </div>
-      <div class="form-group">
-        <label>Vision (NL)</label>
-        <textarea onchange="updateDivers('vision_mission', 'vision_nl', this.value)">${contenu.vision_mission.vision_nl || ''}</textarea>
-      </div>
-      <div class="form-group">
-        <label>Mission (FR)</label>
-        <textarea onchange="updateDivers('vision_mission', 'mission', this.value)">${contenu.vision_mission.mission || ''}</textarea>
-      </div>
-      <div class="form-group">
-        <label>Mission (NL)</label>
-        <textarea onchange="updateDivers('vision_mission', 'mission_nl', this.value)">${contenu.vision_mission.mission_nl || ''}</textarea>
-      </div>
-    `;
+  for (const file of files) {
+    prog.textContent = `Envoi ${done + 1}/${files.length} : ${file.name}…`;
+    try {
+      const base64  = await fileToBase64(file);
+      const safeName = file.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9.\-_]/g, '');
+      const path    = `img/uploads/${Date.now()}-${safeName}`;
+      await ghCommitBinary(path, base64, `Ajout photo: ${safeName}`);
+      photosData.photos.push({ url: `/${path}`, legende: '', date: new Date().toISOString().split('T')[0] });
+      done++;
+    } catch (e) { toast(`Erreur sur ${file.name} : ${e.message}`, 'error'); }
   }
 
-  html += `
-    </div>
-    <div class="form-section">
-      <h3>Footer</h3>
-  `;
-
-  if (contenu.footer) {
-    html += `
-      <div class="form-group">
-        <label>Verset (FR)</label>
-        <textarea onchange="updateDivers('footer', 'verset', this.value)">${contenu.footer.verset || ''}</textarea>
-      </div>
-      <div class="form-group">
-        <label>Référence verset</label>
-        <input type="text" value="${contenu.footer.verset_ref || ''}" onchange="updateDivers('footer', 'verset_ref', this.value)">
-      </div>
-      <div class="form-group">
-        <label>Copyright</label>
-        <input type="text" value="${contenu.footer.copyright || ''}" onchange="updateDivers('footer', 'copyright', this.value)">
-      </div>
-    `;
+  if (done > 0) {
+    prog.textContent = 'Mise à jour de la liste…';
+    try {
+      await ghCommitText('photos_culte.json', JSON.stringify(photosData, null, 2), `Ajout ${done} photo(s) via admin`);
+      toast(`✓ ${done} photo(s) ajoutée(s) et publiée(s) !`, 'success');
+      renderPhotosGrid();
+    } catch (e) { toast('Erreur sauvegarde : ' + e.message, 'error'); }
   }
-
-  html += '</div>';
-  content.innerHTML = html;
+  prog.style.display = 'none';
+  input.value = '';
 }
 
-function updateDivers(section, field, value) {
-  if (!contenu[section]) contenu[section] = {};
-  contenu[section][field] = value;
-  hasChanges = true;
-}
-
-// Save content
-async function saveContent() {
+async function savePhotosLegends() {
+  if (!getGHToken()) { toast('Token GitHub requis. Configurez-le dans ⚙ Paramètres.', 'error'); return; }
   try {
-    // Download the updated JSON file
-    downloadAllJSON();
+    await ghCommitText('photos_culte.json', JSON.stringify(photosData, null, 2), 'Mise à jour légendes photos via admin');
+    toast('✓ Légendes sauvegardées !', 'success');
+  } catch (e) { toast('Erreur : ' + e.message, 'error'); }
+}
 
-    // Show clear instructions for the user
-    showStatus('✓ Contenu téléchargé! Remplacez contenu.json à la racine du site, puis commitez avec git.', 'success');
-  } catch (error) {
-    showStatus('Erreur: Impossible de télécharger le fichier', 'error');
-    console.error('Error saving:', error);
+async function deletePhoto(idx) {
+  if (!confirm('Supprimer cette photo de la galerie ?')) return;
+  photosData.photos.splice(idx, 1);
+  if (getGHToken()) {
+    try {
+      await ghCommitText('photos_culte.json', JSON.stringify(photosData, null, 2), 'Suppression photo via admin');
+      toast('Photo supprimée.', 'success');
+    } catch (e) { toast('Erreur : ' + e.message, 'error'); }
   }
+  renderPhotosGrid();
 }
 
-// Download functions
-function downloadJSON(section) {
-  let data = {};
-
-  if (section === 'all') {
-    data = contenu;
-  } else if (section === 'annonces') {
-    data = { annonces: contenu.annonces };
-  } else if (section === 'departements') {
-    data = { departements: contenu.departements };
-  } else {
-    data = contenu;
-  }
-
-  const json = JSON.stringify(data, null, 2);
-  downloadFile(json, 'contenu.json', 'application/json');
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result.split(',')[1]);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
 }
 
-function downloadAllJSON() {
-  const json = JSON.stringify(contenu, null, 2);
-  downloadFile(json, 'contenu.json', 'application/json');
+// ════════════ USERS ════════════
+
+function showCurrentUser(user) {
+  const el = document.getElementById('current-user-info');
+  if (!el) return;
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border-radius:8px">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">
+        ${(user.email||'A')[0].toUpperCase()}
+      </div>
+      <div>
+        <div style="font-weight:600">${esc(user.email||'')}</div>
+        <div style="font-size:12px;color:var(--text2)">Administrateur connecté</div>
+      </div>
+    </div>`;
 }
 
-function downloadFile(content, filename, type) {
-  const blob = new Blob([content], { type });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-// Logout
-function logoutAdmin() {
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.logout().then(() => {
-      window.location.href = '/';
+async function loadUsers() {
+  const el = document.getElementById('users-list');
+  if (!el) return;
+  const user = window.netlifyIdentity?.currentUser();
+  if (!user) return;
+  try {
+    const token = await user.jwt();
+    const res = await fetch('/.netlify/identity/admin/users?per_page=50', {
+      headers: { Authorization: `Bearer ${token}` }
     });
-  } else {
-    window.location.href = '/';
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const users = data.users || [];
+    el.innerHTML = users.map(u => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg3);border-radius:8px;margin-bottom:8px">
+        <div>
+          <div style="font-size:14px;font-weight:500">${esc(u.email)}</div>
+          <div style="font-size:11px;color:var(--text2)">${u.confirmed_at ? 'Compte actif' : 'Invitation en attente'}</div>
+        </div>
+        ${u.email !== user.email ? `<button class="btn-del" onclick="deleteUser('${u.id}','${esc(u.email)}')">Supprimer</button>` : '<span style="font-size:11px;color:var(--text2)">Vous</span>'}
+      </div>`).join('') || '<p style="color:var(--text2);font-size:13px">Aucun utilisateur.</p>';
+  } catch {
+    el.innerHTML = `<p style="font-size:13px;color:var(--text2)">Liste indisponible. <a href="https://app.netlify.com/sites/cefclabornealost9300/identity" target="_blank" style="color:var(--purple-light)">Gérer sur Netlify →</a></p>`;
   }
+}
+
+async function inviteUser() {
+  const email = document.getElementById('invite-email').value.trim();
+  const resultEl = document.getElementById('invite-result');
+  if (!email || !email.includes('@')) {
+    resultEl.style.display = 'block'; resultEl.style.background = 'rgba(239,68,68,.1)';
+    resultEl.style.border = '1px solid rgba(239,68,68,.2)'; resultEl.style.color = '#fca5a5';
+    resultEl.textContent = 'Entrez une adresse email valide.'; return;
+  }
+  const user = window.netlifyIdentity?.currentUser();
+  if (!user) return;
+  try {
+    const token = await user.jwt();
+    const res = await fetch('/.netlify/identity/admin/users', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, app_metadata: { roles: ['admin'] } })
+    });
+    if (!res.ok) throw new Error();
+    resultEl.style.display = 'block'; resultEl.style.background = 'rgba(16,185,129,.1)';
+    resultEl.style.border = '1px solid rgba(16,185,129,.2)'; resultEl.style.color = '#6ee7b7';
+    resultEl.textContent = `✓ Invitation envoyée à ${email}.`;
+    document.getElementById('invite-email').value = '';
+    loadUsers();
+  } catch {
+    resultEl.style.display = 'block'; resultEl.style.background = 'rgba(245,158,11,.1)';
+    resultEl.style.border = '1px solid rgba(245,158,11,.2)'; resultEl.style.color = '#fcd34d';
+    resultEl.innerHTML = `Droits insuffisants. <a href="https://app.netlify.com/sites/cefclabornealost9300/identity" target="_blank" style="color:inherit;text-decoration:underline">Inviter sur Netlify →</a>`;
+  }
+}
+
+async function deleteUser(id, email) {
+  if (!confirm(`Supprimer l'accès de ${email} ?`)) return;
+  const user = window.netlifyIdentity?.currentUser();
+  if (!user) return;
+  try {
+    const token = await user.jwt();
+    await fetch(`/.netlify/identity/admin/users/${id}`, { method:'DELETE', headers:{ Authorization:`Bearer ${token}` } });
+    toast(`Accès supprimé pour ${email}`, 'success');
+    loadUsers();
+  } catch { toast('Erreur lors de la suppression.', 'error'); }
+}
+
+// ════════════ HELPERS ════════════
+
+function bindField(el) {
+  const val = getPath(contenu, el.dataset.path);
+  if (el.type === 'checkbox') el.checked = !!val; else el.value = val || '';
+  el.addEventListener('input',  () => setPath(contenu, el.dataset.path, el.type === 'checkbox' ? el.checked : el.value));
+  el.addEventListener('change', () => setPath(contenu, el.dataset.path, el.type === 'checkbox' ? el.checked : el.value));
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'show ' + type;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+function setPath(obj, path, value) {
+  const parts = path.split('.');
+  let cur = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!cur[parts[i]] || typeof cur[parts[i]] !== 'object') cur[parts[i]] = {};
+    cur = cur[parts[i]];
+  }
+  cur[parts[parts.length - 1]] = value;
+}
+
+function getPath(obj, path) {
+  return path.split('.').reduce((o, k) => (o && o[k] !== undefined ? o[k] : ''), obj);
+}
+
+function downloadJSON() {
+  const json = JSON.stringify(contenu, null, 2);
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([json], {type:'application/json'})),
+    download: 'contenu.json'
+  });
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
