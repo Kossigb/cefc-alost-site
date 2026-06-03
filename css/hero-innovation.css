@@ -1,0 +1,199 @@
+/* ===== HERO INNOVATION : Canvas · Countdown · Typewriter ===== */
+
+/* ── 1. PARTICLE CANVAS ──────────────────────────────────────── */
+#heroCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+#heroCanvas.ready { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  #heroCanvas { display: none; }
+}
+
+/* ── 2. SERVICE COUNTDOWN ────────────────────────────────────── */
+.hero-service-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 40px;
+  position: relative;
+  z-index: 4;
+  opacity: 0;
+  animation: fade-up 1s var(--ease) 1.3s forwards;
+}
+
+.hero-clock-label {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(227, 227, 235, 0.38);
+  transition: color 0.5s ease;
+}
+
+.hero-clock-rings {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.hero-clock-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  width: 52px;
+}
+
+.hero-clock-unit svg {
+  width: 52px;
+  height: 52px;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.ring-track {
+  fill: none;
+  stroke: rgba(167, 139, 250, 0.1);
+  stroke-width: 2.5;
+}
+
+.ring-fill {
+  fill: none;
+  stroke: rgba(167, 139, 250, 0.85);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 0 125.66;
+  transition: stroke-dasharray 0.9s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.5s ease;
+  filter: drop-shadow(0 0 5px rgba(167, 139, 250, 0.55));
+}
+
+.hero-clock-val {
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--silver);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  transition: color 0.5s ease, font-size 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.hero-clock-lbl {
+  font-family: var(--sans);
+  font-size: 7.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(227, 227, 235, 0.28);
+  line-height: 1;
+}
+
+.hero-clock-sep {
+  color: rgba(227, 227, 235, 0.18);
+  font-size: 14px;
+  padding-bottom: 22px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* ── LIVE STATE ── */
+.hero-service-clock.is-live .hero-clock-label {
+  color: #E24B4A;
+  animation: live-label-pulse 1.8s ease-in-out infinite;
+}
+@keyframes live-label-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+.hero-service-clock.is-live .ring-fill {
+  stroke: #E24B4A;
+  stroke-dasharray: 125.66 0;
+  filter: drop-shadow(0 0 7px rgba(226, 75, 74, 0.75));
+  animation: live-ring-glow 1.8s ease-in-out infinite;
+}
+@keyframes live-ring-glow {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+.hero-service-clock.is-live .ring-track {
+  stroke: rgba(226, 75, 74, 0.12);
+}
+
+.hero-service-clock.is-live .hero-clock-val {
+  color: #E24B4A;
+  font-size: 15px;
+}
+
+/* ── 3. SCRIPTURE TYPEWRITER ─────────────────────────────────── */
+.hero-verse-typewriter {
+  position: relative;
+  z-index: 4;
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11.5px;
+  color: rgba(227, 227, 235, 0.32);
+  letter-spacing: 0.04em;
+  min-height: 18px;
+  margin-top: 12px;
+  opacity: 0;
+  animation: fade-up 1s var(--ease) 1.5s forwards;
+}
+
+.hero-verse-typewriter .cursor {
+  display: inline-block;
+  width: 1px;
+  height: 0.85em;
+  background: rgba(167, 139, 250, 0.65);
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  animation: cursor-blink 0.85s step-end infinite;
+}
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .hero-service-clock,
+  .hero-verse-typewriter {
+    animation: none;
+    opacity: 1;
+  }
+  .ring-fill { transition: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .hero-clock-unit { width: 44px; }
+  .hero-clock-unit svg { width: 44px; height: 44px; }
+  .hero-clock-val { font-size: 11px; top: 22px; }
+  .hero-clock-rings { gap: 4px; }
+  .hero-clock-sep { font-size: 12px; }
+}
+
+@media (max-height: 620px) {
+  .hero-verse-typewriter { display: none; }
+  .hero-service-clock { margin-top: 20px; gap: 6px; }
+  .hero-clock-unit svg { width: 40px; height: 40px; }
+  .hero-clock-unit { width: 40px; }
+  .hero-clock-val { top: 20px; font-size: 11px; }
+}
