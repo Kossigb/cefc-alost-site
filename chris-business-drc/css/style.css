@@ -400,38 +400,28 @@ p {
 
 .trust-bar {
   background: var(--paper-raised);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 36px;
+  padding: 26px 4px;
 }
 
 .trust-item {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 22px 20px;
-  border-right: 1px solid var(--line);
-}
-
-.trust-item:last-child {
-  border-right: none;
+  align-items: baseline;
+  gap: 10px;
 }
 
 .trust-icon {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   color: var(--ink-faint);
   flex-shrink: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 6px 8px;
-  min-width: 36px;
-  text-align: center;
 }
 
 .trust-item strong {
-  display: block;
   font-family: var(--font-serif);
   font-weight: 600;
   font-size: 1rem;
@@ -511,30 +501,28 @@ section {
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  gap: 48px;
 }
 
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  gap: 40px;
 }
 
 .grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  gap: 32px;
 }
 
 .card {
-  background: var(--paper-raised);
-  padding: 30px;
+  padding: 0;
+}
+
+.grid-2 .card,
+.grid-3 .card {
+  padding-right: 8px;
 }
 
 .badge {
@@ -575,53 +563,66 @@ section {
   border-color: var(--seal);
 }
 
-/* Service cards (dossier index) */
+/* Services — flowing index, not a card grid */
 
-.service-card {
-  background: var(--paper-raised);
-  padding: 26px 22px;
-  text-align: left;
+.service-list {
+  columns: 2;
+  column-gap: 48px;
+}
+
+.service-entry {
+  break-inside: avoid;
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+
+.service-list .service-entry:nth-child(1),
+.service-list .service-entry:nth-child(2) {
+  border-top: none;
 }
 
 .service-icon {
   font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   color: var(--ink-faint);
-  margin-bottom: 14px;
+  padding-top: 4px;
+  flex-shrink: 0;
+  width: 32px;
 }
 
-.service-card h4 {
+.service-entry h4 {
   font-size: 1.02rem;
   font-weight: 600;
   font-family: var(--font-sans);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
-.service-card p {
+.service-entry p {
   color: var(--ink-soft);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   margin: 0;
 }
 
 /* Market / domain cards */
 
 .market-card {
-  background: var(--paper-raised);
   display: flex;
   flex-direction: column;
 }
 
 .market-card-head {
   color: var(--ink);
-  padding: 18px 20px;
+  padding: 0 0 12px;
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: 1.02rem;
-  border-bottom: 1px solid var(--line);
+  font-size: 1.1rem;
+  border-bottom: 1px solid var(--ink);
 }
 
 .market-card-body {
-  padding: 16px 20px 20px;
+  padding: 4px 0 0;
 }
 
 .market-card-body li {
@@ -650,8 +651,7 @@ section {
 .case-card {
   display: flex;
   gap: 18px;
-  background: var(--paper-raised);
-  padding: 26px;
+  padding: 4px 0 0;
 }
 
 .case-icon {
@@ -869,16 +869,14 @@ section {
 .stat-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
+  gap: 40px;
   margin-top: 36px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .stat {
   text-align: left;
-  padding: 24px 20px;
-  background: var(--ink);
 }
 
 .stat strong {
@@ -910,6 +908,21 @@ section {
 
 .timeline-item:first-child {
   border-top: 1px solid var(--line);
+}
+
+/* Plain variant: for lists without real chronological order — no rules, just rhythm */
+
+.timeline.timeline-plain {
+  gap: 30px;
+}
+
+.timeline-plain .timeline-item {
+  padding: 0;
+  border: none;
+}
+
+.timeline-plain .timeline-item:first-child {
+  border: none;
 }
 
 .timeline-marker {
@@ -1052,14 +1065,11 @@ section {
 .people-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  gap: 48px;
 }
 
 .person-card {
-  background: var(--paper-raised);
-  padding: 28px;
+  padding: 0;
 }
 
 .person-avatar {
