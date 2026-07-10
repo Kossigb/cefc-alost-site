@@ -1,19 +1,19 @@
 /* ===== Chris Business DRC & Chris Foot — Feuille de style =====
    Direction : dossier de presse officiel / carte d'accréditation fédérale.
-   Encre + papier froid, un seul accent (rouge sceau), typographie éditoriale. */
+   Papier neutre, encre chaude (pas de bleu), un seul accent (rouge sceau). */
 
 :root {
-  --paper: #f5f6f8;
+  --paper: #f5f4f1;
   --paper-raised: #ffffff;
-  --ink: #12172b;
-  --ink-soft: #4b5468;
-  --ink-faint: #7b8296;
-  --line: #d8dce3;
-  --seal: #c4162c;
-  --seal-dark: #93101f;
-  --pitch: #1f5d42;
-  --pitch-dark: #163f2d;
-  --shadow: 0 1px 2px rgba(18, 23, 43, 0.04);
+  --ink: #1b1815;
+  --ink-soft: #5a5650;
+  --ink-faint: #8c877e;
+  --line: #ded9d0;
+  --seal: #b3231f;
+  --seal-dark: #841a17;
+  --pitch: #2c5a3f;
+  --pitch-dark: #1e3f2c;
+  --shadow: 0 1px 2px rgba(27, 24, 21, 0.04);
   --radius: 3px;
   --max-width: 1180px;
   --font-serif: "Newsreader", "Iowan Old Style", Georgia, serif;
@@ -23,46 +23,46 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #0e1220;
-    --paper-raised: #161b2c;
-    --ink: #edeff4;
-    --ink-soft: #9aa3b5;
-    --ink-faint: #6b7386;
-    --line: #2a3149;
-    --seal: #ff6b70;
-    --seal-dark: #ff9296;
-    --pitch: #4fb489;
-    --pitch-dark: #6fcaa2;
+    --paper: #17140f;
+    --paper-raised: #211d17;
+    --ink: #f2efe9;
+    --ink-soft: #b3ab9e;
+    --ink-faint: #837c71;
+    --line: #362f26;
+    --seal: #e8615c;
+    --seal-dark: #f08a86;
+    --pitch: #5ea37c;
+    --pitch-dark: #7fbb9a;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   }
 }
 
 :root[data-theme="dark"] {
-  --paper: #0e1220;
-  --paper-raised: #161b2c;
-  --ink: #edeff4;
-  --ink-soft: #9aa3b5;
-  --ink-faint: #6b7386;
-  --line: #2a3149;
-  --seal: #ff6b70;
-  --seal-dark: #ff9296;
-  --pitch: #4fb489;
-  --pitch-dark: #6fcaa2;
+  --paper: #17140f;
+  --paper-raised: #211d17;
+  --ink: #f2efe9;
+  --ink-soft: #b3ab9e;
+  --ink-faint: #837c71;
+  --line: #362f26;
+  --seal: #e8615c;
+  --seal-dark: #f08a86;
+  --pitch: #5ea37c;
+  --pitch-dark: #7fbb9a;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 :root[data-theme="light"] {
-  --paper: #f5f6f8;
+  --paper: #f5f4f1;
   --paper-raised: #ffffff;
-  --ink: #12172b;
-  --ink-soft: #4b5468;
-  --ink-faint: #7b8296;
-  --line: #d8dce3;
-  --seal: #c4162c;
-  --seal-dark: #93101f;
-  --pitch: #1f5d42;
-  --pitch-dark: #163f2d;
-  --shadow: 0 1px 2px rgba(18, 23, 43, 0.04);
+  --ink: #1b1815;
+  --ink-soft: #5a5650;
+  --ink-faint: #8c877e;
+  --line: #ded9d0;
+  --seal: #b3231f;
+  --seal-dark: #841a17;
+  --pitch: #2c5a3f;
+  --pitch-dark: #1e3f2c;
+  --shadow: 0 1px 2px rgba(27, 24, 21, 0.04);
 }
 
 * {
@@ -184,6 +184,16 @@ p {
 .btn-outline:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: #fff;
+}
+
+.cta-final .btn-outline {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.cta-final .btn-outline:hover {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .btn-dark {
@@ -336,7 +346,7 @@ p {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, rgba(14, 18, 32, 0.96) 0%, rgba(14, 18, 32, 0.88) 45%, rgba(14, 18, 32, 0.62) 100%);
+  background: linear-gradient(100deg, rgba(27, 24, 21, 0.96) 0%, rgba(27, 24, 21, 0.88) 45%, rgba(27, 24, 21, 0.62) 100%);
 }
 
 .hero-inner {
@@ -494,6 +504,19 @@ section {
 
 .section-dark .eyebrow-inline {
   color: var(--seal);
+}
+
+.pull-quote {
+  margin: 14px 0 0;
+  padding-left: 28px;
+  border-left: 3px solid var(--seal);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+  line-height: 1.4;
+  color: var(--ink);
+  max-width: 46ch;
 }
 
 /* ===== Grids & Cards ===== */
@@ -774,7 +797,7 @@ section {
   right: 0;
   bottom: 0;
   padding: 16px 20px;
-  background: linear-gradient(0deg, rgba(14, 18, 32, 0.92) 0%, rgba(14, 18, 32, 0) 100%);
+  background: linear-gradient(0deg, rgba(27, 24, 21, 0.92) 0%, rgba(27, 24, 21, 0) 100%);
   color: #fff;
 }
 
@@ -877,19 +900,33 @@ section {
 
 .stat {
   text-align: left;
+  padding-top: 16px;
+  border-top: 2px solid var(--seal);
 }
 
 .stat strong {
   display: block;
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: 1.7rem;
-  color: #fff;
+  font-size: 1.5rem;
+  color: var(--ink);
 }
 
 .stat span {
   font-size: 0.85rem;
-  color: rgba(237, 239, 244, 0.68);
+  color: var(--ink-soft);
+}
+
+.section-dark .stat {
+  border-top-color: var(--seal);
+}
+
+.section-dark .stat strong {
+  color: #fff;
+}
+
+.section-dark .stat span {
+  color: rgba(255, 255, 255, 0.68);
 }
 
 /* ===== Timeline / list blocks ===== */
@@ -991,14 +1028,15 @@ section {
 
 .cta-final {
   text-align: left;
-  padding: 52px 40px;
-  background: var(--ink);
-  color: #fff;
+  padding: 48px 44px;
+  background: var(--paper-raised);
+  color: var(--ink);
   border: 1px solid var(--line);
+  border-top: 3px solid var(--seal);
 }
 
 .cta-final h2 {
-  color: #fff;
+  color: var(--ink);
   font-weight: 500;
 }
 
@@ -1018,6 +1056,7 @@ section {
   align-items: center;
   background: var(--paper-raised);
   border: 1px solid var(--line);
+  border-top: 3px solid var(--seal);
   padding: 32px;
 }
 
