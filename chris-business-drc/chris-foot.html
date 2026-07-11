@@ -32,9 +32,25 @@
         <li><a href="contact.html" class="nav-cta">Devenir partenaire</a></li>
       </ul>
     </nav>
+    <button class="search-trigger" data-search-trigger type="button">
+      <span class="search-icon">⌕</span>
+      <span class="search-label">Rechercher</span>
+      <kbd>/</kbd>
+    </button>
     <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
   </div>
 </header>
+
+<div class="search-overlay" data-search-overlay>
+  <div class="search-panel">
+    <div class="search-input-row">
+      <span class="search-icon">⌕</span>
+      <input type="text" placeholder="Rechercher sur le site…" aria-label="Rechercher sur le site" autocomplete="off">
+      <button type="button" data-search-close>Échap</button>
+    </div>
+    <div class="search-results" data-search-results></div>
+  </div>
+</div>
 
 <section class="hero page-hero">
   <div class="container hero-inner">
@@ -45,7 +61,7 @@
   </div>
 </section>
 
-<section>
+<section id="luyindama">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Réussite encadrée</p>
@@ -72,7 +88,7 @@
   </div>
 </section>
 
-<section>
+<section id="jubile">
   <div class="container">
     <div class="banner">
       <div>
@@ -83,24 +99,41 @@
       <a class="btn btn-outline" href="contact.html">S'associer à l'événement</a>
     </div>
 
-    <div class="gallery-grid mt-lg">
-      <figure class="photo-frame">
-        <div class="frame-img">
-          <img src="img/rencontre-jubile-mputu.jpg" alt="Remise du programme officiel du Jubilé Tresor Mputu" loading="lazy">
+    <div class="slider mt-lg" data-slider>
+      <div class="slider-viewport">
+        <div class="slider-track">
+          <div class="slide">
+            <div class="slide-media"><img src="img/rencontre-jubile-mputu.jpg" alt="Remise du programme officiel du Jubilé Tresor Mputu" loading="lazy"></div>
+            <div class="slide-caption"><p>Serge Tungila Mwanza et Christian Yangongo Kapenga, avec le programme officiel du Jubilé.</p></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/brochure-jubile-mputu.jpg" alt="Brochure de présentation du Jubilé Tresor Mputu" loading="lazy"></div>
+            <div class="slide-caption"><p>Brochure de présentation du projet — « Le génie du football congolais ».</p></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media">
+              <video controls playsinline preload="metadata">
+                <source src="video/jubile-clip.mov" type="video/quicktime">
+                Votre navigateur ne prend pas en charge la lecture de cette vidéo.
+              </video>
+            </div>
+            <div class="slide-caption"><p>Extrait vidéo — coulisses du projet Jubilé Tresor Mputu.</p></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/conference-presse-fecofa-2.jpg" alt="Conférence de presse FECOFA, campagne En route vers le Mondial" loading="lazy"></div>
+            <div class="slide-caption"><p>Conférence de presse FECOFA — campagne « En route vers le Mondial », logo Chris Foot en partenaire.</p></div>
+          </div>
         </div>
-        <figcaption>Serge Tungila Mwanza et Christian Yangongo Kapenga, avec le programme officiel du Jubilé Tresor Mputu.</figcaption>
-      </figure>
-      <figure class="photo-frame">
-        <div class="frame-img">
-          <img src="img/conference-presse-fecofa-2.jpg" alt="Conférence de presse FECOFA, campagne En route vers le Mondial" loading="lazy">
-        </div>
-        <figcaption>Conférence de presse FECOFA — campagne « En route vers le Mondial », logo Chris Foot en partenaire.</figcaption>
-      </figure>
+        <div class="slider-counter"></div>
+      </div>
+      <button class="slider-arrow slider-prev" aria-label="Média précédent">‹</button>
+      <button class="slider-arrow slider-next" aria-label="Média suivant">›</button>
+      <div class="slider-dots"></div>
     </div>
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="academie">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Un projet d'ambition</p>
@@ -122,7 +155,7 @@
   </div>
 </section>
 
-<section>
+<section id="faq">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Questions fréquentes</p>

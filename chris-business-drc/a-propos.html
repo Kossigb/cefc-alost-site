@@ -32,9 +32,25 @@
         <li><a href="contact.html" class="nav-cta">Devenir partenaire</a></li>
       </ul>
     </nav>
+    <button class="search-trigger" data-search-trigger type="button">
+      <span class="search-icon">⌕</span>
+      <span class="search-label">Rechercher</span>
+      <kbd>/</kbd>
+    </button>
     <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
   </div>
 </header>
+
+<div class="search-overlay" data-search-overlay>
+  <div class="search-panel">
+    <div class="search-input-row">
+      <span class="search-icon">⌕</span>
+      <input type="text" placeholder="Rechercher sur le site…" aria-label="Rechercher sur le site" autocomplete="off">
+      <button type="button" data-search-close>Échap</button>
+    </div>
+    <div class="search-results" data-search-results></div>
+  </div>
+</div>
 
 <section class="hero page-hero">
   <div class="container hero-inner">
@@ -45,7 +61,7 @@
   </div>
 </section>
 
-<section>
+<section id="equipe">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">L'équipe</p>
@@ -75,7 +91,7 @@
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="mission">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Notre mission</p>
@@ -96,7 +112,7 @@
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="pourquoi-rdc">
   <div class="container">
     <p class="ref-label">Pourquoi la RDC</p>
     <blockquote class="pull-quote">

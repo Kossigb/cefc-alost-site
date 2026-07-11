@@ -32,9 +32,25 @@
         <li><a href="contact.html" class="nav-cta">Devenir partenaire</a></li>
       </ul>
     </nav>
+    <button class="search-trigger" data-search-trigger type="button">
+      <span class="search-icon">⌕</span>
+      <span class="search-label">Rechercher</span>
+      <kbd>/</kbd>
+    </button>
     <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
   </div>
 </header>
+
+<div class="search-overlay" data-search-overlay>
+  <div class="search-panel">
+    <div class="search-input-row">
+      <span class="search-icon">⌕</span>
+      <input type="text" placeholder="Rechercher sur le site…" aria-label="Rechercher sur le site" autocomplete="off">
+      <button type="button" data-search-close>Échap</button>
+    </div>
+    <div class="search-results" data-search-results></div>
+  </div>
+</div>
 
 <section class="hero hero-photo" style="background-image: url('img/campagne-en-route-vers-le-mondial.jpg'); background-position: center 15%;">
   <div class="container hero-inner">
@@ -81,7 +97,7 @@
   </div>
 </div>
 
-<section>
+<section id="axes">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Nos deux axes</p>
@@ -105,7 +121,7 @@
   </div>
 </section>
 
-<section class="section-tight">
+<section class="section-tight" id="direction">
   <div class="container">
     <div class="credential-block">
       <div>
@@ -121,7 +137,7 @@
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="jubile">
   <div class="container">
     <div class="banner">
       <div>
@@ -134,7 +150,7 @@
   </div>
 </section>
 
-<section>
+<section id="domaines">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Nos domaines d'action</p>
@@ -178,7 +194,42 @@
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="galerie">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow-inline">Galerie</p>
+      <h2>Nos réalisations en images</h2>
+      <p>Campagnes officielles, conférences de presse, délégations et coulisses du Jubilé — un aperçu du terrain.</p>
+    </div>
+    <div class="slider" data-slider>
+      <div class="slider-viewport">
+        <div class="slider-track">
+          <div class="slide">
+            <div class="slide-media"><img src="img/campagne-en-route-vers-le-mondial.jpg" alt="Affiche officielle de la campagne En route vers le Mondial" loading="lazy"></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/conference-presse-fecofa-3.jpg" alt="Conférence de presse FECOFA avec le mur de partenaires, dont Chris Foot" loading="lazy"></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/delegation-stade-europe.jpg" alt="Délégation Chris Business DRC en tribune lors d'un match en Europe, avec WIDAL Fondation" loading="lazy"></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/stade-infrastructure.jpg" alt="Infrastructure sportive, Ministère provincial de la Jeunesse, Sports, Loisirs, Culture et Art" loading="lazy"></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/brochure-jubile-mputu.jpg" alt="Brochure de présentation du Jubilé Tresor Mputu" loading="lazy"></div>
+          </div>
+        </div>
+        <div class="slider-counter"></div>
+      </div>
+      <button class="slider-arrow slider-prev" aria-label="Image précédente">‹</button>
+      <button class="slider-arrow slider-next" aria-label="Image suivante">›</button>
+      <div class="slider-dots"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="realisations">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Réalisations</p>
@@ -225,7 +276,7 @@
   </div>
 </section>
 
-<section>
+<section id="services">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Ce que nous apportons</p>
@@ -293,7 +344,7 @@
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="faq">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Questions fréquentes</p>

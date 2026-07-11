@@ -32,9 +32,25 @@
         <li><a href="contact.html" class="nav-cta">Devenir partenaire</a></li>
       </ul>
     </nav>
+    <button class="search-trigger" data-search-trigger type="button">
+      <span class="search-icon">⌕</span>
+      <span class="search-label">Rechercher</span>
+      <kbd>/</kbd>
+    </button>
     <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
   </div>
 </header>
+
+<div class="search-overlay" data-search-overlay>
+  <div class="search-panel">
+    <div class="search-input-row">
+      <span class="search-icon">⌕</span>
+      <input type="text" placeholder="Rechercher sur le site…" aria-label="Rechercher sur le site" autocomplete="off">
+      <button type="button" data-search-close>Échap</button>
+    </div>
+    <div class="search-results" data-search-results></div>
+  </div>
+</div>
 
 <section class="hero page-hero">
   <div class="container hero-inner">
@@ -45,7 +61,7 @@
   </div>
 </section>
 
-<section>
+<section id="projet-phare">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Notre réalisation phare</p>
@@ -76,24 +92,36 @@
       </div>
     </div>
 
-    <div class="gallery-grid mt-lg">
-      <figure class="photo-frame">
-        <div class="frame-img">
-          <img src="img/magazine-en-route-coupe-du-monde.jpg" alt="Couverture du magazine « En route vers la Coupe du Monde », édition spéciale mai 2026" loading="lazy">
+    <div class="slider mt-lg" data-slider>
+      <div class="slider-viewport">
+        <div class="slider-track">
+          <div class="slide">
+            <div class="slide-media"><img src="img/magazine-en-route-coupe-du-monde.jpg" alt="Couverture du magazine « En route vers la Coupe du Monde », édition spéciale mai 2026" loading="lazy"></div>
+            <div class="slide-caption"><p>Magazine « En route vers la Coupe du Monde » — édition spéciale, mai 2026.</p></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/campagne-en-route-vers-le-mondial.jpg" alt="Campagne « En route vers le Mondial » avec le logo Chris Foot" loading="lazy"></div>
+            <div class="slide-caption"><p>Campagne officielle « En route vers le Mondial », en partenariat avec la FECOFA.</p></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/conference-presse-fecofa-3.jpg" alt="Conférence de presse FECOFA, mur de partenaires avec le logo Chris Foot" loading="lazy"></div>
+            <div class="slide-caption"><p>Conférence de presse FECOFA — Chris Foot parmi les partenaires officiels.</p></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/stade-infrastructure.jpg" alt="Infrastructure sportive soutenue par le Ministère provincial de la Jeunesse, Sports, Loisirs, Culture et Art" loading="lazy"></div>
+            <div class="slide-caption"><p>Relations institutionnelles — infrastructures sportives, Ministère provincial de la Jeunesse et des Sports.</p></div>
+          </div>
         </div>
-        <figcaption>Magazine « En route vers la Coupe du Monde » — édition spéciale, mai 2026.</figcaption>
-      </figure>
-      <figure class="photo-frame">
-        <div class="frame-img">
-          <img src="img/campagne-en-route-vers-le-mondial.jpg" alt="Campagne « En route vers le Mondial » avec le logo Chris Foot" loading="lazy">
-        </div>
-        <figcaption>Campagne officielle « En route vers le Mondial », en partenariat avec la FECOFA.</figcaption>
-      </figure>
+        <div class="slider-counter"></div>
+      </div>
+      <button class="slider-arrow slider-prev" aria-label="Image précédente">‹</button>
+      <button class="slider-arrow slider-next" aria-label="Image suivante">›</button>
+      <div class="slider-dots"></div>
     </div>
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="institutions">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Partenariats institutionnels</p>
@@ -117,7 +145,7 @@
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="visibilite">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Pour nos partenaires</p>

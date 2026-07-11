@@ -32,9 +32,25 @@
         <li><a href="contact.html" class="nav-cta">Devenir partenaire</a></li>
       </ul>
     </nav>
+    <button class="search-trigger" data-search-trigger type="button">
+      <span class="search-icon">⌕</span>
+      <span class="search-label">Rechercher</span>
+      <kbd>/</kbd>
+    </button>
     <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
   </div>
 </header>
+
+<div class="search-overlay" data-search-overlay>
+  <div class="search-panel">
+    <div class="search-input-row">
+      <span class="search-icon">⌕</span>
+      <input type="text" placeholder="Rechercher sur le site…" aria-label="Rechercher sur le site" autocomplete="off">
+      <button type="button" data-search-close>Échap</button>
+    </div>
+    <div class="search-results" data-search-results></div>
+  </div>
+</div>
 
 <section class="hero page-hero">
   <div class="container hero-inner">
@@ -45,7 +61,7 @@
   </div>
 </section>
 
-<section>
+<section id="visibilite">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Visibilité sportive</p>
@@ -70,24 +86,36 @@
       </div>
     </div>
 
-    <div class="gallery-grid mt-lg">
-      <figure class="photo-frame">
-        <div class="frame-img">
-          <img src="img/conference-presse-fecofa-1.jpg" alt="Conférence de presse FECOFA avec les partenaires visibles en arrière-plan" loading="lazy">
+    <div class="slider mt-lg" data-slider>
+      <div class="slider-viewport">
+        <div class="slider-track">
+          <div class="slide">
+            <div class="slide-media"><img src="img/conference-presse-fecofa-1.jpg" alt="Conférence de presse FECOFA avec les partenaires visibles en arrière-plan" loading="lazy"></div>
+            <div class="slide-caption"><p>Conférence de presse FECOFA — panneau des partenaires et sponsors.</p></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/campagne-en-route-vers-le-mondial.jpg" alt="Affiche officielle de la campagne En route vers le Mondial" loading="lazy"></div>
+            <div class="slide-caption"><p>Affiche officielle de la campagne « En route vers le Mondial », logo Chris Foot en bonne place.</p></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/delegation-stade-europe.jpg" alt="Délégation en tribune lors d'un match en Europe, avec WIDAL Fondation" loading="lazy"></div>
+            <div class="slide-caption"><p>Rayonnement international — délégation en tribune lors d'un déplacement en Europe.</p></div>
+          </div>
+          <div class="slide">
+            <div class="slide-media"><img src="img/stade-infrastructure.jpg" alt="Infrastructure sportive, Ministère provincial de la Jeunesse, Sports, Loisirs, Culture et Art" loading="lazy"></div>
+            <div class="slide-caption"><p>Infrastructures sportives soutenues par les institutions provinciales.</p></div>
+          </div>
         </div>
-        <figcaption>Conférence de presse FECOFA — panneau des partenaires et sponsors.</figcaption>
-      </figure>
-      <figure class="photo-frame">
-        <div class="frame-img">
-          <img src="img/campagne-en-route-vers-le-mondial.jpg" alt="Affiche officielle de la campagne En route vers le Mondial" loading="lazy">
-        </div>
-        <figcaption>Affiche officielle de la campagne « En route vers le Mondial », logo Chris Foot en bonne place.</figcaption>
-      </figure>
+        <div class="slider-counter"></div>
+      </div>
+      <button class="slider-arrow slider-prev" aria-label="Image précédente">‹</button>
+      <button class="slider-arrow slider-next" aria-label="Image suivante">›</button>
+      <div class="slider-dots"></div>
     </div>
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="medical">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Secteur médical &amp; humanitaire</p>
@@ -120,7 +148,7 @@
   </div>
 </section>
 
-<section class="section-alt">
+<section class="section-alt" id="tourisme">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Tourisme médical</p>
@@ -130,7 +158,7 @@
   </div>
 </section>
 
-<section>
+<section id="academie">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow-inline">Projet académie</p>
