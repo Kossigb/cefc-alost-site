@@ -551,6 +551,37 @@ section {
   color: var(--pitch);
 }
 
+/* Partner logo cards */
+
+.partner-card {
+  text-align: center;
+}
+
+.partner-logo {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 16px;
+  border: 1px solid var(--line);
+}
+
+.partner-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.partner-strip img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .card .link-arrow {
   display: inline-flex;
   align-items: center;
