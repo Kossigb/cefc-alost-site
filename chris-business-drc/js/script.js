@@ -121,7 +121,7 @@ var SEARCH_INDEX = [
   { page: "Accueil", title: "Jubilé de Tresor Mputu", url: "index.html#jubile", snippet: "2026, un grand événement organisé en RDC." },
   { page: "Accueil", title: "Nos services", url: "index.html#services", snippet: "Facilitation d'affaires, représentation FIFA, partenariats médicaux, événementiel." },
   { page: "Chris Business", title: "Votre porte d'entrée en RDC", url: "chris-business.html", snippet: "Facilitation d'affaires en République Démocratique du Congo." },
-  { page: "Chris Business", title: "Nos clients actuels", url: "chris-business.html#clients", snippet: "Jetour, Swista, CNSS." },
+  { page: "Chris Business", title: "Nos clients actuels", url: "chris-business.html#clients", snippet: "Jetour, Swissta, CNSS." },
   { page: "Chris Business", title: "Objectifs du partenariat", url: "chris-business.html#objectifs", snippet: "Élargir vos contacts, collaborer avec les autorités, installer votre structure." },
   { page: "Chris Business", title: "Trois fondations, un même engagement", url: "chris-business.html#fondations", snippet: "Fondation Denise Nyakeru Tshisekedi, Fondation Widal, FONAREV." },
   { page: "Chrisfoot", title: "Le football congolais à l'international", url: "chris-foot.html", snippet: "Agence intermédiaire FIFA basée en Flandre depuis 2015." },
