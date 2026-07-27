@@ -381,50 +381,6 @@ p {
   padding: 50px 0 88px;
 }
 
-/* ===== Trust bar (overlaps hero) ===== */
-
-.trust-bar-wrap {
-  margin-top: -56px;
-  position: relative;
-  z-index: 5;
-}
-
-.trust-bar {
-  background: var(--paper-raised);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 36px;
-  padding: 26px 28px;
-}
-
-.trust-item {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
-
-.trust-icon {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--ink-faint);
-  flex-shrink: 0;
-}
-
-.trust-item strong {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--ink);
-}
-
-.trust-item span {
-  font-size: 0.8rem;
-  color: var(--ink-soft);
-}
-
 /* ===== Sections ===== */
 
 section {
@@ -1075,60 +1031,6 @@ section {
   margin-top: 22px;
 }
 
-/* ===== Credential / dossier ID block ===== */
-
-.credential-block {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 30px;
-  align-items: center;
-  background: var(--paper-raised);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  border-top: 3px solid var(--seal);
-  padding: 32px;
-}
-
-.credential-block h3 {
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.credential-block p {
-  color: var(--ink-soft);
-  margin-bottom: 0;
-}
-
-.credential-code {
-  flex-shrink: 0;
-  width: 108px;
-  height: 108px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  color: var(--ink);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-family: var(--font-mono);
-  padding: 10px;
-}
-
-.credential-code strong {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  display: block;
-  font-weight: 600;
-}
-
-.credential-code span {
-  font-size: 0.6rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
 /* ===== Team / people ===== */
 
 .people-grid {
@@ -1335,14 +1237,6 @@ section {
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .trust-bar {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .trust-item:nth-child(2) {
-    border-right: none;
-  }
 }
 
 @media (max-width: 900px) {
@@ -1363,11 +1257,6 @@ section {
 
   .form-row {
     grid-template-columns: 1fr;
-  }
-
-  .credential-block {
-    grid-template-columns: 1fr;
-    text-align: left;
   }
 }
 
@@ -1406,19 +1295,6 @@ section {
 
   .grid-4 {
     grid-template-columns: 1fr;
-  }
-
-  .trust-bar {
-    grid-template-columns: 1fr;
-  }
-
-  .trust-item {
-    border-right: none;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .trust-item:last-child {
-    border-bottom: none;
   }
 
   .banner {
