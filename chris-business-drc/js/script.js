@@ -119,7 +119,6 @@ var SEARCH_INDEX = [
   { page: "Accueil", title: "Deux structures, une même vision", url: "index.html#axes", snippet: "Chris Business (facilitation d'affaires) et Chrisfoot (agent FIFA)." },
   { page: "Accueil", title: "Direction", url: "index.html#direction", snippet: "Serge Tungila Mwanza et Christian Yangongo Kapenga." },
   { page: "Accueil", title: "Jubilé de Tresor Mputu", url: "index.html#jubile", snippet: "2026, un grand événement organisé en RDC." },
-  { page: "Accueil", title: "Galerie", url: "index.html#galerie", snippet: "Campagne En route vers le Mondial, Jubilé, délégations." },
   { page: "Accueil", title: "Nos services", url: "index.html#services", snippet: "Facilitation d'affaires, représentation FIFA, partenariats médicaux, événementiel." },
   { page: "Chris Business", title: "Votre porte d'entrée en RDC", url: "chris-business.html", snippet: "Facilitation d'affaires en République Démocratique du Congo." },
   { page: "Chris Business", title: "Nos clients actuels", url: "chris-business.html#clients", snippet: "Jetour, Swista, CNSS." },
