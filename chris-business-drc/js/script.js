@@ -126,7 +126,7 @@ var SEARCH_INDEX = [
   { page: "Chris Business", title: "Trois fondations, un même engagement", url: "chris-business.html#fondations", snippet: "Fondation Denise Nyakeru Tshisekedi, Fondation Widal, FONAREV." },
   { page: "Chrisfoot", title: "Le football congolais à l'international", url: "chris-foot.html", snippet: "Agence intermédiaire FIFA basée en Flandre depuis 2015." },
   { page: "Chrisfoot", title: "Christian Luyindama", url: "chris-foot.html#luyindama", snippet: "International rd-congolais, réussi en RDC, en Belgique et en Turquie." },
-  { page: "Chrisfoot", title: "Jubilé de Tresor Mputu", url: "chris-foot.html#jubile", snippet: "Galerie photo et vidéo de l'événement." },
+  { page: "Chrisfoot", title: "Jubilé de Tresor Mputu", url: "chris-foot.html#jubile", snippet: "Conférence de presse FECOFA pour l'événement." },
   { page: "Chrisfoot", title: "Nos clubs partenaires en Europe", url: "chris-foot.html#international", snippet: "Olympique de Marseille, Standard de Liège, RB Leipzig." },
   { page: "Chrisfoot", title: "Une académie de football en RDC", url: "chris-foot.html#academie", snippet: "Un projet pour convaincre Mesut Özil de s'associer." },
   { page: "Chrisfoot", title: "Questions fréquentes", url: "chris-foot.html#faq", snippet: "Agent FIFA, footballeurs professionnels." },
