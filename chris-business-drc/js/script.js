@@ -120,7 +120,6 @@ var SEARCH_INDEX = [
   { page: "Accueil", title: "Direction", url: "index.html#direction", snippet: "Serge Tungila Mwanza et Christian Yangongo Kapenga." },
   { page: "Accueil", title: "Jubilé de Tresor Mputu", url: "index.html#jubile", snippet: "2026, un grand événement organisé en RDC." },
   { page: "Accueil", title: "Galerie", url: "index.html#galerie", snippet: "Campagne En route vers le Mondial, Jubilé, délégations." },
-  { page: "Accueil", title: "Ce que nous avons accompli", url: "index.html#realisations", snippet: "FECOFA, transferts internationaux, fondations partenaires, clubs européens." },
   { page: "Accueil", title: "Nos services", url: "index.html#services", snippet: "Facilitation d'affaires, représentation FIFA, partenariats médicaux, événementiel." },
   { page: "Accueil", title: "Questions fréquentes", url: "index.html#faq", snippet: "Comment devenir partenaire, institutions publiques, Jubilé." },
   { page: "Chris Business", title: "Votre porte d'entrée en RDC", url: "chris-business.html", snippet: "Facilitation d'affaires en République Démocratique du Congo." },
