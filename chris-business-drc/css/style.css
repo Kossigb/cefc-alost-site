@@ -566,6 +566,13 @@ section {
   border: 1px solid var(--line);
 }
 
+.club-logo {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  margin: 0 auto 16px;
+}
+
 .partner-strip {
   display: flex;
   align-items: center;
