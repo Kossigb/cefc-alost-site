@@ -994,6 +994,17 @@ section {
   justify-content: space-between;
   gap: 28px;
   flex-wrap: wrap;
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+a.banner:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.banner .btn {
+  pointer-events: none;
 }
 
 .banner h2 {
