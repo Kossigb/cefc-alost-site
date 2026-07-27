@@ -129,7 +129,6 @@ var SEARCH_INDEX = [
   { page: "Chrisfoot", title: "Jubilé de Tresor Mputu", url: "chris-foot.html#jubile", snippet: "Conférence de presse FECOFA pour l'événement." },
   { page: "Chrisfoot", title: "Nos clubs partenaires en Europe", url: "chris-foot.html#international", snippet: "Olympique de Marseille, Standard de Liège, RB Leipzig." },
   { page: "Chrisfoot", title: "Une académie de football en RDC", url: "chris-foot.html#academie", snippet: "Un projet pour convaincre Mesut Özil de s'associer." },
-  { page: "Chrisfoot", title: "Questions fréquentes", url: "chris-foot.html#faq", snippet: "Agent FIFA, footballeurs professionnels." },
   { page: "Partenariats", title: "Vendons ensemble votre image", url: "partenariats.html", snippet: "Opportunités de partenariat sportif, médical et international." },
   { page: "Partenariats", title: "Votre marque au cœur du football", url: "partenariats.html#visibilite", snippet: "Maillots, écrans LED, panneaux et stades." },
   { page: "Partenariats", title: "Chirurgie esthétique pour les blessés de guerre", url: "partenariats.html#medical", snippet: "Ministère des Anciens Combattants, FONAREV, INPP, Ministère de la Santé." },
@@ -139,7 +138,7 @@ var SEARCH_INDEX = [
   { page: "À propos", title: "Portée par des managers de conviction", url: "a-propos.html#equipe", snippet: "Serge Tungila Mwanza et Christian Yangongo Kapenga." },
   { page: "À propos", title: "Deux axes, une même ambition", url: "a-propos.html#mission", snippet: "Facilitation d'affaires et agent FIFA." },
   { page: "À propos", title: "Pourquoi la RDC", url: "a-propos.html#pourquoi-rdc", snippet: "Un point central pour conquérir l'Afrique." },
-  { page: "À propos", title: "Questions fréquentes", url: "a-propos.html#faq", snippet: "Comment devenir partenaire, institutions publiques, Jubilé." },
+  { page: "À propos", title: "Questions fréquentes", url: "a-propos.html#faq", snippet: "Comment devenir partenaire, institutions publiques, Jubilé, agent FIFA." },
   { page: "Contact", title: "Devenez partenaire", url: "contact.html", snippet: "Téléphone, WhatsApp, email et formulaire de contact." }
 ];
 
