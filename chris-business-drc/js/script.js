@@ -121,7 +121,6 @@ var SEARCH_INDEX = [
   { page: "Accueil", title: "Jubilé de Tresor Mputu", url: "index.html#jubile", snippet: "2026, un grand événement organisé en RDC." },
   { page: "Accueil", title: "Galerie", url: "index.html#galerie", snippet: "Campagne En route vers le Mondial, Jubilé, délégations." },
   { page: "Accueil", title: "Nos services", url: "index.html#services", snippet: "Facilitation d'affaires, représentation FIFA, partenariats médicaux, événementiel." },
-  { page: "Accueil", title: "Questions fréquentes", url: "index.html#faq", snippet: "Comment devenir partenaire, institutions publiques, Jubilé." },
   { page: "Chris Business", title: "Votre porte d'entrée en RDC", url: "chris-business.html", snippet: "Facilitation d'affaires en République Démocratique du Congo." },
   { page: "Chris Business", title: "Nos clients actuels", url: "chris-business.html#clients", snippet: "Jetour, Swista, CNSS." },
   { page: "Chris Business", title: "Objectifs du partenariat", url: "chris-business.html#objectifs", snippet: "Élargir vos contacts, collaborer avec les autorités, installer votre structure." },
@@ -141,6 +140,7 @@ var SEARCH_INDEX = [
   { page: "À propos", title: "Portée par des managers de conviction", url: "a-propos.html#equipe", snippet: "Serge Tungila Mwanza et Christian Yangongo Kapenga." },
   { page: "À propos", title: "Deux axes, une même ambition", url: "a-propos.html#mission", snippet: "Facilitation d'affaires et agent FIFA." },
   { page: "À propos", title: "Pourquoi la RDC", url: "a-propos.html#pourquoi-rdc", snippet: "Un point central pour conquérir l'Afrique." },
+  { page: "À propos", title: "Questions fréquentes", url: "a-propos.html#faq", snippet: "Comment devenir partenaire, institutions publiques, Jubilé." },
   { page: "Contact", title: "Devenez partenaire", url: "contact.html", snippet: "Téléphone, WhatsApp, email et formulaire de contact." }
 ];
 
