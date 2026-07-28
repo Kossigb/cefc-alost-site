@@ -587,8 +587,11 @@ async function inviteUser() {
     showResult(resultEl, 'error', 'Entrez une adresse email valide.'); return;
   }
   try {
-    await adminFetch('POST', { email });
-    showResult(resultEl, 'success', `✓ Invitation envoyée à ${email}.`);
+    const result = await adminFetch('POST', { email });
+    const msg = result.resent
+      ? `✓ Invitation renvoyée à ${email}. Vérifiez vos spams.`
+      : `✓ Invitation envoyée à ${email}.`;
+    showResult(resultEl, 'success', msg);
     document.getElementById('invite-email').value = '';
     loadUsers();
   } catch (e) {
