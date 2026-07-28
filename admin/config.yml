@@ -204,26 +204,42 @@ collections:
     label: "📸 Photos du culte"
     files:
       - name: "photos_data"
-        label: "Galerie photos"
+        label: "Galerie de la page d'accueil"
         file: "photos_culte.json"
         description: >
-          COMMENT AJOUTER PLUSIEURS PHOTOS EN UNE FOIS :
-          Utilisez le bouton flottant "📸 Upload photos" en bas à droite —
-          il permet de glisser-déposer toutes vos photos en une seule opération.
+          Gérez ici toutes les photos qui défilent sur la page d'accueil.
+          Ajoutez, supprimez ou réorganisez les photos par glisser-déposer.
+          Les modifications sont en ligne dès que vous cliquez sur "Publier".
         fields:
-          - label: "Photos du culte"
+          - label: "Photos"
             name: "photos"
             widget: "list"
-            minimize_collapsed: true
-            collapsed: false
+            label_singular: "photo"
+            summary: "{{fields.legende | ternary(fields.legende, fields.url)}}"
+            minimize_collapsed: false
+            collapsed: true
             hint: >
-              ➕ Astuce : utilisez le bouton flottant "📸 Upload photos" pour uploader toutes vos photos
-              en même temps. Elles apparaîtront automatiquement dans la galerie.
-            field:
-              label: "Photo"
-              name: "url"
-              widget: "image"
-              hint: "Cliquez pour choisir une photo déjà uploadée ou en uploader une nouvelle"
+              Glissez-déposez les lignes pour réorganiser l'ordre d'affichage.
+              Cliquez sur "Ajouter une photo" pour en insérer une nouvelle.
+            fields:
+              - label: "Photo"
+                name: "url"
+                widget: "image"
+                hint: "Uploadez une nouvelle photo ou sélectionnez-en une existante."
+                media_library:
+                  config:
+                    multiple: false
+              - label: "Légende (optionnel)"
+                name: "legende"
+                widget: "string"
+                required: false
+                hint: "Courte description affichée sous la photo (ex: Culte du 1er juin 2026)."
+              - label: "Date du culte (optionnel)"
+                name: "date"
+                widget: "date"
+                required: false
+                format: "YYYY-MM-DD"
+                date_format: "DD/MM/YYYY"
 
   # ========================================
   # 5. HORAIRES DES CULTES
