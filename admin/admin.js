@@ -3,8 +3,10 @@
 //  Auth: Netlify Identity | Save: GitHub API
 // ════════════════════════════════════════
 
-const REPO   = 'kossigb/cefc-alost-site';
-const BRANCH = 'main';
+const REPO        = 'kossigb/cefc-alost-site';
+const BRANCH      = 'main';
+const SUPER_ADMIN = 'chrisgbev2005@gmail.com';
+const SESSION_MAX = 7 * 24 * 60 * 60 * 1000; // 1 semaine en ms
 
 let contenu    = {};
 let photosData = { photos: [] };
@@ -38,7 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(initTimeout);
     if (user) { showApp(user); } else { enableLoginBtn(); }
   });
-  window.netlifyIdentity.on('login', user => { window.netlifyIdentity.close(); showApp(user); });
+  window.netlifyIdentity.on('login', user => {
+    localStorage.setItem('cefc_login_time', Date.now().toString());
+    window.netlifyIdentity.close();
+    showApp(user);
+  });
   window.netlifyIdentity.on('logout', () => {
     document.getElementById('admin-app').classList.remove('open');
     document.getElementById('login-screen').style.display = 'flex';
@@ -55,18 +61,33 @@ function openLogin() {
 }
 
 function doLogout() {
+  localStorage.removeItem('cefc_login_time');
   window.netlifyIdentity && window.netlifyIdentity.logout();
 }
 
 async function showApp(user) {
+  // Session expiry: 1 semaine
+  const loginTime = parseInt(localStorage.getItem('cefc_login_time') || '0');
+  if (loginTime && (Date.now() - loginTime) > SESSION_MAX) {
+    localStorage.removeItem('cefc_login_time');
+    window.netlifyIdentity && window.netlifyIdentity.logout();
+    return;
+  }
+
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('admin-app').classList.add('open');
   document.getElementById('admin-username').textContent = user.email || 'Admin';
+
+  // Gestion utilisateurs : réservé au super-admin uniquement
+  const isAdmin = user.email === SUPER_ADMIN;
+  const userNav = document.querySelector('.nav-item[data-page="utilisateurs"]');
+  if (userNav) userNav.style.display = isAdmin ? '' : 'none';
+
   setupNav();
   await Promise.all([loadContent(), loadPhotosData()]);
   populateAll();
   showCurrentUser(user);
-  loadUsers();
+  if (isAdmin) loadUsers();
   refreshTokenStatus();
 }
 
@@ -527,29 +548,35 @@ function showCurrentUser(user) {
     </div>`;
 }
 
+async function adminFetch(method, body) {
+  const user = window.netlifyIdentity?.currentUser();
+  if (!user) throw new Error('non connecté');
+  const token = await user.jwt();
+  const opts = { method, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch('/.netlify/functions/identity-admin', opts);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Erreur ${res.status}`);
+  return data;
+}
+
 async function loadUsers() {
   const el = document.getElementById('users-list');
   if (!el) return;
-  const user = window.netlifyIdentity?.currentUser();
-  if (!user) return;
+  const me = window.netlifyIdentity?.currentUser();
   try {
-    const token = await user.jwt();
-    const res = await fetch('/.netlify/identity/admin/users?per_page=50', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error();
-    const data = await res.json();
+    const data = await adminFetch('GET');
     const users = data.users || [];
     el.innerHTML = users.map(u => `
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg3);border-radius:8px;margin-bottom:8px">
         <div>
           <div style="font-size:14px;font-weight:500">${esc(u.email)}</div>
-          <div style="font-size:11px;color:var(--text2)">${u.confirmed_at ? 'Compte actif' : 'Invitation en attente'}</div>
+          <div style="font-size:11px;color:var(--text2)">${u.email === SUPER_ADMIN ? '👑 Super-admin' : (u.confirmed_at ? 'Compte actif' : 'Invitation en attente')}</div>
         </div>
-        ${u.email !== user.email ? `<button class="btn-del" onclick="deleteUser('${u.id}','${esc(u.email)}')">Supprimer</button>` : '<span style="font-size:11px;color:var(--text2)">Vous</span>'}
+        ${u.email !== SUPER_ADMIN ? `<button class="btn-del" onclick="deleteUser('${u.id}','${esc(u.email)}')">Supprimer</button>` : '<span style="font-size:11px;color:var(--text2)">Vous</span>'}
       </div>`).join('') || '<p style="color:var(--text2);font-size:13px">Aucun utilisateur.</p>';
-  } catch {
-    el.innerHTML = `<p style="font-size:13px;color:var(--text2)">Liste indisponible. <a href="https://app.netlify.com/sites/cefclabornealost9300/identity" target="_blank" style="color:var(--purple-light)">Gérer sur Netlify →</a></p>`;
+  } catch (e) {
+    el.innerHTML = `<p style="font-size:13px;color:var(--text2)">${esc(e.message)}</p>`;
   }
 }
 
@@ -557,42 +584,39 @@ async function inviteUser() {
   const email = document.getElementById('invite-email').value.trim();
   const resultEl = document.getElementById('invite-result');
   if (!email || !email.includes('@')) {
-    resultEl.style.display = 'block'; resultEl.style.background = 'rgba(239,68,68,.1)';
-    resultEl.style.border = '1px solid rgba(239,68,68,.2)'; resultEl.style.color = '#fca5a5';
-    resultEl.textContent = 'Entrez une adresse email valide.'; return;
+    showResult(resultEl, 'error', 'Entrez une adresse email valide.'); return;
   }
-  const user = window.netlifyIdentity?.currentUser();
-  if (!user) return;
   try {
-    const token = await user.jwt();
-    const res = await fetch('/.netlify/identity/admin/users', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, app_metadata: { roles: ['admin'] } })
-    });
-    if (!res.ok) throw new Error();
-    resultEl.style.display = 'block'; resultEl.style.background = 'rgba(16,185,129,.1)';
-    resultEl.style.border = '1px solid rgba(16,185,129,.2)'; resultEl.style.color = '#6ee7b7';
-    resultEl.textContent = `✓ Invitation envoyée à ${email}.`;
+    await adminFetch('POST', { email });
+    showResult(resultEl, 'success', `✓ Invitation envoyée à ${email}.`);
     document.getElementById('invite-email').value = '';
     loadUsers();
-  } catch {
-    resultEl.style.display = 'block'; resultEl.style.background = 'rgba(245,158,11,.1)';
-    resultEl.style.border = '1px solid rgba(245,158,11,.2)'; resultEl.style.color = '#fcd34d';
-    resultEl.innerHTML = `Droits insuffisants. <a href="https://app.netlify.com/sites/cefclabornealost9300/identity" target="_blank" style="color:inherit;text-decoration:underline">Inviter sur Netlify →</a>`;
+  } catch (e) {
+    showResult(resultEl, 'warn', e.message);
   }
 }
 
-async function deleteUser(id, email) {
+function showResult(el, type, msg) {
+  const styles = {
+    success: ['rgba(16,185,129,.1)', 'rgba(16,185,129,.2)', '#6ee7b7'],
+    error:   ['rgba(239,68,68,.1)',  'rgba(239,68,68,.2)',  '#fca5a5'],
+    warn:    ['rgba(245,158,11,.1)', 'rgba(245,158,11,.2)', '#fcd34d'],
+  };
+  const [bg, border, color] = styles[type] || styles.error;
+  el.style.display = 'block';
+  el.style.background = bg;
+  el.style.border = `1px solid ${border}`;
+  el.style.color = color;
+  el.textContent = msg;
+}
+
+async function deleteUser(userId, email) {
   if (!confirm(`Supprimer l'accès de ${email} ?`)) return;
-  const user = window.netlifyIdentity?.currentUser();
-  if (!user) return;
   try {
-    const token = await user.jwt();
-    await fetch(`/.netlify/identity/admin/users/${id}`, { method:'DELETE', headers:{ Authorization:`Bearer ${token}` } });
+    await adminFetch('DELETE', { userId });
     toast(`Accès supprimé pour ${email}`, 'success');
     loadUsers();
-  } catch { toast('Erreur lors de la suppression.', 'error'); }
+  } catch (e) { toast(e.message, 'error'); }
 }
 
 // ════════════ HELPERS ════════════
