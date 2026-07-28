@@ -17,16 +17,46 @@ document.addEventListener('DOMContentLoaded', () => {
       '<div style="color:#fca5a5;text-align:center;padding:40px">Netlify Identity non disponible.<br>Vérifiez votre connexion.</div>';
     return;
   }
-  window.netlifyIdentity.on('init',  user => { if (user) showApp(user); });
+  window.netlifyIdentity.on('init', user => {
+    if (user) {
+      showApp(user);
+    } else {
+      // No active session — enable the login button
+      const btn = document.getElementById('login-btn');
+      const hint = document.getElementById('login-hint');
+      if (btn) {
+        btn.disabled = false;
+        btn.style.opacity = '';
+        btn.style.pointerEvents = '';
+        btn.style.cursor = '';
+        btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>Se connecter avec mon email`;
+      }
+      if (hint) hint.style.visibility = '';
+    }
+  });
   window.netlifyIdentity.on('login', user => { window.netlifyIdentity.close(); showApp(user); });
   window.netlifyIdentity.on('logout', () => {
     document.getElementById('admin-app').classList.remove('open');
     document.getElementById('login-screen').style.display = 'flex';
+    const btn = document.getElementById('login-btn');
+    const hint = document.getElementById('login-hint');
+    if (btn) {
+      btn.disabled = false;
+      btn.style.opacity = '';
+      btn.style.pointerEvents = '';
+      btn.style.cursor = '';
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>Se connecter avec mon email`;
+    }
+    if (hint) hint.style.visibility = '';
   });
 });
 
 function openLogin() {
-  window.netlifyIdentity && window.netlifyIdentity.open('login');
+  if (!window.netlifyIdentity) return;
+  // If already authenticated, go straight to the app without opening the widget
+  const user = window.netlifyIdentity.currentUser();
+  if (user) { showApp(user); return; }
+  window.netlifyIdentity.open('login');
 }
 
 function doLogout() {
