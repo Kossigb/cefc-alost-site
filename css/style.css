@@ -2106,3 +2106,33 @@ footer::before {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Verse share trigger button ── */
+.verse-share-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 7px 14px;
+  background: rgba(167,139,250,0.12);
+  border: 0.5px solid rgba(167,139,250,0.28);
+  border-radius: 999px;
+  color: rgba(167,139,250,0.9);
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background 0.2s, border-color 0.2s;
+  opacity: 0;
+  animation: fade-up 0.8s var(--ease) 1.7s forwards;
+  position: relative;
+  z-index: 4;
+}
+.verse-share-trigger:hover {
+  background: rgba(167,139,250,0.22);
+  border-color: rgba(167,139,250,0.5);
+}
+@media (prefers-reduced-motion: reduce) {
+  .verse-share-trigger { animation: none; opacity: 1; }
+}

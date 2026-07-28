@@ -218,7 +218,64 @@
   },
   "annonces": {
     "_commentaire": "Annonces / evenements importants. Pour ajouter une annonce, copie un bloc complet. Si tu ne veux aucune annonce, mets une liste vide : \"liste\": []",
-    "liste": []
+    "liste": [
+      {
+        "type": "annonce",
+        "image": null,
+        "titre": "Culte spécial de jeûne et prière",
+        "titre_nl": "Speciale vastengebedsbijeenkomst",
+        "titre_en": "Special Fasting & Prayer Service",
+        "date": "Dimanche 3 août 2026",
+        "date_nl": "Zondag 3 augustus 2026",
+        "date_en": "Sunday, August 3rd, 2026",
+        "description": "Nous vous invitons à un culte spécial entièrement dédié au jeûne et à la prière. Tous les membres et amis de l'église sont appelés à se joindre à nous pour chercher ensemble la face de Dieu. Venez avec un cœur ouvert et préparé.",
+        "description_nl": "We nodigen u uit voor een bijzondere dienst gewijd aan vasten en gebed. Alle leden en vrienden worden opgeroepen om samen Gods aangezicht te zoeken.",
+        "description_en": "We invite you to a special service fully dedicated to fasting and prayer. All members and friends are called to join us in seeking God's face together.",
+        "important": true
+      },
+      {
+        "type": "activite",
+        "image": null,
+        "titre": "Soirée de louange & adoration",
+        "titre_nl": "Lof- en aanbiddingsavond",
+        "titre_en": "Praise & Worship Evening",
+        "date": "Annoncé le 28 juillet 2026",
+        "dateEvenement": "Samedi 9 août 2026",
+        "heureEvenement": "19h00",
+        "lieuEvenement": "Wijngaardveld 29, 9300 Alost",
+        "description": "Une soirée placée sous le signe de la louange et de l'adoration. Venez en famille, entre amis — l'entrée est libre et ouverte à tous. Une occasion de lever nos voix ensemble devant le Seigneur.",
+        "description_nl": "Een avond in het teken van lofprijs en aanbidding. Kom met uw gezin of vrienden — gratis toegang, open voor iedereen.",
+        "description_en": "An evening of praise and worship. Come with family or friends — free entry, open to everyone.",
+        "important": false
+      },
+      {
+        "type": "activite",
+        "image": null,
+        "titre": "Réunion des cellules de maison",
+        "titre_nl": "Huiskringbijeenkomst",
+        "titre_en": "Home Cell Group Meeting",
+        "date": "Annoncé le 25 juillet 2026",
+        "dateEvenement": "Vendredi 1er août 2026",
+        "heureEvenement": "18h30",
+        "lieuEvenement": "Wijngaardveld 29, 9300 Alost",
+        "description": "Les cellules de maison se réunissent cette semaine pour l'étude de la Parole, le partage fraternel et la prière intercessive. Retrouvez votre groupe ou rejoignez-en un pour la première fois.",
+        "description_nl": "De huiskringen komen deze week samen voor bijbelstudie, broederlijk delen en voorbede.",
+        "description_en": "Home cell groups gather this week for Bible study, fellowship, and intercessory prayer.",
+        "important": false
+      },
+      {
+        "type": "necro",
+        "image": null,
+        "titre": "Rappel à Dieu de Sœur Marie-Claire Nkosi",
+        "titre_nl": "Thuisroeping van Zuster Marie-Claire Nkosi",
+        "titre_en": "Passing of Sister Marie-Claire Nkosi",
+        "date": "Communiqué du 22 juillet 2026",
+        "description": "C'est avec une profonde tristesse et une foi certaine en la résurrection que nous vous annonçons le rappel à Dieu de notre sœur bien-aimée Marie-Claire Nkosi, survenu le 20 juillet 2026. La famille remercie l'église pour ses prières et son soutien. Les informations relatives aux funérailles seront communiquées en temps voulu.",
+        "description_nl": "Met diep verdriet en vast geloof in de opstanding kondigen we het overlijden aan van onze geliefde zuster Marie-Claire Nkosi op 20 juli 2026. Details over de begrafenis volgen.",
+        "description_en": "It is with deep sadness and firm faith in the resurrection that we announce the passing of our beloved sister Marie-Claire Nkosi on July 20, 2026. Funeral details will follow.",
+        "important": false
+      }
+    ]
   },
   "temoignages": {
     "_commentaire": "Temoignages de membres de l'eglise. Mets 'actif' a true pour afficher la section.",
