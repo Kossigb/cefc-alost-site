@@ -58,6 +58,11 @@
     <a href="https://www.youtube.com/@CE_laFamilleChretienne" class="nav-live" target="_blank" rel="noopener">
       <span class="dot"></span> <span data-i18n="nav.live">Live</span>
     </a>
+    <button class="nav-search-btn" onclick="if(window.cefcCmdk)cefcCmdk.open()" aria-label="Recherche rapide (Ctrl+K)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span class="nav-search-label">Recherche</span>
+      <kbd>Ctrl K</kbd>
+    </button>
     <div class="lang-switch" role="group" aria-label="Langue / Taal / Language">
       <button type="button" data-lang="fr" class="active">FR</button>
       <button type="button" data-lang="nl">NL</button>
@@ -77,6 +82,9 @@
     </p>
   </div>
 </div>
+
+<!-- ===== CONTENT SECTION ===== -->
+<div class="annonces-section">
 
 <!-- ===== FILTRES ===== -->
 <div class="annonces-filters" role="group" aria-label="Filtrer les annonces">
@@ -101,6 +109,8 @@
 <div class="annonces-grid-wrap">
   <div class="annonces-grid" id="annoncesGrid"></div>
 </div>
+
+</div><!-- /.annonces-section -->
 
 <!-- ===== FOOTER ===== -->
 <footer>

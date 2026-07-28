@@ -75,6 +75,39 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .nav-links a:hover { color: var(--silver); }
 .nav-links a.nav-current { color: var(--silver); font-weight: 600; }
+/* ── Search / Command palette trigger ── */
+.nav-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(227, 227, 235, 0.18);
+  background: rgba(227, 227, 235, 0.06);
+  color: rgba(227, 227, 235, 0.55);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.nav-search-btn:hover { background: rgba(227, 227, 235, 0.12); color: var(--silver); border-color: rgba(227, 227, 235, 0.3); }
+.nav-search-btn kbd {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: rgba(227, 227, 235, 0.1);
+  border: 0.5px solid rgba(227, 227, 235, 0.2);
+  color: rgba(227, 227, 235, 0.4);
+}
+@media (max-width: 900px) {
+  .nav-search-btn .nav-search-label { display: none; }
+  .nav-search-btn kbd { display: none; }
+}
+
 .nav-live {
   display: inline-flex; align-items: center; gap: 6px;
   color: var(--live);
@@ -109,7 +142,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero {
   position: relative;
   min-height: 100vh;
-  background: var(--night) url('/img/hero/hero-bg.jpg') center top / cover no-repeat;
+  background: linear-gradient(155deg, #1A1B3E 0%, #0A0A21 55%, #131430 100%);
   color: var(--silver);
   display: flex; flex-direction: column;
   overflow: hidden;
@@ -118,9 +151,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero::before {
   content: ''; position: absolute; inset: 0;
   background:
-    linear-gradient(180deg, rgba(10, 10, 33, 0.62) 0%, rgba(10, 10, 33, 0.58) 45%, rgba(10, 10, 33, 0.94) 100%),
-    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(227, 227, 235, 0.10), transparent 60%),
-    radial-gradient(ellipse 500px 400px at 85% 70%, rgba(186, 185, 199, 0.08), transparent 60%);
+    radial-gradient(ellipse 750px 550px at 18% 28%, rgba(167, 139, 250, 0.22), transparent 65%),
+    radial-gradient(ellipse 600px 500px at 85% 72%, rgba(186, 185, 199, 0.07), transparent 60%),
+    radial-gradient(ellipse 400px 300px at 55% 85%, rgba(167, 139, 250, 0.08), transparent 55%);
   pointer-events: none;
 }
 .hero::after {
