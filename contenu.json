@@ -221,7 +221,7 @@
     "liste": [
       {
         "type": "annonce",
-        "image": null,
+        "image": "/img/uploads/1780509319013-27-img_0239.jpg",
         "titre": "Culte spécial de jeûne et prière",
         "titre_nl": "Speciale vastengebedsbijeenkomst",
         "titre_en": "Special Fasting & Prayer Service",
@@ -235,7 +235,7 @@
       },
       {
         "type": "activite",
-        "image": null,
+        "image": "/img/uploads/1779626518945-59-img_0109.jpg",
         "titre": "Soirée de louange & adoration",
         "titre_nl": "Lof- en aanbiddingsavond",
         "titre_en": "Praise & Worship Evening",
@@ -250,7 +250,7 @@
       },
       {
         "type": "activite",
-        "image": null,
+        "image": "/img/uploads/1780509343974-35-img_0260.jpg",
         "titre": "Réunion des cellules de maison",
         "titre_nl": "Huiskringbijeenkomst",
         "titre_en": "Home Cell Group Meeting",
