@@ -31,6 +31,14 @@ collections:
                 widget: "list"
                 hint: "Ajoutez, modifiez ou supprimez des annonces. Les annonces importantes s'affichent en bleu nuit."
                 fields:
+                  - label: "Type d'annonce"
+                    name: "type"
+                    widget: "select"
+                    default: "annonce"
+                    options:
+                      - { label: "📢 Annonce générale", value: "annonce" }
+                      - { label: "🗓️ Activité / Événement", value: "activite" }
+                      - { label: "🕊️ Communiqué de deuil (Nécrologie)", value: "necro" }
                   - label: "Photo illustrative (optionnel)"
                     name: "image"
                     widget: "image"
@@ -45,7 +53,10 @@ collections:
                   - { label: "Description (FR)", name: "description", widget: "text" }
                   - { label: "Description (NL)", name: "description_nl", widget: "text", required: false }
                   - { label: "Description (EN)", name: "description_en", widget: "text", required: false }
-                  - { label: "Mettre en avant ? (fond bleu nuit)", name: "important", widget: "boolean", default: false }
+                  - { label: "Date de l'événement (pour Activités) — ex: Samedi 9 août 2026", name: "dateEvenement", widget: "string", required: false }
+                  - { label: "Heure de l'événement — ex: 19h00", name: "heureEvenement", widget: "string", required: false }
+                  - { label: "Lieu de l'événement — ex: Wijngaardveld 29, 9300 Alost", name: "lieuEvenement", widget: "string", required: false }
+                  - { label: "Mettre en avant ? (affichée en premier, bordure violette)", name: "important", widget: "boolean", default: false }
           - { label: "_", name: "hero", widget: "hidden" }
           - { label: "_", name: "banniere", widget: "hidden" }
           - { label: "_", name: "horaires", widget: "hidden" }
