@@ -58,6 +58,11 @@
     <a href="https://www.youtube.com/@CE_laFamilleChretienne" class="nav-live" target="_blank" rel="noopener">
       <span class="dot"></span> <span data-i18n="nav.live">Live</span>
     </a>
+    <button class="nav-search-btn" onclick="if(window.cefcCmdk)cefcCmdk.open()" aria-label="Recherche rapide (Ctrl+K)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span class="nav-search-label">Recherche</span>
+      <kbd>Ctrl K</kbd>
+    </button>
     <div class="lang-switch" role="group" aria-label="Langue / Taal / Language">
       <button type="button" data-lang="fr" class="active">FR</button>
       <button type="button" data-lang="nl">NL</button>
@@ -124,13 +129,6 @@
         </div>
       </div>
     </div>
-
-    <!-- ── Scripture typewriter ── -->
-    <div class="hero-verse-typewriter" id="heroVerse" aria-live="polite" aria-label="Verset du jour"></div>
-    <button class="verse-share-trigger" id="verseShareTrigger" aria-label="Générer et partager le verset du jour">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-      Partager le verset
-    </button>
 
     <div class="hero-divider" aria-hidden="true">
       <span class="line"></span>
