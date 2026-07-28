@@ -206,12 +206,12 @@
     }
   },
   "banniere": {
-    "texte_nl": "",
+    "texte_nl": "Goede morgen",
     "lien": "",
-    "active": false,
+    "active": true,
     "lien_texte_en": "",
-    "texte_en": "",
-    "texte": "",
+    "texte_en": "Good morning",
+    "texte": "Bonjour ",
     "_commentaire": "Bannière d'annonce en haut du site. Mets 'active' à true pour l'afficher.",
     "lien_texte_nl": "",
     "lien_texte": ""
