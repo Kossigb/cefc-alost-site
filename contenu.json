@@ -208,7 +208,7 @@
   "banniere": {
     "texte_nl": "Goede morgen",
     "lien": "",
-    "active": true,
+    "active": false,
     "lien_texte_en": "",
     "texte_en": "Good morning",
     "texte": "Bonjour ",
