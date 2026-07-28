@@ -135,6 +135,7 @@ var SEARCH_INDEX = [
   { page: "Partenariats", title: "Un pont entre la RDC et la Turquie", url: "partenariats.html#tourisme", snippet: "Tourisme médical." },
   { page: "Partenariats", title: "Une académie de football en RDC", url: "partenariats.html#academie", snippet: "Convaincre Mesut Özil de s'associer." },
   { page: "À propos", title: "Faire confiance à notre expertise", url: "a-propos.html", snippet: "La vision de Chris Business & Chrisfoot." },
+  { page: "À propos", title: "Faire de la RDC un pont vers le monde", url: "a-propos.html#vision", snippet: "Notre vision : ouvrir la RDC aux opportunités internationales." },
   { page: "À propos", title: "Portée par des managers de conviction", url: "a-propos.html#equipe", snippet: "Serge Tungila Mwanza et Christian Yangongo Kapenga." },
   { page: "À propos", title: "Deux axes, une même ambition", url: "a-propos.html#mission", snippet: "Facilitation d'affaires et agent FIFA." },
   { page: "À propos", title: "Pourquoi la RDC", url: "a-propos.html#pourquoi-rdc", snippet: "Un point central pour conquérir l'Afrique." },
