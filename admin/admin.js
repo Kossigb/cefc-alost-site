@@ -440,6 +440,9 @@ function removeTemoignage(i) {
 
 // ════════════ PHOTOS CULTE ════════════
 
+let photoSelectMode = false;
+const photoSelected = new Set();
+
 function renderPhotosGrid() {
   const el = document.getElementById('photos-grid');
   if (!el) return;
@@ -447,26 +450,123 @@ function renderPhotosGrid() {
   const count = document.getElementById('photos-count');
   if (count) count.textContent = photos.length + ' photo(s)';
 
+  // Render toolbar
+  const toolbar = document.getElementById('photos-toolbar');
+  if (toolbar) {
+    toolbar.style.display = photos.length ? 'flex' : 'none';
+    toolbar.innerHTML = photoSelectMode ? `
+      <button onclick="toggleSelectAll()" style="padding:7px 14px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:13px;cursor:pointer">
+        ☑ Tout sélectionner
+      </button>
+      <button onclick="deleteSelectedPhotos()" id="btn-del-sel"
+        style="padding:7px 14px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:none">
+        🗑 Supprimer (<span id="sel-count">0</span>)
+      </button>
+      <button onclick="exitSelectMode()" style="padding:7px 14px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:8px;font-size:13px;cursor:pointer;margin-left:auto">
+        Annuler
+      </button>
+    ` : `
+      <button onclick="enterSelectMode()" style="padding:7px 14px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:#fca5a5;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">
+        🗑 Supprimer plusieurs
+      </button>
+    `;
+  }
+
   if (!photos.length) {
     el.innerHTML = '<p style="color:var(--text2);font-size:14px">Aucune photo. Utilisez le bouton ci-dessus pour en ajouter.</p>';
     return;
   }
+
   el.innerHTML =
     '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">' +
     photos.map((p, i) => `
-      <div style="position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--bg3)">
+      <div id="photo-tile-${i}" onclick="${photoSelectMode ? `togglePhotoSelect(${i})` : ''}"
+        style="position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--bg3);
+               ${photoSelectMode ? 'cursor:pointer;' : ''}
+               ${photoSelected.has(i) ? 'outline:3px solid var(--red);outline-offset:-3px;' : ''}">
         <img src="${esc(p.url)}" loading="lazy"
-             style="width:100%;height:100%;object-fit:cover;display:block" />
-        <button onclick="deletePhoto(${i})" title="Supprimer"
-          style="position:absolute;top:5px;right:5px;width:28px;height:28px;border-radius:50%;
-                 background:rgba(0,0,0,0.75);border:none;color:#fca5a5;font-size:16px;
-                 cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+             style="width:100%;height:100%;object-fit:cover;display:block;${photoSelected.has(i) ? 'opacity:.65' : ''}" />
+        ${photoSelectMode ? `
+          <div style="position:absolute;top:6px;left:6px;width:22px;height:22px;border-radius:6px;
+                      background:${photoSelected.has(i) ? '#ef4444' : 'rgba(0,0,0,0.6)'};
+                      border:2px solid ${photoSelected.has(i) ? '#ef4444' : 'rgba(255,255,255,0.6)'};
+                      display:flex;align-items:center;justify-content:center;font-size:13px">
+            ${photoSelected.has(i) ? '✓' : ''}
+          </div>` : `
+          <button onclick="deletePhoto(${i})" title="Supprimer"
+            style="position:absolute;top:5px;right:5px;width:28px;height:28px;border-radius:50%;
+                   background:rgba(0,0,0,0.75);border:none;color:#fca5a5;font-size:16px;
+                   cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>`}
         <div style="position:absolute;bottom:0;left:0;right:0;padding:4px 6px;background:rgba(0,0,0,0.7)">
           <input type="text" value="${esc(p.legende||'')}" placeholder="Légende…"
             style="width:100%;background:transparent;border:none;color:#fff;font-size:11px;outline:none"
-            onchange="photosData.photos[${i}].legende=this.value" />
+            onchange="photosData.photos[${i}].legende=this.value"
+            onclick="event.stopPropagation()" />
         </div>
       </div>`).join('') + '</div>';
+}
+
+function enterSelectMode() {
+  photoSelectMode = true;
+  photoSelected.clear();
+  renderPhotosGrid();
+}
+
+function exitSelectMode() {
+  photoSelectMode = false;
+  photoSelected.clear();
+  renderPhotosGrid();
+}
+
+function togglePhotoSelect(i) {
+  if (photoSelected.has(i)) photoSelected.delete(i);
+  else photoSelected.add(i);
+  // Update tile appearance inline (fast, no full re-render)
+  const tile = document.getElementById(`photo-tile-${i}`);
+  if (tile) {
+    const selected = photoSelected.has(i);
+    tile.style.outline = selected ? '3px solid #ef4444' : '';
+    tile.style.outlineOffset = selected ? '-3px' : '';
+    const img = tile.querySelector('img');
+    if (img) img.style.opacity = selected ? '.65' : '';
+    const chk = tile.querySelector('div');
+    if (chk) {
+      chk.style.background = selected ? '#ef4444' : 'rgba(0,0,0,0.6)';
+      chk.style.borderColor = selected ? '#ef4444' : 'rgba(255,255,255,0.6)';
+      chk.textContent = selected ? '✓' : '';
+    }
+  }
+  // Update counter & delete button visibility
+  const countEl = document.getElementById('sel-count');
+  if (countEl) countEl.textContent = photoSelected.size;
+  const delBtn = document.getElementById('btn-del-sel');
+  if (delBtn) delBtn.style.display = photoSelected.size ? '' : 'none';
+}
+
+function toggleSelectAll() {
+  const total = photosData.photos.length;
+  if (photoSelected.size === total) {
+    photoSelected.clear();
+  } else {
+    for (let i = 0; i < total; i++) photoSelected.add(i);
+  }
+  renderPhotosGrid();
+}
+
+async function deleteSelectedPhotos() {
+  const indices = Array.from(photoSelected).sort((a, b) => b - a); // desc pour splice correct
+  if (!indices.length) return;
+  if (!confirm(`Supprimer ${indices.length} photo(s) de la galerie ?`)) return;
+  indices.forEach(i => photosData.photos.splice(i, 1));
+  photoSelected.clear();
+  photoSelectMode = false;
+  if (getGHToken()) {
+    try {
+      await ghCommitText('photos_culte.json', JSON.stringify(photosData, null, 2), `Suppression ${indices.length} photo(s) via admin`);
+      toast(`✓ ${indices.length} photo(s) supprimée(s).`, 'success');
+    } catch (e) { toast('Erreur : ' + e.message, 'error'); }
+  }
+  renderPhotosGrid();
 }
 
 async function handlePhotoUpload(input) {
