@@ -161,9 +161,9 @@
   box-shadow: 0 4px 32px rgba(26, 27, 62, 0.08);
 }
 .anniv-success-icon {
-  font-size: 48px;
   margin-bottom: 20px;
-  line-height: 1;
+  display: flex;
+  justify-content: center;
 }
 .anniv-success h3 {
   font-family: var(--serif);
@@ -283,7 +283,20 @@
     </form>
 
     <div id="anniv-success" class="anniv-success" style="display:none;">
-      <div class="anniv-success-icon">🎂</div>
+      <div class="anniv-success-icon">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Flamme -->
+          <path d="M28 22C28 22 24 17.5 24 14.5C24 12.0 25.8 10 28 10C30.2 10 32 12.0 32 14.5C32 17.5 28 22 28 22Z" fill="#A78BFA" opacity="0.9"/>
+          <!-- Mèche -->
+          <line x1="28" y1="24" x2="28" y2="22" stroke="#7C5CF6" stroke-width="1.8" stroke-linecap="round"/>
+          <!-- Corps de la bougie -->
+          <rect x="20" y="24" width="16" height="20" rx="3" fill="#1A1B3E" stroke="#A78BFA" stroke-width="1.5"/>
+          <!-- Reflet sur la bougie -->
+          <line x1="23" y1="27" x2="23" y2="41" stroke="rgba(167,139,250,0.25)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Assiette -->
+          <ellipse cx="28" cy="44" rx="11" ry="3.5" fill="#1A1B3E" stroke="#A78BFA" stroke-width="1.2" opacity="0.6"/>
+        </svg>
+      </div>
       <h3>Merci&nbsp;!</h3>
       <p>Votre anniversaire a bien été transmis à l'équipe de l'église.<br>Que Dieu vous bénisse&nbsp;!</p>
     </div>
