@@ -29,19 +29,39 @@
     return '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>';
   }
 
+  const PLACEHOLDER_SVG = {
+    annonce: `<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.25)' stroke-width='1.5' stroke-linecap='round'><path d='M3 11l19-9-9 19-2-8-8-2z'/></svg>`,
+    activite: `<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.25)' stroke-width='1.5' stroke-linecap='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>`,
+    necro: `<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.18)' stroke-width='1.5' stroke-linecap='round'><path d='M12 22V12M12 12C12 7 7 3 7 3C7 3 12 5 12 8V12ZM12 12C12 7 17 3 17 3C17 3 12 5 12 8'/></svg>`,
+  };
+
+  function renderMedia(item, type, titre, pinned) {
+    const badgeLabel = typeLabel(type);
+    const pinnedBadge = pinned ? `<span class="ann-pin-flag">✦ Important</span>` : '';
+    const badge = `<span class="ann-media-badge badge-${type}">${typeIcon(type)} ${badgeLabel}</span>`;
+
+    if (item.image) {
+      return `<div class="ann-card-media">
+        <img class="ann-card-img" src="${item.image}" alt="${titre}" loading="lazy" />
+        <div class="ann-media-overlay">${pinnedBadge}${badge}</div>
+      </div>`;
+    }
+
+    const svgB64 = btoa(PLACEHOLDER_SVG[type] || PLACEHOLDER_SVG.annonce);
+    return `<div class="ann-card-media ann-placeholder type-${type}">
+      <div class="ann-placeholder-inner">
+        <img src="data:image/svg+xml;base64,${svgB64}" alt="" aria-hidden="true" width="40" height="40" />
+      </div>
+      <div class="ann-media-overlay">${pinnedBadge}${badge}</div>
+    </div>`;
+  }
+
   function renderCard(item) {
     const type = item.type || 'annonce';
     const pinned = item.important;
     const titre = t(item, 'titre') || '—';
     const date = t(item, 'date') || '';
     const desc = t(item, 'description') || '';
-
-    let metaHTML = `<div class="ann-card-meta">
-      <span class="ann-type-badge badge-${type}">${typeIcon(type)} ${typeLabel(type)}</span>
-      ${pinned ? '<span class="ann-pin-badge">📌 Important</span>' : ''}
-    </div>`;
-
-    let imageHTML = item.image ? `<img class="ann-card-img" src="${item.image}" alt="${titre}" loading="lazy" />` : '';
 
     let eventHTML = '';
     if (type === 'activite') {
@@ -53,9 +73,8 @@
     }
 
     return `<div class="ann-card type-${type}${pinned ? ' pinned' : ''}">
-      ${imageHTML}
+      ${renderMedia(item, type, titre, pinned)}
       <div class="ann-card-body">
-        ${metaHTML}
         <div class="ann-card-title">${titre}</div>
         ${eventHTML}
         <div class="ann-card-desc">${desc}</div>
@@ -70,11 +89,13 @@
     grid.innerHTML = Array.from({ length: 6 }, () => `
       <div class="ann-skeleton">
         <div class="ann-skel-inner">
-          <div class="skel-line" style="height:18px;width:40%;"></div>
-          <div class="skel-line" style="height:24px;width:80%;"></div>
-          <div class="skel-line" style="height:14px;width:100%;"></div>
-          <div class="skel-line" style="height:14px;width:90%;"></div>
-          <div class="skel-line" style="height:14px;width:70%;"></div>
+          <div class="skel-img"></div>
+          <div class="skel-body">
+            <div class="skel-line" style="height:20px;width:80%;"></div>
+            <div class="skel-line" style="height:14px;width:100%;"></div>
+            <div class="skel-line" style="height:14px;width:88%;"></div>
+            <div class="skel-line" style="height:14px;width:60%;margin-top:4px;"></div>
+          </div>
         </div>
       </div>`).join('');
   }
