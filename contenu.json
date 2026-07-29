@@ -64,7 +64,7 @@
         "description": "Reseaux sociaux & communication.",
         "description_nl": "Sociale media & communicatie.",
         "description_en": "Social media & communication.",
-        "photo": "media.jpg"
+        "photo": ""
       },
       {
         "id": "chorale",
@@ -394,8 +394,8 @@
       {
         "initiales": "SM",
         "nom": "Safi Mudiri",
-        "role": "Secretaire de l'eglise",
-        "role_nl": "Secretaresse van de kerk",
+        "role": "Secrétaire ",
+        "role_nl": "Secretaresse ",
         "role_en": "Church secretary"
       }
     ]
