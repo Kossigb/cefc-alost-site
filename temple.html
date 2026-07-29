@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Achat du Temple — CEFC Alost</title>
+<meta name="description" content="Rejoignez le projet d'achat du temple de la CEFC Alost. Ensemble, construisons une maison permanente pour l'Éternel. Cotisation mensuelle de 20 € par membre de famille." />
+<meta name="theme-color" content="#1A1B3E" />
+<meta property="og:title" content="Achat du Temple — CEFC Alost" />
+<meta property="og:description" content="Achetons un Temple à l'Éternel. Rejoignez la vision collective de la CEFC Alost pour acquérir un lieu de culte permanent." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://cefclabornealost9300.netlify.app/cefc-logo.png" />
+<meta property="og:url" content="https://cefclabornealost9300.netlify.app/temple.html" />
+<link rel="canonical" href="https://cefclabornealost9300.netlify.app/temple.html" />
+<link rel="icon" href="/cefc-logo.png" type="image/png" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) { window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; }); }
+    });
+  }
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ===== TEMPLE PAGE ===== */
+
+/* Hero */
+.temple-hero {
+  min-height: 92vh;
+  background: var(--night-deep);
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.temple-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(167,139,250,.13) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 80%, rgba(124,58,237,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.temple-hero-inner { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; }
+
+.temple-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(167,139,250,.1);
+  border: 0.5px solid rgba(167,139,250,.3);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: #A78BFA;
+  margin-bottom: 36px;
+}
+.temple-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: #A78BFA; animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:.4;transform:scale(.8)} 50%{opacity:1;transform:scale(1.2)} }
+
+.temple-hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(38px, 7vw, 72px);
+  font-weight: 500;
+  color: var(--silver);
+  line-height: 1.1;
+  margin-bottom: 28px;
+  letter-spacing: -.01em;
+}
+.temple-hero h1 em {
+  font-style: italic;
+  color: #A78BFA;
+}
+.temple-hero-sub {
+  font-size: clamp(15px, 2.2vw, 19px);
+  color: rgba(227,227,235,.65);
+  line-height: 1.75;
+  max-width: 580px;
+  margin: 0 auto 48px;
+}
+.temple-hero-verse {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(14px, 1.8vw, 17px);
+  color: rgba(227,227,235,.45);
+  border-top: 0.5px solid rgba(227,227,235,.12);
+  padding-top: 28px;
+  margin-top: 8px;
+}
+.temple-cta-row {
+  display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.btn-temple-primary {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: #7c3aed;
+  color: #fff;
+  padding: 15px 30px;
+  border-radius: 100px;
+  font-size: 14px; font-weight: 600;
+  letter-spacing: .01em;
+  transition: background .25s, transform .2s, box-shadow .25s;
+  box-shadow: 0 0 0 0 rgba(124,58,237,0);
+}
+.btn-temple-primary:hover {
+  background: #6d28d9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(124,58,237,.4);
+}
+.btn-temple-ghost {
+  display: inline-flex; align-items: center; gap: 9px;
+  border: 0.5px solid rgba(227,227,235,.25);
+  color: rgba(227,227,235,.8);
+  padding: 15px 28px;
+  border-radius: 100px;
+  font-size: 14px; font-weight: 500;
+  transition: border-color .25s, color .25s;
+}
+.btn-temple-ghost:hover { border-color: rgba(227,227,235,.5); color: var(--silver); }
+
+/* Stats band */
+.temple-stats {
+  background: rgba(167,139,250,.07);
+  border-top: 0.5px solid rgba(167,139,250,.15);
+  border-bottom: 0.5px solid rgba(167,139,250,.15);
+  padding: 36px 24px;
+  display: flex; justify-content: center; gap: 0;
+  flex-wrap: wrap;
+}
+.temple-stat {
+  flex: 1; min-width: 160px; max-width: 220px;
+  text-align: center;
+  padding: 16px 24px;
+  border-right: 0.5px solid rgba(167,139,250,.15);
+}
+.temple-stat:last-child { border-right: none; }
+.temple-stat-val {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 500;
+  color: #A78BFA;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.temple-stat-label { font-size: 12px; color: rgba(227,227,235,.5); letter-spacing: .05em; text-transform: uppercase; }
+
+/* Vision section */
+.section-light { background: #fff; padding: 100px 24px; }
+.section-dark  { background: var(--night); padding: 100px 24px; color: var(--silver); }
+.section-soft  { background: var(--silver-soft); padding: 100px 24px; }
+
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-inner-narrow { max-width: 740px; margin: 0 auto; }
+
+.eyebrow-tag {
+  display: inline-block;
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: #7c3aed;
+  margin-bottom: 14px;
+}
+.eyebrow-tag-light { color: rgba(167,139,250,.75); }
+
+h2.section-title {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4.5vw, 48px);
+  font-weight: 500;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  letter-spacing: -.01em;
+}
+h2.section-title em { font-style: italic; }
+
+.section-lead {
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.8;
+  color: var(--text-muted);
+  max-width: 660px;
+  margin-bottom: 56px;
+}
+.section-dark .section-lead { color: rgba(227,227,235,.65); }
+
+/* Why cards */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 56px;
+}
+.why-card {
+  background: #fff;
+  border: 1px solid rgba(26,27,62,.07);
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: 0 4px 28px rgba(26,27,62,.06);
+  transition: transform .3s var(--ease), box-shadow .3s;
+}
+.why-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(26,27,62,.1); }
+.why-icon {
+  width: 56px; height: 56px;
+  background: rgba(124,58,237,.08);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 22px;
+  color: #7c3aed;
+}
+.why-card h3 {
+  font-family: var(--serif);
+  font-size: 21px; font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+.why-card p { font-size: 14px; color: var(--text-muted); line-height: 1.75; }
+
+/* How it works */
+.steps { display: flex; flex-direction: column; gap: 0; max-width: 700px; margin: 0 auto; }
+.step {
+  display: flex; gap: 28px;
+  padding: 32px 0;
+  border-bottom: 0.5px solid rgba(227,227,235,.1);
+  align-items: flex-start;
+}
+.step:last-child { border-bottom: none; }
+.step-num {
+  width: 48px; height: 48px; flex-shrink: 0;
+  border-radius: 50%;
+  border: 0.5px solid rgba(167,139,250,.4);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif);
+  font-size: 20px; font-weight: 500;
+  color: #A78BFA;
+}
+.step-body h3 {
+  font-family: var(--serif);
+  font-size: 20px; font-weight: 500;
+  color: var(--silver);
+  margin-bottom: 8px;
+}
+.step-body p { font-size: 14px; color: rgba(227,227,235,.6); line-height: 1.7; }
+.step-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(167,139,250,.12);
+  border: 0.5px solid rgba(167,139,250,.25);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px; font-weight: 600; color: #A78BFA;
+  margin-top: 10px;
+}
+
+/* Bank details card */
+.bank-section { background: var(--silver-soft); padding: 100px 24px; }
+.bank-card {
+  max-width: 680px; margin: 0 auto;
+  background: #fff;
+  border: 1px solid rgba(26,27,62,.08);
+  border-radius: 24px;
+  padding: 48px 44px;
+  box-shadow: 0 8px 48px rgba(26,27,62,.07);
+  text-align: center;
+}
+.bank-card-icon {
+  width: 72px; height: 72px;
+  background: rgba(124,58,237,.08);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px;
+  color: #7c3aed;
+}
+.bank-card h2 {
+  font-family: var(--serif);
+  font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+.bank-card-sub { font-size: 15px; color: var(--text-muted); margin-bottom: 36px; line-height: 1.6; }
+
+.bank-iban-box {
+  background: var(--night);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.bank-iban-label {
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(227,227,235,.4); margin-bottom: 10px;
+}
+.bank-iban-number {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(20px, 4vw, 30px);
+  font-weight: 700;
+  color: var(--silver);
+  letter-spacing: .06em;
+}
+.bank-copy-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(167,139,250,.12);
+  border: 0.5px solid rgba(167,139,250,.3);
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 13px; font-weight: 500; color: #A78BFA;
+  cursor: pointer; transition: background .2s, color .2s;
+  margin-top: 16px;
+}
+.bank-copy-btn:hover { background: rgba(167,139,250,.2); color: var(--silver); }
+.bank-copy-btn.copied { background: rgba(110,231,183,.12); border-color: rgba(110,231,183,.3); color: #6ee7b7; }
+
+.bank-details-row {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  margin: 28px 0;
+}
+.bank-detail-chip {
+  background: var(--silver-soft);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.bank-detail-chip strong { color: var(--text-dark); display: block; font-size: 12px; margin-bottom: 2px; letter-spacing: .04em; text-transform: uppercase; }
+
+.bank-note {
+  font-size: 13px; color: var(--text-muted);
+  line-height: 1.6;
+  border-top: 1px solid rgba(26,27,62,.07);
+  padding-top: 22px;
+}
+.bank-note strong { color: var(--text-dark); }
+
+/* Verse pull-quote */
+.verse-section {
+  background: var(--night);
+  padding: 80px 24px;
+  text-align: center;
+}
+.verse-section blockquote {
+  max-width: 700px; margin: 0 auto;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(20px, 3.5vw, 32px);
+  font-weight: 400;
+  color: rgba(227,227,235,.85);
+  line-height: 1.55;
+  position: relative;
+}
+.verse-section blockquote::before {
+  content: '"';
+  font-size: clamp(80px, 12vw, 140px);
+  line-height: 0.8;
+  color: rgba(167,139,250,.15);
+  display: block;
+  margin-bottom: -10px;
+  font-family: var(--serif);
+}
+.verse-ref {
+  display: block;
+  margin-top: 24px;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(167,139,250,.65);
+}
+
+/* FAQ */
+.faq-list { max-width: 700px; margin: 56px auto 0; }
+.faq-item {
+  border-bottom: 0.5px solid rgba(26,27,62,.08);
+  padding: 0;
+}
+.faq-q {
+  width: 100%;
+  text-align: left;
+  padding: 22px 0;
+  font-family: var(--serif);
+  font-size: 18px; font-weight: 500;
+  color: var(--text-dark);
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  background: none; border: none; cursor: pointer;
+  transition: color .2s;
+}
+.faq-q:hover { color: #7c3aed; }
+.faq-q svg { flex-shrink: 0; transition: transform .3s; color: var(--text-muted); }
+.faq-item.open .faq-q svg { transform: rotate(45deg); color: #7c3aed; }
+.faq-a {
+  font-size: 14px; color: var(--text-muted); line-height: 1.8;
+  max-height: 0; overflow: hidden;
+  transition: max-height .4s var(--ease), padding .3s;
+  padding-bottom: 0;
+}
+.faq-item.open .faq-a { max-height: 300px; padding-bottom: 22px; }
+
+/* CTA final */
+.temple-cta-final {
+  background: linear-gradient(135deg, var(--night-deep) 0%, #1a0a3e 100%);
+  padding: 100px 24px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.temple-cta-final::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(124,58,237,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.temple-cta-final-inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+.temple-cta-final h2 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 4.5vw, 46px);
+  font-weight: 500;
+  color: var(--silver);
+  margin-bottom: 18px;
+}
+.temple-cta-final p { font-size: 16px; color: rgba(227,227,235,.6); margin-bottom: 40px; line-height: 1.7; }
+
+@media (max-width: 640px) {
+  .temple-stat { border-right: none; border-bottom: 0.5px solid rgba(167,139,250,.15); }
+  .temple-stat:last-child { border-bottom: none; }
+  .bank-card { padding: 32px 22px; }
+  .bank-iban-number { font-size: 20px; letter-spacing: .04em; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav" aria-label="Navigation principale">
+  <a href="/" class="nav-brand">
+    <div class="nav-brand-mark">
+      <img src="/cefc-logo.png" alt="Logo CEFC" />
+    </div>
+    <div class="nav-brand-text">
+      <strong>CEFC</strong>
+      <span>La Famille Chrétienne</span>
+    </div>
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <a href="/">Accueil</a>
+    <a href="/services.html">Services</a>
+    <a href="/jeunesse.html">Jeunesse</a>
+    <a href="/navette.html">Navette</a>
+    <a href="/departements.html">Départements</a>
+    <a href="/annonces.html">Annonces</a>
+    <a href="/temple.html" class="nav-current">Temple</a>
+    <a href="/dons.html">Dons</a>
+    <a href="/contact.html">Contact</a>
+    <a href="https://www.youtube.com/@CE_laFamilleChretienne" class="nav-live" target="_blank" rel="noopener">
+      <span class="dot"></span> Live
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="temple-hero">
+  <div class="temple-hero-inner">
+    <div class="temple-eyebrow">
+      <span></span> Projet communautaire · CEFC Alost
+    </div>
+    <h1>Achetons un Temple<br><em>à l'Éternel</em></h1>
+    <p class="temple-hero-sub">
+      Depuis des années, nous nous rassemblons avec foi et joie dans des lieux loués. Aujourd'hui, l'Éternel pose sur nos cœurs une vision plus grande : bâtir un foyer permanent, une maison qui portera Son nom pour les générations à venir.
+    </p>
+    <div class="temple-cta-row">
+      <a href="#comment-participer" class="btn-temple-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M5 9h14"/></svg>
+        Comment participer
+      </a>
+      <a href="#virement" class="btn-temple-ghost">
+        Faire un virement
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <p class="temple-hero-verse">
+      « Montez à la montagne, apportez du bois, et rebâtissez le temple ; j'y prendrai plaisir, et je serai glorifié. »<br>
+      <strong style="font-style:normal;font-size:12px;letter-spacing:.08em;color:rgba(167,139,250,.5)">AGGÉE 1 : 8</strong>
+    </p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="temple-stats" style="background:var(--night)">
+  <div class="temple-stat">
+    <div class="temple-stat-val">20 €</div>
+    <div class="temple-stat-label">Par membre de famille / mois</div>
+  </div>
+  <div class="temple-stat">
+    <div class="temple-stat-val">1<sup style="font-size:.5em">er</sup></div>
+    <div class="temple-stat-label">Dimanche du mois en présentiel</div>
+  </div>
+  <div class="temple-stat">
+    <div class="temple-stat-val">24/7</div>
+    <div class="temple-stat-label">Virement possible en ligne</div>
+  </div>
+  <div class="temple-stat">
+    <div class="temple-stat-val">∞</div>
+    <div class="temple-stat-label">Générations à venir bénies</div>
+  </div>
+</div>
+
+<!-- POURQUOI -->
+<section class="section-light">
+  <div class="section-inner">
+    <div style="max-width:640px">
+      <span class="eyebrow-tag">Pourquoi ce projet ?</span>
+      <h2 class="section-title">Un lieu qui nous appartient,<br><em>pour servir durablement</em></h2>
+      <p class="section-lead">
+        Chaque dimanche, nous remplissons de louanges un espace qui ne nous appartient pas. La CEFC Alost grandit — en membres, en jeunesse, en impact dans la cité. Il est temps de franchir un nouveau palier : posséder notre propre maison de Dieu, libre de toute contrainte de location.
+      </p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3>Un foyer permanent</h3>
+        <p>Avoir notre propre bâtiment, c'est la liberté d'organiser nos cultes, nos réunions de prière, nos événements pour la jeunesse sans dépendre d'un propriétaire ou d'un calendrier imposé. Un ancrage solide dans la ville d'Alost.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Un héritage collectif</h3>
+        <p>Ce n'est pas le projet d'un seul, c'est la vision de toute une famille. Chaque famille qui cotise plante une graine. Dans 10 ans, nos enfants hériteront d'une maison spirituelle solide — et ils sauront qu'elle a été construite par la foi et la persévérance de leurs parents.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Une stabilité financière</h3>
+        <p>Payer un loyer chaque mois, c'est de l'argent qui s'envole. Un temple qui nous appartient est un investissement durable : plus de loyer, plus de liberté budgétaire pour soutenir les missions, la jeunesse, et les familles dans le besoin.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>Un témoignage visible</h3>
+        <p>Un bâtiment portant l'identité de l'église est un témoignage permanent dans le quartier. Il invite, il interpelle, il signale que Dieu est présent dans cette ville. C'est une pierre dans la communauté d'Alost qui parlera à ceux qui passent.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Un élan de foi</h3>
+        <p>Décider de s'engager financièrement ensemble pour une vision commune renforce la foi de chaque membre. On ne cotise pas par obligation — on participe par conviction que Dieu honore ceux qui agissent avec foi. Chaque virement est une prière concrète.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3>Une famille unie</h3>
+        <p>Construire ensemble, c'est aussi se rapprocher. Ce projet nous appelle à faire confiance, à nous soutenir mutuellement, à prier avec un objectif commun. Ce que nous vivrons dans cette démarche nous transformera bien avant l'inauguration du temple.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VERSE -->
+<section class="verse-section">
+  <blockquote>
+    Je me suis réjoui quand on m'a dit : Allons à la maison de l'Éternel !
+    <span class="verse-ref">Psaumes 122 : 1</span>
+  </blockquote>
+</section>
+
+<!-- COMMENT PARTICIPER -->
+<section class="section-dark" id="comment-participer">
+  <div class="section-inner">
+    <div style="max-width:640px;margin-bottom:64px">
+      <span class="eyebrow-tag eyebrow-tag-light">Comment participer ?</span>
+      <h2 class="section-title" style="color:var(--silver)">Simple, régulier,<br><em>à la portée de chaque famille</em></h2>
+      <p class="section-lead">
+        L'Éternel n'attend pas de vous des millions. Il attend la fidélité de chacun. 20 € par mois et par membre de famille : c'est à la portée de tous, et c'est ensemble que cela devient puissant.
+      </p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>20 € par membre de famille</h3>
+          <p>Le montant est fixé à 20 € par mois et par membre de la famille. Un couple avec deux enfants contribue donc 80 € par mois. C'est une offrande volontaire et sacrificielle — pas un impôt, mais un acte de foi pour une vision commune.</p>
+          <span class="step-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M5 9h14"/></svg>
+            20 € × membres de la famille
+          </span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>En présentiel — le 1<sup>er</sup> dimanche du mois</h3>
+          <p>Lors de chaque premier dimanche du mois, une collecte spéciale est organisée pour le projet du temple. Venez avec votre offrande prête — vous pouvez la déposer dans l'enveloppe dédiée. Ce moment collectif est important : il nous rappelle que nous bâtissons ensemble.</p>
+          <span class="step-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            1<sup>er</sup> dimanche · 10h00 · Wijngaardveld 29
+          </span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>En ligne — à tout moment</h3>
+          <p>Vous ne pouvez pas être présent ce dimanche-là ? Aucun problème. Vous pouvez effectuer un virement bancaire à tout moment, depuis votre application bancaire ou en ligne. La régularité est ce qui compte le plus : une cotisation mensuelle régulière, même modeste, a plus de valeur qu'un grand don unique.</p>
+          <span class="step-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            Virement bancaire · IBAN ci-dessous
+          </span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Communication conseillée</h3>
+          <p>Lors de votre virement, indiquez en communication : <em>« Temple – [votre nom de famille] »</em>. Cela permet à l'église de tenir une comptabilité claire et de vous remercier personnellement pour votre contribution.</p>
+          <span class="step-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Communication : Temple – Nom de famille
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BANK DETAILS -->
+<section class="bank-section" id="virement">
+  <div class="bank-card">
+    <div class="bank-card-icon">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+    </div>
+    <span class="eyebrow-tag" style="margin-bottom:12px">Virement bancaire</span>
+    <h2>Numéro de compte</h2>
+    <p class="bank-card-sub">Utilisez ce numéro pour vos virements mensuels. Pensez à ajouter la communication pour un suivi optimal.</p>
+
+    <div class="bank-iban-box">
+      <div class="bank-iban-label">IBAN — Compte Temple CEFC Alost</div>
+      <div class="bank-iban-number" id="ibanNumber">BE97 3631 6425 1049</div>
+      <button class="bank-copy-btn" id="copyBtn" onclick="copyIban()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copier l'IBAN
+      </button>
+    </div>
+
+    <div class="bank-details-row">
+      <div class="bank-detail-chip">
+        <strong>Bénéficiaire</strong>
+        CEFC La Famille Chrétienne
+      </div>
+      <div class="bank-detail-chip">
+        <strong>Communication</strong>
+        Temple – [Votre nom]
+      </div>
+      <div class="bank-detail-chip">
+        <strong>Montant suggéré</strong>
+        20 € / membre / mois
+      </div>
+    </div>
+
+    <p class="bank-note">
+      <strong>Pas encore membre ?</strong> Ce projet est ouvert à tous ceux qui partagent cette vision. Chaque contribution, quelle que soit sa taille, est précieuse aux yeux de Dieu et de toute notre communauté. Vous pouvez aussi contacter l'église pour toute question via la page <a href="/contact.html" style="color:#7c3aed;font-weight:600">Contact</a>.
+    </p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section-light">
+  <div class="section-inner-narrow">
+    <span class="eyebrow-tag">Questions fréquentes</span>
+    <h2 class="section-title">Tout ce que vous voulez savoir</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Est-ce obligatoire de participer ?
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a">Non, absolument pas. La participation à ce projet est volontaire. Dieu aime celui qui donne avec joie et non par contrainte (2 Corinthiens 9:7). Nous vous invitons à prier et à discerner si vous sentez le cœur à y contribuer. Chaque famille décide librement.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Pourquoi 20 € exactement ?
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a">Le montant de 20 € par membre a été choisi après réflexion pour être accessible à toutes les familles tout en permettant d'atteindre un objectif significatif. C'est moins qu'un repas au restaurant. Si vous pouvez donner davantage, c'est une bénédiction. Si 20 € est difficile pour vous en ce moment, donnez ce que vous pouvez — l'intention et la fidélité comptent plus que le montant.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Comment savoir que l'argent est bien utilisé ?
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a">Les fonds collectés pour le projet Temple sont gérés dans un compte dédié, séparé du compte courant de l'église. Des bilans réguliers sont présentés à la communauté. La transparence est une valeur fondamentale de notre church — vous avez le droit de savoir où en est le projet.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Et si je suis à l'étranger ou non-membre ?
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a">Peu importe où vous vous trouvez — si vous portez cette vision dans votre cœur, vous pouvez participer par virement international. L'IBAN belge est universel. Des amis de la CEFC qui vivent loin soutiennent le projet en ligne. Vous n'avez pas besoin d'être présent le dimanche pour faire partie de l'aventure.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Combien de temps durera ce projet ?
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-a">Nous avançons par foi, pas par calendrier. L'objectif est de constituer un capital suffisant pour acquérir un bien — cela peut prendre plusieurs années. Mais chaque mois de cotisation nous rapproche du but. La persévérance est au cœur de la foi chrétienne, et ce projet en est une belle illustration concrète.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="temple-cta-final">
+  <div class="temple-cta-final-inner">
+    <span class="temple-eyebrow" style="margin-bottom:28px">Rejoindre le mouvement</span>
+    <h2>Votre pierre dans<br><em>la maison de l'Éternel</em></h2>
+    <p>Un temple ne se bâtit pas en un jour, mais une pierre à la fois. Chaque famille qui contribue pose sa pierre dans cette maison. Quelle sera la vôtre ?</p>
+    <div class="temple-cta-row" style="justify-content:center">
+      <a href="#virement" class="btn-temple-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        Faire un virement maintenant
+      </a>
+      <a href="/contact.html" class="btn-temple-ghost">Nous contacter</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-mark">
+        <img src="/cefc-logo.png" alt="Logo CEFC" />
+      </div>
+      <div>
+        <strong>CEFC — La Famille Chrétienne</strong>
+        <span>Wijngaardveld 29, 9300 Aalst · Belgique</span>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="/">Accueil</a>
+      <a href="/services.html">Services</a>
+      <a href="/temple.html">Temple</a>
+      <a href="/dons.html">Dons</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+    <p class="footer-copy">© 2025 CEFC Alost — Tous droits réservés</p>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+  // Mobile nav toggle
+  document.getElementById('navToggle').addEventListener('click', function() {
+    const links = document.getElementById('navLinks');
+    const isOpen = links.classList.toggle('open');
+    this.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Copy IBAN
+  function copyIban() {
+    const iban = 'BE97363164251049';
+    navigator.clipboard.writeText(iban).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.classList.add('copied');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Copié !';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copier l\'IBAN';
+      }, 2500);
+    });
+  }
+
+  // FAQ accordion
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.why-card, .step, .bank-card');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => {
+    el.style.opacity = '0'; el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity .6s var(--ease), transform .6s var(--ease)';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
