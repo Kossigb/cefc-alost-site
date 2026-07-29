@@ -21,8 +21,8 @@
     <a href="index.html" class="logo">
       <span class="logo-mark"><img src="img/logo-mark-chris-business.png" alt="Chris Business"></span>
       <span class="logo-text">
-        <strong>Chris Business</strong>
-        <span>&amp; Chrisfoot</span>
+        <strong data-key="site.logoText1">Chris Business</strong>
+        <span data-key="site.logoText2">&amp; Chrisfoot</span>
       </span>
     </a>
     <nav class="main-nav">
@@ -60,9 +60,9 @@
 <section class="hero page-hero">
   <div class="container hero-inner">
     <p class="breadcrumb"><a href="index.html">Accueil</a> / Contact</p>
-    <p class="eyebrow">Parlons de votre projet</p>
-    <h1>Devenez partenaire</h1>
-    <p class="lead">Une question, une opportunité de partenariat ? Écrivez-nous.</p>
+    <p class="eyebrow" data-key="contact.hero.eyebrow">Parlons de votre projet</p>
+    <h1 data-key="contact.hero.title">Devenez partenaire</h1>
+    <p class="lead" data-key="contact.hero.lead">Une question, une opportunité de partenariat ? Écrivez-nous.</p>
   </div>
 </section>
 
@@ -70,33 +70,33 @@
   <div class="container">
     <div class="contact-grid">
       <div>
-        <h2>Nos coordonnées</h2>
+        <h2 data-key="contact.coordonnees.title">Nos coordonnées</h2>
         <div class="contact-info-item">
           <div class="contact-icon">TÉL</div>
           <div>
             <strong>Téléphone</strong>
-            <p style="margin:2px 0 0;color:var(--ink-soft);"><a href="tel:+243985838653">+243 985 838 653</a></p>
+            <p style="margin:2px 0 0;color:var(--ink-soft);"><a href="tel:+243985838653" data-key="site.phone">+243 985 838 653</a></p>
           </div>
         </div>
         <div class="contact-info-item">
           <div class="contact-icon">WA</div>
           <div>
             <strong>WhatsApp</strong>
-            <p style="margin:2px 0 0;color:var(--ink-soft);"><a href="https://wa.me/32493363433">+32 493 363 433</a></p>
+            <p style="margin:2px 0 0;color:var(--ink-soft);"><a href="https://wa.me/32493363433" data-key="site.whatsapp">+32 493 363 433</a></p>
           </div>
         </div>
         <div class="contact-info-item">
           <div class="contact-icon">MAIL</div>
           <div>
             <strong>Email</strong>
-            <p style="margin:2px 0 0;color:var(--ink-soft);"><a href="mailto:christiankapenga@yahoo.fr">christiankapenga@yahoo.fr</a></p>
+            <p style="margin:2px 0 0;color:var(--ink-soft);"><a href="mailto:christiankapenga@yahoo.fr" data-key="site.email">christiankapenga@yahoo.fr</a></p>
           </div>
         </div>
         <div class="contact-info-item">
           <div class="contact-icon">DIR.</div>
           <div>
             <strong>Direction</strong>
-            <p style="margin:2px 0 0;color:var(--ink-soft);">Serge Tungila Mwanza &amp; Christian Yangongo Kapenga</p>
+            <p style="margin:2px 0 0;color:var(--ink-soft);" data-key="site.footerNames">Serge Tungila Mwanza &amp; Christian Yangongo Kapenga</p>
           </div>
         </div>
       </div>
@@ -136,9 +136,9 @@
           <label for="message">Message</label>
           <textarea id="message" name="message" rows="5" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Envoyer le message</button>
-        <p class="form-note">Ce formulaire est une démonstration côté client. Pour recevoir réellement les messages, connectez-le à votre service d'envoi d'e-mails habituel.</p>
-        <div class="form-success">Merci, votre message a bien été enregistré. Nous vous répondrons rapidement.</div>
+        <button type="submit" class="btn btn-primary" data-key="contact.form.submitBtn">Envoyer le message</button>
+        <p class="form-note" data-key="contact.form.note">Ce formulaire est une démonstration côté client. Pour recevoir réellement les messages, connectez-le à votre service d'envoi d'e-mails habituel.</p>
+        <div class="form-success" data-key="contact.form.successMessage">Merci, votre message a bien été enregistré. Nous vous répondrons rapidement.</div>
       </form>
     </div>
   </div>
@@ -148,8 +148,8 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <h4>Chris Business &amp; Chrisfoot</h4>
-        <p>Facilitation d'affaires en RDC et agence agréée FIFA.</p>
+        <h4 data-key="site.footerTitle">Chris Business &amp; Chrisfoot</h4>
+        <p data-key="site.footerTagline">Facilitation d'affaires en RDC et agence agréée FIFA.</p>
       </div>
       <div>
         <h4>Navigation</h4>
@@ -163,18 +163,19 @@
       <div>
         <h4>Contact</h4>
         <ul>
-          <li><a href="tel:+243985838653">+243 985 838 653</a></li>
-          <li><a href="mailto:christiankapenga@yahoo.fr">christiankapenga@yahoo.fr</a></li>
+          <li><a href="tel:+243985838653" data-key="site.phone">+243 985 838 653</a></li>
+          <li><a href="mailto:christiankapenga@yahoo.fr" data-key="site.email">christiankapenga@yahoo.fr</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Chris Business &amp; Chrisfoot. Tous droits réservés.</span>
-      <span>Serge Tungila Mwanza · Christian Yangongo Kapenga</span>
+      <span data-key="site.footerCopyright">© 2026 Chris Business &amp; Chrisfoot. Tous droits réservés.</span>
+      <span data-key="site.footerNames">Serge Tungila Mwanza · Christian Yangongo Kapenga</span>
     </div>
   </div>
 </footer>
 
 <script src="js/script.js"></script>
+<script src="js/content-loader.js"></script>
 </body>
 </html>
