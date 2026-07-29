@@ -694,38 +694,16 @@
           <div><h1>⚙️ Paramètres</h1><p>Connexion GitHub, compte et données</p></div>
         </div>
 
-        <!-- GitHub Token -->
-        <div class="card" style="border-color:rgba(124,58,237,.3)">
+        <!-- GitHub connexion -->
+        <div class="card" style="border-color:rgba(110,231,183,.2)">
           <div class="card-title" style="justify-content:space-between">
-            <span>🔑 Token GitHub (requis pour sauvegarder)</span>
-            <span id="gh-token-badge" style="font-size:12px;font-weight:600">⚠ Non configuré</span>
+            <span>🔗 Connexion GitHub</span>
+            <span style="font-size:12px;font-weight:600;color:#6ee7b7">✓ Configurée automatiquement</span>
           </div>
-          <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7">
-            Pour que vos modifications soient publiées directement sur le site, vous devez connecter un <strong style="color:var(--text)">Personal Access Token (PAT)</strong> GitHub.<br>
-            Ce token est stocké uniquement dans votre navigateur.
+          <p style="font-size:13px;color:var(--text2);line-height:1.7">
+            La connexion GitHub est gérée par l'administrateur principal via les variables d'environnement Netlify.<br>
+            Vous n'avez rien à configurer — vos modifications sont publiées automatiquement.
           </p>
-
-          <div style="background:var(--bg3);border-radius:10px;padding:16px;margin-bottom:16px">
-            <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text)">📋 Comment créer un token :</div>
-            <ol style="font-size:12px;color:var(--text2);line-height:2;padding-left:18px">
-              <li>Allez sur <strong style="color:var(--text)">github.com → Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong></li>
-              <li>Cliquez <strong style="color:var(--text)">Generate new token</strong></li>
-              <li>Nom : <code style="background:var(--bg);padding:1px 5px;border-radius:4px">CEFC Admin</code> — Expiration : <strong style="color:var(--text)">No expiration</strong> (ou 1 an)</li>
-              <li>Repository access : <strong style="color:var(--text)">Only select repositories</strong> → choisissez <code style="background:var(--bg);padding:1px 5px;border-radius:4px">cefc-alost-site</code></li>
-              <li>Permissions → <strong style="color:var(--text)">Repository permissions → Contents : Read and write</strong></li>
-              <li>Cliquez <strong style="color:var(--text)">Generate token</strong> et copiez le token affiché</li>
-            </ol>
-          </div>
-
-          <div class="field">
-            <label>Coller votre token ici</label>
-            <input type="password" id="gh-token-input" placeholder="github_pat_..." autocomplete="off" />
-          </div>
-          <div id="gh-token-status" style="font-size:13px;min-height:20px;margin-bottom:12px"></div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <button class="save-btn" onclick="testAndSaveToken()">✓ Tester et enregistrer</button>
-            <button class="btn-del" style="padding:10px 16px;font-size:13px" onclick="clearToken()">🗑️ Supprimer le token</button>
-          </div>
         </div>
 
         <div class="card">

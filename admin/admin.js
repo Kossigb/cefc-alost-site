@@ -88,89 +88,45 @@ async function showApp(user) {
   populateAll();
   showCurrentUser(user);
   if (isAdmin) loadUsers();
-  refreshTokenStatus();
 }
 
-// ════════════ GITHUB API ════════════
+// ════════════ GITHUB API (via proxy Netlify) ════════════
 
-function getGHToken() { return localStorage.getItem('cefc_gh_token') || ''; }
-function saveGHToken(t) { localStorage.setItem('cefc_gh_token', t.trim()); }
+async function ghProxy(method, path, data) {
+  const user = window.netlifyIdentity && window.netlifyIdentity.currentUser();
+  const jwt  = user ? await user.jwt() : null;
+  return fetch('/.netlify/functions/github-proxy', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
+    },
+    body: JSON.stringify({ method, path, data }),
+  });
+}
 
 async function ghGetSHA(path) {
-  const token = getGHToken();
   try {
-    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`, {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
-    });
+    const res = await ghProxy('GET', `repos/${REPO}/contents/${path}?ref=${BRANCH}`);
     if (!res.ok) return null;
     return (await res.json()).sha;
   } catch { return null; }
 }
 
 async function ghCommitText(path, content, message) {
-  const token = getGHToken();
-  if (!token) throw new Error('no-token');
-  const sha = await ghGetSHA(path);
+  const sha  = await ghGetSHA(path);
   const body = { message, branch: BRANCH, content: btoa(unescape(encodeURIComponent(content))) };
   if (sha) body.sha = sha;
-  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
-    method: 'PUT',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
-    body: JSON.stringify(body)
-  });
+  const res = await ghProxy('PUT', `repos/${REPO}/contents/${path}`, body);
   if (!res.ok) { const e = await res.json(); throw new Error(e.message || `Erreur ${res.status}`); }
 }
 
 async function ghCommitBinary(path, base64, message) {
-  const token = getGHToken();
-  if (!token) throw new Error('no-token');
-  const sha = await ghGetSHA(path);
+  const sha  = await ghGetSHA(path);
   const body = { message, branch: BRANCH, content: base64 };
   if (sha) body.sha = sha;
-  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
-    method: 'PUT',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
-    body: JSON.stringify(body)
-  });
+  const res = await ghProxy('PUT', `repos/${REPO}/contents/${path}`, body);
   if (!res.ok) { const e = await res.json(); throw new Error(e.message || `Erreur ${res.status}`); }
-}
-
-async function testAndSaveToken() {
-  const input = document.getElementById('gh-token-input');
-  const status = document.getElementById('gh-token-status');
-  const token = input.value.trim();
-  if (!token) { status.textContent = 'Entrez un token.'; status.style.color = '#fca5a5'; return; }
-  status.textContent = 'Vérification...'; status.style.color = 'var(--text2)';
-  try {
-    const res = await fetch(`https://api.github.com/repos/${REPO}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (res.ok) {
-      saveGHToken(token);
-      status.textContent = '✓ Token valide — connexion GitHub établie !';
-      status.style.color = '#6ee7b7';
-      input.value = '';
-      refreshTokenStatus();
-      toast('Token GitHub enregistré !', 'success');
-    } else {
-      status.textContent = '✗ Token invalide ou accès refusé.';
-      status.style.color = '#fca5a5';
-    }
-  } catch { status.textContent = '✗ Erreur réseau.'; status.style.color = '#fca5a5'; }
-}
-
-function refreshTokenStatus() {
-  const el = document.getElementById('gh-token-badge');
-  if (!el) return;
-  const t = getGHToken();
-  el.textContent = t ? '✓ Token configuré' : '⚠ Token non configuré';
-  el.style.color  = t ? '#6ee7b7' : '#fcd34d';
-}
-
-function clearToken() {
-  localStorage.removeItem('cefc_gh_token');
-  refreshTokenStatus();
-  toast('Token supprimé.', 'success');
 }
 
 // ════════════ SAVE ALL → GITHUB ════════════
@@ -179,17 +135,13 @@ async function saveAll() {
   document.querySelectorAll('[data-path]').forEach(el => {
     setPath(contenu, el.dataset.path, el.type === 'checkbox' ? el.checked : el.value);
   });
-  if (!getGHToken()) {
-    toast('⚠ Token GitHub requis — configurez-le dans ⚙ Paramètres.', 'error');
-    switchPage('parametres'); return;
-  }
   const btns = document.querySelectorAll('.save-btn');
   btns.forEach(b => { b._orig = b.textContent; b.textContent = '⏳ Publication…'; b.disabled = true; });
   try {
     await ghCommitText('contenu.json', JSON.stringify(contenu, null, 2), 'Mise à jour contenu via admin CEFC');
     toast('✓ Modifications publiées ! Le site se met à jour automatiquement.', 'success');
   } catch (e) {
-    toast(e.message === 'no-token' ? 'Token GitHub manquant.' : 'Erreur GitHub : ' + e.message, 'error');
+    toast('Erreur GitHub : ' + e.message, 'error');
   } finally {
     btns.forEach(b => { b.textContent = b._orig; b.disabled = false; });
   }
@@ -584,20 +536,16 @@ async function deleteSelectedPhotos() {
   indices.forEach(i => photosData.photos.splice(i, 1));
   photoSelected.clear();
   photoSelectMode = false;
-  if (getGHToken()) {
-    try {
-      await ghCommitText('photos_culte.json', JSON.stringify(photosData, null, 2), `Suppression ${indices.length} photo(s) via admin`);
-      toast(`✓ ${indices.length} photo(s) supprimée(s).`, 'success');
-    } catch (e) { toast('Erreur : ' + e.message, 'error'); }
-  }
+  try {
+    await ghCommitText('photos_culte.json', JSON.stringify(photosData, null, 2), `Suppression ${indices.length} photo(s) via admin`);
+    toast(`✓ ${indices.length} photo(s) supprimée(s).`, 'success');
+  } catch (e) { toast('Erreur : ' + e.message, 'error'); }
   renderPhotosGrid();
 }
 
 async function handlePhotoUpload(input) {
   const files = Array.from(input.files);
   if (!files.length) return;
-  if (!getGHToken()) { toast('Token GitHub requis. Configurez-le dans ⚙ Paramètres.', 'error'); return; }
-
   const prog = document.getElementById('upload-progress');
   prog.style.display = 'block';
   let done = 0;
@@ -627,7 +575,6 @@ async function handlePhotoUpload(input) {
 }
 
 async function savePhotosLegends() {
-  if (!getGHToken()) { toast('Token GitHub requis. Configurez-le dans ⚙ Paramètres.', 'error'); return; }
   try {
     await ghCommitText('photos_culte.json', JSON.stringify(photosData, null, 2), 'Mise à jour légendes photos via admin');
     toast('✓ Légendes sauvegardées !', 'success');
@@ -637,12 +584,10 @@ async function savePhotosLegends() {
 async function deletePhoto(idx) {
   if (!confirm('Supprimer cette photo de la galerie ?')) return;
   photosData.photos.splice(idx, 1);
-  if (getGHToken()) {
-    try {
-      await ghCommitText('photos_culte.json', JSON.stringify(photosData, null, 2), 'Suppression photo via admin');
-      toast('Photo supprimée.', 'success');
-    } catch (e) { toast('Erreur : ' + e.message, 'error'); }
-  }
+  try {
+    await ghCommitText('photos_culte.json', JSON.stringify(photosData, null, 2), 'Suppression photo via admin');
+    toast('Photo supprimée.', 'success');
+  } catch (e) { toast('Erreur : ' + e.message, 'error'); }
   renderPhotosGrid();
 }
 
