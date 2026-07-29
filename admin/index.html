@@ -214,6 +214,10 @@
       }
     }
     @media (min-width:769px) { .mobile-nav-btn { display:none; } }
+
+    /* Drag & drop photos */
+    .photo-drag-ghost  { opacity: 0.25; border-radius: 10px; }
+    .photo-drag-chosen { transform: scale(1.04); box-shadow: 0 8px 28px rgba(124,58,237,.45); z-index: 10; position: relative; }
   </style>
 </head>
 <body>
@@ -272,6 +276,7 @@
       <div class="nav-item" data-page="parametres"><span class="icon">⚙️</span> Paramètres</div>
     </nav>
     <div class="sidebar-footer">
+      <button class="logout-btn" onclick="openPreview()" style="margin-bottom:8px;color:var(--purple-light);border-color:rgba(124,58,237,.3)"><span>👁</span> Prévisualiser</button>
       <button class="logout-btn" onclick="doLogout()"><span>🚪</span> Déconnexion</button>
     </div>
   </aside>
@@ -748,6 +753,7 @@
 <!-- Mobile menu button -->
 <button class="mobile-nav-btn" onclick="toggleSidebar()">☰</button>
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>

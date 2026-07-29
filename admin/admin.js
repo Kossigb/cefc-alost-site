@@ -478,7 +478,7 @@ function renderPhotosGrid() {
   }
 
   el.innerHTML =
-    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">' +
+    `<div id="photos-sortable" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">` +
     photos.map((p, i) => `
       <div id="photo-tile-${i}" onclick="${photoSelectMode ? `togglePhotoSelect(${i})` : ''}"
         style="position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--bg3);
@@ -504,6 +504,30 @@ function renderPhotosGrid() {
             onclick="event.stopPropagation()" />
         </div>
       </div>`).join('') + '</div>';
+  requestAnimationFrame(initPhotosDragSort);
+}
+
+function initPhotosDragSort() {
+  if (photoSelectMode) return;
+  const container = document.getElementById('photos-sortable');
+  if (!container || !window.Sortable) return;
+  new window.Sortable(container, {
+    animation: 200,
+    ghostClass: 'photo-drag-ghost',
+    chosenClass: 'photo-drag-chosen',
+    delay: 80,
+    delayOnTouchOnly: true,
+    onEnd(evt) {
+      const moved = photosData.photos.splice(evt.oldIndex, 1)[0];
+      photosData.photos.splice(evt.newIndex, 0, moved);
+      toast('Ordre modifié — cliquez 💾 pour sauvegarder.', 'success');
+    },
+  });
+}
+
+function openPreview() {
+  sessionStorage.setItem('cefc_preview', JSON.stringify(contenu));
+  window.open('/?preview=1', '_blank');
 }
 
 function enterSelectMode() {
@@ -581,10 +605,10 @@ async function handlePhotoUpload(input) {
   for (const file of files) {
     prog.textContent = `Envoi ${done + 1}/${files.length} : ${file.name}…`;
     try {
-      const base64  = await fileToBase64(file);
-      const safeName = file.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9.\-_]/g, '');
-      const path    = `img/uploads/${Date.now()}-${safeName}`;
-      await ghCommitBinary(path, base64, `Ajout photo: ${safeName}`);
+      const { base64, ext } = await compressImage(file);
+      const baseName = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-_]/g, '');
+      const path = `img/uploads/${Date.now()}-${baseName}.${ext}`;
+      await ghCommitBinary(path, base64, `Ajout photo: ${baseName}`);
       photosData.photos.push({ url: `/${path}`, legende: '', date: new Date().toISOString().split('T')[0] });
       done++;
     } catch (e) { toast(`Erreur sur ${file.name} : ${e.message}`, 'error'); }
@@ -620,6 +644,31 @@ async function deletePhoto(idx) {
     } catch (e) { toast('Erreur : ' + e.message, 'error'); }
   }
   renderPhotosGrid();
+}
+
+async function compressImage(file) {
+  const MAX_W = 1920, QUALITY = 0.82;
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > MAX_W) { height = Math.round(height * MAX_W / width); width = MAX_W; }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      canvas.toBlob(blob => {
+        if (!blob) { reject(new Error('Compression échouée')); return; }
+        const reader = new FileReader();
+        reader.onload = () => resolve({ base64: reader.result.split(',')[1], ext: 'webp' });
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      }, 'image/webp', QUALITY);
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
 }
 
 function fileToBase64(file) {

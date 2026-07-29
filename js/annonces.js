@@ -165,6 +165,67 @@
     });
   }
 
+  // ── Pull-to-refresh (mobile) ──
+  let _ptr_startY = 0;
+  let _ptr_indicator = null;
+  const PTR_THRESHOLD = 72;
+
+  function getPtrIndicator() {
+    if (_ptr_indicator) return _ptr_indicator;
+    _ptr_indicator = document.createElement('div');
+    _ptr_indicator.style.cssText =
+      'position:fixed;top:-64px;left:50%;transform:translateX(-50%);z-index:9999;' +
+      'background:#1A1B3E;color:#fff;border-radius:24px;padding:10px 20px;' +
+      'font-size:13px;font-family:sans-serif;display:flex;align-items:center;gap:8px;' +
+      'transition:top .25s ease;box-shadow:0 4px 20px rgba(0,0,0,.35);white-space:nowrap';
+    _ptr_indicator.innerHTML =
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5.34"/></svg> Actualisation…';
+    document.body.appendChild(_ptr_indicator);
+    return _ptr_indicator;
+  }
+
+  function ptrReload() {
+    const ind = getPtrIndicator();
+    ind.style.top = '16px';
+    showSkeleton();
+    fetch('/contenu.json?' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        const liste = (data.annonces && data.annonces.liste) ? data.annonces.liste : [];
+        allItems = liste.map(item => ({ type: 'annonce', ...item }))
+          .sort((a, b) => (a.important === b.important) ? 0 : a.important ? -1 : 1);
+        updateCountBadges();
+        renderFiltered();
+        setTimeout(() => { ind.style.top = '-64px'; }, 900);
+      })
+      .catch(() => { ind.style.top = '-64px'; });
+  }
+
+  if ('ontouchstart' in window) {
+    document.addEventListener('touchstart', e => {
+      _ptr_startY = window.scrollY === 0 ? e.touches[0].clientY : 0;
+    }, { passive: true });
+    document.addEventListener('touchmove', e => {
+      if (!_ptr_startY) return;
+      const dy = e.touches[0].clientY - _ptr_startY;
+      if (dy > 10 && window.scrollY === 0) {
+        const ind = getPtrIndicator();
+        const pct = Math.min(dy / PTR_THRESHOLD, 1);
+        ind.style.top = (-64 + pct * 80) + 'px';
+      }
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+      if (!_ptr_startY) return;
+      const dy = e.changedTouches[0].clientY - _ptr_startY;
+      _ptr_startY = 0;
+      if (dy >= PTR_THRESHOLD && window.scrollY === 0) {
+        ptrReload();
+      } else if (_ptr_indicator) {
+        _ptr_indicator.style.top = '-64px';
+      }
+    }, { passive: true });
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

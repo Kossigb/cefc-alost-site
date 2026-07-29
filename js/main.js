@@ -1,3 +1,24 @@
+// ===== PREVIEW MODE =====
+(function () {
+  if (!new URLSearchParams(window.location.search).has('preview')) return;
+  var previewData = sessionStorage.getItem('cefc_preview');
+  if (!previewData) return;
+  // Banner
+  var banner = document.createElement('div');
+  banner.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;background:#7c3aed;color:#fff;padding:12px 22px;border-radius:12px;font-size:13px;font-family:sans-serif;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);white-space:nowrap';
+  banner.innerHTML = '👁 <strong>Mode prévisualisation</strong> — données non publiées <button onclick="this.parentElement.remove()" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">✕</button>';
+  document.body.appendChild(banner);
+  // Patch fetch to return preview data for contenu.json
+  var _fetch = window.fetch.bind(window);
+  window.fetch = function (url) {
+    var rest = Array.prototype.slice.call(arguments, 1);
+    if (typeof url === 'string' && url.replace(/\?.*/, '').endsWith('contenu.json')) {
+      return Promise.resolve(new Response(previewData, { status: 200, headers: { 'Content-Type': 'application/json' } }));
+    }
+    return _fetch.apply(window, [url].concat(rest));
+  };
+})();
+
 // ===== NAV SCROLL =====
 const nav = document.getElementById('nav');
 const isInnerPage = window.location.pathname !== '/' && window.location.pathname !== '/index.html';

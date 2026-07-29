@@ -13,6 +13,35 @@
 <meta property="og:url" content="https://cefclabornealost9300.netlify.app/" />
 <link rel="canonical" href="https://cefclabornealost9300.netlify.app/" />
 <link rel="icon" href="/cefc-logo.png" type="image/png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Church",
+  "name": "CEFC – Centre Évangélique La Famille Chrétienne",
+  "alternateName": "CEFC Alost",
+  "url": "https://cefclabornealost9300.netlify.app",
+  "logo": "https://cefclabornealost9300.netlify.app/cefc-logo.png",
+  "description": "Église évangélique à Alost (Belgique). Cultes dominicaux, étude biblique, jeûne et prière. Navette gratuite disponible.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Wijngaardveld 29",
+    "addressLocality": "Aalst",
+    "postalCode": "9300",
+    "addressCountry": "BE"
+  },
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday",    "opens": "10:00", "closes": "12:30" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Wednesday", "opens": "18:00", "closes": "20:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday",    "opens": "18:00", "closes": "20:00" }
+  ],
+  "email": "contact@cefclabornealost.be",
+  "sameAs": [
+    "https://www.youtube.com/@CE_laFamilleChretienne",
+    "https://www.facebook.com/CentreEvangeliqueLaFamilleChretienne",
+    "https://www.instagram.com/cefc.alost/"
+  ]
+}
+</script>
 <link rel="stylesheet" href="/css/style.css" />
 <link rel="stylesheet" href="/css/hero-innovation.css" />
 
@@ -315,5 +344,31 @@
 <script src="/js/hero-innovation.js" defer></script>
 <script src="/js/cmdk.js" defer></script>
 <script src="/js/verse-share.js" defer></script>
+<script>
+// ── YouTube live auto-détection ──
+(function () {
+  function applyLiveState(data) {
+    if (!data.isLive) return;
+    const badge = document.getElementById('liveBadge');
+    const title = document.getElementById('liveTitle');
+    const sub   = document.getElementById('liveSub');
+    const cta   = document.getElementById('liveCtaWrap');
+    const embed = document.getElementById('liveEmbed');
+    const iframe = document.getElementById('liveIframe');
+    const fallbackLink = document.getElementById('liveFallbackLink');
+    if (badge) { badge.className = 'live-badge live'; const sp = badge.querySelector('span:last-child'); if (sp) sp.textContent = 'En direct maintenant'; }
+    if (title) title.textContent = data.title || 'Le culte est en direct';
+    if (sub)   sub.textContent   = 'Rejoignez-nous dès maintenant — le culte est diffusé sur notre chaîne.';
+    if (cta)   cta.style.display = 'none';
+    if (embed) embed.style.display = 'block';
+    if (iframe && !iframe.src) iframe.src = 'https://www.youtube.com/embed/' + data.videoId + '?autoplay=0';
+    if (fallbackLink) fallbackLink.href = 'https://www.youtube.com/watch?v=' + data.videoId;
+  }
+  fetch('/.netlify/functions/check-live').then(r => r.json()).then(applyLiveState).catch(function(){});
+  setInterval(function () {
+    fetch('/.netlify/functions/check-live').then(r => r.json()).then(applyLiveState).catch(function(){});
+  }, 5 * 60 * 1000);
+})();
+</script>
 </body>
 </html>
