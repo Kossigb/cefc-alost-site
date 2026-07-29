@@ -1343,6 +1343,9 @@ function applyLanguage(lang) {
   document.querySelectorAll('.lang-switch button').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
+
+  // 6) Notify other modules (annonces, etc.) to re-render in the new language
+  window.dispatchEvent(new Event('cefcLangChange'));
 }
 
 // Init i18n

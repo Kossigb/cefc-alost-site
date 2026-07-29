@@ -2,7 +2,9 @@
 (function () {
   'use strict';
 
-  const LANG = localStorage.getItem('cefcLang') || 'fr';
+  function getLang() {
+    try { return localStorage.getItem('cefcLang') || 'fr'; } catch(e) { return 'fr'; }
+  }
 
   const TYPE_LABELS = {
     annonce:  { fr: 'Annonce', nl: 'Aankondiging', en: 'Announcement' },
@@ -11,8 +13,9 @@
   };
 
   function t(item, key) {
-    if (LANG !== 'fr') {
-      const loc = item[key + '_' + LANG];
+    const lang = getLang();
+    if (lang !== 'fr') {
+      const loc = item[key + '_' + lang];
       if (loc) return loc;
     }
     return item[key] || '';
@@ -20,7 +23,7 @@
 
   function typeLabel(type) {
     const map = TYPE_LABELS[type] || TYPE_LABELS.annonce;
-    return map[LANG] || map.fr;
+    return map[getLang()] || map.fr;
   }
 
   function typeIcon(type) {
@@ -231,4 +234,10 @@
   } else {
     init();
   }
+
+  // Re-render when the page language changes
+  window.addEventListener('cefcLangChange', () => {
+    updateCountBadges();
+    renderFiltered();
+  });
 })();
