@@ -351,7 +351,7 @@
   "hero": {
     "titre_ligne1_nl": "Evangelisch Centrum",
     "bouton_secondaire": "Rejoindre le live",
-    "eyebrow": "Bienvenue au",
+    "eyebrow": "Centre Évangélique la Famille Chrétienne",
     "titre_ligne2_en": "The Christian Family",
     "titre_ligne1_en": "Evangelical Centre",
     "sous_titre": "Vous êtes les bienvenus dans notre famille. Ensemble dans la foi, la prière et la fraternité.",
@@ -360,8 +360,8 @@
     "bouton_principal": "Nos rassemblements",
     "_commentaire": "Texte de la section d'accueil (hero). Modifie le titre, le sous-titre et le texte des boutons.",
     "sous_titre_en": "You are welcome in our family. Together in faith, prayer and fellowship.",
-    "titre_ligne1": "Centre Évangélique",
-    "titre_ligne2": "La Famille Chrétienne",
+    "titre_ligne1": "CEFC",
+    "titre_ligne2": "La Borne Alost",
     "eyebrow_en": "Welcome to",
     "titre_ligne2_nl": "De Christelijke Familie"
   },
