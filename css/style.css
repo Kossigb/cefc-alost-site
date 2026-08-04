@@ -208,6 +208,28 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
+
+/* ── Letter-by-letter animation ── */
+.hero h1.letters-split {
+  opacity: 1;
+  animation: none;
+}
+.hero h1 .letter {
+  display: inline-block;
+  opacity: 0;
+  animation: letter-reveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--delay, 0.5s);
+}
+.hero h1 .accent .letter {
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--silver-mid) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+@keyframes letter-reveal {
+  from { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+}
 .hero-sub {
   font-family: var(--serif);
   font-style: italic;

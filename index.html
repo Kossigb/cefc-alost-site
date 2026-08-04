@@ -372,5 +372,44 @@
   }, 5 * 60 * 1000);
 })();
 </script>
+
+<script>
+// ── Hero letter-by-letter animation ──
+(function () {
+  function splitHeroLetters() {
+    var h1 = document.querySelector('.hero h1');
+    if (!h1) return;
+
+    h1.classList.add('letters-split');
+
+    var idx = 0;
+    var BASE = 0.5;
+    var STEP = 0.042;
+
+    h1.querySelectorAll(':scope > span').forEach(function (span) {
+      var text = span.textContent;
+      span.textContent = '';
+      Array.from(text).forEach(function (char) {
+        var el = document.createElement('span');
+        if (char === ' ') {
+          el.textContent = ' ';
+        } else {
+          el.className = 'letter';
+          el.style.setProperty('--delay', (BASE + idx++ * STEP).toFixed(3) + 's');
+          el.textContent = char;
+        }
+        span.appendChild(el);
+      });
+    });
+  }
+
+  splitHeroLetters();
+
+  window.addEventListener('cefcLangChange', function () {
+    // applyCmsContent() already ran and reset textContent — re-split
+    splitHeroLetters();
+  });
+})();
+</script>
 </body>
 </html>
