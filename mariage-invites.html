@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste des invités — Mariage</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+
+    :root {
+      --bg:       #F7F5F0;
+      --surface:  #FFFFFF;
+      --border:   rgba(0,0,0,0.08);
+      --border-2: rgba(0,0,0,0.14);
+      --text-1:   #1C1917;
+      --text-2:   #78716C;
+      --text-3:   #A8A29E;
+      --gold:     #B8860B;
+      --gold-bg:  rgba(184,134,11,0.09);
+      --gold-br:  rgba(184,134,11,0.3);
+      --green:    #15803D;
+      --green-bg: rgba(21,128,61,0.08);
+      --green-br: rgba(21,128,61,0.3);
+      --red:      #DC2626;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --serif: Georgia, serif;
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --r: 14px;
+    }
+
+    body { font-family: var(--font); background: var(--bg); color: var(--text-1); min-height: 100vh; }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 16px rgba(0,0,0,0.07);
+    }
+    .header-top { display: flex; align-items: center; padding: 16px 20px 12px; gap: 12px; }
+    .rings { font-size: 26px; flex-shrink: 0; }
+    .event-couple { font-family: var(--serif); font-size: clamp(17px,4vw,24px); font-style: italic; font-weight: normal; }
+    .event-date { font-size: 12px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 2px; }
+
+    .stats-bar { display: flex; border-top: 1px solid var(--border); }
+    .stat-item { flex: 1; text-align: center; padding: 10px 4px; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-size: 20px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+    .stat-num.green { color: var(--green); }
+    .stat-num.gold  { color: var(--gold); }
+    .stat-lbl { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+
+    .progress-wrap { height: 3px; background: var(--border); }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--green), #4ADE80); transition: width 0.5s var(--ease); }
+
+    /* ── CONTROLS ── */
+    .controls { padding: 14px 16px 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .search-wrap { position: relative; margin-bottom: 10px; }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-3); pointer-events: none; }
+    .search-input {
+      width: 100%; padding: 13px 44px;
+      font-family: var(--font); font-size: 16px;
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 100px; color: var(--text-1); outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-bg); }
+    .search-input::placeholder { color: var(--text-3); }
+    .search-clear {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: var(--text-3); color: #fff; border: none; cursor: pointer;
+      width: 20px; height: 20px; border-radius: 50%; font-size: 11px;
+      display: none; align-items: center; justify-content: center;
+    }
+    .search-clear.show { display: flex; }
+
+    .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      flex-shrink: 0; padding: 7px 16px; border-radius: 100px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      border: 1.5px solid var(--border); background: transparent;
+      color: var(--text-2); font-family: var(--font); transition: all 0.18s; white-space: nowrap;
+    }
+    .filter-btn.active { background: var(--text-1); color: #fff; border-color: var(--text-1); }
+    .filter-btn.active.green { background: var(--green); border-color: var(--green); }
+    .filter-btn.active.gold  { background: var(--gold);  border-color: var(--gold); color: #fff; }
+
+    /* ── GUEST LIST ── */
+    .guest-list { padding: 10px 14px 100px; display: flex; flex-direction: column; gap: 7px; }
+    .empty-state { text-align: center; padding: 60px 24px; color: var(--text-3); }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+    .guest-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--r); display: flex; align-items: stretch;
+      cursor: pointer; overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      user-select: none; -webkit-tap-highlight-color: transparent;
+    }
+    .guest-card:active { transform: scale(0.985); }
+    .guest-card.arrived { border-color: var(--green-br); background: #F0FDF4; }
+    .guest-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+
+    .guest-check {
+      width: 52px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg); border-right: 1.5px solid var(--border);
+      transition: background 0.2s;
+    }
+    .guest-card.arrived .guest-check { background: var(--green-bg); border-color: var(--green-br); }
+    .check-circle {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 2px solid var(--border-2); background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s var(--ease);
+    }
+    .guest-card.arrived .check-circle { background: var(--green); border-color: var(--green); }
+    .check-icon { color: #fff; opacity: 0; transition: opacity 0.2s; font-size: 13px; }
+    .guest-card.arrived .check-icon { opacity: 1; }
+
+    .guest-info { flex: 1; padding: 12px 12px; min-width: 0; }
+    .guest-name { font-size: 15.5px; font-weight: 600; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+    .guest-card.arrived .guest-name { color: var(--green); }
+    .guest-meta { font-size: 12px; color: var(--text-3); }
+
+    .guest-right { display: flex; align-items: center; gap: 0; padding-right: 8px; flex-shrink: 0; }
+    .guest-time { font-size: 11px; color: var(--green); font-weight: 600; display: none; padding-right: 8px; }
+    .guest-card.arrived .guest-time { display: block; }
+
+    .qr-btn {
+      background: none; border: none; cursor: pointer;
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .qr-btn:hover { background: var(--bg); color: var(--gold); }
+
+    /* ── FAB ── */
+    .fab {
+      position: fixed; bottom: 24px; right: 18px; z-index: 200;
+      width: 54px; height: 54px; border-radius: 50%;
+      background: var(--text-1); color: #fff; border: none; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .fab:hover { transform: scale(1.08); box-shadow: 0 10px 28px rgba(0,0,0,0.28); }
+
+    /* ── MODALS ── */
+    .overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+      display: none; align-items: flex-end; justify-content: center; padding: 16px;
+    }
+    .overlay.open { display: flex; }
+    .sheet {
+      background: var(--surface); border-radius: 24px 24px 20px 20px;
+      width: 100%; max-width: 480px; max-height: 92vh;
+      overflow-y: auto; padding: 24px 22px 28px;
+      animation: slide-up 0.28s var(--ease);
+    }
+    @keyframes slide-up { from{transform:translateY(36px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .sheet-handle { width: 38px; height: 4px; background: var(--border-2); border-radius: 2px; margin: 0 auto 20px; }
+    .sheet-title { font-family: var(--serif); font-size: 20px; font-style: italic; font-weight: normal; color: var(--text-1); margin-bottom: 20px; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-label { font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 6px; display: block; }
+    .form-input, .form-textarea {
+      width: 100%; padding: 11px 14px; border-radius: 10px;
+      border: 1.5px solid var(--border); background: var(--bg);
+      font-family: var(--font); font-size: 15px; color: var(--text-1); outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-3); }
+    .form-textarea { min-height: 110px; resize: vertical; line-height: 1.65; }
+    .form-hint { font-size: 11.5px; color: var(--text-3); margin-top: 5px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .btn-row { display: flex; flex-direction: column; gap: 9px; margin-top: 6px; }
+    .mbt {
+      width: 100%; padding: 13px; border-radius: 11px;
+      font-family: var(--font); font-size: 15px; font-weight: 600;
+      cursor: pointer; border: none; transition: opacity 0.2s, transform 0.15s;
+    }
+    .mbt:active { transform: scale(0.98); }
+    .mbt-gold { background: var(--gold); color: #fff; }
+    .mbt-gold:hover { opacity: 0.9; }
+    .mbt-outline { background: transparent; border: 1.5px solid var(--border-2); color: var(--text-2); }
+    .mbt-outline:hover { background: var(--bg); }
+    .mbt-danger { background: transparent; border: 1.5px solid rgba(220,38,38,0.3); color: var(--red); }
+
+    /* ── QR MODAL ── */
+    .qr-sheet { text-align: center; }
+    .qr-name { font-family: var(--serif); font-size: 22px; font-style: italic; color: var(--text-1); margin-bottom: 6px; }
+    .qr-sub { font-size: 13px; color: var(--text-3); margin-bottom: 24px; }
+    .qr-box {
+      display: inline-block; background: #fff;
+      padding: 16px; border-radius: 16px;
+      border: 1px solid var(--border); margin-bottom: 20px;
+    }
+    #qrCanvas { display: block; }
+    .qr-url { font-size: 11px; color: var(--text-3); margin-bottom: 24px; word-break: break-all; max-width: 280px; margin-left: auto; margin-right: auto; }
+    .qr-actions { display: flex; gap: 10px; }
+    .qr-actions .mbt { flex: 1; }
+
+    /* ── AUTO CHECKIN OVERLAY ── */
+    .checkin-overlay {
+      position: fixed; inset: 0; z-index: 400;
+      background: rgba(21,128,61,0.97);
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 32px; animation: fade-in 0.3s ease;
+    }
+    .checkin-overlay.open { display: flex; }
+    @keyframes fade-in { from{opacity:0} to{opacity:1} }
+    .checkin-icon { font-size: 72px; margin-bottom: 24px; }
+    .checkin-name { font-family: var(--serif); font-size: 32px; font-style: italic; color: #fff; margin-bottom: 12px; }
+    .checkin-msg { font-size: 17px; color: rgba(255,255,255,0.8); margin-bottom: 40px; }
+    .checkin-close { background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.4); color: #fff; padding: 14px 36px; border-radius: 100px; font-family: var(--font); font-size: 16px; font-weight: 600; cursor: pointer; }
+
+    /* ── PIN ── */
+    .pin-overlay {
+      position: fixed; inset: 0; z-index: 250;
+      background: rgba(247,245,240,0.97); backdrop-filter: blur(8px);
+      display: none; flex-direction: column; align-items: center; justify-content: center; padding: 32px;
+    }
+    .pin-overlay.open { display: flex; }
+    .pin-title { font-family: var(--serif); font-size: 22px; font-style: italic; margin-bottom: 6px; }
+    .pin-sub { font-size: 14px; color: var(--text-3); margin-bottom: 32px; }
+    .pin-dots { display: flex; gap: 12px; margin-bottom: 32px; }
+    .pin-dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--border-2); transition: background 0.15s; }
+    .pin-dot.filled { background: var(--text-1); border-color: var(--text-1); }
+    .pin-grid { display: grid; grid-template-columns: repeat(3, 68px); gap: 10px; }
+    .pin-key {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: var(--surface); border: 1px solid var(--border);
+      font-family: var(--font); font-size: 21px; color: var(--text-1);
+      cursor: pointer; transition: background 0.15s, transform 0.1s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pin-key:active { background: var(--border); transform: scale(0.93); }
+    .pin-error { color: var(--red); font-size: 13px; margin-top: 14px; min-height: 18px; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 88px; left: 50%; transform: translateX(-50%);
+      background: var(--text-1); color: #fff;
+      padding: 11px 22px; border-radius: 100px; font-size: 14px; font-weight: 500;
+      z-index: 500; opacity: 0; pointer-events: none;
+      transition: opacity 0.25s; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+
+    mark { background: rgba(184,134,11,0.18); color: var(--gold); border-radius: 2px; padding: 0 1px; }
+
+    @media (min-width: 600px) {
+      .controls, .guest-list { max-width: 600px; margin-left: auto; margin-right: auto; }
+      .overlay { align-items: center; }
+      .sheet { border-radius: 24px; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .header, .controls, .fab, .toast { display: none !important; }
+      .guest-list { padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .guest-card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Auto-checkin success overlay -->
+<div class="checkin-overlay" id="checkinOverlay">
+  <div class="checkin-icon">✅</div>
+  <div class="checkin-name" id="checkinName"></div>
+  <div class="checkin-msg">Check-in confirmé · Bienvenue !</div>
+  <button class="checkin-close" onclick="document.getElementById('checkinOverlay').classList.remove('open')">Continuer</button>
+</div>
+
+<!-- PIN overlay -->
+<div class="pin-overlay" id="pinOverlay">
+  <div class="pin-title">Panneau admin</div>
+  <div class="pin-sub">Code PIN requis</div>
+  <div class="pin-dots" id="pinDots">
+    <div class="pin-dot" id="pd0"></div>
+    <div class="pin-dot" id="pd1"></div>
+    <div class="pin-dot" id="pd2"></div>
+    <div class="pin-dot" id="pd3"></div>
+  </div>
+  <div class="pin-grid">
+    <button class="pin-key" onclick="pinKey('1')">1</button>
+    <button class="pin-key" onclick="pinKey('2')">2</button>
+    <button class="pin-key" onclick="pinKey('3')">3</button>
+    <button class="pin-key" onclick="pinKey('4')">4</button>
+    <button class="pin-key" onclick="pinKey('5')">5</button>
+    <button class="pin-key" onclick="pinKey('6')">6</button>
+    <button class="pin-key" onclick="pinKey('7')">7</button>
+    <button class="pin-key" onclick="pinKey('8')">8</button>
+    <button class="pin-key" onclick="pinKey('9')">9</button>
+    <button class="pin-key" onclick="pinClose()">✕</button>
+    <button class="pin-key" onclick="pinKey('0')">0</button>
+    <button class="pin-key" style="font-size:16px" onclick="pinDel()">⌫</button>
+  </div>
+  <div class="pin-error" id="pinError"></div>
+</div>
+
+<!-- QR Modal -->
+<div class="overlay" id="qrOverlay" onclick="closeQRModal(event)">
+  <div class="sheet qr-sheet">
+    <div class="sheet-handle"></div>
+    <div class="qr-name" id="qrGuestName"></div>
+    <div class="qr-sub">Scannez pour check-in automatique</div>
+    <div class="qr-box">
+      <canvas id="qrCanvas"></canvas>
+    </div>
+    <div class="qr-url" id="qrUrl"></div>
+    <div class="qr-actions">
+      <button class="mbt mbt-gold" onclick="printCurrentQR()">🖨️ Imprimer</button>
+      <button class="mbt mbt-outline" onclick="closeQRModal()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Modal -->
+<div class="overlay" id="adminOverlay" onclick="closeAdmin(event)">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Gestion de l'événement</div>
+
+    <div class="form-group">
+      <label class="form-label">Noms des mariés</label>
+      <input class="form-input" id="iCouple" placeholder="Sophie & Thomas">
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input class="form-input" id="iDate" placeholder="14 juin 2025">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lieu</label>
+        <input class="form-input" id="iLieu" placeholder="Alost">
+      </div>
+    </div>
+    <button class="mbt mbt-outline" style="width:100%;margin-bottom:20px" onclick="saveInfo()">Enregistrer les infos</button>
+
+    <div class="form-group">
+      <label class="form-label">Ajouter des invités</label>
+      <textarea class="form-textarea" id="iGuests" placeholder="Un nom par ligne :&#10;Marie Dupont&#10;Jean Martin&#10;Sophie Leclerc"></textarea>
+      <p class="form-hint">Les doublons sont ignorés automatiquement.</p>
+    </div>
+    <button class="mbt mbt-gold" style="width:100%;margin-bottom:20px" onclick="importGuests()">Ajouter à la liste</button>
+
+    <div class="form-group">
+      <label class="form-label">QR Code du site</label>
+    </div>
+    <button class="mbt mbt-outline" style="width:100%;margin-bottom:6px" onclick="showSiteQR()">📱 Générer le QR du site</button>
+    <button class="mbt mbt-outline" style="width:100%;margin-bottom:20px" onclick="printAllQR()">🖨️ Imprimer tous les QR codes</button>
+
+    <div class="form-group">
+      <label class="form-label">Nouveau code PIN (4 chiffres)</label>
+      <input class="form-input" id="iPin" type="number" placeholder="1234" maxlength="4">
+    </div>
+    <button class="mbt mbt-outline" style="width:100%;margin-bottom:20px" onclick="savePin()">Changer le PIN</button>
+
+    <div class="btn-row">
+      <button class="mbt mbt-outline" onclick="resetArrivals()">🔄 Remettre les arrivées à zéro</button>
+      <button class="mbt mbt-danger" onclick="clearAll()">🗑️ Effacer toute la liste</button>
+      <button class="mbt mbt-outline" onclick="closeAdmin()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-top">
+    <span class="rings">💍</span>
+    <div>
+      <div class="event-couple" id="evtCouple">Sophie &amp; Thomas</div>
+      <div class="event-date" id="evtDate">Samedi 14 juin 2025 · Alost</div>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num" id="sTotal">0</div><div class="stat-lbl">Invités</div></div>
+    <div class="stat-item"><div class="stat-num green" id="sArrived">0</div><div class="stat-lbl">Arrivés</div></div>
+    <div class="stat-item"><div class="stat-num gold" id="sPending">0</div><div class="stat-lbl">En attente</div></div>
+    <div class="stat-item"><div class="stat-num" id="sPct">0%</div><div class="stat-lbl">Présence</div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="pBar" style="width:0%"></div></div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </span>
+    <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un invité..." autocomplete="off" autocorrect="off" spellcheck="false">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" data-f="all"     onclick="setFilter('all',this)">Tous</button>
+    <button class="filter-btn"        data-f="pending" onclick="setFilter('pending',this)">En attente</button>
+    <button class="filter-btn green"  data-f="arrived" onclick="setFilter('arrived',this)">Arrivés ✓</button>
+  </div>
+</div>
+
+<!-- List -->
+<div class="guest-list" id="gList"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- FAB -->
+<button class="fab" onclick="openAdmin()" title="Admin">⚙️</button>
+
+<script>
+'use strict';
+
+/* ── Storage ── */
+const SK  = 'wedding5e_v2';
+const PK  = 'wedding5e_pin';
+const DEF_PIN = '1234';
+
+const DEFAULTS = [
+  'Adrien Peeters','Alice Stevens','Amandine Pirard','Anaïs Charlier',
+  'Antoine Lecomte','Arnaud Léonard','Aurélie Maes','Bastien Marchal',
+  'Bryan Claes','Camille Lefèvre','Céline Minet','Cédric Fontaine',
+  'Charlotte Henrard','Christophe Gilson','Claire Simon','Dylan Vanderburg',
+  'Eléonore Bastin','Emilie Rousseau','François Moreau','Grégory Lepage',
+  'Hugo Bodart','Isabelle Fontaine','Julien Picard','Jonathan Delvaux',
+  'Kevin De Smedt','Laetitia Simon','Laura Gilles','Lucie Renard',
+  'Luc Vandenberghe','Manon Willems','Marc Dubois','Marie Dupont',
+  'Maxime Charlier','Mélanie Goffin','Nadège Dumont','Nathalie Bernard',
+  'Nicolas Lambert','Olivier Renard','Patricia Collignon','Pierre Collin',
+  'Quentin Hermans','Romain Claes','Sandra Lejeune','Sébastien Pirotte',
+  'Sophie Leclerc','Stéphanie Wauthy','Thomas Beaumont','Valérie Bodart',
+  'Véronique Noël','Vincent Marchal'
+];
+
+let state = (() => {
+  try { const r = localStorage.getItem(SK); if(r) return JSON.parse(r); } catch(e) {}
+  return {
+    couple: 'Sophie & Thomas',
+    date: 'Samedi 14 juin 2025 · Alost',
+    guests: DEFAULTS.map((name,i) => ({ id: i+1, name, arrived: false, arrivedAt: null }))
+  };
+})();
+
+let filter = 'all', query = '', pinBuf = '', currentQRGuest = null;
+
+function save() { localStorage.setItem(SK, JSON.stringify(state)); }
+function getPin() { return localStorage.getItem(PK) || DEF_PIN; }
+
+/* ── Render ── */
+function render() {
+  const total   = state.guests.length;
+  const arrived = state.guests.filter(g => g.arrived).length;
+  const pending = total - arrived;
+  const pct     = total ? Math.round(arrived / total * 100) : 0;
+
+  document.getElementById('sTotal').textContent   = total;
+  document.getElementById('sArrived').textContent = arrived;
+  document.getElementById('sPending').textContent = pending;
+  document.getElementById('sPct').textContent     = pct + '%';
+  document.getElementById('pBar').style.width     = pct + '%';
+  document.getElementById('evtCouple').textContent = state.couple;
+  document.getElementById('evtDate').textContent   = state.date;
+
+  const q = query.trim().toLowerCase();
+  let list = state.guests.filter(g => {
+    if (filter === 'arrived') return g.arrived;
+    if (filter === 'pending') return !g.arrived;
+    return true;
+  });
+  if (q) list = list.filter(g => g.name.toLowerCase().includes(q));
+  list.sort((a,b) => a.name.localeCompare(b.name, 'fr'));
+
+  const cont = document.getElementById('gList');
+  if (!list.length) {
+    cont.innerHTML = `<div class="empty-state"><div class="empty-icon">${q?'🔍':'🎉'}</div><p>${q?'Aucun invité ne correspond.':'Aucun invité dans cette catégorie.'}</p></div>`;
+    return;
+  }
+
+  cont.innerHTML = list.map(g => {
+    const dn   = q ? hi(g.name, q) : esc(g.name);
+    const time = g.arrivedAt ? fmt(g.arrivedAt) : '';
+    return `
+    <div class="guest-card${g.arrived?' arrived':''}" onclick="toggle(${g.id})">
+      <div class="guest-check">
+        <div class="check-circle"><span class="check-icon">✓</span></div>
+      </div>
+      <div class="guest-info">
+        <div class="guest-name">${dn}</div>
+        <div class="guest-meta">${g.arrived?'✅ Arrivé(e) à '+time:'⏳ En attente'}</div>
+      </div>
+      <div class="guest-right">
+        <button class="qr-btn" onclick="event.stopPropagation();showQR(${g.id})" title="QR Code">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <path d="M14 14h.01M18 14h.01M14 18h.01M18 18h.01"/>
+          </svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function hi(name, q) {
+  const i = name.toLowerCase().indexOf(q);
+  if (i<0) return esc(name);
+  return esc(name.slice(0,i))+'<mark>'+esc(name.slice(i,i+q.length))+'</mark>'+esc(name.slice(i+q.length));
+}
+function fmt(iso) {
+  const d = new Date(iso);
+  return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+}
+
+/* ── Toggle ── */
+function toggle(id) {
+  const g = state.guests.find(g => g.id===id);
+  if (!g) return;
+  g.arrived   = !g.arrived;
+  g.arrivedAt = g.arrived ? new Date().toISOString() : null;
+  save(); render();
+  toast(g.arrived ? `✅ ${g.name} — arrivé(e)` : `↩️ ${g.name} — retiré(e)`);
+}
+
+/* ── Search ── */
+const si = document.getElementById('searchInput');
+const sc = document.getElementById('searchClear');
+si.addEventListener('input', () => { query = si.value; sc.classList.toggle('show', !!query); render(); });
+function clearSearch() { si.value=''; query=''; sc.classList.remove('show'); si.focus(); render(); }
+
+/* ── Filters ── */
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+/* ── QR Code ── */
+function getPageUrl() { return window.location.href.split('?')[0]; }
+
+function showQR(id) {
+  const g = state.guests.find(g => g.id===id);
+  if (!g) return;
+  currentQRGuest = g;
+  const url = getPageUrl() + '?autocheck=' + id;
+  document.getElementById('qrGuestName').textContent = g.name;
+  document.getElementById('qrUrl').textContent = url;
+
+  const canvas = document.getElementById('qrCanvas');
+  if (typeof QRCode !== 'undefined') {
+    QRCode.toCanvas(canvas, url, {
+      width: 220, margin: 2,
+      color: { dark: '#1C1917', light: '#FFFFFF' }
+    }, err => { if(err) canvas.style.display='none'; });
+  }
+  document.getElementById('qrOverlay').classList.add('open');
+}
+
+function showSiteQR() {
+  currentQRGuest = { name: 'Site — ' + state.couple, id: 0 };
+  const url = getPageUrl();
+  document.getElementById('qrGuestName').textContent = state.couple;
+  document.getElementById('qrUrl').textContent = url;
+  document.getElementById('qrOverlay').classList.add('open');
+  closeAdmin();
+
+  const canvas = document.getElementById('qrCanvas');
+  if (typeof QRCode !== 'undefined') {
+    QRCode.toCanvas(canvas, url, { width: 220, margin: 2, color: { dark: '#1C1917', light: '#FFFFFF' } });
+  }
+}
+
+function closeQRModal(e) {
+  if (!e || e.target === e.currentTarget) document.getElementById('qrOverlay').classList.remove('open');
+}
+
+function printCurrentQR() {
+  const canvas = document.getElementById('qrCanvas');
+  const name = document.getElementById('qrGuestName').textContent;
+  const url = document.getElementById('qrUrl').textContent;
+  const dataUrl = canvas.toDataURL();
+  const w = window.open('','_blank','width=400,height=500');
+  w.document.write(`<!DOCTYPE html><html><head><title>QR — ${name}</title><style>
+    body{font-family:Georgia,serif;text-align:center;padding:40px;background:#fff}
+    h2{font-style:italic;font-weight:normal;margin-bottom:8px}
+    p{font-size:12px;color:#888;margin-top:8px;word-break:break-all}
+    img{border:1px solid #eee;border-radius:12px;padding:12px}
+  </style></head><body>
+  <h2>${name}</h2>
+  <img src="${dataUrl}" width="200">
+  <p>${url}</p>
+  <script>window.onload=()=>window.print()<\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+function printAllQR() {
+  closeAdmin();
+  if (typeof QRCode === 'undefined') { toast('⚠️ QR non disponible'); return; }
+  toast('⏳ Génération en cours...');
+  const base = getPageUrl();
+
+  Promise.all(state.guests.map(g =>
+    new Promise(res => {
+      const c = document.createElement('canvas');
+      QRCode.toCanvas(c, base+'?autocheck='+g.id, { width:160, margin:1, color:{dark:'#1C1917',light:'#fff'} }, err => {
+        res(err ? null : { name: g.name, img: c.toDataURL() });
+      });
+    })
+  )).then(results => {
+    const cards = results.filter(Boolean).map(r =>
+      `<div class="card"><img src="${r.img}"><div class="name">${r.name}</div></div>`
+    ).join('');
+
+    const w = window.open('','_blank');
+    w.document.write(`<!DOCTYPE html><html><head><title>QR Invités — ${state.couple}</title><style>
+      body{font-family:Georgia,serif;padding:24px;background:#fff}
+      h1{text-align:center;font-style:italic;font-weight:normal;margin-bottom:24px;font-size:26px}
+      .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+      .card{text-align:center;padding:12px;border:1px solid #eee;border-radius:10px;break-inside:avoid}
+      .card img{width:100%;border-radius:6px}
+      .name{font-size:12px;margin-top:8px;color:#333}
+      @media print{@page{size:A4;margin:16mm}.grid{grid-template-columns:repeat(4,1fr)}}
+    </style></head><body>
+    <h1>💍 ${state.couple} — QR Codes Invités</h1>
+    <div class="grid">${cards}</div>
+    <script>window.onload=()=>setTimeout(()=>window.print(),400)<\/script>
+    </body></html>`);
+    w.document.close();
+  });
+}
+
+/* ── Auto check-in via URL ── */
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  const id = parseInt(p.get('autocheck'));
+  if (!id) return;
+  const g = state.guests.find(g => g.id === id);
+  if (!g) return;
+  if (!g.arrived) {
+    g.arrived   = true;
+    g.arrivedAt = new Date().toISOString();
+    save();
+  }
+  document.getElementById('checkinName').textContent = g.name;
+  document.getElementById('checkinOverlay').classList.add('open');
+})();
+
+/* ── Admin ── */
+function openAdmin() { pinBuf=''; updateDots(); document.getElementById('pinError').textContent=''; document.getElementById('pinOverlay').classList.add('open'); }
+function pinClose() { document.getElementById('pinOverlay').classList.remove('open'); }
+function pinKey(k) { if(pinBuf.length>=4) return; pinBuf+=k; updateDots(); if(pinBuf.length===4) setTimeout(checkPin,80); }
+function pinDel() { pinBuf=pinBuf.slice(0,-1); updateDots(); }
+function updateDots() { for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('filled', i<pinBuf.length); }
+function checkPin() {
+  if (pinBuf===getPin()) {
+    document.getElementById('pinOverlay').classList.remove('open');
+    document.getElementById('iCouple').value = state.couple;
+    document.getElementById('iDate').value   = state.date;
+    document.getElementById('adminOverlay').classList.add('open');
+  } else {
+    document.getElementById('pinError').textContent='Code incorrect.';
+    pinBuf=''; updateDots();
+  }
+}
+function closeAdmin(e) { if(!e||e.target===e.currentTarget) document.getElementById('adminOverlay').classList.remove('open'); }
+
+function saveInfo() {
+  const c=document.getElementById('iCouple').value.trim();
+  const d=document.getElementById('iDate').value.trim();
+  if(c) state.couple=c; if(d) state.date=d;
+  save(); render(); toast('✅ Infos mises à jour');
+}
+function importGuests() {
+  const raw=document.getElementById('iGuests').value.trim();
+  if(!raw) return;
+  const ex=new Set(state.guests.map(g=>g.name.toLowerCase()));
+  let nextId=Math.max(0,...state.guests.map(g=>g.id))+1, added=0;
+  raw.split('\n').map(l=>l.trim()).filter(Boolean).forEach(name=>{
+    if(!ex.has(name.toLowerCase())) {
+      state.guests.push({id:nextId++,name,arrived:false,arrivedAt:null});
+      ex.add(name.toLowerCase()); added++;
+    }
+  });
+  document.getElementById('iGuests').value='';
+  save(); render(); toast(`✅ ${added} invité(s) ajouté(s)`);
+}
+function savePin() {
+  const p=document.getElementById('iPin').value.trim();
+  if(p.length!==4||isNaN(p)) { toast('⚠️ PIN invalide'); return; }
+  localStorage.setItem(PK,p);
+  document.getElementById('iPin').value='';
+  toast('✅ PIN mis à jour');
+}
+function resetArrivals() {
+  if(!confirm('Remettre toutes les arrivées à zéro ?')) return;
+  state.guests.forEach(g=>{g.arrived=false;g.arrivedAt=null;});
+  save(); render(); closeAdmin(); toast('🔄 Remis à zéro');
+}
+function clearAll() {
+  if(!confirm('Effacer TOUTE la liste ?')) return;
+  state.guests=[]; save(); render(); closeAdmin(); toast('🗑️ Liste effacée');
+}
+
+/* ── Toast ── */
+let toastT;
+function toast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ── Init ── */
+render();
+</script>
+</body>
+</html>
