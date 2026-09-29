@@ -581,7 +581,10 @@ section { scroll-margin-top: 80px; }
 .annonces .container { max-width: 980px; }
 .annonces-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  /* Cartes de largeur fixe, centrées : une annonce seule ne s'étire pas sur toute la page */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 290px));
+  justify-content: center;
+  align-items: start;
   gap: 16px;
   margin-top: 36px;
 }
@@ -658,8 +661,10 @@ section { scroll-margin-top: 80px; }
   display: none;
   max-width: none;
   width: calc(100% + 52px);
-  height: 180px;
+  height: auto;          /* affiche entière (flyers souvent en portrait) */
+  max-height: 480px;
   object-fit: cover;
+  object-position: top;
   margin: -28px -26px 20px;
 }
 .annonce-card.has-img { overflow: hidden; }
