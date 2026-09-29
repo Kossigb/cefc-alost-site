@@ -421,6 +421,42 @@ h2.section-title em { font-style: italic; }
   .bank-card { padding: 32px 22px; }
   .bank-iban-number { font-size: 20px; letter-spacing: .04em; }
 }
+
+/* Comment participer : montant en grand, puis les deux façons de donner */
+.participer-h {
+  font-family: var(--sans); font-size: 15px; font-weight: 600;
+  color: #A78BFA; margin-bottom: 28px;
+}
+.participer-top {
+  display: grid; grid-template-columns: auto 1fr; gap: 56px; align-items: end;
+  padding-bottom: 48px; border-bottom: 1px solid rgba(227,227,235,.12);
+}
+.participer-montant {
+  font-family: var(--serif); font-weight: 500; line-height: .9;
+  font-size: clamp(88px, 13vw, 160px); color: var(--silver); letter-spacing: -.03em;
+}
+.participer-montant span {
+  display: block; margin-top: 18px; letter-spacing: 0;
+  font-family: var(--sans); font-size: 16px; font-weight: 400; line-height: 1.4;
+  color: rgba(227,227,235,.75);
+}
+.participer-regle {
+  font-size: clamp(18px, 1.8vw, 22px); line-height: 1.6;
+  color: rgba(227,227,235,.85); max-width: 460px; margin-bottom: 38px;
+}
+.participer-ways { display: grid; grid-template-columns: 1fr 1fr; }
+.participer-ways > div { padding: 40px 40px 0 0; }
+.participer-ways > div + div { padding-left: 40px; border-left: 1px solid rgba(227,227,235,.12); }
+.participer-ways h3 { font-family: var(--serif); font-weight: 500; font-size: 24px; margin-bottom: 10px; color: var(--silver); }
+.participer-ways p { font-size: 16px; line-height: 1.7; color: rgba(227,227,235,.72); max-width: 420px; }
+.participer-ways a { color: var(--silver); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 760px) {
+  .participer-top { grid-template-columns: 1fr; gap: 20px; }
+  .participer-regle { margin-bottom: 0; }
+  .participer-ways { grid-template-columns: 1fr; }
+  .participer-ways > div, .participer-ways > div + div { padding: 32px 0 0; border-left: 0; }
+  .participer-ways > div + div { margin-top: 32px; border-top: 1px solid rgba(227,227,235,.12); }
+}
 </style>
 </head>
 <body>
@@ -480,37 +516,21 @@ h2.section-title em { font-style: italic; }
 </section>
 
 <!-- COMMENT PARTICIPER -->
-<section class="section-dark" id="comment-participer">
+<section class="section-dark participer" id="comment-participer">
   <div class="section-inner">
-    <div style="max-width:640px;margin-bottom:48px">
-      <span class="eyebrow-tag eyebrow-tag-light">Comment participer ?</span>
-      <h2 class="section-title" style="color:var(--silver)">20 € par personne,<br><em>chaque mois</em></h2>
-      <p class="section-lead">
-        20 € est le montant minimum par mois par personne dans le foyer. Celui qui a plus donnera selon ses moyens. Chacun donne selon ce qu'il a résolu dans son cœur.
-      </p>
+    <h2 class="participer-h">Comment participer</h2>
+    <div class="participer-top">
+      <p class="participer-montant">20&nbsp;€<span>minimum par mois, par personne du foyer</span></p>
+      <p class="participer-regle">Celui qui a plus donnera selon ses moyens. Chacun donne selon ce qu'il a résolu dans son cœur.</p>
     </div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h3>Le 1<sup>er</sup> dimanche du mois, au culte</h3>
-          <p>Une collecte pour le temple a lieu pendant le culte. Venez avec votre enveloppe.</p>
-          <span class="step-tag">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            1<sup>er</sup> dimanche · 10h00 · Wijngaardveld 29
-          </span>
-        </div>
+    <div class="participer-ways">
+      <div>
+        <h3>Au culte</h3>
+        <p>Le premier dimanche du mois, pendant le culte de 10h, au Wijngaardveld 29. Venez avec votre enveloppe.</p>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h3>Par virement, à tout moment</h3>
-          <p>Sur le compte ci-dessous, avec la communication « Temple – votre nom ».</p>
-          <span class="step-tag">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-            Virement bancaire · IBAN ci-dessous
-          </span>
-        </div>
+      <div>
+        <h3>Par virement</h3>
+        <p>Quand vous voulez, avec la communication « Temple – votre nom ». Le numéro de compte est <a href="#virement">juste en dessous</a>.</p>
       </div>
     </div>
   </div>
@@ -618,7 +638,7 @@ h2.section-title em { font-style: italic; }
   }
 
   // Reveal on scroll
-  const revealEls = document.querySelectorAll('.step, .bank-card');
+  const revealEls = document.querySelectorAll('.bank-card');
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } });
   }, { threshold: 0.1 });
