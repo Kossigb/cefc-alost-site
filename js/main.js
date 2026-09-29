@@ -479,6 +479,33 @@ function formRecipients(form, deptId) {
 }
 window.cefcFormTo = formRecipients;
 
+// Envoi d'un formulaire : directement par le serveur (netlify/functions/send-form.js).
+// Si l'envoi automatique n'est pas disponible, on retombe sur la messagerie du visiteur.
+// Renvoie 'sent' (parti tout seul) ou 'mailto' (messagerie ouverte).
+async function sendSiteForm({ form, dept, subject, lines, replyTo, replyName, website }) {
+  const text = lines.join('\n');
+  try {
+    const res = await fetch('/.netlify/functions/send-form', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ form, dept, subject, text, replyTo, replyName, website }),
+    });
+    if (res.ok) return 'sent';
+  } catch (e) { /* hors ligne ou fonction absente : on passe à la messagerie */ }
+  window.location.href = `mailto:${formRecipients(form, dept)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+  return 'mailto';
+}
+window.cefcSendForm = sendSiteForm;
+
+// Bouton d'envoi : « Envoi… » pendant la requête
+function setSendingBtn(form, on) {
+  const btn = form.querySelector('[type="submit"]');
+  if (!btn) return;
+  if (on) { btn.dataset.label = btn.innerHTML; btn.disabled = true; btn.textContent = 'Envoi…'; }
+  else if (btn.dataset.label) { btn.disabled = false; btn.innerHTML = btn.dataset.label; }
+}
+window.cefcSetSending = setSendingBtn;
+
 // Live status — doit être après loadCmsContentSync() pour que CMS_DATA soit disponible
 updateLiveStatus();
 setInterval(updateLiveStatus, 60000);
@@ -1440,7 +1467,43 @@ document.querySelectorAll('.lang-switch button').forEach(btn => {
 
 // ===== BOUTON RDV PASTEUR : ouvre un mailto pré-rempli =====
 const pastorCta = document.getElementById('pastorCta');
-if (pastorCta) {
+const rdvForm = document.getElementById('rdvForm');
+if (pastorCta && rdvForm) {
+  // Page Contact : le bouton ouvre le formulaire de demande de rendez-vous
+  pastorCta.addEventListener('click', (e) => {
+    e.preventDefault();
+    rdvForm.hidden = false;
+    pastorCta.hidden = true;
+    rdvForm.querySelector('input:not([name="website"])').focus();
+  });
+  rdvForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!rdvForm.reportValidity()) return;
+    const d = new FormData(rdvForm);
+    const name = `${d.get('prenom')} ${d.get('nom')}`.trim();
+    const lines = [
+      'Demande de rendez-vous avec le pasteur', '',
+      `Prénom : ${d.get('prenom')}`,
+      `Nom : ${d.get('nom')}`,
+      `Email : ${d.get('email')}`,
+      `Téléphone : ${d.get('tel') || '—'}`,
+      `Disponibilités : ${d.get('creneau') || '—'}`, '',
+      'Message :', `${d.get('objet') || '—'}`,
+    ];
+    setSendingBtn(rdvForm, true);
+    const how = await sendSiteForm({
+      form: 'rdv_pasteur', subject: `Demande de rendez-vous — ${name}`, lines,
+      replyTo: d.get('email'), replyName: name, website: d.get('website'),
+    });
+    setSendingBtn(rdvForm, false);
+    rdvForm.querySelectorAll('.form-row, .form-row-grid, .form-submit').forEach(el => { el.hidden = true; });
+    const done = document.getElementById('rdvDone');
+    done.hidden = false;
+    done.textContent = how === 'sent'
+      ? 'Merci, votre demande a été envoyée. Le secrétariat vous recontactera pour fixer le rendez-vous.'
+      : "Votre messagerie s'est ouverte avec votre demande : il ne reste qu'à l'envoyer.";
+  });
+} else if (pastorCta) {
   pastorCta.addEventListener('click', (e) => {
     e.preventDefault();
     const isNL = document.documentElement.lang === 'nl';
@@ -1711,15 +1774,16 @@ document.getElementById('formBack').addEventListener('click', () => showView('ch
 document.getElementById('questionBack').addEventListener('click', () => showView('choice'));
 document.getElementById('successClose').addEventListener('click', closeModal);
 
-// Soumission formulaire candidature — envoi par mailto au secrétariat (pas de backend)
-modalForm.addEventListener('submit', (e) => {
+// Soumission formulaire candidature — envoyé directement au département / secrétariat
+modalForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!modalForm.reportValidity()) return;
   const data = new FormData(modalForm);
   const competences = Array.from(modalForm.querySelectorAll('input[name="competence"]:checked')).map(c => c.value);
   const deptName = DEPT_DATA[currentDept]?.name || '';
+  const dept = currentDept;
 
-  const subject = encodeURIComponent(`Candidature département ${deptName} — ${data.get('prenom')} ${data.get('nom')}`);
+  const subject = `Candidature département ${deptName} — ${data.get('prenom')} ${data.get('nom')}`;
   const lines = [
     `Département souhaité : ${deptName}`,
     ``,
@@ -1737,22 +1801,30 @@ modalForm.addEventListener('submit', (e) => {
     ``,
     `— Envoyé depuis le site CEFC Alost`
   ];
-  const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = `mailto:${formRecipients('candidature', currentDept)}?subject=${subject}&body=${body}`;
+  setSendingBtn(modalForm, true);
+  const how = await sendSiteForm({
+    form: 'candidature', dept, subject, lines,
+    replyTo: data.get('email'), replyName: `${data.get('prenom') || ''} ${data.get('nom') || ''}`.trim(),
+    website: data.get('bot-field'),
+  });
+  setSendingBtn(modalForm, false);
 
-  successHeading.textContent = 'Merci pour votre demande !';
-  successText.textContent = "Votre messagerie s'est ouverte avec votre candidature : il ne reste qu'à l'envoyer. Le secrétariat vous recontactera.";
+  successHeading.textContent = 'Merci pour votre candidature !';
+  successText.textContent = how === 'sent'
+    ? 'Elle a bien été envoyée. Le responsable vous recontactera. Que Dieu vous bénisse.'
+    : "Votre messagerie s'est ouverte avec votre candidature : il ne reste qu'à l'envoyer.";
   showView('success');
 });
 
 // Soumission formulaire question
-modalQuestionForm.addEventListener('submit', (e) => {
+modalQuestionForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!modalQuestionForm.reportValidity()) return;
   const data = new FormData(modalQuestionForm);
   const deptName = DEPT_DATA[currentDept]?.name || '';
+  const dept = currentDept;
 
-  const subject = encodeURIComponent(`Question — département ${deptName}${data.get('sujet') ? ' · ' + data.get('sujet') : ''}`);
+  const subject = `Question — département ${deptName}${data.get('sujet') ? ' · ' + data.get('sujet') : ''}`;
   const lines = [
     `Département concerné : ${deptName}`,
     `Sujet : ${data.get('sujet') || '—'}`,
@@ -1765,11 +1837,18 @@ modalQuestionForm.addEventListener('submit', (e) => {
     ``,
     `— Envoyé depuis le site CEFC Alost`
   ];
-  const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = `mailto:${formRecipients('question', currentDept)}?subject=${subject}&body=${body}`;
+  setSendingBtn(modalQuestionForm, true);
+  const how = await sendSiteForm({
+    form: 'question', dept, subject, lines,
+    replyTo: data.get('email'), replyName: `${data.get('prenom') || ''} ${data.get('nom') || ''}`.trim(),
+    website: data.get('bot-field'),
+  });
+  setSendingBtn(modalQuestionForm, false);
 
   successHeading.textContent = 'Question envoyée !';
-  successText.textContent = "Votre messagerie s'est ouverte avec votre question : il ne reste qu'à l'envoyer.";
+  successText.textContent = how === 'sent'
+    ? 'Le responsable vous répondra à l’adresse indiquée.'
+    : "Votre messagerie s'est ouverte avec votre question : il ne reste qu'à l'envoyer.";
   showView('success');
 });
 } // end if (modal)

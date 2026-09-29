@@ -2442,3 +2442,15 @@ input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
   border: 1px dashed rgba(26, 27, 62, 0.2);
 }
 .annonce-card.annonce-empty:hover { transform: none; box-shadow: none; }
+
+/* Formulaire de demande de rendez-vous (page Contact, bandeau sombre) */
+.rdv-form {
+  margin: 8px auto 0; max-width: 560px; text-align: left;
+  background: #fff; color: var(--text-dark);
+  border-radius: var(--radius-lg); padding: 28px;
+  display: grid; gap: 14px;
+}
+.rdv-form[hidden] { display: none; }
+.rdv-form .form-row label { color: var(--night); }
+.rdv-form [hidden] { display: none !important; }
+.rdv-done { font-size: 15px; line-height: 1.6; color: var(--night); margin: 0; }
