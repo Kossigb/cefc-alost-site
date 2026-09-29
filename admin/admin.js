@@ -224,11 +224,72 @@ function populateAll() {
     el.addEventListener('change', () => setPath(contenu, el.dataset.path, el.type === 'checkbox' ? el.checked : el.value));
   });
   renderAnnonces();
+  renderJefcAnnonces();
   renderHoraires();
   renderNavette();
   renderDepts();
   renderEquipe();
   renderTemoignages();
+}
+
+// ════════════ ANNONCES DE LA JEUNESSE ════════════
+
+function renderJefcAnnonces() {
+  const el = document.getElementById('jefc-annonces-list');
+  if (!el) return;
+  const list = annList('jefc');
+  if (!list.length) { el.innerHTML = '<p class="field-hint" style="margin-bottom:12px">Aucune annonce pour la jeunesse : la section est cachée sur le site.</p>'; return; }
+  const P = `contenu.jefc.annonces`;
+  const f = (i, k, label, ta) => {
+    const v = esc(list[i][k] || ''), on = `onchange="${P}[${i}]['${k}']=this.value"`;
+    return ta ? `<div class="field"><label>${label}</label><textarea ${on}>${v}</textarea></div>`
+              : `<div class="field"><label>${label}</label><input type="text" value="${v}" ${on} /></div>`;
+  };
+  el.innerHTML = list.map((a, i) => `
+    <div class="list-item ann-item${a.masquer ? ' is-hidden' : ''}">
+      <div class="list-item-head">
+        <h4>${esc(a.titre || 'Sans titre')} ${a.masquer ? '<span class="pill pill-off">Masquée</span>' : '<span class="pill pill-on">Affichée</span>'}</h4>
+        <div class="row-actions">
+          <button class="btn-mini" onclick="moveJefcAnnonce(${i},-1)" ${i === 0 ? 'disabled' : ''}>↑</button>
+          <button class="btn-mini" onclick="moveJefcAnnonce(${i},1)" ${i === list.length - 1 ? 'disabled' : ''}>↓</button>
+          <button class="btn-del" onclick="removeJefcAnnonce(${i})">Supprimer</button>
+        </div>
+      </div>
+      <div class="ann-toggles">
+        <label class="ann-switch"><span class="toggle"><input type="checkbox" ${a.masquer ? '' : 'checked'} onchange="${P}[${i}].masquer=!this.checked; renderJefcAnnonces()" /><span class="toggle-slider"></span></span> Afficher sur le site</label>
+        <label class="ann-switch"><span class="toggle"><input type="checkbox" ${a.important ? 'checked' : ''} onchange="${P}[${i}].important=this.checked; renderJefcAnnonces()" /><span class="toggle-slider"></span></span> À la une</label>
+      </div>
+      <div class="dept-photo-row">
+        <div class="dept-photo" style="${a.image ? `background-image:url('${esc(a.image)}')` : ''}">${a.image ? '' : '<span>Pas de photo</span>'}</div>
+        <div class="dept-photo-actions">
+          <button class="btn-upload" onclick="openPhotoPicker(${i}, 'jefc')">Choisir une photo</button>
+          <label class="btn-mini" style="cursor:pointer">Envoyer une nouvelle photo
+            <input type="file" accept="image/*" hidden onchange="uploadAnnoncePhoto(${i}, this, 'jefc')" /></label>
+          ${a.image ? `<button class="btn-mini" onclick="${P}[${i}].image=''; renderJefcAnnonces()">Retirer la photo</button>` : ''}
+          <div class="field-hint" id="jefc-ann-upload-${i}"></div>
+        </div>
+      </div>
+      <div class="grid2" style="margin-top:14px">${f(i, 'titre', 'Titre ' + L('fr'))}${f(i, 'date', 'Date', false)}</div>
+      ${f(i, 'description', 'Texte ' + L('fr'), true)}
+      <details class="dept-more"><summary>Traductions NL / EN</summary>
+        <div class="grid2">${f(i, 'titre_nl', 'Titre ' + L('nl'))}${f(i, 'titre_en', 'Titre ' + L('en'))}</div>
+        ${f(i, 'description_nl', 'Texte ' + L('nl'), true)}${f(i, 'description_en', 'Texte ' + L('en'), true)}
+      </details>
+    </div>`).join('');
+}
+function addJefcAnnonce() {
+  annList('jefc').unshift({ titre: 'Nouvelle annonce jeunesse', date: '', description: '', image: '', important: false, masquer: false });
+  renderJefcAnnonces();
+}
+function moveJefcAnnonce(i, dir) {
+  const l = annList('jefc'), j = i + dir;
+  if (j < 0 || j >= l.length) return;
+  [l[i], l[j]] = [l[j], l[i]];
+  renderJefcAnnonces();
+}
+function removeJefcAnnonce(i) {
+  if (!confirm('Supprimer cette annonce de la jeunesse ?')) return;
+  annList('jefc').splice(i, 1); renderJefcAnnonces();
 }
 
 // ════════════ HORAIRES ════════════
@@ -260,6 +321,18 @@ function renderHoraires() {
 }
 
 // ════════════ ANNONCES ════════════
+
+// Deux listes d'annonces : celles de l'église et celles de la jeunesse (page JEFC)
+function annList(kind) {
+  if (kind === 'jefc') {
+    if (!contenu.jefc) contenu.jefc = {};
+    if (!Array.isArray(contenu.jefc.annonces)) contenu.jefc.annonces = [];
+    return contenu.jefc.annonces;
+  }
+  if (!contenu.annonces) contenu.annonces = { liste: [] };
+  return contenu.annonces.liste;
+}
+function rerenderAnn(kind) { kind === 'jefc' ? renderJefcAnnonces() : renderAnnonces(); }
 
 const ANN_TYPES = [['annonce', 'Annonce'], ['activite', 'Activité / événement'], ['necro', 'Nécrologie']];
 
@@ -357,18 +430,18 @@ function removeAnnonce(i) {
   contenu.annonces.liste.splice(i, 1); renderAnnonces();
 }
 
-async function uploadAnnoncePhoto(i, input) {
+async function uploadAnnoncePhoto(i, input, kind = 'annonces') {
   const file = input.files && input.files[0];
   if (!file) return;
-  const hint = document.getElementById('ann-upload-' + i);
+  const hint = document.getElementById((kind === 'jefc' ? 'jefc-ann-upload-' : 'ann-upload-') + i);
   if (hint) hint.textContent = 'Envoi de la photo…';
   try {
     const { base64, ext } = await compressImage(file);
     const base = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40);
     const path = `img/uploads/${Date.now()}-${base || 'annonce'}.${ext}`;
     await ghCommitBinary(path, base64, 'Photo d\'annonce');
-    contenu.annonces.liste[i].image = '/' + path;
-    renderAnnonces();
+    annList(kind)[i].image = '/' + path;
+    rerenderAnn(kind);
     await saveAll();
   } catch (e) {
     if (hint) hint.textContent = 'Échec : ' + e.message;
@@ -378,13 +451,14 @@ async function uploadAnnoncePhoto(i, input) {
 }
 
 // Choix d'une photo parmi celles déjà en ligne (galerie du culte + photos d'annonces)
-function openPhotoPicker(i) {
+function openPhotoPicker(i, kind = 'annonces') {
   const seen = new Set();
   const photos = [
     ...(contenu.annonces?.liste || []).map(a => a.image),
+    ...(contenu.jefc?.annonces || []).map(a => a.image),
     ...(photosData.photos || []).map(p => p.url),
   ].filter(u => u && !seen.has(u) && seen.add(u));
-  const current = contenu.annonces.liste[i].image;
+  const current = annList(kind)[i].image;
   const ov = document.createElement('div');
   ov.className = 'picker-overlay';
   ov.innerHTML = `
@@ -400,8 +474,8 @@ function openPhotoPicker(i) {
     if (e.target === ov || e.target.closest('[data-close]')) return close();
     const item = e.target.closest('.picker-item');
     if (!item) return;
-    contenu.annonces.liste[i].image = item.dataset.url;
-    close(); renderAnnonces();
+    annList(kind)[i].image = item.dataset.url;
+    close(); rerenderAnn(kind);
     toast('Photo choisie. Cliquez sur « Enregistrer » pour publier.', 'success');
   });
   document.addEventListener('keydown', function onKey(e) { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onKey); } });
