@@ -370,7 +370,8 @@ document.getElementById('anniversaire-form').addEventListener('submit', function
     '— Envoyé depuis le site CEFC Alost'
   ];
   const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = 'mailto:cefclaborne@gmail.com?subject=' + subject + '&body=' + body;
+  const to = window.cefcFormTo ? window.cefcFormTo('anniversaire') : 'cefclaborne@gmail.com';
+  window.location.href = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
   document.getElementById('anniversaire-form').style.display = 'none';
   document.getElementById('anniv-success').style.display = 'block';
 });

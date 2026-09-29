@@ -456,6 +456,29 @@ loadCmsContentSync();
 applyCmsContent();
 applyDeptCards();
 
+// ===== DESTINATAIRES DES FORMULAIRES (réglables dans l'admin → Formulaires) =====
+// Priorité : adresse propre au département > adresse du formulaire > email de contact.
+// Plusieurs adresses possibles, séparées par des virgules.
+const DEFAULT_FORM_EMAIL = 'contact@cefclabornealost.be';
+// Adresses utilisées jusqu'ici, gardées tant que rien n'est réglé dans l'admin
+const FORM_DEFAULTS = { anniversaire: 'cefclaborne@gmail.com' };
+function cleanEmails(value) {
+  return String(value || '').split(/[\s,;]+/).filter(x => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x)).join(',');
+}
+function formRecipients(form, deptId) {
+  const d = CMS_DATA || {};
+  const dept = deptId && d.departements && Array.isArray(d.departements.liste)
+    ? d.departements.liste.find(x => x && x.id === deptId) : null;
+  const legal = form === 'rgpd' && d.legal ? d.legal.email_rgpd : '';
+  return cleanEmails(dept && dept.email)
+    || cleanEmails(d.formulaires && d.formulaires[form])
+    || cleanEmails(legal)
+    || cleanEmails(FORM_DEFAULTS[form])
+    || cleanEmails(d.infos && d.infos.email)
+    || DEFAULT_FORM_EMAIL;
+}
+window.cefcFormTo = formRecipients;
+
 // Live status — doit être après loadCmsContentSync() pour que CMS_DATA soit disponible
 updateLiveStatus();
 setInterval(updateLiveStatus, 60000);
@@ -1456,7 +1479,7 @@ Objet du rendez-vous :
 Bien à vous,
 
 — Envoyé depuis le site CEFC Alost`);
-    window.location.href = `mailto:contact@cefclabornealost.be?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${formRecipients('rdv_pasteur')}?subject=${subject}&body=${body}`;
   });
 }
 
@@ -1715,7 +1738,7 @@ modalForm.addEventListener('submit', (e) => {
     `— Envoyé depuis le site CEFC Alost`
   ];
   const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = `mailto:contact@cefclabornealost.be?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:${formRecipients('candidature', currentDept)}?subject=${subject}&body=${body}`;
 
   successHeading.textContent = 'Merci pour votre demande !';
   successText.textContent = "Votre messagerie s'est ouverte avec votre candidature : il ne reste qu'à l'envoyer. Le secrétariat vous recontactera.";
@@ -1743,10 +1766,10 @@ modalQuestionForm.addEventListener('submit', (e) => {
     `— Envoyé depuis le site CEFC Alost`
   ];
   const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = `mailto:contact@cefclabornealost.be?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:${formRecipients('question', currentDept)}?subject=${subject}&body=${body}`;
 
   successHeading.textContent = 'Question envoyée !';
-  successText.textContent = 'Votre message a bien été transmis au responsable. Vous recevrez une réponse dans les meilleurs délais.';
+  successText.textContent = "Votre messagerie s'est ouverte avec votre question : il ne reste qu'à l'envoyer.";
   showView('success');
 });
 } // end if (modal)
