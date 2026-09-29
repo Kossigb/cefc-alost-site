@@ -92,17 +92,37 @@ async function showApp(user) {
 
 // ════════════ GITHUB API (via proxy Netlify) ════════════
 
+// Écriture dans le dépôt GitHub.
+// 1) via la fonction github-proxy (nécessite GITHUB_TOKEN dans les variables Netlify) ;
+// 2) sinon via Git Gateway de Netlify Identity, qui n'a besoin d'aucun jeton GitHub.
+let useGitGateway = false;
 async function ghProxy(method, path, data) {
   const user = window.netlifyIdentity && window.netlifyIdentity.currentUser();
   const jwt  = user ? await user.jwt() : null;
-  return fetch('/.netlify/functions/github-proxy', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
-    },
-    body: JSON.stringify({ method, path, data }),
+  const auth = jwt ? { Authorization: `Bearer ${jwt}` } : {};
+
+  if (!useGitGateway) {
+    const res = await fetch('/.netlify/functions/github-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...auth },
+      body: JSON.stringify({ method, path, data }),
+    });
+    if (res.status !== 500 || !(await res.clone().text()).includes('GITHUB_TOKEN')) return res;
+    useGitGateway = true; // jeton absent : on bascule pour le reste de la session
+  }
+
+  const rel = path.replace(/^\/?repos\/[^/]+\/[^/]+\//, '');
+  return fetch(`/.netlify/git/github/${rel}`, {
+    method,
+    headers: { 'Content-Type': 'application/json', ...auth },
+    body: data ? JSON.stringify(data) : undefined,
   });
+}
+
+async function ghError(res) {
+  let msg = `Erreur ${res.status}`;
+  try { const e = await res.json(); msg = e.message || e.msg || e.error || msg; } catch {}
+  return new Error(msg);
 }
 
 async function ghGetSHA(path) {
@@ -118,7 +138,7 @@ async function ghCommitText(path, content, message) {
   const body = { message, branch: BRANCH, content: btoa(unescape(encodeURIComponent(content))) };
   if (sha) body.sha = sha;
   const res = await ghProxy('PUT', `repos/${REPO}/contents/${path}`, body);
-  if (!res.ok) { const e = await res.json(); throw new Error(e.message || `Erreur ${res.status}`); }
+  if (!res.ok) throw await ghError(res);
 }
 
 async function ghCommitBinary(path, base64, message) {
@@ -126,7 +146,7 @@ async function ghCommitBinary(path, base64, message) {
   const body = { message, branch: BRANCH, content: base64 };
   if (sha) body.sha = sha;
   const res = await ghProxy('PUT', `repos/${REPO}/contents/${path}`, body);
-  if (!res.ok) { const e = await res.json(); throw new Error(e.message || `Erreur ${res.status}`); }
+  if (!res.ok) throw await ghError(res);
 }
 
 // ════════════ SAVE ALL → GITHUB ════════════
