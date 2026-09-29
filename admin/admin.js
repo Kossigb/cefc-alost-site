@@ -240,15 +240,15 @@ function renderJefcAnnonces() {
   const list = annList('jefc');
   if (!list.length) { el.innerHTML = '<p class="field-hint" style="margin-bottom:12px">Aucune annonce pour la jeunesse : la section est cachée sur le site.</p>'; return; }
   const P = `contenu.jefc.annonces`;
-  const f = (i, k, label, ta) => {
-    const v = esc(list[i][k] || ''), on = `onchange="${P}[${i}]['${k}']=this.value"`;
-    return ta ? `<div class="field"><label>${label}</label><textarea ${on}>${v}</textarea></div>`
-              : `<div class="field"><label>${label}</label><input type="text" value="${v}" ${on} /></div>`;
+  const f = (i, k, label, ta, ph = '') => {
+    const v = esc(list[i][k] || ''), on = `oninput="${P}[${i}]['${k}']=this.value"`;
+    return ta ? `<div class="field"><label>${label}</label><textarea ${on} placeholder="${ph}" rows="4">${v}</textarea></div>`
+              : `<div class="field"><label>${label}</label><input type="text" value="${v}" ${on} placeholder="${ph}" /></div>`;
   };
   el.innerHTML = list.map((a, i) => `
     <div class="list-item ann-item${a.masquer ? ' is-hidden' : ''}">
       <div class="list-item-head">
-        <h4>${esc(a.titre || 'Sans titre')} ${a.masquer ? '<span class="pill pill-off">Masquée</span>' : '<span class="pill pill-on">Affichée</span>'}</h4>
+        <h4>${esc(a.titre || 'Annonce sans titre')} ${a.masquer ? '<span class="pill pill-off">Masquée</span>' : '<span class="pill pill-on">Affichée</span>'}</h4>
         <div class="row-actions">
           <button class="btn-mini" onclick="moveJefcAnnonce(${i},-1)" ${i === 0 ? 'disabled' : ''}>↑</button>
           <button class="btn-mini" onclick="moveJefcAnnonce(${i},1)" ${i === list.length - 1 ? 'disabled' : ''}>↓</button>
@@ -259,7 +259,9 @@ function renderJefcAnnonces() {
         <label class="ann-switch"><span class="toggle"><input type="checkbox" ${a.masquer ? '' : 'checked'} onchange="${P}[${i}].masquer=!this.checked; renderJefcAnnonces()" /><span class="toggle-slider"></span></span> Afficher sur le site</label>
         <label class="ann-switch"><span class="toggle"><input type="checkbox" ${a.important ? 'checked' : ''} onchange="${P}[${i}].important=this.checked; renderJefcAnnonces()" /><span class="toggle-slider"></span></span> À la une</label>
       </div>
-      <div class="dept-photo-row">
+      <div class="grid2" style="margin-top:4px">${f(i, 'titre', "Titre de l'annonce " + L('fr'), false, 'ex : Brunch de rentrée')}${f(i, 'date', 'Date', false, 'ex : Samedi 3 octobre 2026 à 12h')}</div>
+      ${f(i, 'description', "Texte de l'annonce " + L('fr'), true, 'ex : Le comeback de la jeunesse ! Viens avec un plat à partager, et ne viens pas seul.')}
+      <div class="dept-photo-row" style="margin:6px 0 14px">
         <div class="dept-photo" style="${a.image ? `background-image:url('${esc(a.image)}')` : ''}">${a.image ? '' : '<span>Pas de photo</span>'}</div>
         <div class="dept-photo-actions">
           <button class="btn-upload" onclick="openPhotoPicker(${i}, 'jefc')">Choisir une photo</button>
@@ -269,8 +271,6 @@ function renderJefcAnnonces() {
           <div class="field-hint" id="jefc-ann-upload-${i}"></div>
         </div>
       </div>
-      <div class="grid2" style="margin-top:14px">${f(i, 'titre', 'Titre ' + L('fr'))}${f(i, 'date', 'Date', false)}</div>
-      ${f(i, 'description', 'Texte ' + L('fr'), true)}
       <details class="dept-more"><summary>Traductions NL / EN</summary>
         <div class="grid2">${f(i, 'titre_nl', 'Titre ' + L('nl'))}${f(i, 'titre_en', 'Titre ' + L('en'))}</div>
         ${f(i, 'description_nl', 'Texte ' + L('nl'), true)}${f(i, 'description_en', 'Texte ' + L('en'), true)}
@@ -278,7 +278,7 @@ function renderJefcAnnonces() {
     </div>`).join('');
 }
 function addJefcAnnonce() {
-  annList('jefc').unshift({ titre: 'Nouvelle annonce jeunesse', date: '', description: '', image: '', important: false, masquer: false });
+  annList('jefc').unshift({ titre: '', date: '', description: '', image: '', important: false, masquer: false });
   renderJefcAnnonces();
 }
 function moveJefcAnnonce(i, dir) {
