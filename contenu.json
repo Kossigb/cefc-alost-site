@@ -340,7 +340,17 @@
     "titre_en": "A place to grow in faith, with other young people.",
     "texte": "La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.",
     "tag": "Toutes les 2 semaines",
-    "_commentaire": "Section JEFC (Jeunesse Évangélique La Famille Chrétienne). Modifie le titre, le texte et la fréquence."
+    "_commentaire": "Section JEFC (Jeunesse Évangélique La Famille Chrétienne). Modifie le titre, le texte et la fréquence.",
+    "annonces": [
+      {
+        "titre": "Nouvelle annonce jeunesse",
+        "date": "",
+        "description": "",
+        "image": "/img/uploads/1790698231919-825276466-18115634402102143-535901357997.webp",
+        "important": false,
+        "masquer": false
+      }
+    ]
   },
   "hero": {
     "titre_ligne1_nl": "Evangelisch Centrum",
