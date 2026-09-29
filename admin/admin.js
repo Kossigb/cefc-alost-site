@@ -132,6 +132,7 @@ async function ghCommitBinary(path, base64, message) {
 // ════════════ SAVE ALL → GITHUB ════════════
 
 async function saveAll() {
+  (contenu.departements?.liste || []).forEach(d => delete d._nouveau);
   document.querySelectorAll('[data-path]').forEach(el => {
     setPath(contenu, el.dataset.path, el.type === 'checkbox' ? el.checked : el.value);
   });
@@ -304,34 +305,134 @@ function removeNavette(i) {
 
 // ════════════ DÉPARTEMENTS ════════════
 
+// Même règle que sur le site : "chorale.jpg" → /img/dept/chorale.jpg, "-" = pas de photo
+function deptPhotoUrl(photo) {
+  if (!photo || photo === '-') return '';
+  return /^(https?:)?\//.test(photo) ? photo : '/img/dept/' + photo;
+}
+
+function deptField(i, key, label, type = 'text') {
+  const d = contenu.departements.liste[i];
+  const v = esc(d[key] || '');
+  const on = `onchange="contenu.departements.liste[${i}]['${key}']=this.value"`;
+  return type === 'textarea'
+    ? `<div class="field"><label>${label}</label><textarea ${on}>${v}</textarea></div>`
+    : `<div class="field"><label>${label}</label><input type="text" value="${v}" ${on} /></div>`;
+}
+const L = (code) => `<span class="lang lang-${code}">${code.toUpperCase()}</span>`;
+
 function renderDepts() {
   const list = contenu.departements?.liste || [];
   const el = document.getElementById('dept-list');
   if (!list.length) { el.innerHTML = ''; return; }
-  el.innerHTML = list.map((d, i) => `
-    <div class="list-item">
-      <div class="list-item-head"><h4>🏢 ${esc(d.nom||'Sans nom')}</h4><button class="btn-del" onclick="removeDept(${i})">🗑️ Supprimer</button></div>
-      <div class="grid2">
-        <div class="field"><label>ID</label><input type="text" value="${esc(d.id||'')}" onchange="contenu.departements.liste[${i}].id=this.value" /></div>
-        <div class="field"><label>Photo (fichier)</label><input type="text" value="${esc(d.photo||'')}" placeholder="chorale.jpg" onchange="contenu.departements.liste[${i}].photo=this.value" /></div>
+  el.innerHTML = list.map((d, i) => {
+    const url = deptPhotoUrl(d.photo);
+    return `
+    <div class="list-item dept-item${d.masquer ? ' is-hidden' : ''}">
+      <div class="list-item-head">
+        <h4>${esc(d.nom || 'Sans nom')}${d.masquer ? ' <small class="muted">(masqué)</small>' : ''}</h4>
+        <div class="row-actions">
+          <button class="btn-mini" title="Monter" onclick="moveDept(${i},-1)" ${i === 0 ? 'disabled' : ''}>↑</button>
+          <button class="btn-mini" title="Descendre" onclick="moveDept(${i},1)" ${i === list.length - 1 ? 'disabled' : ''}>↓</button>
+          <button class="btn-del" onclick="removeDept(${i})">Supprimer</button>
+        </div>
       </div>
+
+      <div class="dept-photo-row">
+        <div class="dept-photo" style="${url ? `background-image:url('${esc(url)}');background-position:${esc(d.cadrage || 'center')}` : ''}">
+          ${url ? '' : '<span>Pas de photo</span>'}
+        </div>
+        <div class="dept-photo-actions">
+          <label class="btn-upload">
+            Changer la photo
+            <input type="file" accept="image/*" hidden onchange="uploadDeptPhoto(${i}, this)" />
+          </label>
+          ${url ? `<button class="btn-mini" onclick="clearDeptPhoto(${i})">Retirer la photo</button>` : ''}
+          <div class="field" style="margin:10px 0 0">
+            <label>Cadrage de la photo</label>
+            <select onchange="contenu.departements.liste[${i}].cadrage=this.value; renderDepts()">
+              ${[['center', 'Centré'], ['top', 'Haut de la photo'], ['bottom', 'Bas de la photo'], ['left', 'Gauche'], ['right', 'Droite']]
+                .map(([v, t]) => `<option value="${v}" ${(d.cadrage || 'center') === v ? 'selected' : ''}>${t}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field-hint" id="dept-upload-${i}">JPG, PNG ou photo de téléphone. Elle est redimensionnée automatiquement.</div>
+        </div>
+      </div>
+
+      <div class="toggle-row" style="margin:14px 0">
+        <label>Masquer ce département sur le site</label>
+        <label class="toggle"><input type="checkbox" ${d.masquer ? 'checked' : ''} onchange="contenu.departements.liste[${i}].masquer=this.checked; renderDepts()" /><span class="toggle-slider"></span></label>
+      </div>
+
       <div class="grid3">
-        <div class="field"><label>Nom <span class="lang lang-fr">FR</span></label><input type="text" value="${esc(d.nom||'')}" onchange="contenu.departements.liste[${i}].nom=this.value" /></div>
-        <div class="field"><label>Nom <span class="lang lang-nl">NL</span></label><input type="text" value="${esc(d.nom_nl||'')}" onchange="contenu.departements.liste[${i}].nom_nl=this.value" /></div>
-        <div class="field"><label>Nom <span class="lang lang-en">EN</span></label><input type="text" value="${esc(d.nom_en||'')}" onchange="contenu.departements.liste[${i}].nom_en=this.value" /></div>
+        ${deptField(i, 'nom', 'Nom ' + L('fr'))}
+        ${deptField(i, 'nom_nl', 'Nom ' + L('nl'))}
+        ${deptField(i, 'nom_en', 'Nom ' + L('en'))}
       </div>
-      <div class="field"><label>Description <span class="lang lang-fr">FR</span></label><textarea onchange="contenu.departements.liste[${i}].description=this.value">${esc(d.description||'')}</textarea></div>
-      <div class="field"><label>Description <span class="lang lang-nl">NL</span></label><textarea onchange="contenu.departements.liste[${i}].description_nl=this.value">${esc(d.description_nl||'')}</textarea></div>
-      <div class="field"><label>Description <span class="lang lang-en">EN</span></label><textarea onchange="contenu.departements.liste[${i}].description_en=this.value">${esc(d.description_en||'')}</textarea></div>
-    </div>`).join('');
+      <div class="field-hint" style="margin:-4px 0 10px">Texte court affiché sur la carte :</div>
+      ${deptField(i, 'description', 'Texte de la carte ' + L('fr'), 'textarea')}
+      ${deptField(i, 'description_nl', 'Texte de la carte ' + L('nl'), 'textarea')}
+      ${deptField(i, 'description_en', 'Texte de la carte ' + L('en'), 'textarea')}
+
+      <details class="dept-more">
+        <summary>Fenêtre « Rejoindre » et options</summary>
+        ${deptField(i, 'texte_fenetre', 'Texte de présentation dans la fenêtre ' + L('fr'), 'textarea')}
+        ${deptField(i, 'texte_fenetre_nl', 'Texte de présentation dans la fenêtre ' + L('nl'), 'textarea')}
+        ${deptField(i, 'texte_fenetre_en', 'Texte de présentation dans la fenêtre ' + L('en'), 'textarea')}
+        <div class="field">
+          <label>Choix proposés dans le formulaire (un par ligne)</label>
+          <textarea onchange="contenu.departements.liste[${i}].options=this.value.split('\n').map(x=>x.trim()).filter(Boolean)">${esc((d.options || []).join('\n'))}</textarea>
+          <div class="field-hint">Laisser vide pour garder les choix actuels du site.</div>
+        </div>
+        <div class="field">
+          <label>Identifiant technique</label>
+          <input type="text" value="${esc(d.id || '')}" ${d._nouveau ? `onchange="contenu.departements.liste[${i}].id=this.value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-')"` : 'readonly'} />
+          <div class="field-hint">${d._nouveau ? 'Un mot sans espace ni accent, ex : « evangelisation ».' : 'Ne se modifie pas : il relie ce département à sa carte sur le site.'}</div>
+        </div>
+      </details>
+    </div>`;
+  }).join('');
+}
+
+async function uploadDeptPhoto(i, input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const d = contenu.departements.liste[i];
+  const hint = document.getElementById('dept-upload-' + i);
+  if (hint) hint.textContent = 'Envoi de la photo…';
+  try {
+    const { base64, ext } = await compressImage(file);
+    const path = `img/dept/${d.id || 'dept'}-${Date.now()}.${ext}`;
+    await ghCommitBinary(path, base64, `Photo du département ${d.nom || d.id}`);
+    d.photo = '/' + path;
+    renderDepts();
+    await saveAll();
+  } catch (e) {
+    if (hint) hint.textContent = 'Échec : ' + e.message;
+    toast('Erreur photo : ' + e.message, 'error');
+  }
+  input.value = '';
+}
+function clearDeptPhoto(i) {
+  if (!confirm('Retirer la photo de ce département ? (le fichier reste sur le serveur)')) return;
+  contenu.departements.liste[i].photo = '-';
+  renderDepts();
+}
+function moveDept(i, dir) {
+  const l = contenu.departements.liste, j = i + dir;
+  if (j < 0 || j >= l.length) return;
+  [l[i], l[j]] = [l[j], l[i]];
+  renderDepts();
 }
 function addDept() {
   if (!contenu.departements) contenu.departements = { liste: [] };
-  contenu.departements.liste.push({ id:'nouveau', nom:'Nouveau', nom_nl:'Nieuw', nom_en:'New', description:'', description_nl:'', description_en:'', photo:'' });
+  contenu.departements.liste.push({ id: 'nouveau-' + (contenu.departements.liste.length + 1), _nouveau: true, nom: 'Nouveau département', nom_nl: '', nom_en: '', description: '', description_nl: '', description_en: '', photo: '' });
   renderDepts();
+  const items = document.querySelectorAll('.dept-item');
+  items[items.length - 1]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function removeDept(i) {
-  if (!confirm('Supprimer ce département ?')) return;
+  if (!confirm('Supprimer ce département ? Pour le cacher temporairement, utilisez plutôt « Masquer ».')) return;
   contenu.departements.liste.splice(i, 1); renderDepts();
 }
 
@@ -340,17 +441,47 @@ function removeDept(i) {
 function renderEquipe() {
   const list = contenu.equipe_pastorale?.membres || [];
   const el = document.getElementById('equipe-list');
+  const set = (i, k) => `onchange="contenu.equipe_pastorale.membres[${i}]['${k}']=this.value"`;
   el.innerHTML = list.map((m, i) => `
     <div class="list-item">
-      <div class="list-item-head"><h4>👤 ${esc(m.nom||'Sans nom')}</h4><button class="btn-del" onclick="removeMembre(${i})">🗑️</button></div>
+      <div class="list-item-head"><h4>👤 ${esc(m.nom||'Sans nom')}</h4><button class="btn-del" onclick="removeMembre(${i})">Supprimer</button></div>
+      <div class="dept-photo-row" style="grid-template-columns:96px 1fr;margin-bottom:12px">
+        <div class="dept-photo" style="aspect-ratio:1;border-radius:50%;${m.photo ? `background-image:url('${esc(m.photo)}')` : ''}">${m.photo ? '' : esc(m.initiales || '?')}</div>
+        <div class="dept-photo-actions">
+          <label class="btn-upload">${m.photo ? 'Changer la photo' : 'Ajouter une photo'}
+            <input type="file" accept="image/*" hidden onchange="uploadMembrePhoto(${i}, this)" /></label>
+          ${m.photo ? `<button class="btn-mini" onclick="contenu.equipe_pastorale.membres[${i}].photo=''; renderEquipe()">Retirer la photo</button>` : ''}
+          <div class="field-hint" id="membre-upload-${i}">Sans photo, les initiales sont affichées.</div>
+        </div>
+      </div>
       <div class="grid2">
-        <div class="field"><label>Nom complet</label><input type="text" value="${esc(m.nom||'')}" onchange="contenu.equipe_pastorale.membres[${i}].nom=this.value" /></div>
-        <div class="field"><label>Initiales</label><input type="text" value="${esc(m.initiales||'')}" onchange="contenu.equipe_pastorale.membres[${i}].initiales=this.value" /></div>
-        <div class="field"><label>Rôle <span class="lang lang-fr">FR</span></label><input type="text" value="${esc(m.role||'')}" onchange="contenu.equipe_pastorale.membres[${i}].role=this.value" /></div>
-        <div class="field"><label>Rôle <span class="lang lang-nl">NL</span></label><input type="text" value="${esc(m.role_nl||'')}" onchange="contenu.equipe_pastorale.membres[${i}].role_nl=this.value" /></div>
-        <div class="field"><label>Rôle <span class="lang lang-en">EN</span></label><input type="text" value="${esc(m.role_en||'')}" onchange="contenu.equipe_pastorale.membres[${i}].role_en=this.value" /></div>
+        <div class="field"><label>Nom complet</label><input type="text" value="${esc(m.nom||'')}" ${set(i,'nom')} /></div>
+        <div class="field"><label>Initiales</label><input type="text" value="${esc(m.initiales||'')}" ${set(i,'initiales')} /></div>
+        <div class="field"><label>Rôle <span class="lang lang-fr">FR</span></label><input type="text" value="${esc(m.role||'')}" ${set(i,'role')} /></div>
+        <div class="field"><label>Rôle <span class="lang lang-nl">NL</span></label><input type="text" value="${esc(m.role_nl||'')}" ${set(i,'role_nl')} /></div>
+        <div class="field"><label>Rôle <span class="lang lang-en">EN</span></label><input type="text" value="${esc(m.role_en||'')}" ${set(i,'role_en')} /></div>
       </div>
     </div>`).join('');
+}
+async function uploadMembrePhoto(i, input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const m = contenu.equipe_pastorale.membres[i];
+  const hint = document.getElementById('membre-upload-' + i);
+  if (hint) hint.textContent = 'Envoi de la photo…';
+  try {
+    const { base64, ext } = await compressImage(file);
+    const slug = (m.nom || 'membre').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-');
+    const path = `img/equipe/${slug}-${Date.now()}.${ext}`;
+    await ghCommitBinary(path, base64, `Photo de ${m.nom || 'membre'}`);
+    m.photo = '/' + path;
+    renderEquipe();
+    await saveAll();
+  } catch (e) {
+    if (hint) hint.textContent = 'Échec : ' + e.message;
+    toast('Erreur photo : ' + e.message, 'error');
+  }
+  input.value = '';
 }
 function addMembre() {
   if (!contenu.equipe_pastorale) contenu.equipe_pastorale = { membres: [] };

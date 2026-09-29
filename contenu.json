@@ -17,7 +17,7 @@
         "principal": true,
         "horaire_nl": "9u — 10u",
         "jour_nl": "Zondag",
-        "description": "Navettes continues entre la gare et l'eglise avant le culte principal."
+        "description": "Navettes en continu entre la gare et l'église avant le culte."
       },
       {
         "description_nl": "Vertrek vanaf station Aalst naar de kerk voor de bijbelstudie.",
@@ -28,7 +28,7 @@
         "principal": true,
         "horaire_nl": "17u10",
         "jour_nl": "Woensdag",
-        "description": "Depart depuis la Gare d'Alost vers l'eglise pour l'etude biblique."
+        "description": "Départ de la gare d'Alost vers l'église pour l'étude biblique."
       },
       {
         "description_nl": "Vertrek vanaf station Aalst naar de kerk voor vasten en gebed.",
@@ -39,7 +39,7 @@
         "principal": true,
         "horaire_nl": "17u10",
         "jour_nl": "Vrijdag",
-        "description": "Depart depuis la Gare d'Alost vers l'eglise pour le jeune et la priere."
+        "description": "Départ de la gare d'Alost vers l'église pour le jeûne et la prière."
       }
     ]
   },
@@ -51,37 +51,37 @@
         "nom": "Technique",
         "nom_nl": "Techniek",
         "nom_en": "Technical",
-        "description": "Son, ecrans, photographie & diffusion. L'equipe qui rend chaque culte visible et audible.",
+        "description": "Son, écrans, photo et diffusion en direct. C'est grâce à eux que chaque culte se voit et s'entend.",
         "description_nl": "Geluid, schermen, fotografie & uitzending. Het team dat elke dienst zichtbaar en hoorbaar maakt.",
         "description_en": "Sound, screens, photography & broadcasting. The team that makes every service visible and audible.",
         "photo": "technique.jpg"
       },
       {
         "id": "media",
-        "nom": "Media",
+        "nom": "Média",
         "nom_nl": "Media",
         "nom_en": "Media",
-        "description": "Reseaux sociaux & communication.",
+        "description": "Réseaux sociaux, vidéos et visuels de l'église.",
         "description_nl": "Sociale media & communicatie.",
         "description_en": "Social media & communication.",
-        "photo": ""
+        "photo": "media.jpg"
       },
       {
         "id": "chorale",
         "nom": "Chorale",
         "nom_nl": "Koor",
         "nom_en": "Choir",
-        "description": "Louange & adoration musicale.",
+        "description": "Ils conduisent la louange pendant les cultes.",
         "description_nl": "Lofzang & muzikale aanbidding.",
         "description_en": "Praise & musical worship.",
         "photo": "chorale.jpg"
       },
       {
         "id": "ecodim",
-        "nom": "Ecodim",
+        "nom": "Écodim",
         "nom_nl": "Zondagsschool",
         "nom_en": "Sunday School",
-        "description": "Ecole du dimanche pour enfants.",
+        "description": "L'école du dimanche : la Bible racontée aux enfants, pendant le culte.",
         "description_nl": "Zondagsschool voor kinderen.",
         "description_en": "Sunday school for children.",
         "photo": "ecodim.jpg"
@@ -91,7 +91,7 @@
         "nom": "Accueil",
         "nom_nl": "Onthaal",
         "nom_en": "Welcome",
-        "description": "Hospitalite & integration. Les premieres mains tendues a toute personne qui franchit la porte.",
+        "description": "Les premiers visages que vous croisez en arrivant. Ils vous accueillent et vous aident à trouver votre place.",
         "description_nl": "Gastvrijheid & integratie. De eerste uitgestoken handen voor wie binnenkomt.",
         "description_en": "Hospitality & integration. The first hands extended to everyone who walks through the door.",
         "photo": "accueil.jpg"
@@ -101,7 +101,7 @@
         "nom": "Intercesseurs",
         "nom_nl": "Voorbidders",
         "nom_en": "Intercessors",
-        "description": "Equipe de priere & intercession.",
+        "description": "Ils prient pour l'église, ses familles et ses besoins.",
         "description_nl": "Gebedsteam & voorbede.",
         "description_en": "Prayer & intercession team.",
         "photo": "intercesseurs.jpg"
@@ -111,17 +111,17 @@
         "nom": "Traducteurs",
         "nom_nl": "Vertalers",
         "nom_en": "Translators",
-        "description": "Traduction simultanee.",
+        "description": "Traduction en direct des prédications.",
         "description_nl": "Simultaanvertaling.",
         "description_en": "Simultaneous translation.",
         "photo": "traducteurs.jpg"
       },
       {
         "id": "solidarite",
-        "nom": "Solidarite",
+        "nom": "Solidarité",
         "nom_nl": "Solidariteit",
         "nom_en": "Solidarity",
-        "description": "Aide sociale & fraternelle.",
+        "description": "Aide concrète aux membres et aux familles qui traversent un moment difficile.",
         "description_nl": "Sociale & broederlijke hulp.",
         "description_en": "Social & fraternal assistance.",
         "photo": ""
@@ -131,7 +131,7 @@
         "nom": "Techniciens de surface",
         "nom_nl": "Schoonmaakdienst",
         "nom_en": "Cleaning Team",
-        "description": "Proprete & entretien des locaux.",
+        "description": "Ils gardent les locaux propres et prêts avant chaque culte.",
         "description_nl": "Netheid & onderhoud van de lokalen.",
         "description_en": "Cleanliness & maintenance of premises.",
         "photo": ""
@@ -170,7 +170,7 @@
     "titre": "culte",
     "titre_nl": "eredienst",
     "titre_en": "worship",
-    "sous_titre": "Retrouvez les moments forts de nos rassemblements dominicaux.",
+    "sous_titre": "Quelques photos prises pendant nos cultes du dimanche.",
     "sous_titre_nl": "Ontdek de hoogtepunten van onze zondagse samenkomsten.",
     "sous_titre_en": "Discover the highlights of our Sunday gatherings.",
     "photos": []
@@ -182,25 +182,25 @@
       "nom": "Culte principal",
       "nom_nl": "Hoofddienst",
       "nom_en": "Main Service",
-      "description": "Adoration, predication et communion fraternelle. Le rendez-vous central de notre communaute.",
+      "description": "Louange, prédication et communion fraternelle. C'est le grand rendez-vous de la semaine.",
       "description_nl": "Aanbidding, prediking en broederlijke gemeenschap. Het centrale moment van onze gemeenschap.",
       "description_en": "Worship, preaching and fellowship. The central gathering of our community."
     },
     "mercredi": {
       "heure": "18h00",
-      "nom": "Etude biblique",
+      "nom": "Étude biblique",
       "nom_nl": "Bijbelstudie",
       "nom_en": "Bible Study",
-      "description": "Approfondissement de la Parole dans un cadre intime et interactif.",
+      "description": "On ouvre la Bible ensemble, en petit groupe. Les questions sont les bienvenues.",
       "description_nl": "Verdieping van het Woord in een intieme en interactieve sfeer.",
       "description_en": "Deepening of the Word in an intimate and interactive setting."
     },
     "vendredi": {
       "heure": "18h00-20h00",
-      "nom": "Jeune & priere",
+      "nom": "Jeûne & prière",
       "nom_nl": "Vasten & gebed",
       "nom_en": "Fasting & Prayer",
-      "description": "Une soiree consacree a l'intercession et a la recherche de la face de Dieu.",
+      "description": "Une soirée pour prier ensemble et chercher la face de Dieu.",
       "description_nl": "Een avond gewijd aan voorbede en het zoeken van Gods aangezicht.",
       "description_en": "An evening dedicated to intercession and seeking the face of God."
     }
@@ -283,7 +283,7 @@
     "liste": []
   },
   "vision_mission": {
-    "vision_texte": "Le Centre Evangélique La Famille Chrétienne repend le message de l'évangile. Nous prechons le nom de Jésus Christ. Ce nom qui sauve, qui libère, qui affranchit et qui délivre. Le seul nom capable de donner le bonheur et la joie dans le coeur des hommes et de réparer ce que l'ennemi a brisé.",
+    "vision_texte": "Le Centre Évangélique La Famille Chrétienne répand le message de l'évangile. Nous prêchons le nom de Jésus-Christ. Ce nom qui sauve, qui libère, qui affranchit et qui délivre. Le seul nom capable de donner le bonheur et la joie dans le cœur des hommes et de réparer ce que l'ennemi a brisé.",
     "vision_titre_nl": "Onze Visie",
     "mission_texte_en": "Bringing Christ back to the heart of the family. We firmly believe that the family is the central pillar of our society. Our goal is to restore Christian values to the heart of homes, strengthen family bonds through faith, and make every home a place where the presence of Christ is alive, shared and passed on from generation to generation.",
     "mission_texte": "Ramener Christ au sein de la famille. Nous croyons fermement que la famille est le pilier central de notre société. Notre objectif est de restaurer les valeurs chrétiennes au cœur des foyers, de fortifier les liens familiaux à travers la foi, et de faire de chaque maison un lieu où la présence de Christ est vivante, partagée et transmise de génération en génération.",
@@ -293,7 +293,7 @@
     "eyebrow": "Qui sommes-nous",
     "verset_reference": "Actes 4:12",
     "titre_nl": "Visie & Missie",
-    "intro": "Nous sommes une église évangélique franco néerlandophone établie à Alost, en Belgique. Notre porte est ouverte à tous sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.",
+    "intro": "Nous sommes une église évangélique franco-néerlandophone établie à Alost, en Belgique. Notre porte est ouverte à tous sans distinction d'origine, de parcours ou de passé. Venez tels que vous êtes.",
     "vision_titre_en": "Our Vision",
     "actif": true,
     "verset_texte_en": "«Salvation is found in no one else, for there is no other name under heaven given to mankind by which we must be saved.»",
@@ -303,7 +303,7 @@
     "titre": "Vision & Mission",
     "eyebrow_nl": "Wie zijn wij",
     "titre_en": "Vision & Mission",
-    "verset_texte": "<< Il n'y a de salut en aucun autre; car il n'y a sous le ciel aucun autre nom qui ait été donné parmi les hommes, par lequel nous devions être sauvés. »",
+    "verset_texte": "« Il n'y a de salut en aucun autre ; car il n'y a sous le ciel aucun autre nom qui ait été donné parmi les hommes, par lequel nous devions être sauvés. »",
     "mission_texte_nl": "Christus terugbrengen in het hart van het gezin. Wij geloven sterk dat het gezin de centrale pijler van onze samenleving is. Ons doel is de christelijke waarden te herstellen in de huizen, de familieband te versterken door het geloof, en van elk huis een plek te maken waar de aanwezigheid van Christus levend, gedeeld en doorgegeven wordt van generatie op generatie.",
     "_commentaire": "Section Vision et Mission affichée sur le site. Mets 'actif' à false pour la masquer.",
     "vision_titre": "Notre Vision",
@@ -328,13 +328,13 @@
     "tag_nl": "Om de 2 weken",
     "texte_nl": "JEFC komt om de twee weken samen voor een moment van delen, onderwijs en aanbidding aangepast aan de jeugd van onze gemeenschap.",
     "frequence": "Toutes les 2 semaines",
-    "titre_nl": "Een plek van geloof, groei en broederschap.",
+    "titre_nl": "Een plek om samen met andere jongeren te groeien in geloof.",
     "lieu": "Wijngaardveld 29",
     "tag_en": "Every 2 weeks",
     "texte_en": "JEFC gathers every two weeks for a time of sharing, teaching and worship adapted to the youth of our community.",
-    "titre": "Un espace de foi, de croissance et de fraternité.",
+    "titre": "Un endroit pour grandir dans la foi, entre jeunes.",
     "frequence_nl": "Om de 2 weken",
-    "titre_en": "A place of faith, growth and fellowship.",
+    "titre_en": "A place to grow in faith, with other young people.",
     "texte": "La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.",
     "tag": "Toutes les 2 semaines",
     "_commentaire": "Section JEFC (Jeunesse Évangélique La Famille Chrétienne). Modifie le titre, le texte et la fréquence."
@@ -345,12 +345,12 @@
     "eyebrow": "Centre Évangélique la Famille Chrétienne",
     "titre_ligne2_en": "The Christian Family",
     "titre_ligne1_en": "Evangelical Centre",
-    "sous_titre": "Vous êtes les bienvenus dans notre famille. Ensemble dans la foi, la prière et la fraternité.",
-    "sous_titre_nl": "U bent welkom in onze familie. Samen in geloof, gebed en broederschap.",
+    "sous_titre": "Première visite ou fidèle depuis des années, vous êtes ici chez vous.",
+    "sous_titre_nl": "Of u nu voor het eerst komt of al jaren, u bent hier thuis.",
     "eyebrow_nl": "Welkom bij",
     "bouton_principal": "Nos rassemblements",
     "_commentaire": "Texte de la section d'accueil (hero). Modifie le titre, le sous-titre et le texte des boutons.",
-    "sous_titre_en": "You are welcome in our family. Together in faith, prayer and fellowship.",
+    "sous_titre_en": "First visit or coming for years, this is your home too.",
     "titre_ligne1": "CEFC",
     "titre_ligne2": "La Borne Alost",
     "eyebrow_en": "Welcome to",
@@ -396,7 +396,7 @@
     "meta_title": "CEFC Alost — La Famille Chrétienne",
     "meta_description": "Centre Évangélique La Famille Chrétienne à Alost. Cultes dominicaux, étude biblique, jeûne & prière, navette gratuite, JEFC jeunesse. Bienvenue dans la famille !",
     "og_title": "CEFC Alost — La Famille Chrétienne",
-    "og_description": "Vous êtes les bienvenus dans notre famille. Ensemble dans la foi, la prière et la fraternité."
+    "og_description": "Première visite ou fidèle depuis des années, vous êtes ici chez vous."
   },
   "_GUIDE": [
     "============================================================",
@@ -424,5 +424,15 @@
     "siege_social": "",
     "responsable_publication": "Pasteur Guy KOBI",
     "email_rgpd": ""
+  },
+  "dons": {
+    "_commentaire": "Coordonnées bancaires de la page Dons.",
+    "beneficiaire": "Centre Évangélique La Famille Chrétienne",
+    "iban_principal": "BE97 3631 6425 1049",
+    "iban_solidarite": "BE42 3632 0186 8154"
+  },
+  "temple": {
+    "_commentaire": "Coordonnées du projet temple.",
+    "iban": "BE97 3631 6425 1049"
   }
 }

@@ -91,7 +91,10 @@
         <div data-cms-list="equipe_pastorale.membres" class="team-list">
           <template data-cms-template>
             <div class="secretary-card">
-              <div class="secretary-avatar" data-cms-field="initiales">XX</div>
+              <div class="secretary-avatar-wrap">
+                <div class="secretary-avatar" data-cms-field="initiales">XX</div>
+                <img class="secretary-photo" data-cms-img="photo" alt="" loading="lazy" />
+              </div>
               <div>
                 <div class="secretary-info-name" data-cms-field="nom">Nom</div>
                 <div class="secretary-info-role" data-cms-field="role">Rôle</div>
@@ -167,13 +170,13 @@
     <div class="section-head reveal">
       <span class="eyebrow" data-i18n="faq.eyebrow">Questions fréquentes</span>
       <h2 class="section-title"><span data-i18n="faq.title.1">Vous avez des</span> <span class="accent" data-i18n="faq.title.2">questions ?</span></h2>
-      <p class="faq-intro reveal" data-i18n="faq.intro">Voici les réponses aux questions les plus posées. N'hésitez pas à nous contacter si vous ne trouvez pas ce que vous cherchez.</p>
+      <p class="faq-intro reveal" data-i18n="faq.intro">Les questions qu'on nous pose le plus souvent. Si la vôtre n'y est pas, écrivez-nous.</p>
     </div>
     <div class="faq-list reveal" style="transition-delay:0.1s;">
 
       <details class="faq-item">
         <summary class="faq-question" data-i18n="faq.q1">Où se déroulent les cultes ?</summary>
-        <div class="faq-answer" data-i18n="faq.a1">Les cultes ont lieu au <strong>Wijngaardveld 29, 9300 Alost (Aalst)</strong>. Vous êtes les bienvenus — pas besoin de vous inscrire, venez simplement !</div>
+        <div class="faq-answer" data-i18n="faq.a1">Les cultes ont lieu au <strong>Wijngaardveld 29, 9300 Alost (Aalst)</strong>. Pas besoin de vous inscrire, venez simplement.</div>
       </details>
 
       <details class="faq-item">
@@ -203,7 +206,7 @@
 
       <details class="faq-item">
         <summary class="faq-question" data-i18n="faq.q7">J'ai une autre question — qui contacter ?</summary>
-        <div class="faq-answer" data-i18n="faq.a7">Contactez-nous via cette page ou écrivez-nous directement à <a href="mailto:cefclaborne@gmail.com" class="faq-link">cefclaborne@gmail.com</a>. Nous répondons dans les meilleurs délais.</div>
+        <div class="faq-answer" data-i18n="faq.a7">Contactez-nous via cette page ou écrivez-nous directement à <a href="mailto:cefclaborne@gmail.com" class="faq-link">cefclaborne@gmail.com</a>. Nous vous répondrons dès que possible.</div>
       </details>
 
     </div>
@@ -266,6 +269,7 @@
 </footer>
 
 <script src="/js/conformite.js"></script>
+<script src="/js/motion.js" defer></script>
 <script src="/js/main.js"></script>
 <script src="/js/cmdk.js" defer></script>
 </body>
