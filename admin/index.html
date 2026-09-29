@@ -216,6 +216,22 @@
     .dept-more[open] summary { color:var(--text); }
     @media (max-width:640px) { .dept-photo-row { grid-template-columns:1fr; } }
 
+    /* Annonces */
+    .pill { display:inline-block; font-size:11px; font-weight:600; padding:2px 8px; border-radius:20px; margin-left:6px;
+      background:rgba(124,58,237,.18); color:#c4b5fd; vertical-align:middle; }
+    .pill-on { background:rgba(16,185,129,.15); color:#6ee7b7; }
+    .pill-off { background:rgba(239,68,68,.12); color:#fca5a5; }
+    .ann-toggles { display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; margin-bottom:14px; }
+    .ann-switch { display:flex; align-items:center; gap:10px; font-size:14px; cursor:pointer; text-transform:none; letter-spacing:0; }
+    .picker-overlay { position:fixed; inset:0; background:rgba(5,6,20,.75); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px; }
+    .picker { background:var(--bg2); border:1px solid var(--border); border-radius:14px; width:min(920px,100%); max-height:85vh; display:flex; flex-direction:column; }
+    .picker-head { display:flex; align-items:center; gap:12px; padding:16px 18px; border-bottom:1px solid var(--border); }
+    .picker-head .btn-mini { margin-left:auto; }
+    .picker-grid { padding:16px; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; }
+    .picker-item { aspect-ratio:4/3; border-radius:8px; border:2px solid transparent; background:var(--bg3) center/cover no-repeat; cursor:pointer; }
+    .picker-item:hover { border-color:var(--purple-light); }
+    .picker-item.selected { border-color:#10b981; box-shadow:0 0 0 3px rgba(16,185,129,.3); }
+
     /* Status toast */
     #toast {
       position:fixed; bottom:24px; right:24px; z-index:9999;
@@ -359,7 +375,7 @@
       <!-- ── ANNONCES ── -->
       <div class="page" id="page-annonces">
         <div class="topbar">
-          <div><h1>📢 Annonces</h1><p>Événements et annonces affichés sur le site</p></div>
+          <div><h1>📢 Annonces</h1><p>Choisissez les annonces affichées, leur ordre et leur photo</p></div>
           <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
         </div>
         <div id="annonces-list"></div>
