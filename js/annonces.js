@@ -140,7 +140,7 @@
     fetch('/contenu.json')
       .then(r => r.json())
       .then(data => {
-        const liste = (data.annonces && data.annonces.liste) ? data.annonces.liste : [];
+        const liste = ((data.annonces && data.annonces.liste) || []).filter(a => !a.masquer);
         allItems = liste
           .map(item => ({ type: 'annonce', ...item }))
           .sort((a, b) => {
@@ -194,7 +194,7 @@
     fetch('/contenu.json?' + Date.now())
       .then(r => r.json())
       .then(data => {
-        const liste = (data.annonces && data.annonces.liste) ? data.annonces.liste : [];
+        const liste = ((data.annonces && data.annonces.liste) || []).filter(a => !a.masquer);
         allItems = liste.map(item => ({ type: 'annonce', ...item }))
           .sort((a, b) => (a.important === b.important) ? 0 : a.important ? -1 : 1);
         updateCountBadges();

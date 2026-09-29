@@ -317,8 +317,9 @@ function applyCmsContent() {
   // 2. Listes répétées : data-cms-list="path.to.array" avec un <template> à l'intérieur
   document.querySelectorAll('[data-cms-list]').forEach(container => {
     const path = container.getAttribute('data-cms-list');
-    const arr = getCmsValue(path);
-    if (!Array.isArray(arr)) return;
+    const all = getCmsValue(path);
+    if (!Array.isArray(all)) return;
+    const arr = all.filter(item => !(item && item.masquer)); // éléments masqués depuis l'admin
 
     const tpl = container.querySelector('template[data-cms-template]');
     if (!tpl) return;

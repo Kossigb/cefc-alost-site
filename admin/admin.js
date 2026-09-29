@@ -261,35 +261,151 @@ function renderHoraires() {
 
 // ════════════ ANNONCES ════════════
 
+const ANN_TYPES = [['annonce', 'Annonce'], ['activite', 'Activité / événement'], ['necro', 'Nécrologie']];
+
+function annField(i, key, label, type = 'text', ph = '') {
+  const v = esc(contenu.annonces.liste[i][key] || '');
+  const on = `onchange="contenu.annonces.liste[${i}]['${key}']=this.value"`;
+  return type === 'textarea'
+    ? `<div class="field"><label>${label}</label><textarea ${on}>${v}</textarea></div>`
+    : `<div class="field"><label>${label}</label><input type="text" value="${v}" placeholder="${ph}" ${on} /></div>`;
+}
+
 function renderAnnonces() {
   const list = contenu.annonces?.liste || [];
   const el = document.getElementById('annonces-list');
   if (!list.length) { el.innerHTML = '<p style="color:var(--text2);font-size:14px;margin-bottom:16px">Aucune annonce.</p>'; return; }
-  el.innerHTML = list.map((a, i) => `
-    <div class="list-item">
-      <div class="list-item-head"><h4>📌 ${esc(a.titre||'Sans titre')}</h4><button class="btn-del" onclick="removeAnnonce(${i})">🗑️ Supprimer</button></div>
-      <div class="grid2">
-        <div class="field"><label>Titre <span class="lang lang-fr">FR</span></label><input type="text" value="${esc(a.titre||'')}" onchange="contenu.annonces.liste[${i}].titre=this.value" /></div>
-        <div class="field"><label>Date</label><input type="text" value="${esc(a.date||'')}" placeholder="ex: 15 juin 2026" onchange="contenu.annonces.liste[${i}].date=this.value" /></div>
+  const shown = list.filter(a => !a.masquer).length;
+  el.innerHTML = `<p class="field-hint" style="margin-bottom:12px">${shown} annonce(s) affichée(s) sur le site, ${list.length - shown} masquée(s).</p>` +
+  list.map((a, i) => {
+    const type = a.type || 'annonce';
+    return `
+    <div class="list-item ann-item${a.masquer ? ' is-hidden' : ''}">
+      <div class="list-item-head">
+        <h4>${esc(a.titre || 'Sans titre')} ${a.masquer ? '<span class="pill pill-off">Masquée</span>' : '<span class="pill pill-on">Affichée</span>'}${a.important ? ' <span class="pill">À la une</span>' : ''}</h4>
+        <div class="row-actions">
+          <button class="btn-mini" title="Monter" onclick="moveAnnonce(${i},-1)" ${i === 0 ? 'disabled' : ''}>↑</button>
+          <button class="btn-mini" title="Descendre" onclick="moveAnnonce(${i},1)" ${i === list.length - 1 ? 'disabled' : ''}>↓</button>
+          <button class="btn-del" onclick="removeAnnonce(${i})">Supprimer</button>
+        </div>
       </div>
-      <div class="field"><label>Description <span class="lang lang-fr">FR</span></label><textarea onchange="contenu.annonces.liste[${i}].description=this.value">${esc(a.description||'')}</textarea></div>
-      <div class="field"><label>Description <span class="lang lang-nl">NL</span></label><textarea onchange="contenu.annonces.liste[${i}].description_nl=this.value">${esc(a.description_nl||'')}</textarea></div>
-      <div class="field"><label>Description <span class="lang lang-en">EN</span></label><textarea onchange="contenu.annonces.liste[${i}].description_en=this.value">${esc(a.description_en||'')}</textarea></div>
-      <div class="field"><label>Image (URL)</label><input type="text" value="${esc(a.image||'')}" placeholder="/img/uploads/photo.jpg" onchange="contenu.annonces.liste[${i}].image=this.value" /></div>
-      <div class="toggle-row" style="margin-top:8px">
-        <label>À la une</label>
-        <label class="toggle"><input type="checkbox" ${a.important?'checked':''} onchange="contenu.annonces.liste[${i}].important=this.checked" /><span class="toggle-slider"></span></label>
+
+      <div class="ann-toggles">
+        <label class="ann-switch">
+          <span class="toggle"><input type="checkbox" ${a.masquer ? '' : 'checked'} onchange="contenu.annonces.liste[${i}].masquer=!this.checked; renderAnnonces()" /><span class="toggle-slider"></span></span>
+          Afficher sur le site
+        </label>
+        <label class="ann-switch">
+          <span class="toggle"><input type="checkbox" ${a.important ? 'checked' : ''} onchange="contenu.annonces.liste[${i}].important=this.checked; renderAnnonces()" /><span class="toggle-slider"></span></span>
+          À la une (en premier)
+        </label>
+        <div class="field" style="margin:0;min-width:200px">
+          <select onchange="contenu.annonces.liste[${i}].type=this.value; renderAnnonces()">
+            ${ANN_TYPES.map(([v, t]) => `<option value="${v}" ${type === v ? 'selected' : ''}>${t}</option>`).join('')}
+          </select>
+        </div>
       </div>
-    </div>`).join('');
+
+      <div class="dept-photo-row">
+        <div class="dept-photo" style="${a.image ? `background-image:url('${esc(a.image)}')` : ''}">${a.image ? '' : '<span>Pas de photo</span>'}</div>
+        <div class="dept-photo-actions">
+          <button class="btn-upload" onclick="openPhotoPicker(${i})">Choisir une photo</button>
+          <label class="btn-mini" style="cursor:pointer">Envoyer une nouvelle photo
+            <input type="file" accept="image/*" hidden onchange="uploadAnnoncePhoto(${i}, this)" /></label>
+          ${a.image ? `<button class="btn-mini" onclick="contenu.annonces.liste[${i}].image=''; renderAnnonces()">Retirer la photo</button>` : ''}
+          <div class="field-hint" id="ann-upload-${i}">Choisissez parmi les photos du culte déjà en ligne, ou envoyez-en une nouvelle.</div>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-top:14px">
+        ${annField(i, 'titre', 'Titre ' + L('fr'))}
+        ${annField(i, 'titre_nl', 'Titre ' + L('nl'))}
+        ${annField(i, 'titre_en', 'Titre ' + L('en'))}
+      </div>
+      <div class="grid3">
+        ${annField(i, 'date', 'Date de publication', 'text', 'ex : Annoncé le 28 juillet 2026')}
+        ${type === 'activite' ? annField(i, 'dateEvenement', "Date de l'événement", 'text', 'ex : Samedi 9 août 2026') : ''}
+        ${type === 'activite' ? annField(i, 'heureEvenement', 'Heure', 'text', 'ex : 19h00') : ''}
+      </div>
+      ${type === 'activite' ? annField(i, 'lieuEvenement', 'Lieu', 'text', 'Wijngaardveld 29, 9300 Alost') : ''}
+      ${annField(i, 'description', 'Texte ' + L('fr'), 'textarea')}
+      <details class="dept-more">
+        <summary>Traductions NL / EN</summary>
+        ${annField(i, 'description_nl', 'Texte ' + L('nl'), 'textarea')}
+        ${annField(i, 'description_en', 'Texte ' + L('en'), 'textarea')}
+        <div class="grid2">
+          ${annField(i, 'date_nl', 'Date ' + L('nl'))}
+          ${annField(i, 'date_en', 'Date ' + L('en'))}
+        </div>
+      </details>
+    </div>`;
+  }).join('');
 }
 function addAnnonce() {
   if (!contenu.annonces) contenu.annonces = { liste: [] };
-  contenu.annonces.liste.unshift({ titre:'Nouvelle annonce', date:'', description:'', description_nl:'', description_en:'', image:'', important:false });
+  contenu.annonces.liste.unshift({ type: 'annonce', titre: 'Nouvelle annonce', date: '', description: '', description_nl: '', description_en: '', image: '', important: false, masquer: false });
+  renderAnnonces();
+}
+function moveAnnonce(i, dir) {
+  const l = contenu.annonces.liste, j = i + dir;
+  if (j < 0 || j >= l.length) return;
+  [l[i], l[j]] = [l[j], l[i]];
   renderAnnonces();
 }
 function removeAnnonce(i) {
-  if (!confirm('Supprimer cette annonce ?')) return;
+  if (!confirm('Supprimer définitivement cette annonce ? Pour la cacher seulement, décochez « Afficher sur le site ».')) return;
   contenu.annonces.liste.splice(i, 1); renderAnnonces();
+}
+
+async function uploadAnnoncePhoto(i, input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const hint = document.getElementById('ann-upload-' + i);
+  if (hint) hint.textContent = 'Envoi de la photo…';
+  try {
+    const { base64, ext } = await compressImage(file);
+    const base = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40);
+    const path = `img/uploads/${Date.now()}-${base || 'annonce'}.${ext}`;
+    await ghCommitBinary(path, base64, 'Photo d\'annonce');
+    contenu.annonces.liste[i].image = '/' + path;
+    renderAnnonces();
+    await saveAll();
+  } catch (e) {
+    if (hint) hint.textContent = 'Échec : ' + e.message;
+    toast('Erreur photo : ' + e.message, 'error');
+  }
+  input.value = '';
+}
+
+// Choix d'une photo parmi celles déjà en ligne (galerie du culte + photos d'annonces)
+function openPhotoPicker(i) {
+  const seen = new Set();
+  const photos = [
+    ...(contenu.annonces?.liste || []).map(a => a.image),
+    ...(photosData.photos || []).map(p => p.url),
+  ].filter(u => u && !seen.has(u) && seen.add(u));
+  const current = contenu.annonces.liste[i].image;
+  const ov = document.createElement('div');
+  ov.className = 'picker-overlay';
+  ov.innerHTML = `
+    <div class="picker" role="dialog" aria-label="Choisir une photo">
+      <div class="picker-head"><strong>Choisir une photo</strong><span class="muted">${photos.length} photo(s)</span>
+        <button class="btn-mini" data-close>Fermer</button></div>
+      <div class="picker-grid">${photos.length ? photos.map(u => `
+        <button class="picker-item${u === current ? ' selected' : ''}" data-url="${esc(u)}" style="background-image:url('${esc(u)}')"></button>`).join('')
+        : '<p class="muted">Aucune photo en ligne pour le moment. Utilisez « Envoyer une nouvelle photo ».</p>'}</div>
+    </div>`;
+  const close = () => ov.remove();
+  ov.addEventListener('click', e => {
+    if (e.target === ov || e.target.closest('[data-close]')) return close();
+    const item = e.target.closest('.picker-item');
+    if (!item) return;
+    contenu.annonces.liste[i].image = item.dataset.url;
+    close(); renderAnnonces();
+    toast('Photo choisie. Cliquez sur « Enregistrer » pour publier.', 'success');
+  });
+  document.addEventListener('keydown', function onKey(e) { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onKey); } });
+  document.body.appendChild(ov);
 }
 
 // ════════════ NAVETTE ════════════
