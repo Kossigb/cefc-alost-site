@@ -151,6 +151,45 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Demander un rendez-vous
     </a>
+    <form class="rdv-form" id="rdvForm" hidden novalidate>
+      <p style="display:none"><label>Ne pas remplir : <input name="website" tabindex="-1" autocomplete="off" /></label></p>
+      <div class="form-row-grid">
+        <div class="form-row">
+          <label for="rdv-prenom">Prénom <span class="req">*</span></label>
+          <input type="text" id="rdv-prenom" name="prenom" required autocomplete="given-name" />
+        </div>
+        <div class="form-row">
+          <label for="rdv-nom">Nom <span class="req">*</span></label>
+          <input type="text" id="rdv-nom" name="nom" required autocomplete="family-name" />
+        </div>
+      </div>
+      <div class="form-row-grid">
+        <div class="form-row">
+          <label for="rdv-email">Email <span class="req">*</span></label>
+          <input type="email" id="rdv-email" name="email" required autocomplete="email" />
+        </div>
+        <div class="form-row">
+          <label for="rdv-tel">Téléphone</label>
+          <input type="tel" id="rdv-tel" name="tel" autocomplete="tel" />
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="rdv-creneau">Jours et heures qui vous conviennent</label>
+        <input type="text" id="rdv-creneau" name="creneau" placeholder="ex : en semaine après 18h, ou le samedi matin" />
+      </div>
+      <div class="form-row">
+        <label for="rdv-objet">En quelques mots (facultatif)</label>
+        <textarea id="rdv-objet" name="objet" placeholder="Vous pouvez aussi ne rien préciser : tout reste confidentiel."></textarea>
+      </div>
+      <div class="form-row form-consent">
+        <label class="consent-check" for="rdv-consent">
+          <input type="checkbox" id="rdv-consent" name="consentement" value="oui" required />
+          <span>J'accepte que la CEFC utilise ces informations uniquement pour organiser ce rendez-vous. <a href="/confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a> <span class="req">*</span></span>
+        </label>
+      </div>
+      <button type="submit" class="form-submit">Envoyer la demande</button>
+      <p class="rdv-done" id="rdvDone" hidden></p>
+    </form>
     <div class="pastor-meta">
       <span class="pastor-meta-item">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>

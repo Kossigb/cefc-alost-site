@@ -241,6 +241,7 @@
   <div class="container">
 
     <form id="anniversaire-form" class="anniv-form-wrap reveal" novalidate>
+      <p style="display:none"><label>Ne pas remplir : <input name="website" tabindex="-1" autocomplete="off" /></label></p>
 
       <div class="form-row-grid">
         <div class="form-row">
@@ -309,7 +310,7 @@
         </svg>
       </div>
       <h3>Merci&nbsp;!</h3>
-      <p>Votre messagerie s'est ouverte : envoyez le message et c'est noté.<br>Que Dieu vous bénisse&nbsp;!</p>
+      <p id="anniv-done">Votre date d'anniversaire a bien été envoyée à l'église.<br>Que Dieu vous bénisse&nbsp;!</p>
     </div>
 
   </div>
@@ -352,11 +353,11 @@
 <script src="/js/main.js"></script>
 <script src="/js/cmdk.js" defer></script>
 <script>
-document.getElementById('anniversaire-form').addEventListener('submit', function(e) {
+document.getElementById('anniversaire-form').addEventListener('submit', async function (e) {
   e.preventDefault();
   if (!this.reportValidity()) return;
   const d = new FormData(this);
-  const subject = encodeURIComponent('Anniversaire — ' + (d.get('prenom') || '') + ' ' + (d.get('nom') || ''));
+  const name = ((d.get('prenom') || '') + ' ' + (d.get('nom') || '')).trim();
   const lines = [
     'Prénom : ' + (d.get('prenom') || ''),
     'Nom : ' + (d.get('nom') || ''),
@@ -366,13 +367,17 @@ document.getElementById('anniversaire-form').addEventListener('submit', function
     '',
     'Message :',
     (d.get('message') || '—'),
-    '',
-    '— Envoyé depuis le site CEFC Alost'
   ];
-  const body = encodeURIComponent(lines.join('\n'));
-  const to = window.cefcFormTo ? window.cefcFormTo('anniversaire') : 'cefclaborne@gmail.com';
-  window.location.href = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
-  document.getElementById('anniversaire-form').style.display = 'none';
+  window.cefcSetSending(this, true);
+  const how = await window.cefcSendForm({
+    form: 'anniversaire', subject: 'Anniversaire — ' + name, lines,
+    replyTo: d.get('email') || '', replyName: name, website: d.get('website'),
+  });
+  window.cefcSetSending(this, false);
+  document.getElementById('anniv-done').innerHTML = how === 'sent'
+    ? 'Votre date d\'anniversaire a bien été envoyée à l\'église.<br>Que Dieu vous bénisse&nbsp;!'
+    : 'Votre messagerie s\'est ouverte : envoyez le message et c\'est noté.<br>Que Dieu vous bénisse&nbsp;!';
+  this.style.display = 'none';
   document.getElementById('anniv-success').style.display = 'block';
 });
 </script>

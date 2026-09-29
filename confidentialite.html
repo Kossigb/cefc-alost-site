@@ -72,7 +72,7 @@
       <li>Pas de compte à créer, pas de publicité, pas d'outil de statistiques ou de suivi.</li>
       <li>Nous ne vendons ni ne louons jamais vos données.</li>
       <li>Nos formulaires ne demandent que ce qui est utile ; les champs non indispensables sont facultatifs. Nous ne demandons jamais votre année de naissance.</li>
-      <li>Les formulaires <strong>n'enregistrent rien sur le site</strong> : ils préparent un email dans votre propre messagerie, que vous relisez et envoyez vous-même.</li>
+      <li>Les formulaires <strong>n'enregistrent rien sur le site</strong> : votre message est transmis par email à la personne de l'église concernée, puis n'est plus conservé par le site.</li>
     </ul>
 
     <h2 id="donnees">3. Quelles données, pour quoi faire, combien de temps&nbsp;?</h2>
@@ -103,7 +103,7 @@
           <tr><td>GitHub (États-Unis)</td><td>Stockage du code et du contenu du site (aucune donnée de visiteur)</td><td>—</td></tr>
           <tr><td>YouTube / Google (États-Unis)</td><td>Lecture des vidéos et du culte en direct</td><td><strong>Uniquement si vous acceptez</strong> les contenus externes</td></tr>
           <tr><td>Google Maps (États-Unis)</td><td>Carte d'accès à l'église</td><td><strong>Uniquement si vous acceptez</strong> les contenus externes</td></tr>
-          <tr><td>Votre messagerie email</td><td>Envoi des formulaires</td><td>Quand vous envoyez un formulaire</td></tr>
+          <tr><td>Brevo (Sendinblue SAS, France)</td><td>Envoi par email des formulaires du site à l'église</td><td>Quand vous envoyez un formulaire</td></tr>
         </tbody>
       </table>
     </div>
@@ -135,8 +135,9 @@
     <p>Nous répondons dans un délai d'<strong>un mois</strong> maximum, gratuitement. Si vous n'êtes pas satisfait de notre réponse, vous pouvez porter plainte auprès de l'<strong>Autorité de protection des données</strong> (APD), rue de la Presse 35, 1000 Bruxelles — <a href="https://www.autoriteprotectiondonnees.be" target="_blank" rel="noopener">autoriteprotectiondonnees.be</a>.</p>
 
     <h2 id="demande">9. Faire une demande (suppression, accès, correction…)</h2>
-    <p>Remplissez ce formulaire : il prépare un email à notre adresse dans votre messagerie. Vous pouvez aussi écrire directement à <a href="mailto:contact@cefclabornealost.be" data-legal-email>contact@cefclabornealost.be</a>.</p>
+    <p>Remplissez ce formulaire : votre demande nous est envoyée directement. Vous pouvez aussi écrire à <a href="mailto:contact@cefclabornealost.be" data-legal-email>contact@cefclabornealost.be</a>.</p>
     <form class="legal-form" id="rgpdForm" novalidate>
+      <p style="display:none"><label>Ne pas remplir : <input name="website" tabindex="-1" autocomplete="off" /></label></p>
       <div class="form-row-grid">
         <div class="form-row">
           <label for="r-nom">Prénom et nom <span class="req">*</span></label>
@@ -165,7 +166,8 @@
         <textarea id="r-details" name="details" placeholder="Ex. : formulaire concerné, lien de la photo…"></textarea>
       </div>
       <button type="submit" class="form-submit">Préparer ma demande</button>
-      <p style="font-size:12px;color:var(--text-muted)">Ce bouton ouvre votre messagerie : rien n'est enregistré sur ce site. Nous pourrons vous demander de confirmer votre identité avant de répondre.</p>
+      <p class="legal-note" id="rgpdDone" hidden role="status"></p>
+      <p style="font-size:12px;color:var(--text-muted)">Votre demande nous est envoyée par email ; rien n'est conservé sur ce site. Nous pourrons vous demander de confirmer votre identité avant de répondre.</p>
     </form>
 
     <h2 id="cookies">10. Cookies</h2>
@@ -223,22 +225,29 @@ fetch('/contenu.json').then(r => r.json()).then(d => {
   const email = L.email_rgpd || (d.infos && d.infos.email);
   if (email) { window.RGPD_EMAIL = email; document.querySelectorAll('[data-legal-email]').forEach(a => { a.textContent = email; a.href = 'mailto:' + email; }); }
 }).catch(() => {});
-document.getElementById('rgpdForm').addEventListener('submit', function (e) {
+document.getElementById('rgpdForm').addEventListener('submit', async function (e) {
   e.preventDefault();
   if (!this.reportValidity()) return;
   const d = new FormData(this);
-  const to = window.cefcFormTo ? window.cefcFormTo('rgpd') : (window.RGPD_EMAIL || 'contact@cefclabornealost.be');
-  const subject = encodeURIComponent('Demande RGPD — ' + d.get('type'));
-  const body = encodeURIComponent([
-    'Bonjour,', '',
+  const lines = [
     'Demande : ' + d.get('type'),
     'Nom : ' + d.get('nom'),
     'Email : ' + d.get('email'), '',
     'Précisions : ' + (d.get('details') || '—'), '',
-    'Merci de me répondre dans le délai légal d\'un mois.',
-    '— Envoyé depuis la page Confidentialité du site CEFC Alost'
-  ].join('\n'));
-  window.location.href = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
+    'Merci de répondre dans le délai légal d\'un mois.',
+  ];
+  window.cefcSetSending(this, true);
+  const how = await window.cefcSendForm({
+    form: 'rgpd', subject: 'Demande RGPD — ' + d.get('type'), lines,
+    replyTo: d.get('email'), replyName: d.get('nom'), website: d.get('website'),
+  });
+  window.cefcSetSending(this, false);
+  const done = document.getElementById('rgpdDone');
+  done.hidden = false;
+  done.textContent = how === 'sent'
+    ? 'Votre demande a bien été envoyée. Nous vous répondrons dans un délai d\'un mois maximum.'
+    : 'Votre messagerie s\'est ouverte avec votre demande : il ne reste qu\'à l\'envoyer.';
+  if (how === 'sent') this.reset();
 });
 </script>
 </body>
