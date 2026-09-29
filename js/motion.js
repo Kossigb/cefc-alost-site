@@ -60,15 +60,23 @@
   });
 
   // Les éléments ajoutés par le JS après coup (annonces, galerie…) : même traitement
+  // On observe un élément « témoin » : pour les titres, c'est leur parent,
+  // car le rideau (clip-path) rend le titre lui-même invisible pour l'observer.
+  const watched = new Map();
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
-      e.target.classList.add('in-view');
+      (watched.get(e.target) || []).forEach(t => t.classList.add('in-view'));
       io.unobserve(e.target);
     });
   }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.section-title, .section-head, .dept-card, .gallery-wrap, .temple-stat-val, .legal-wrap h2')
-    .forEach(el => io.observe(el));
+  function watch(target, witness) {
+    if (!watched.has(witness)) { watched.set(witness, []); io.observe(witness); }
+    watched.get(witness).push(target);
+  }
+  document.querySelectorAll('.section-title').forEach(el => watch(el, el.parentElement || el));
+  document.querySelectorAll('.section-head, .dept-card, .gallery-wrap, .temple-stat-val, .legal-wrap h2')
+    .forEach(el => watch(el, el));
 
   // Compteurs : « 20 € », « 1er »… montent depuis 0 quand ils apparaissent
   document.querySelectorAll('.temple-stat-val').forEach(el => {

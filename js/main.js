@@ -331,9 +331,17 @@ function applyCmsContent() {
 
     if (arr.length === 0) {
       container.setAttribute('data-empty', 'true');
-      // Cache la section parente si elle a la classe .annonces et qu'elle est vide
       const parentSection = container.closest('section.annonces');
-      if (parentSection) parentSection.classList.add('empty-section');
+      if (parentSection && parentSection.hasAttribute('data-keep-visible')) {
+        // Section gardée à l'écran : on affiche un message à la place des cartes
+        const note = document.createElement('div');
+        note.className = 'annonce-card annonce-empty';
+        note.textContent = parentSection.getAttribute('data-empty-text') || 'Aucune annonce pour le moment.';
+        container.appendChild(note);
+      } else if (parentSection) {
+        // Sinon, une section d'annonces vide est cachée
+        parentSection.classList.add('empty-section');
+      }
       return;
     }
     container.removeAttribute('data-empty');
