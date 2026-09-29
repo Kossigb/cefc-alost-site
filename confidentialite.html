@@ -227,7 +227,7 @@ document.getElementById('rgpdForm').addEventListener('submit', function (e) {
   e.preventDefault();
   if (!this.reportValidity()) return;
   const d = new FormData(this);
-  const to = window.RGPD_EMAIL || 'contact@cefclabornealost.be';
+  const to = window.cefcFormTo ? window.cefcFormTo('rgpd') : (window.RGPD_EMAIL || 'contact@cefclabornealost.be');
   const subject = encodeURIComponent('Demande RGPD — ' + d.get('type'));
   const body = encodeURIComponent([
     'Bonjour,', '',

@@ -590,6 +590,11 @@ function renderDepts() {
         ${deptField(i, 'texte_fenetre_nl', 'Texte de présentation dans la fenêtre ' + L('nl'), 'textarea')}
         ${deptField(i, 'texte_fenetre_en', 'Texte de présentation dans la fenêtre ' + L('en'), 'textarea')}
         <div class="field">
+          <label>Adresse(s) qui reçoivent les candidatures et questions de ce département</label>
+          <input type="text" value="${esc(d.email || '')}" placeholder="Vide = adresse de la rubrique Formulaires" onchange="contenu.departements.liste[${i}].email=this.value.trim()" />
+          <div class="field-hint">Ex : le responsable du département. Plusieurs adresses séparées par des virgules.</div>
+        </div>
+        <div class="field">
           <label>Choix proposés dans le formulaire (un par ligne)</label>
           <textarea onchange="contenu.departements.liste[${i}].options=this.value.split('\n').map(x=>x.trim()).filter(Boolean)">${esc((d.options || []).join('\n'))}</textarea>
           <div class="field-hint">Laisser vide pour garder les choix actuels du site.</div>

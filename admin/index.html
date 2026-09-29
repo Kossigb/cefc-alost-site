@@ -313,6 +313,7 @@
       <div class="nav-item" data-page="banniere"><span class="icon">🎗️</span> Bannière</div>
       <div class="nav-item" data-page="temoignages"><span class="icon">💬</span> Témoignages</div>
       <div class="nav-item" data-page="dons"><span class="icon">💶</span> Dons & Temple</div>
+      <div class="nav-item" data-page="formulaires"><span class="icon">✉️</span> Formulaires</div>
       <div class="nav-item" data-page="infos"><span class="icon">ℹ️</span> Infos & Réseaux</div>
       <div class="nav-item" data-page="footer"><span class="icon">🦶</span> Footer</div>
       <div class="nav-item" data-page="seo"><span class="icon">🔍</span> SEO</div>
@@ -620,6 +621,30 @@
         <div class="card">
           <div class="card-title">Page Temple</div>
           <div class="field"><label>IBAN du projet temple</label><input type="text" data-path="temple.iban" placeholder="BE00 0000 0000 0000" /></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-formulaires">
+        <div class="topbar">
+          <div><h1>✉️ Formulaires</h1><p>À qui arrivent les messages envoyés depuis le site</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="field-hint" style="font-size:13px;line-height:1.6">
+            Mettez une ou plusieurs adresses, séparées par des virgules (ex : <em>secretariat@exemple.be, pasteur@exemple.be</em>).
+            Un champ vide utilise l'adresse indiquée en gris.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Départements</div>
+          <div class="field"><label>Candidature à un département</label><input type="text" data-path="formulaires.candidature" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Page Départements → « Rejoindre ». Un département peut aussi avoir sa propre adresse (rubrique Départements).</div></div>
+          <div class="field"><label>Question sur un département</label><input type="text" data-path="formulaires.question" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Page Départements → « En savoir plus / Poser une question ».</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Autres formulaires</div>
+          <div class="field"><label>Rendez-vous avec le pasteur</label><input type="text" data-path="formulaires.rdv_pasteur" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Page Contact → « Demander un rendez-vous ».</div></div>
+          <div class="field"><label>Anniversaires</label><input type="text" data-path="formulaires.anniversaire" placeholder="cefclaborne@gmail.com" /><div class="field-hint">Page Anniversaires.</div></div>
+          <div class="field"><label>Demandes sur les données personnelles (RGPD)</label><input type="text" data-path="formulaires.rgpd" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Page Confidentialité → « Faire une demande » (suppression, accès, correction…).</div></div>
         </div>
       </div>
 
