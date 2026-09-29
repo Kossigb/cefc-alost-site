@@ -186,6 +186,36 @@
     }
     .btn-add:hover { background:rgba(16,185,129,.2); }
 
+    /* Départements : photo + actions */
+    .row-actions { display:flex; gap:6px; align-items:center; }
+    .btn-mini {
+      padding:5px 10px; background:var(--bg2); border:1px solid var(--border);
+      color:var(--text2); border-radius:6px; font-size:12px; cursor:pointer;
+    }
+    .btn-mini:hover:not(:disabled) { color:var(--text); border-color:rgba(255,255,255,.2); }
+    .btn-mini:disabled { opacity:.35; cursor:default; }
+    .dept-item.is-hidden { opacity:.7; }
+    .muted { color:var(--text2); font-weight:400; }
+    .dept-photo-row { display:grid; grid-template-columns:220px 1fr; gap:16px; align-items:start; }
+    .dept-photo {
+      aspect-ratio:16/10; border-radius:8px; background:var(--bg2) center/cover no-repeat;
+      border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+      color:var(--text2); font-size:12px;
+    }
+    .dept-photo-actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; align-content:flex-start; }
+    .dept-photo-actions .field { flex-basis:100%; }
+    .dept-photo-actions .field-hint { flex-basis:100%; }
+    .btn-upload {
+      display:inline-flex; padding:8px 14px; border-radius:8px; cursor:pointer;
+      background:var(--purple); color:#fff; font-size:13px; font-weight:600;
+      text-transform:none; letter-spacing:0;
+    }
+    .btn-upload:hover { background:var(--purple-light); }
+    .dept-more { margin-top:6px; border-top:1px solid var(--border); padding-top:10px; }
+    .dept-more summary { cursor:pointer; font-size:13px; color:var(--text2); margin-bottom:10px; }
+    .dept-more[open] summary { color:var(--text); }
+    @media (max-width:640px) { .dept-photo-row { grid-template-columns:1fr; } }
+
     /* Status toast */
     #toast {
       position:fixed; bottom:24px; right:24px; z-index:9999;
@@ -266,6 +296,7 @@
       <div class="nav-sep"></div>
       <div class="nav-item" data-page="banniere"><span class="icon">🎗️</span> Bannière</div>
       <div class="nav-item" data-page="temoignages"><span class="icon">💬</span> Témoignages</div>
+      <div class="nav-item" data-page="dons"><span class="icon">💶</span> Dons & Temple</div>
       <div class="nav-item" data-page="infos"><span class="icon">ℹ️</span> Infos & Réseaux</div>
       <div class="nav-item" data-page="footer"><span class="icon">🦶</span> Footer</div>
       <div class="nav-item" data-page="seo"><span class="icon">🔍</span> SEO</div>
@@ -441,7 +472,7 @@
       <!-- ── DÉPARTEMENTS ── -->
       <div class="page" id="page-departements">
         <div class="topbar">
-          <div><h1>🏢 Départements</h1><p>Les équipes de service de l'église</p></div>
+          <div><h1>🏢 Départements</h1><p>Photos, textes et ordre des cartes de la page Départements</p></div>
           <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
         </div>
         <div id="dept-list"></div>
@@ -550,6 +581,26 @@
       </div>
 
       <!-- ── INFOS ── -->
+      <div class="page" id="page-dons">
+        <div class="topbar">
+          <div><h1>💶 Dons & Temple</h1><p>Coordonnées bancaires affichées sur les pages Dons et Temple</p></div>
+          <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Page Dons</div>
+          <div class="field"><label>Bénéficiaire (nom sur le compte)</label><input type="text" data-path="dons.beneficiaire" /></div>
+          <div class="grid2">
+            <div class="field"><label>IBAN compte principal (dîme, offrandes)</label><input type="text" data-path="dons.iban_principal" placeholder="BE00 0000 0000 0000" /></div>
+            <div class="field"><label>IBAN compte solidarité</label><input type="text" data-path="dons.iban_solidarite" placeholder="BE00 0000 0000 0000" /></div>
+          </div>
+          <div class="field-hint">Vérifiez l'IBAN deux fois avant d'enregistrer : une erreur enverrait les dons sur le mauvais compte.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Page Temple</div>
+          <div class="field"><label>IBAN du projet temple</label><input type="text" data-path="temple.iban" placeholder="BE00 0000 0000 0000" /></div>
+        </div>
+      </div>
+
       <div class="page" id="page-infos">
         <div class="topbar">
           <div><h1>ℹ️ Infos & Réseaux sociaux</h1><p>Coordonnées et liens réseaux</p></div>

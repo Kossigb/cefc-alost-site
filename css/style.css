@@ -1527,6 +1527,12 @@ section { scroll-margin-top: 80px; }
   letter-spacing: 0.05em;
   flex-shrink: 0;
 }
+.secretary-avatar-wrap { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
+.secretary-photo {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  border-radius: 50%; object-fit: cover;
+}
+.secretary-photo:not([src]) { display: none; }
 .secretary-info-name { font-weight: 500; font-size: 15px; color: var(--text-dark); }
 .secretary-info-role { font-size: 13px; color: var(--text-muted); }
 
@@ -2358,3 +2364,54 @@ input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 .legal-form { display: grid; gap: 14px; margin-top: 18px; }
 .legal-form .form-row label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--night); }
 .legal-form .form-submit { justify-self: start; }
+
+/* =====================================================================
+   MOTION — complété par js/motion.js (désactivé si « moins d'animations »)
+   ===================================================================== */
+
+/* Transition douce entre les pages (navigateurs compatibles) */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vt-out 0.28s ease both; }
+::view-transition-new(root) { animation: vt-in 0.42s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+
+.scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px;
+  z-index: 200;
+  background: linear-gradient(90deg, #7C5CF6, #A78BFA 60%, #E3E3EB);
+  transform-origin: 0 50%; transform: scaleX(0);
+  pointer-events: none;
+}
+
+.motion-ok .nav { transition: background 0.4s, backdrop-filter 0.4s, padding 0.4s, transform 0.45s var(--ease); }
+.motion-ok .nav.nav-hidden { transform: translateY(-110%); }
+
+.motion-ok .hero-inner { will-change: transform, opacity; }
+
+/* Titres : apparition par un léger « rideau » */
+.motion-ok .section-title {
+  clip-path: inset(0 -5% 100% -5%);
+  transform: translateY(14px);
+  transition: clip-path 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.motion-ok .section-title.in-view { clip-path: inset(-20% -5% -25% -5%); transform: none; }
+
+/* Photos des départements : zoom arrière à l'apparition */
+.motion-ok .dept-card .dept-card-bg { transform: scale(1.14); transition: transform 1.4s var(--ease), filter 0.5s; }
+.motion-ok .dept-card.in-view .dept-card-bg { transform: scale(1); }
+.motion-ok .dept-card.in-view:hover .dept-card-bg { transform: scale(1.05); }
+
+.motion-ok .gallery-wrap { clip-path: inset(6% 4% round 20px); transition: clip-path 1.1s var(--ease); }
+.motion-ok .gallery-wrap.in-view { clip-path: inset(0 0 round 20px); }
+
+/* Boutons : effet aimanté (translate posé par le JS) + retour au clic */
+.btn-primary, .btn-ghost, .form-submit, .btn-youtube { transition: translate 0.25s var(--ease), transform 0.25s var(--ease), background 0.25s, border-color 0.25s, box-shadow 0.25s; }
+.btn-primary:active, .btn-ghost:active, .form-submit:active, .btn-youtube:active, .cc-btn:active { transform: scale(0.97); }
+
+/* Liens du pied de page : soulignement qui se dessine */
+.footer-links a { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: color 0.2s, background-size 0.35s var(--ease); }
+.footer-links a:hover { background-size: 100% 1px; }
+
+/* Département masqué depuis l’admin */
+.dept-card[hidden] { display: none !important; }

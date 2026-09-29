@@ -402,8 +402,48 @@ function applyCmsContent() {
   });
 }
 
+// Cartes de la page Départements : photo, nom, texte et visibilité viennent de l'admin.
+// Photo vide = on garde l'image par défaut du HTML ; "-" = pas de photo.
+function deptPhotoUrl(photo) {
+  if (!photo || photo === '-') return '';
+  return /^(https?:)?\//.test(photo) ? photo : '/img/dept/' + photo;
+}
+function applyDeptCards() {
+  const grid = document.querySelector('.depts-grid');
+  const list = CMS_DATA && CMS_DATA.departements && CMS_DATA.departements.liste;
+  if (!grid || !Array.isArray(list)) return;
+  const template = grid.querySelector('.dept-card:not(.large)');
+  list.forEach(item => {
+    if (!item || !item.id) return;
+    let card = grid.querySelector(`.dept-card[data-dept="${CSS.escape(item.id)}"]`);
+    if (!card && template) {
+      // Département ajouté depuis l'admin : on clone une carte existante
+      card = template.cloneNode(true);
+      card.dataset.dept = item.id;
+      card.removeAttribute('style');
+      card.querySelector('.dept-icon').innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>';
+      card.querySelector('.dept-card-bg').style.backgroundImage = '';
+      grid.appendChild(card);
+    }
+    if (!card) return;
+    card.hidden = !!item.masquer;
+    const name = pickLangValue(item, 'nom'), desc = pickLangValue(item, 'description');
+    const nameEl = card.querySelector('.dept-name'), descEl = card.querySelector('.dept-desc');
+    if (name && nameEl) nameEl.textContent = name;
+    if (desc && descEl) descEl.textContent = desc;
+    const bg = card.querySelector('.dept-card-bg');
+    if (bg && item.photo) {
+      const url = deptPhotoUrl(item.photo);
+      bg.style.backgroundImage = url ? `url('${url}')` : 'none';
+      if (item.cadrage) bg.style.backgroundPosition = item.cadrage;
+    }
+    grid.appendChild(card); // respecte l'ordre choisi dans l'admin
+  });
+}
+
 loadCmsContentSync();
 applyCmsContent();
+applyDeptCards();
 
 // Live status — doit être après loadCmsContentSync() pour que CMS_DATA soit disponible
 updateLiveStatus();
@@ -479,7 +519,7 @@ const I18N = {
     "nav.live": "Live",
     "nav.dons": "Giften",
     "anniv.banner.title": "Viert u uw verjaardag?",
-    "anniv.banner.sub": "Deel de datum met de familie van de kerk — wij vieren u graag!",
+    "anniv.banner.sub": "Geef ons de datum, dan wensen we u een fijne verjaardag tijdens de dienst.",
     "anniv.banner.cta": "Mijn verjaardag delen",
     "jefc.social.label": "Volg de JEFC",
     "services.address.label": "Ons adres",
@@ -488,7 +528,7 @@ const I18N = {
     "dons.eyebrow": "Geef met vreugde",
     "dons.hero.title.1": "Vrijgevigheid · Tiende ·",
     "dons.hero.title.2": "Speciale Giften",
-    "dons.hero.sub": "Uw offer is een daad van geloof en dankbaarheid aan God. Het stelt de kerk in staat haar missie voort te zetten en de gemeenschap te zegenen.",
+    "dons.hero.sub": "Geven is een manier om God te bedanken. Dankzij uw giften kan de kerk blijven bestaan en mensen in nood helpen.",
     "dons.card1.title": "De Tiende &amp; Vrijgevigheid",
     "dons.card1.text": "De tiende is een tiende van onze inkomsten die wij in geloof aan God geven. Vrijgevigheid gaat verder en weerspiegelt een gul hart. Deze offers ondersteunen het bediening van de kerk en het pastorale werk.",
     "dons.card1.ref": "Maleachi 3 : 10 — « Breng de volle tiende naar het voorraadhuis... »",
@@ -500,25 +540,25 @@ const I18N = {
     "dons.how.eyebrow": "Modaliteiten",
     "dons.how.title": "Hoe geven?",
     "dons.method1.title": "In persoon",
-    "dons.method1.text": "Tijdens de kerkdiensten, tijdens het moment van de collecte. Een plechtig moment om uw offer aan de Heer te brengen samen met de hele gemeenschap.",
+    "dons.method1.text": "Tijdens de dienst, op het moment van de collecte.",
     "dons.method2.title": "Overschrijving",
     "dons.method2.label1": "Tiende, Vrijgevigheid &amp; Speciale Giften",
     "dons.method2.label2": "Solidariteit",
     "dons.method3.title": "Online",
-    "dons.method3.text": "Een online doneeroplossing is in voorbereiding om uw vrijgevigheid op afstand te vergemakkelijken.",
+    "dons.method3.text": "We werken aan een online mogelijkheid om te geven. Tot dan is een overschrijving het eenvoudigst.",
     "dons.method3.soon": "Binnenkort beschikbaar",
     "dons.verse.text": "« Laat ieder geven zoals hij in zijn hart besloten heeft, niet met tegenzin of gedwongen, want God heeft een blijmoedige gever lief. »",
     "dons.verse.ref": "2 Korintiërs 9 : 7",
     "hero.eyebrow": "Welkom bij",
     "hero.title.1": "Evangelisch Centrum",
     "hero.title.2": "De Christelijke Familie",
-    "hero.sub": "U bent welkom in onze familie. Samen in geloof, gebed en broederschap.",
+    "hero.sub": "Of u nu voor het eerst komt of al jaren, u bent hier thuis.",
     "hero.cta.hours": "Onze uren",
     "hero.cta.live": "Live volgen",
     "services.eyebrow": "Bijeenkomsten",
     "services.title.1": "Kom",
     "services.title.2": "zoals u bent",
-    "services.sub": "Drie wekelijkse momenten om samen te groeien in geloof.",
+    "services.sub": "Drie samenkomsten per week. Kom naar degene die u het best past.",
     "annonces.eyebrow": "Niet te missen",
     "annonces.title.1": "Aankondigingen",
     "annonces.title.2": "& evenementen",
@@ -559,18 +599,18 @@ const I18N = {
     "navette.title.1": "Een",
     "navette.title.2": "pendeldienst",
     "navette.title.3": "voor u",
-    "navette.sub": "Een minibus staat tot uw beschikking om uw komst naar de kerk te vergemakkelijken.",
+    "navette.sub": "Geen auto? Een minibus wacht op u aan het station van Aalst.",
     "depts.eyebrow": "Organisatie",
     "depts.title.1": "Onze",
     "depts.title.2": "afdelingen",
-    "depts.sub": "Negen teams in dienst van uitmuntendheid in het huis van God.",
+    "depts.sub": "Vrijwilligers houden de kerk draaiende. Dit zijn hun teams.",
     "contact.eyebrow": "Sluit u aan",
     "contact.title.1": "Contact &",
     "contact.title.2": "adres",
     "faq.eyebrow": "Veelgestelde vragen",
     "faq.title.1": "Heeft u",
     "faq.title.2": "vragen?",
-    "faq.intro": "Hier vindt u antwoorden op de meest gestelde vragen. Aarzel niet om ons te contacteren als u niet vindt wat u zoekt.",
+    "faq.intro": "De vragen die we het vaakst krijgen. Staat die van u er niet bij? Schrijf ons.",
     "faq.q1": "Waar vinden de diensten plaats?",
     "faq.a1": "De diensten vinden plaats aan <strong>Wijngaardveld 29, 9300 Aalst</strong>. U bent welkom — geen inschrijving nodig, kom gewoon!",
     "faq.q2": "Wat zijn de uren van de diensten?",
@@ -596,7 +636,7 @@ const I18N = {
     "nav.live": "Live",
     "nav.dons": "Giving",
     "anniv.banner.title": "Celebrating your birthday?",
-    "anniv.banner.sub": "Share the date with the church family — we'd love to celebrate you!",
+    "anniv.banner.sub": "Tell us the date and we'll wish you a happy birthday at church.",
     "anniv.banner.cta": "Share my birthday",
     "jefc.social.label": "Follow JEFC",
     "services.address.label": "Our address",
@@ -605,7 +645,7 @@ const I18N = {
     "dons.eyebrow": "Give with joy",
     "dons.hero.title.1": "Generosity · Tithe ·",
     "dons.hero.title.2": "Special Gifts",
-    "dons.hero.sub": "Your offering is an act of faith and gratitude towards God. It enables the church to continue its mission and bless the community.",
+    "dons.hero.sub": "Giving is a way of thanking God. Your gifts also keep the church going and help those in need.",
     "dons.card1.title": "Tithe &amp; Generosity",
     "dons.card1.text": "The tithe is a tenth of our income given to God in faith. Generosity goes beyond that and reflects a giving heart. These offerings support the church's ministry and pastoral work.",
     "dons.card1.ref": "Malachi 3 : 10 — « Bring the whole tithe into the storehouse... »",
@@ -617,25 +657,25 @@ const I18N = {
     "dons.how.eyebrow": "How to give",
     "dons.how.title": "How to give?",
     "dons.method1.title": "In person",
-    "dons.method1.text": "During services, at the time of the offering. A solemn moment to present your offering to the Lord together with the whole community.",
+    "dons.method1.text": "During the service, when the offering is collected.",
     "dons.method2.title": "Bank transfer",
     "dons.method2.label1": "Tithe, Generosity &amp; Special Gifts",
     "dons.method2.label2": "Solidarity",
     "dons.method3.title": "Online",
-    "dons.method3.text": "An online giving solution is being prepared to make your generosity easier from anywhere.",
+    "dons.method3.text": "We're working on online giving. Until then, a bank transfer is the simplest way.",
     "dons.method3.soon": "Coming soon",
     "dons.verse.text": "« Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver. »",
     "dons.verse.ref": "2 Corinthians 9 : 7",
     "hero.eyebrow": "Welcome to",
     "hero.title.1": "Evangelical Centre",
     "hero.title.2": "The Christian Family",
-    "hero.sub": "You are welcome in our family. Together in faith, prayer and fellowship.",
+    "hero.sub": "First visit or coming for years, this is your home too.",
     "hero.cta.hours": "Our schedule",
     "hero.cta.live": "Join live",
     "services.eyebrow": "Gatherings",
     "services.title.1": "Come",
     "services.title.2": "as you are",
-    "services.sub": "Three weekly gatherings to grow together in faith.",
+    "services.sub": "Three gatherings a week. Come to whichever suits you.",
     "annonces.eyebrow": "Not to be missed",
     "annonces.title.1": "Announcements",
     "annonces.title.2": "& events",
@@ -676,18 +716,18 @@ const I18N = {
     "navette.title.1": "A",
     "navette.title.2": "shuttle",
     "navette.title.3": "for you",
-    "navette.sub": "A minibus is at your disposal to make it easier to get to church.",
+    "navette.sub": "No car? A minibus picks you up at Aalst station.",
     "depts.eyebrow": "Organisation",
     "depts.title.1": "Our",
     "depts.title.2": "departments",
-    "depts.sub": "Nine teams serving excellence in the house of God.",
+    "depts.sub": "Volunteers keep the church running. These are their teams.",
     "contact.eyebrow": "Join us",
     "contact.title.1": "Contact &",
     "contact.title.2": "address",
     "faq.eyebrow": "Frequently asked questions",
     "faq.title.1": "Do you have",
     "faq.title.2": "questions?",
-    "faq.intro": "Here are answers to the most common questions. Don't hesitate to contact us if you can't find what you're looking for.",
+    "faq.intro": "The questions we get asked most. If yours isn't here, just write to us.",
     "faq.q1": "Where do services take place?",
     "faq.a1": "Services are held at <strong>Wijngaardveld 29, 9300 Alost (Aalst)</strong>. You are welcome — no registration needed, just come!",
     "faq.q2": "What are the service times?",
@@ -713,7 +753,7 @@ const TRANSLATIONS_NL = {
   "Anniversaires": "Verjaardagen",
   // ANNIVERSARY BANNER
   "Vous fêtez votre anniversaire ?": "Viert u uw verjaardag?",
-  "Partagez la date avec la famille de l'église — nous serons heureux de vous célébrer !": "Deel de datum met de familie van de kerk — wij vieren u graag!",
+  "Donnez-nous la date, on vous le souhaitera au culte.": "Geef ons de datum, dan wensen we u een fijne verjaardag tijdens de dienst.",
   "Partager mon anniversaire": "Mijn verjaardag delen",
   // JEFC SOCIAL
   "Suivez la JEFC": "Volg de JEFC",
@@ -747,7 +787,7 @@ const TRANSLATIONS_NL = {
   "Rassemblements": "Bijeenkomsten",
   "Venez": "Kom",
   "comme vous êtes": "zoals u bent",
-  "Trois rendez-vous hebdomadaires pour grandir ensemble dans la foi.": "Drie wekelijkse momenten om samen te groeien in geloof.",
+  "Trois rendez-vous par semaine. Venez à celui qui vous convient.": "Drie samenkomsten per week. Kom naar degene die u het best past.",
   "Principal": "Hoofd",
   "Dimanche": "Zondag",
   "Mercredi": "Woensdag",
@@ -771,7 +811,7 @@ const TRANSLATIONS_NL = {
 
   // JEFC
   "Toutes les 2 semaines": "Om de 2 weken",
-  "Un espace de foi, de croissance et de fraternité.": "Een plek van geloof, groei en broederschap.",
+  "Un endroit pour grandir dans la foi, entre jeunes.": "Een plek om samen met andere jongeren te groeien in geloof.",
   "La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.":
     "JEFC komt om de twee weken samen voor een moment van delen, onderwijs en aanbidding aangepast aan de jeugd van onze gemeenschap.",
   "Fréquence": "Frequentie",
@@ -797,7 +837,7 @@ const TRANSLATIONS_NL = {
   "Organisation": "Organisatie",
   "Nos": "Onze",
   "départements": "afdelingen",
-  "Neuf équipes au service de l'excellence dans la maison de Dieu.": "Negen teams in dienst van uitmuntendheid in het huis van God.",
+  "Ce sont des bénévoles qui font tourner l'église. Voici leurs équipes.": "Vrijwilligers houden de kerk draaiende. Dit zijn hun teams.",
   "Technique": "Techniek",
   "Son, écrans, photographie & diffusion. L'équipe qui rend chaque culte visible et audible.":
     "Geluid, schermen, fotografie & uitzending. Het team dat elke dienst zichtbaar en hoorbaar maakt.",
@@ -822,8 +862,8 @@ const TRANSLATIONS_NL = {
   "Département": "Afdeling",
   "Voulez-vous nous rejoindre ?": "Wilt u zich bij ons aansluiten?",
   "En savoir plus / Poser une question": "Meer weten / Een vraag stellen",
-  "Tous les départements sont ouverts à ceux qui souhaitent servir avec un cœur disponible.":
-    "Alle afdelingen staan open voor wie met een beschikbaar hart wil dienen.",
+  "Pas besoin d'expérience : l'envie de servir suffit, on vous montrera le reste.":
+    "Ervaring is niet nodig: de wil om te dienen volstaat, de rest leren we u.",
   "Retour": "Terug",
   "Prénom": "Voornaam",
   "Nom": "Naam",
@@ -856,8 +896,8 @@ const TRANSLATIONS_NL = {
   "Envoyer ma question": "Mijn vraag versturen",
   "Vous recevrez une réponse à l'adresse indiquée.": "U ontvangt een antwoord op het opgegeven adres.",
   "Merci pour votre demande !": "Bedankt voor uw aanvraag!",
-  "Votre candidature a bien été enregistrée. Le secrétariat vous recontactera prochainement. Que Dieu vous bénisse.":
-    "Uw aanvraag is goed geregistreerd. Het secretariaat zal u binnenkort contacteren. Moge God u zegenen.",
+  "Votre messagerie s'est ouverte avec votre candidature : il ne reste qu'à l'envoyer. Le secrétariat vous recontactera.":
+    "Uw e-mailprogramma is geopend met uw kandidatuur: u hoeft ze alleen nog te verzenden. Het secretariaat neemt contact met u op.",
   "Question envoyée !": "Vraag verzonden!",
   "Votre message a bien été transmis au responsable. Vous recevrez une réponse dans les meilleurs délais.":
     "Uw bericht is goed doorgegeven aan de verantwoordelijke. U ontvangt zo spoedig mogelijk een antwoord.",
@@ -911,12 +951,12 @@ const TRANSLATIONS_NL = {
   "Épouse du pasteur": "Echtgenote van de pastor",
 
   // NAVETTE NOUVELLE VERSION
-  "Un mini-bus est mis à votre disposition pour faciliter votre venue à l'église.":
-    "Een minibus staat tot uw beschikking om uw komst naar de kerk te vergemakkelijken.",
+  "Pas de voiture ? Un minibus vous attend à la gare d'Alost.":
+    "Geen auto? Een minibus wacht op u aan het station van Aalst.",
   "Aucune réservation": "Geen reservering",
   "↔ Wijngaardveld 29": "↔ Wijngaardveld 29",
-  "Un mini-bus assure la liaison entre la gare et notre lieu de culte. Montez simplement à bord aux horaires indiqués — le service est entièrement gratuit et ouvert à tous.":
-    "Een minibus verzorgt de verbinding tussen het station en onze plaats van eredienst. Stap gewoon in op de aangegeven tijden — de dienst is volledig gratis en open voor iedereen.",
+  "Le minibus fait le trajet entre la gare et l'église. Soyez à la gare aux heures indiquées et montez : c'est gratuit, et ouvert à tout le monde.":
+    "De minibus rijdt tussen het station en de kerk. Wees op tijd aan het station en stap in: gratis en voor iedereen.",
   "9h — 10h": "9u — 10u",
   "Navettes continues entre la gare et l'église avant le culte principal.":
     "Doorlopende ritten tussen het station en de kerk vóór de hoofddienst.",
@@ -924,8 +964,8 @@ const TRANSLATIONS_NL = {
     "Vertrek vanaf station Aalst naar de kerk voor de bijbelstudie.",
   "Départ depuis la Gare d'Alost vers l'église pour le jeûne & la prière.":
     "Vertrek vanaf station Aalst naar de kerk voor vasten & gebed.",
-  "Pas de réservation nécessaire — montez simplement à bord aux horaires indiqués.":
-    "Geen reservering nodig — stap gewoon in op de aangegeven tijden.",
+  "Pas besoin de réserver, soyez juste à l'heure.":
+    "Reserveren hoeft niet, wees gewoon op tijd.",
 
   // SCHEMA NAVETTE SVG (labels en majuscules)
   "GARE": "STATION",
@@ -982,7 +1022,7 @@ const TRANSLATIONS_EN = {
   "Anniversaires": "Birthdays",
   // ANNIVERSARY BANNER
   "Vous fêtez votre anniversaire ?": "Celebrating your birthday?",
-  "Partagez la date avec la famille de l'église — nous serons heureux de vous célébrer !": "Share the date with the church family — we'd love to celebrate you!",
+  "Donnez-nous la date, on vous le souhaitera au culte.": "Tell us the date and we'll wish you a happy birthday at church.",
   "Partager mon anniversaire": "Share my birthday",
   // JEFC SOCIAL
   "Suivez la JEFC": "Follow JEFC",
@@ -1016,7 +1056,7 @@ const TRANSLATIONS_EN = {
   "Rassemblements": "Gatherings",
   "Venez": "Come",
   "comme vous êtes": "as you are",
-  "Trois rendez-vous hebdomadaires pour grandir ensemble dans la foi.": "Three weekly gatherings to grow together in faith.",
+  "Trois rendez-vous par semaine. Venez à celui qui vous convient.": "Three gatherings a week. Come to whichever suits you.",
   "Principal": "Main",
   "Dimanche": "Sunday",
   "Mercredi": "Wednesday",
@@ -1052,7 +1092,7 @@ const TRANSLATIONS_EN = {
 
   // JEFC
   "Toutes les 2 semaines": "Every 2 weeks",
-  "Un espace de foi, de croissance et de fraternité.": "A space of faith, growth and fellowship.",
+  "Un endroit pour grandir dans la foi, entre jeunes.": "A place to grow in faith, with other young people.",
   "La JEFC se réunit toutes les deux semaines pour un temps de partage, d'enseignement et d'adoration adapté à la jeunesse de notre communauté.":
     "JEFC meets every two weeks for a time of sharing, teaching and worship adapted to the youth of our community.",
   "Fréquence": "Frequency",
@@ -1063,7 +1103,7 @@ const TRANSLATIONS_EN = {
   "Une": "A",
   "navette": "shuttle",
   "pour vous": "for you",
-  "Un mini-bus est mis à votre disposition pour faciliter votre venue à l'église.": "A minibus is available to facilitate your journey to church.",
+  "Pas de voiture ? Un minibus vous attend à la gare d'Alost.": "No car? A minibus picks you up at Aalst station.",
   "Navette église": "Church shuttle",
   "Gratuit": "Free",
   "Aucune réservation": "No reservation",
@@ -1073,13 +1113,13 @@ const TRANSLATIONS_EN = {
   "17h10 depuis la gare": "17:10 from the station",
   "9h – 10h, navettes continues": "9am – 10am, continuous runs",
   "Pas de réservation. Montez simplement à bord.": "No reservation. Simply board the bus.",
-  "Un mini-bus assure la liaison entre la gare et notre lieu de culte. Montez simplement à bord aux horaires indiqués — le service est entièrement gratuit et ouvert à tous.":
-    "A minibus connects the station to our place of worship. Simply board at the indicated times — the service is entirely free and open to all.",
+  "Le minibus fait le trajet entre la gare et l'église. Soyez à la gare aux heures indiquées et montez : c'est gratuit, et ouvert à tout le monde.":
+    "The minibus runs between the station and the church. Be at the station at the times shown and hop on: it's free and open to everyone.",
   "9h — 10h": "9am — 10am",
   "Navettes continues entre la gare et l'église avant le culte principal.": "Continuous runs between the station and the church before the main service.",
   "Départ depuis la Gare d'Alost vers l'église pour l'étude biblique.": "Departure from Alost station to the church for Bible study.",
   "Départ depuis la Gare d'Alost vers l'église pour le jeûne & la prière.": "Departure from Alost station to the church for fasting & prayer.",
-  "Pas de réservation nécessaire — montez simplement à bord aux horaires indiqués.": "No reservation needed — simply board at the indicated times.",
+  "Pas besoin de réserver, soyez juste à l'heure.": "No need to book, just be on time.",
   "GARE": "STATION",
   "D'ALOST": "ALOST",
   "ÉGLISE": "CHURCH",
@@ -1088,7 +1128,7 @@ const TRANSLATIONS_EN = {
   "Organisation": "Organisation",
   "Nos": "Our",
   "départements": "departments",
-  "Neuf équipes au service de l'excellence dans la maison de Dieu.": "Nine teams serving excellence in the house of God.",
+  "Ce sont des bénévoles qui font tourner l'église. Voici leurs équipes.": "Volunteers keep the church running. These are their teams.",
   "Technique": "Technical",
   "Son, écrans, photographie & diffusion. L'équipe qui rend chaque culte visible et audible.":
     "Sound, screens, photography & broadcasting. The team that makes every service visible and audible.",
@@ -1113,8 +1153,8 @@ const TRANSLATIONS_EN = {
   "Département": "Department",
   "Voulez-vous nous rejoindre ?": "Would you like to join us?",
   "En savoir plus / Poser une question": "Learn more / Ask a question",
-  "Tous les départements sont ouverts à ceux qui souhaitent servir avec un cœur disponible.":
-    "All departments are open to those who wish to serve with a willing heart.",
+  "Pas besoin d'expérience : l'envie de servir suffit, on vous montrera le reste.":
+    "No experience needed: a willingness to serve is enough, we'll show you the rest.",
   "Retour": "Back",
   "Prénom": "First name",
   "Nom": "Last name",
@@ -1144,8 +1184,8 @@ const TRANSLATIONS_EN = {
   "Envoyer ma question": "Send my question",
   "Vous recevrez une réponse à l'adresse indiquée.": "You will receive a reply at the address provided.",
   "Merci pour votre demande !": "Thank you for your request!",
-  "Votre candidature a bien été enregistrée. Le secrétariat vous recontactera prochainement. Que Dieu vous bénisse.":
-    "Your application has been registered. The secretariat will contact you soon. God bless you.",
+  "Votre messagerie s'est ouverte avec votre candidature : il ne reste qu'à l'envoyer. Le secrétariat vous recontactera.":
+    "Your email app has opened with your application: just press send. The office will get back to you.",
   "Question envoyée !": "Question sent!",
   "Votre message a bien été transmis au responsable. Vous recevrez une réponse dans les meilleurs délais.":
     "Your message has been forwarded to the manager. You will receive a reply as soon as possible.",
@@ -1269,6 +1309,8 @@ function applyLanguage(lang) {
   // 0) Ré-appliquer le contenu CMS dans la bonne langue
   if (CMS_DATA) {
     applyCmsContent();
+    applyDeptCards();
+    try { syncDeptData(); } catch (e) { /* DEPT_DATA pas encore défini au premier passage */ }
     document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
     collectAndStoreOriginals();
     collectAttrOriginals();
@@ -1446,7 +1488,7 @@ if (isFinePointer && !reducedMotion) {
 const DEPT_DATA = {
   technique: {
     name: 'Technique',
-    sub: 'Son, écrans, photographie & diffusion. Vous avez un sens du détail technique et aimez servir dans l\'ombre ? Cette équipe est faite pour vous.',
+    sub: 'Son, écrans, photo, diffusion en direct. Si vous aimez la technique et servir en coulisses, c\'est ici.',
     iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>',
     dynLabel: 'Domaines qui vous intéressent',
     dynOptions: ['Sonorisation', 'Photographie', 'Régie vidéo', 'Streaming / live', 'Écrans / projection', 'Aucune expérience, à former']
@@ -1460,54 +1502,76 @@ const DEPT_DATA = {
   },
   chorale: {
     name: 'Chorale',
-    sub: 'Louange et adoration musicale. Une oreille, une voix, un instrument à mettre au service du Seigneur ?',
+    sub: 'Vous chantez ou jouez d\'un instrument ? La chorale répète chaque semaine et conduit la louange au culte.',
     iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
     dynLabel: 'Votre rôle souhaité',
     dynOptions: ['Chant — soprano', 'Chant — alto', 'Chant — ténor', 'Chant — basse', 'Piano / clavier', 'Guitare', 'Basse', 'Batterie', 'Autre instrument']
   },
   ecodim: {
     name: 'Écodim',
-    sub: 'École du dimanche pour enfants. Vous aimez transmettre la Parole aux plus petits avec patience et créativité ?',
+    sub: 'Pendant le culte, les enfants ont leur propre temps autour de la Bible. Il faut surtout de la patience et un peu d\'imagination.',
     iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
     dynLabel: 'Tranche d\'âge préférée',
     dynOptions: ['Tout-petits (3-5 ans)', 'Enfants (6-9 ans)', 'Pré-ados (10-12 ans)', 'Indifférent']
   },
   accueil: {
     name: 'Accueil',
-    sub: 'Vous êtes la première personne qu\'un visiteur rencontre. Sourire, écoute et chaleur sont vos outils principaux.',
+    sub: 'Vous êtes la première personne qu\'un visiteur rencontre. Il suffit d\'aimer les gens et d\'arriver un peu avant le culte.',
     iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17a4 4 0 0 1-8 0V8c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2v9z"/><path d="M11 8h6c1.1 0 2 .9 2 2v6"/><path d="M19 16l3-3-3-3"/></svg>',
     dynLabel: 'Vos disponibilités',
     dynOptions: ['Dimanche matin', 'Mercredi soir', 'Vendredi soir', 'Événements ponctuels']
   },
   intercesseurs: {
     name: 'Intercesseurs',
-    sub: 'Le ministère de la prière au cœur de l\'église. Persévérance, discrétion et passion pour la présence de Dieu.',
+    sub: 'L\'équipe qui prie pour l\'église, avant et pendant les cultes. On y demande surtout de la fidélité et de la discrétion.',
     iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
     dynLabel: 'Votre expérience dans la prière',
     dynOptions: ['Débutant, à former', 'Pratique régulière', 'Engagé depuis plusieurs années', 'Ministère prophétique']
   },
   traducteurs: {
     name: 'Traducteurs',
-    sub: 'Traduction simultanée. Donnez accès à la Parole à toutes les personnes présentes, quelle que soit leur langue.',
+    sub: 'Traduction en direct des prédications, pour que tout le monde suive, quelle que soit sa langue.',
     iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/></svg>',
     dynLabel: 'Langues maîtrisées',
     dynOptions: ['Français', 'Néerlandais', 'Anglais', 'Lingala', 'Swahili', 'Espagnol', 'Portugais', 'Autre']
   },
   solidarite: {
     name: 'Solidarité',
-    sub: 'Aide sociale et fraternelle. Le bras concret de l\'amour de Christ envers les plus fragiles de notre communauté.',
+    sub: 'Visites, repas, coups de main : l\'équipe qui aide concrètement les membres qui traversent une période difficile.',
     iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 14h1v4"/><path d="M16 2v4M8 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/></svg>',
     dynLabel: 'Comment souhaitez-vous aider ?',
     dynOptions: ['Visites aux malades', 'Aide alimentaire', 'Soutien financier ponctuel', 'Écoute & accompagnement', 'Logistique / transport']
   },
   surface: {
     name: 'Techniciens de surface',
-    sub: 'Propreté et entretien des locaux. Un service humble mais essentiel : l\'église doit toujours être un lieu digne pour la rencontre.',
+    sub: 'Propreté et entretien des locaux, avant et après les cultes. Un service discret, mais on remarque vite quand il manque.',
     iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 7 18.2l1.9-5.8L4 8.8h6.1z"/></svg>',
     dynLabel: 'Vos disponibilités',
     dynOptions: ['Avant les cultes', 'Après les cultes', 'En semaine', 'Grand ménage périodique']
   }
 };
+
+// Textes de la fenêtre (et départements ajoutés) depuis l'admin
+function syncDeptData() {
+  const list = CMS_DATA && CMS_DATA.departements && CMS_DATA.departements.liste;
+  if (!Array.isArray(list)) return;
+  list.forEach(item => {
+    if (!item || !item.id) return;
+    const d = DEPT_DATA[item.id] || (DEPT_DATA[item.id] = {
+      name: item.nom || item.id,
+      sub: '',
+      iconSvg: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
+      dynLabel: 'Vos compétences ou intérêts',
+      dynOptions: ['Débutant, prêt à apprendre', 'Déjà de l\'expérience', 'Disponible le dimanche', 'Disponible en semaine']
+    });
+    const name = pickLangValue(item, 'nom');
+    if (name) d.name = name;
+    const long = pickLangValue(item, 'texte_fenetre') || (!d.sub && pickLangValue(item, 'description'));
+    if (long) d.sub = long;
+    if (Array.isArray(item.options) && item.options.filter(Boolean).length) d.dynOptions = item.options.filter(Boolean);
+  });
+}
+syncDeptData();
 
 const modal = document.getElementById('deptModal');
 if (modal) {
@@ -1643,7 +1707,7 @@ modalForm.addEventListener('submit', (e) => {
   window.location.href = `mailto:contact@cefclabornealost.be?subject=${subject}&body=${body}`;
 
   successHeading.textContent = 'Merci pour votre demande !';
-  successText.textContent = 'Votre candidature a bien été enregistrée. Le secrétariat vous recontactera prochainement. Que Dieu vous bénisse.';
+  successText.textContent = "Votre messagerie s'est ouverte avec votre candidature : il ne reste qu'à l'envoyer. Le secrétariat vous recontactera.";
   showView('success');
 });
 

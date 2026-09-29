@@ -362,7 +362,7 @@
       <h1 class="section-title"><span data-i18n="dons.hero.title.1">Libéralité · Dîme ·</span> <span class="accent" data-i18n="dons.hero.title.2">Dons Spéciaux</span></h1>
     </div>
     <p class="dons-hero-sub reveal" style="transition-delay:0.1s;" data-i18n="dons.hero.sub">
-      Votre offrande est un acte de foi et de gratitude envers Dieu. Elle permet à l'église de poursuivre sa mission et de bénir la communauté.
+      Donner, c'est une façon de dire merci à Dieu. C'est aussi grâce à vos dons que l'église peut continuer à vivre et à aider ceux qui en ont besoin.
     </p>
   </div>
 </section>
@@ -408,7 +408,7 @@
         <h3 data-i18n="dons.card3.title">Solidarité</h3>
         <p data-i18n="dons.card3.text">Le fonds de solidarité permet à l'église de soutenir les membres dans le besoin, les familles en difficulté et les actions sociales de la communauté.</p>
         <blockquote class="dons-card-ref">
-          <span data-i18n="dons.card3.ref">Compte bancaire — Solidarité :</span><br><strong>BE42 3632 0186 8154</strong>
+          <span data-i18n="dons.card3.ref">Compte bancaire — Solidarité :</span><br><strong data-cms="dons.iban_solidarite">BE42 3632 0186 8154</strong>
         </blockquote>
       </div>
 
@@ -430,7 +430,7 @@
       <div class="dons-iban-card">
         <span class="dons-iban-type">Compte principal</span>
         <div class="dons-iban-label">Dîme · Libéralité · Dons spéciaux</div>
-        <div class="dons-iban-number" id="iban1">BE97 3631 6425 1049</div>
+        <div class="dons-iban-number" id="iban1" data-cms="dons.iban_principal">BE97 3631 6425 1049</div>
         <button class="dons-copy-btn" onclick="copyIban('iban1', this)" aria-label="Copier le numéro de compte">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           Copier le numéro
@@ -441,7 +441,7 @@
       <div class="dons-iban-card">
         <span class="dons-iban-type">Solidarité</span>
         <div class="dons-iban-label">Fonds d'entraide &amp; soutien aux familles</div>
-        <div class="dons-iban-number" id="iban2">BE42 3632 0186 8154</div>
+        <div class="dons-iban-number" id="iban2" data-cms="dons.iban_solidarite">BE42 3632 0186 8154</div>
         <button class="dons-copy-btn" onclick="copyIban('iban2', this)" aria-label="Copier le numéro de compte solidarité">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           Copier le numéro
@@ -450,8 +450,8 @@
 
     </div>
     <p class="dons-bank-note">
-      Bénéficiaire : <strong>Centre Évangélique La Famille Chrétienne</strong><br>
-      Communication libre — ex : « Dîme juillet 2026 » ou « Don spécial »
+      Bénéficiaire : <strong data-cms="dons.beneficiaire">Centre Évangélique La Famille Chrétienne</strong><br>
+      Communication libre, par exemple « Dîme juillet 2026 » ou « Don spécial »
     </p>
     <p class="dons-bank-note">
       <strong>Aucun frais caché :</strong> l'église ne prélève rien sur vos dons. Seule votre banque peut appliquer ses propres frais (par exemple pour un virement depuis l'étranger).
@@ -485,7 +485,7 @@ function copyIban(id, btn) {
       <div class="dons-how-card reveal">
         <div class="dons-how-card-num">01</div>
         <h3 data-i18n="dons.method1.title">En personne</h3>
-        <p data-i18n="dons.method1.text">Lors des cultes, lors du moment de la collecte. Un moment solennel pour remettre votre offrande au Seigneur avec toute la communauté.</p>
+        <p data-i18n="dons.method1.text">Pendant le culte, au moment de la collecte.</p>
       </div>
 
       <!-- Méthode 2 -->
@@ -493,16 +493,16 @@ function copyIban(id, btn) {
         <div class="dons-how-card-num">02</div>
         <h3 data-i18n="dons.method2.title">Virement bancaire</h3>
         <p style="margin-bottom:8px;" data-i18n="dons.method2.label1">Dîme, Libéralité &amp; Dons spéciaux</p>
-        <p class="dons-note" style="font-style:normal;font-weight:600;letter-spacing:0.04em;font-size:13px;color:rgba(227,227,235,0.85);">BE97 3631 6425 1049</p>
+        <p class="dons-note" style="font-style:normal;font-weight:600;letter-spacing:0.04em;font-size:13px;color:rgba(227,227,235,0.85);" data-cms="dons.iban_principal">BE97 3631 6425 1049</p>
         <p style="margin-top:14px;margin-bottom:8px;" data-i18n="dons.method2.label2">Solidarité</p>
-        <p class="dons-note" style="font-style:normal;font-weight:600;letter-spacing:0.04em;font-size:13px;color:rgba(227,227,235,0.85);">BE42 3632 0186 8154</p>
+        <p class="dons-note" style="font-style:normal;font-weight:600;letter-spacing:0.04em;font-size:13px;color:rgba(227,227,235,0.85);" data-cms="dons.iban_solidarite">BE42 3632 0186 8154</p>
       </div>
 
       <!-- Méthode 3 -->
       <div class="dons-how-card reveal" style="transition-delay:0.2s;">
         <div class="dons-how-card-num">03</div>
         <h3 data-i18n="dons.method3.title">En ligne</h3>
-        <p data-i18n="dons.method3.text">Une solution de don en ligne est en cours de préparation pour faciliter votre générosité à distance.</p>
+        <p data-i18n="dons.method3.text">Nous préparons une solution de don en ligne. En attendant, le virement reste le plus simple.</p>
         <span class="dons-how-card-soon" data-i18n="dons.method3.soon">Bientôt disponible</span>
       </div>
 
@@ -553,6 +553,7 @@ function copyIban(id, btn) {
 </footer>
 
 <script src="/js/conformite.js"></script>
+<script src="/js/motion.js" defer></script>
 <script src="/js/main.js"></script>
 <script src="/js/cmdk.js" defer></script>
 </body>

@@ -638,7 +638,7 @@ h2.section-title em { font-style: italic; }
 
     <div class="bank-iban-box">
       <div class="bank-iban-label">IBAN — Compte Temple CEFC Alost</div>
-      <div class="bank-iban-number" id="ibanNumber">BE97 3631 6425 1049</div>
+      <div class="bank-iban-number" id="ibanNumber" data-cms="temple.iban">BE97 3631 6425 1049</div>
       <button class="bank-copy-btn" id="copyBtn" onclick="copyIban()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         Copier l'IBAN
@@ -806,5 +806,15 @@ h2.section-title em { font-style: italic; }
   });
 </script>
 <script src="/js/conformite.js"></script>
+<script src="/js/motion.js" defer></script>
+<script>
+// IBAN du projet temple, modifiable dans l'admin (Dons & Temple)
+fetch('/contenu.json').then(r => r.json()).then(d => {
+  document.querySelectorAll('[data-cms]').forEach(el => {
+    const v = el.dataset.cms.split('.').reduce((o, k) => o && o[k], d);
+    if (typeof v === 'string' && v.trim()) el.textContent = v;
+  });
+}).catch(() => {});
+</script>
 </body>
 </html>
