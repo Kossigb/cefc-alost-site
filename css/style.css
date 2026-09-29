@@ -2028,8 +2028,18 @@ footer::before {
   flex-wrap: wrap;
 }
 .anniv-banner-icon {
-  font-size: 40px;
+  width: 64px; height: 64px;
   flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 16px;
+  background: radial-gradient(circle at 50% 30%, rgba(167, 139, 250, 0.22), rgba(167, 139, 250, 0.04) 70%);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+}
+.anniv-flame { transform-box: fill-box; transform-origin: 50% 100%; animation: anniv-flicker 2.4s ease-in-out infinite; }
+@keyframes anniv-flicker {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  30% { transform: scale(0.94, 1.05) rotate(-2deg); opacity: 0.9; }
+  60% { transform: scale(1.04, 0.97) rotate(2deg); }
 }
 .anniv-banner-body {
   flex: 1;
