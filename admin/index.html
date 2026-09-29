@@ -536,6 +536,9 @@
           <div><h1>💬 Témoignages</h1><p>Témoignages de membres de l'église</p></div>
           <button class="save-btn" onclick="saveAll()">💾 Enregistrer</button>
         </div>
+        <div class="card" style="border-color:rgba(245,158,11,.35)">
+          <div class="field-hint" style="font-size:13px;color:#fcd34d">⚠️ Publiez uniquement des témoignages <strong>réels</strong>, avec l'accord de la personne (idéalement par écrit). Un témoignage inventé ou modifié sans accord est interdit par la loi (pratique commerciale trompeuse) et nuit à la confiance.</div>
+        </div>
         <div class="card">
           <div class="toggle-row">
             <label>Afficher la section témoignages</label>
@@ -572,6 +575,18 @@
           <div class="field"><label>YouTube</label><input type="url" data-path="infos.youtube" /></div>
           <div class="field"><label>Facebook</label><input type="url" data-path="infos.facebook" /></div>
           <div class="field"><label>Instagram</label><input type="url" data-path="infos.instagram" /></div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚖️ Informations légales</div>
+          <div class="field-hint" style="margin-bottom:12px">Affichées sur la page « Mentions légales ». Une ligne laissée vide n'est pas affichée.</div>
+          <div class="grid2">
+            <div class="field"><label>Nom officiel de l'association</label><input type="text" data-path="legal.nom_officiel" placeholder="ex : Centre Évangélique La Famille Chrétienne ASBL" /></div>
+            <div class="field"><label>Forme juridique</label><input type="text" data-path="legal.forme_juridique" placeholder="ex : ASBL / VZW" /></div>
+            <div class="field"><label>Numéro d'entreprise (BCE / KBO)</label><input type="text" data-path="legal.numero_bce" placeholder="ex : 0123.456.789" /></div>
+            <div class="field"><label>Siège social (si différent de l'adresse de culte)</label><input type="text" data-path="legal.siege_social" /></div>
+            <div class="field"><label>Responsable de la publication</label><input type="text" data-path="legal.responsable_publication" /></div>
+            <div class="field"><label>Email pour les demandes RGPD</label><input type="email" data-path="legal.email_rgpd" /><div class="field-hint">Laisser vide pour utiliser l'email de contact.</div></div>
+          </div>
         </div>
       </div>
 

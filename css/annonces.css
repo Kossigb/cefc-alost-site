@@ -62,12 +62,12 @@
 }
 .annonces-hero h1 em {
   font-style: italic;
-  color: rgba(227,227,235,0.6);
+  color: rgba(227,227,235,0.66);
 }
 .annonces-hero-sub {
   font-size: 15px;
   line-height: 1.68;
-  color: rgba(227,227,235,0.45);
+  color: rgba(227,227,235,0.66);
   max-width: 500px;
   margin: 0 auto;
 }

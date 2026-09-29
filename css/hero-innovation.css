@@ -36,7 +36,7 @@
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(227, 227, 235, 0.38);
+  color: rgba(227, 227, 235, 0.66);
   transition: color 0.5s ease;
 }
 
@@ -149,7 +149,7 @@
   font-family: var(--serif);
   font-style: italic;
   font-size: 11.5px;
-  color: rgba(227, 227, 235, 0.32);
+  color: rgba(227, 227, 235, 0.66);
   letter-spacing: 0.04em;
   min-height: 18px;
   margin-top: 12px;

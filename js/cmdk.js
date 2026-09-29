@@ -12,12 +12,16 @@
     { label: 'Dons', url: '/dons.html', sub: 'Soutenir la vision et le ministère de l\'église', icon: 'heart' },
     { label: 'Contact', url: '/contact.html', sub: 'Nous écrire ou nous rendre visite', icon: 'mail' },
     { label: 'Anniversaires', url: '/anniversaire.html', sub: 'Calendrier des anniversaires', icon: 'gift' },
+    { label: 'Confidentialité & données', url: '/confidentialite.html', sub: 'Vos données, vos droits, demande de suppression', icon: 'grid' },
+    { label: 'Cookies', url: '/cookies.html', sub: 'Aucun cookie publicitaire · gérer vos choix', icon: 'grid' },
+    { label: 'Mentions légales', url: '/mentions-legales.html', sub: 'Éditeur, hébergement, licences, accessibilité', icon: 'grid' },
+    { label: 'Conditions & politique de dons', url: '/conditions.html', sub: 'Dons libres, aucun frais caché, remboursement', icon: 'grid' },
   ];
 
   const ACTIONS = [
     { label: 'Rejoindre le live YouTube', sub: 'Ouvrir la chaîne YouTube CEFC', icon: 'play', action: () => window.open('https://www.youtube.com/@CE_laFamilleChretienne', '_blank') },
     { label: 'Partager le verset du jour', sub: 'Générer une image à partager', icon: 'share', action: () => { document.dispatchEvent(new CustomEvent('cefc:verse-share')); close(); } },
-    { label: 'Faire un don', sub: 'Soutenir l\'église en ligne', icon: 'heart', action: () => { window.location.href = '/dons.html'; } },
+    { label: 'Faire un don', sub: 'Par virement bancaire · aucun frais prélevé', icon: 'heart', action: () => { window.location.href = '/dons.html'; } },
   ];
 
   const ICONS = {
@@ -98,22 +102,22 @@
         display:flex; align-items:center; gap:12px;
         padding:17px 20px; border-bottom:0.5px solid rgba(227,227,235,0.1);
       }
-      .cmdk-input-row svg { color:rgba(227,227,235,0.4); flex-shrink:0; }
+      .cmdk-input-row svg { color:rgba(227,227,235,0.66); flex-shrink:0; }
       #cefcCmdkInput {
         flex:1; background:none; border:none; outline:none;
         font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif; font-size:16px;
         color:#E3E3EB; caret-color:#A78BFA;
       }
-      #cefcCmdkInput::placeholder { color:rgba(227,227,235,0.3); }
+      #cefcCmdkInput::placeholder { color:rgba(227,227,235,0.66); }
       .cmdk-esc-key {
         font-size:11px; padding:3px 7px; border-radius:5px;
-        border:0.5px solid rgba(227,227,235,0.15); color:rgba(227,227,235,0.35);
+        border:0.5px solid rgba(227,227,235,0.15); color:rgba(227,227,235,0.66);
         background:none; font-family:inherit; flex-shrink:0;
       }
       .cmdk-results { max-height:340px; overflow-y:auto; padding:6px; }
       .cmdk-group-label {
         font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
-        color:rgba(227,227,235,0.3); padding:10px 12px 5px;
+        color:rgba(227,227,235,0.66); padding:10px 12px 5px;
         font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;
       }
       .cmdk-item {
@@ -127,20 +131,20 @@
       .cmdk-item .cmdk-ico {
         width:30px; height:30px; border-radius:8px; flex-shrink:0;
         background:rgba(227,227,235,0.06); border:0.5px solid rgba(227,227,235,0.12);
-        display:flex; align-items:center; justify-content:center; color:rgba(227,227,235,0.55);
+        display:flex; align-items:center; justify-content:center; color:rgba(227,227,235,0.66);
       }
       .cmdk-item.cmdk-active .cmdk-ico { background:rgba(167,139,250,0.2); border-color:rgba(167,139,250,0.35); color:#A78BFA; }
       .cmdk-item-text { flex:1; min-width:0; }
       .cmdk-item-label { font-size:14px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-      .cmdk-item-sub { font-size:12px; color:rgba(227,227,235,0.35); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-      .cmdk-item.cmdk-active .cmdk-item-sub { color:rgba(227,227,235,0.5); }
+      .cmdk-item-sub { font-size:12px; color:rgba(227,227,235,0.66); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .cmdk-item.cmdk-active .cmdk-item-sub { color:rgba(227,227,235,0.66); }
       .cmdk-match { color:#A78BFA; font-weight:600; }
-      .cmdk-item-kbd { font-size:11px; font-weight:600; padding:2px 6px; border-radius:5px; background:rgba(227,227,235,0.08); border:0.5px solid rgba(227,227,235,0.14); color:rgba(227,227,235,0.4); flex-shrink:0; font-family:inherit; }
-      .cmdk-empty { text-align:center; padding:32px; font-size:14px; color:rgba(227,227,235,0.3); font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif; }
+      .cmdk-item-kbd { font-size:11px; font-weight:600; padding:2px 6px; border-radius:5px; background:rgba(227,227,235,0.08); border:0.5px solid rgba(227,227,235,0.14); color:rgba(227,227,235,0.66); flex-shrink:0; font-family:inherit; }
+      .cmdk-empty { text-align:center; padding:32px; font-size:14px; color:rgba(227,227,235,0.66); font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif; }
       .cmdk-footer-bar {
         display:flex; gap:18px; padding:11px 18px;
         border-top:0.5px solid rgba(227,227,235,0.08);
-        font-size:11.5px; color:rgba(227,227,235,0.35);
+        font-size:11.5px; color:rgba(227,227,235,0.66);
         font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;
       }
       .cmdk-footer-bar span { display:flex; align-items:center; gap:5px; }

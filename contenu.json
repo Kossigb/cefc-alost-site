@@ -278,18 +278,9 @@
     ]
   },
   "temoignages": {
-    "_commentaire": "Temoignages de membres de l'eglise. Mets 'actif' a true pour afficher la section.",
+    "_commentaire": "Temoignages REELS de membres, publies avec leur accord ecrit. Ne jamais inventer de temoignage. Mets 'actif' a true pour afficher la section.",
     "actif": false,
-    "liste": [
-      {
-        "prenom": "Marie",
-        "initiales": "M",
-        "role": "Membre depuis 3 ans",
-        "texte": "Cette eglise m'a accueillie comme une famille des le premier jour.",
-        "texte_nl": "",
-        "texte_en": ""
-      }
-    ]
+    "liste": []
   },
   "vision_mission": {
     "vision_texte": "Le Centre Evangélique La Famille Chrétienne repend le message de l'évangile. Nous prechons le nom de Jésus Christ. Ce nom qui sauve, qui libère, qui affranchit et qui délivre. Le seul nom capable de donner le bonheur et la joie dans le coeur des hommes et de réparer ce que l'ennemi a brisé.",
@@ -424,5 +415,14 @@
     "4. Pour mettre un guillemet dans un texte, utilise \\\"",
     "5. Si tu casses un truc : ouvre https://jsonlint.com et colle ton fichier pour voir l'erreur",
     "============================================================"
-  ]
+  ],
+  "legal": {
+    "_commentaire": "Informations légales affichées sur la page Mentions légales. Une valeur vide n'est pas affichée.",
+    "nom_officiel": "",
+    "forme_juridique": "",
+    "numero_bce": "",
+    "siege_social": "",
+    "responsable_publication": "Pasteur Guy KOBI",
+    "email_rgpd": ""
+  }
 }

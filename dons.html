@@ -24,10 +24,7 @@
     });
   }
 </script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="/fonts/fonts.css" rel="stylesheet" />
 
 <style>
 /* ===== PAGE-SPECIFIC STYLES: DONS ===== */
@@ -113,7 +110,7 @@
   padding: 80px 24px;
   color: var(--silver);
 }
-.dons-how .section-head .eyebrow { color: rgba(227, 227, 235, 0.55); }
+.dons-how .section-head .eyebrow { color: rgba(227, 227, 235, 0.66); }
 .dons-how .section-title { color: var(--silver); }
 .dons-how-grid {
   display: grid;
@@ -152,12 +149,12 @@
 }
 .dons-how-card p {
   font-size: 14px;
-  color: rgba(227, 227, 235, 0.6);
+  color: rgba(227, 227, 235, 0.66);
   line-height: 1.65;
 }
 .dons-how-card .dons-note {
   font-size: 12px;
-  color: rgba(227, 227, 235, 0.4);
+  color: rgba(227, 227, 235, 0.66);
   margin-top: 10px;
   font-style: italic;
 }
@@ -170,7 +167,7 @@
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(227, 227, 235, 0.4);
+  color: rgba(227, 227, 235, 0.66);
 }
 
 /* Verse banner */
@@ -194,7 +191,7 @@
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(227, 227, 235, 0.4);
+  color: rgba(227, 227, 235, 0.66);
 }
 
 /* ── Section coordonnées bancaires ── */
@@ -220,7 +217,7 @@
 }
 .dons-bank-header p {
   font-size: 14px;
-  color: rgba(227,227,235,0.45);
+  color: rgba(227,227,235,0.66);
 }
 .dons-bank-grid {
   display: grid;
@@ -296,13 +293,13 @@
 .dons-bank-note {
   text-align: center;
   font-size: 12.5px;
-  color: rgba(227,227,235,0.35);
+  color: rgba(227,227,235,0.66);
   max-width: 500px;
   margin: 0 auto;
   line-height: 1.6;
 }
 .dons-bank-note strong {
-  color: rgba(227,227,235,0.6);
+  color: rgba(227,227,235,0.66);
   font-weight: 600;
 }
 
@@ -456,6 +453,10 @@
       Bénéficiaire : <strong>Centre Évangélique La Famille Chrétienne</strong><br>
       Communication libre — ex : « Dîme juillet 2026 » ou « Don spécial »
     </p>
+    <p class="dons-bank-note">
+      <strong>Aucun frais caché :</strong> l'église ne prélève rien sur vos dons. Seule votre banque peut appliquer ses propres frais (par exemple pour un virement depuis l'étranger).
+      Un don fait par erreur&nbsp;? Voir notre <a href="/conditions.html#dons" style="text-decoration:underline">politique de dons et de remboursement</a>.
+    </p>
   </div>
 </section>
 
@@ -535,6 +536,14 @@ function copyIban(id, btn) {
       <a href="/contact.html">Contact</a>
       <a href="https://www.youtube.com/@CE_laFamilleChretienne" target="_blank" rel="noopener">YouTube</a>
     </div>
+    <nav class="footer-legal" aria-label="Informations légales">
+      <a href="/mentions-legales.html">Mentions légales</a>
+      <a href="/confidentialite.html">Confidentialité</a>
+      <a href="/cookies.html">Cookies</a>
+      <a href="/conditions.html">Conditions &amp; dons</a>
+      <button type="button" data-cc-open>Gérer les cookies</button>
+    </nav>
+
     <div class="footer-divider"></div>
     <div class="footer-meta">
       <div>© 2026 CEFC – Alost. Tous droits réservés.</div>
@@ -543,6 +552,7 @@ function copyIban(id, btn) {
   </div>
 </footer>
 
+<script src="/js/conformite.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/cmdk.js" defer></script>
 </body>

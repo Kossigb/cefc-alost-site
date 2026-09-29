@@ -23,10 +23,7 @@
     });
   }
 </script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="/fonts/fonts.css" rel="stylesheet" />
 
 <style>
 /* ===== TEMPLE PAGE ===== */
@@ -666,6 +663,9 @@ h2.section-title em { font-style: italic; }
     <p class="bank-note">
       <strong>Pas encore membre ?</strong> Vous n'avez pas besoin de l'être pour participer. Si vous portez cette vision dans votre cœur, vous êtes les bienvenus. Pour toute question, contactez-nous via la page <a href="/contact.html" style="color:#7c3aed;font-weight:600">Contact</a>.
     </p>
+    <p class="bank-note">
+      <strong>Aucun frais caché :</strong> l'église ne prélève rien sur votre participation. Votre banque peut appliquer ses propres frais (par exemple pour un virement depuis l'étranger). La participation est libre : vous pouvez arrêter à tout moment en annulant votre ordre permanent. Voir notre <a href="/conditions.html#dons" style="color:#7c3aed;font-weight:600">politique de dons et de remboursement</a>.
+    </p>
   </div>
 </section>
 
@@ -749,6 +749,13 @@ h2.section-title em { font-style: italic; }
       <a href="/dons.html">Dons</a>
       <a href="/contact.html">Contact</a>
     </div>
+      <nav class="footer-legal" aria-label="Informations légales">
+      <a href="/mentions-legales.html">Mentions légales</a>
+      <a href="/confidentialite.html">Confidentialité</a>
+      <a href="/cookies.html">Cookies</a>
+      <a href="/conditions.html">Conditions &amp; dons</a>
+      <button type="button" data-cc-open>Gérer les cookies</button>
+    </nav>
     <p class="footer-copy">© 2025 CEFC Alost — Tous droits réservés</p>
   </div>
 </footer>
@@ -798,5 +805,6 @@ h2.section-title em { font-style: italic; }
     io.observe(el);
   });
 </script>
+<script src="/js/conformite.js"></script>
 </body>
 </html>

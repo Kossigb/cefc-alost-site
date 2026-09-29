@@ -169,7 +169,8 @@ function activateLiveEmbed(embedUrl, titleText, subText, ctaLabel) {
   const chId = CMS_DATA && CMS_DATA.infos && CMS_DATA.infos.youtube_channel_id;
   const ctaLink = ctaText && ctaText.closest('a');
   if (ctaLink && chId) ctaLink.href = `https://www.youtube.com/channel/${chId}/live`;
-  if (liveIframe && !liveIframe.src) liveIframe.src = embedUrl;
+  // Chargé seulement si le visiteur a accepté les contenus externes (voir js/conformite.js)
+  if (liveIframe) { if (window.cefcConsent) cefcConsent.embed(liveIframe, embedUrl); else liveIframe.setAttribute('data-consent-src', embedUrl); }
   if (liveEmbed) liveEmbed.style.display = 'block';
   if (liveCard) liveCard.classList.add('live-card--on');
   const fallback = document.getElementById('liveFallback');
@@ -235,7 +236,7 @@ function updateLiveStatus() {
 
   // 3. Hors direct : affichage du prochain culte
   if (liveEmbed) liveEmbed.style.display = 'none';
-  if (liveIframe) liveIframe.src = '';
+  if (liveIframe) { if (window.cefcConsent) cefcConsent.embed(liveIframe, ''); else liveIframe.removeAttribute('src'); }
   if (liveCard) liveCard.classList.remove('live-card--on');
   let minDiff = Infinity, nextKey = 'sunday';
   for (const svc of SERVICES) {
@@ -1530,10 +1531,12 @@ function showView(view) {
   modalSuccess.classList.toggle('active', view === 'success');
 }
 
+let lastFocusBeforeModal = null;
 function openModal(deptKey) {
   const data = DEPT_DATA[deptKey];
   if (!data) return;
   currentDept = deptKey;
+  lastFocusBeforeModal = document.activeElement;
 
   modalIcon.innerHTML = data.iconSvg;
   modalTitle.textContent = data.name;
@@ -1546,14 +1549,9 @@ function openModal(deptKey) {
       ${opt}
     </label>
   `).join('');
-  dynChecks.querySelectorAll('.form-check').forEach(label => {
-    label.addEventListener('click', (e) => {
-      if (e.target.tagName !== 'INPUT') {
-        const cb = label.querySelector('input');
-        cb.checked = !cb.checked;
-      }
-      label.classList.toggle('selected', label.querySelector('input').checked);
-    });
+  // Case native (utilisable au clavier) : on synchronise juste le style
+  dynChecks.querySelectorAll('.form-check input').forEach(cb => {
+    cb.addEventListener('change', () => cb.closest('.form-check').classList.toggle('selected', cb.checked));
   });
 
   modalForm.reset();
@@ -1566,6 +1564,9 @@ function openModal(deptKey) {
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  // Accessibilité clavier : placer le focus dans la fenêtre
+  const closeBtn = document.getElementById('modalClose');
+  if (closeBtn) setTimeout(() => closeBtn.focus(), 50);
 }
 
 function closeModal() {
@@ -1573,6 +1574,9 @@ function closeModal() {
   modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
   currentDept = null;
+  // Rendre le focus clavier à la carte qui a ouvert la fenêtre
+  if (lastFocusBeforeModal && lastFocusBeforeModal.focus) lastFocusBeforeModal.focus();
+  lastFocusBeforeModal = null;
 }
 
 document.querySelectorAll('.dept-card').forEach(card => {
@@ -1590,6 +1594,19 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
 });
 
+// Accord parental obligatoire si le candidat a moins de 18 ans
+const ageSelect = document.getElementById('f-age');
+const minorRow = document.getElementById('minorConsentRow');
+const parentBox = document.getElementById('f-parent');
+if (ageSelect && minorRow && parentBox) {
+  ageSelect.addEventListener('change', () => {
+    const minor = ageSelect.value === 'Moins de 18 ans';
+    minorRow.hidden = !minor;
+    parentBox.required = minor;
+    if (!minor) parentBox.checked = false;
+  });
+}
+
 document.getElementById('btnJoin').addEventListener('click', () => showView('form'));
 document.getElementById('btnInfo').addEventListener('click', () => showView('question'));
 document.getElementById('formBack').addEventListener('click', () => showView('choice'));
@@ -1599,6 +1616,7 @@ document.getElementById('successClose').addEventListener('click', closeModal);
 // Soumission formulaire candidature — envoi par mailto au secrétariat (pas de backend)
 modalForm.addEventListener('submit', (e) => {
   e.preventDefault();
+  if (!modalForm.reportValidity()) return;
   const data = new FormData(modalForm);
   const competences = Array.from(modalForm.querySelectorAll('input[name="competence"]:checked')).map(c => c.value);
   const deptName = DEPT_DATA[currentDept]?.name || '';
@@ -1612,6 +1630,7 @@ modalForm.addEventListener('submit', (e) => {
     `E-mail : ${data.get('email') || ''}`,
     `Téléphone : ${data.get('tel') || ''}`,
     `Tranche d'âge : ${data.get('age') || ''}`,
+    ...(data.get('accord_parental') ? [`Accord parental : oui`] : []),
     ``,
     `${DEPT_DATA[currentDept]?.dynLabel || 'Compétences/intérêts'} : ${competences.join(', ') || '—'}`,
     ``,
@@ -1631,6 +1650,7 @@ modalForm.addEventListener('submit', (e) => {
 // Soumission formulaire question
 modalQuestionForm.addEventListener('submit', (e) => {
   e.preventDefault();
+  if (!modalQuestionForm.reportValidity()) return;
   const data = new FormData(modalQuestionForm);
   const deptName = DEPT_DATA[currentDept]?.name || '';
 
@@ -1690,7 +1710,7 @@ modalQuestionForm.addEventListener('submit', (e) => {
       const slide = document.createElement('div');
       slide.className = 'gallery-slide' + (i === 0 ? ' active' : '');
       slide.innerHTML = `
-        <img src="${p.url}" alt="${p.legende || ''}" loading="${i === 0 ? 'eager' : 'lazy'}" />
+        <img src="${p.url}" alt="${p.legende || `Photo du culte ${i + 1} sur ${validPhotos.length}`}" loading="${i === 0 ? 'eager' : 'lazy'}" />
         ${p.legende ? `<div class="gallery-slide-caption">${p.legende}${p.date ? ' · ' + p.date : ''}</div>` : ''}`;
       track.appendChild(slide);
 
@@ -1721,8 +1741,11 @@ modalQuestionForm.addEventListener('submit', (e) => {
     counter.textContent = `${current + 1} / ${validPhotos.length}`;
   }
 
+  // Pas de défilement automatique si l'utilisateur a demandé moins d'animations
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function startAuto() {
     clearInterval(autoTimer);
+    if (reduceMotion) return;
     autoTimer = setInterval(() => goTo(current + 1), 3000);
   }
 
@@ -1732,6 +1755,9 @@ modalQuestionForm.addEventListener('submit', (e) => {
   const wrap = document.getElementById('galleryWrap');
   wrap.addEventListener('mouseenter', () => clearInterval(autoTimer));
   wrap.addEventListener('mouseleave', startAuto);
+  // Pause quand on navigue au clavier dans la galerie
+  wrap.addEventListener('focusin', () => clearInterval(autoTimer));
+  wrap.addEventListener('focusout', startAuto);
 
   // Swipe tactile
   let touchX = null;
