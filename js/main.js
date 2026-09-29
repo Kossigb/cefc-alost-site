@@ -359,7 +359,9 @@ function applyCmsContent() {
       node.querySelectorAll('[data-cms-field]').forEach(f => {
         const key = f.getAttribute('data-cms-field');
         const v = pickLangValue(item, key);
-        if (v !== null && v !== undefined) f.textContent = v;
+        // Champ vide dans l'admin : on retire l'élément plutôt que d'afficher le texte d'exemple
+        if (v === null || v === undefined || String(v).trim() === '') f.remove();
+        else f.textContent = v;
       });
 
       // Classe conditionnelle : data-cms-feature="className" + champ booléen "principal" ou "important"
