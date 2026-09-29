@@ -447,5 +447,12 @@
   "temple": {
     "_commentaire": "Coordonnées du projet temple.",
     "iban": "BE97 3631 6425 1049"
+  },
+  "formulaires": {
+    "anniversaire": "chrisgbev2005@gmail.com",
+    "candidature": "",
+    "question": "",
+    "rdv_pasteur": "",
+    "rgpd": ""
   }
 }
