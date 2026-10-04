@@ -179,7 +179,7 @@ function activateLiveEmbed(embedUrl, titleText, subText, ctaLabel) {
     ? `https://www.youtube.com/channel/${chId}/live`
     : ((CMS_DATA && CMS_DATA.live && CMS_DATA.live.url) || embedUrl);
   if (fallbackLink) fallbackLink.href = watchUrl;
-  if (fallback) fallback.style.display = 'flex';
+  if (fallback) fallback.style.display = 'block';
 }
 
 function updateLiveStatus() {
@@ -236,6 +236,7 @@ function updateLiveStatus() {
 
   // 3. Hors direct : affichage du prochain culte
   if (liveEmbed) liveEmbed.style.display = 'none';
+  const fb = document.getElementById('liveFallback'); if (fb) fb.style.display = 'none';
   if (liveIframe) { if (window.cefcConsent) cefcConsent.embed(liveIframe, ''); else liveIframe.removeAttribute('src'); }
   if (liveCard) liveCard.classList.remove('live-card--on');
   let minDiff = Infinity, nextKey = 'sunday';
