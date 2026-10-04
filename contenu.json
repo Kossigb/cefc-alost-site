@@ -348,7 +348,7 @@
         "description": "",
         "image": "/img/uploads/1790698231919-825276466-18115634402102143-535901357997.webp",
         "important": false,
-        "masquer": false
+        "masquer": true
       }
     ]
   },
