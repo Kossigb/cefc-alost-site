@@ -154,8 +154,8 @@
   "live": {
     "titre_nl": "De dienst is nu live",
     "sous_titre": "Rejoignez-nous dès maintenant.",
-    "actif": false,
-    "url": "https://www.youtube.com/watch?v=9KLSGdyRQlk",
+    "actif": true,
+    "url": "https://www.youtube.com/live/UsJP68OPO3o?is=zaNqBhVJDIp59gXO",
     "sous_titre_nl": "Sluit u nu bij ons aan.",
     "titre": "Le culte est en direct",
     "titre_en": "The service is live",
