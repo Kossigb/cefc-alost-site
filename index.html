@@ -260,14 +260,11 @@
         <iframe id="liveIframe" title="Culte en direct sur YouTube" frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
-        <div id="liveFallback" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.75); align-items:center; justify-content:center; border-radius:12px; flex-direction:column; gap:12px;">
-          <p style="color:#fff; margin:0; font-size:14px; opacity:0.8;">La vidéo ne s'affiche pas&nbsp;?</p>
-          <a id="liveFallbackLink" href="#" target="_blank" rel="noopener"
-            style="background:#FF0000; color:#fff; padding:14px 28px; border-radius:8px; font-weight:700; font-size:16px; text-decoration:none;">
-            ▶ Regarder sur YouTube
-          </a>
-        </div>
       </div>
+      <!-- Lien de secours SOUS la vidéo (jamais par-dessus : la vidéo doit rester cliquable) -->
+      <p class="live-fallback" id="liveFallback" style="display:none;">
+        La vidéo ne s'affiche pas&nbsp;? <a id="liveFallbackLink" href="#" target="_blank" rel="noopener">Regarder sur YouTube</a>
+      </p>
     </div>
   </div>
 </section>
