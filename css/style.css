@@ -2571,3 +2571,51 @@ html.intro-playing .hero *, html.intro-playing .hero { animation-play-state: pau
   .navette-bus { grid-template-columns: 1fr; gap: 28px; margin: 40px 0 48px; }
   .navette-bus-poster { max-width: 420px; width: 100%; margin: 0 auto; transform: none; }
 }
+
+/* =====================================================================
+   ACCUEIL : diaporama des photos du culte en fond (js/hero-slides.js)
+   ===================================================================== */
+.hero::after { display: none; }                 /* ancienne trame de points */
+.hero::before { z-index: 2; opacity: .7; }      /* lueurs violettes au-dessus des photos */
+.hero-slides { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: #0A0A21; }
+.hero-slide {
+  position: absolute; inset: -3%;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 1.8s ease;
+  animation: hero-kb 9s linear forwards;
+  will-change: transform, opacity;
+}
+.hero-slide.on { opacity: 1; }
+@keyframes hero-kb {
+  from { transform: scale(1.06) translate(var(--x0, 0), var(--y0, 0)); }
+  to   { transform: scale(1.2)  translate(var(--x1, 0), var(--y1, 0)); }
+}
+/* voile : garde le texte lisible et fond le bas dans la page */
+.hero-veil {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 45%, rgba(10, 10, 33, .35), rgba(10, 10, 33, .78) 100%),
+    linear-gradient(180deg, rgba(10, 10, 33, .55) 0%, rgba(26, 27, 62, .35) 45%, rgba(10, 10, 33, .9) 92%, #0A0A21 100%);
+}
+/* lumière violette qui dérive lentement */
+.hero-veil::before, .hero-veil::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(80px); mix-blend-mode: screen;
+}
+.hero-veil::before {
+  width: 55vw; height: 55vw; left: -10vw; top: -15vw;
+  background: radial-gradient(circle, rgba(124, 92, 246, .45), transparent 65%);
+  animation: hero-drift-a 16s ease-in-out infinite alternate;
+}
+.hero-veil::after {
+  width: 45vw; height: 45vw; right: -12vw; bottom: -10vw;
+  background: radial-gradient(circle, rgba(196, 181, 253, .28), transparent 65%);
+  animation: hero-drift-b 19s ease-in-out infinite alternate;
+}
+@keyframes hero-drift-a { to { transform: translate(18vw, 12vh) scale(1.15); } }
+@keyframes hero-drift-b { to { transform: translate(-16vw, -10vh) scale(1.2); } }
+.hero h1, .hero-sub, .hero-eyebrow { text-shadow: 0 2px 24px rgba(10, 10, 33, .65); }
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide { animation: none; transform: scale(1.06); }
+  .hero-veil::before, .hero-veil::after { animation: none; }
+}
+.hero .ticker-bar { z-index: 3; }
