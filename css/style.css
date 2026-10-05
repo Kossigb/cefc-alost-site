@@ -2668,3 +2668,29 @@ html.intro-playing .hero *, html.intro-playing .hero { animation-play-state: pau
 }
 @media (prefers-reduced-motion: reduce) { .map-route { stroke-dashoffset: 0; } }
 
+
+/* Plan d'accès 3D (js/plan-acces.js) — remplace le plan dessiné quand la 3D est disponible */
+.map-canvas .map-gl { position: absolute; inset: 0; opacity: 0; transition: opacity .6s ease; }
+.map-canvas.gl-ready .map-gl { opacity: 1; }
+.map-canvas.gl-ready .map-base, .map-canvas.gl-ready .map-overlay { visibility: hidden; }
+.map-canvas .maplibregl-ctrl-group { border-radius: 10px; box-shadow: 0 6px 18px rgba(26, 27, 62, .18); }
+.pin-church {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 14px 6px 6px; border-radius: 999px;
+  background: #1A1B3E; color: #fff; font-family: var(--sans); font-size: 13px; line-height: 1.2;
+  box-shadow: 0 10px 26px rgba(26, 27, 62, .4);
+  position: relative; margin-bottom: 10px; cursor: default;
+}
+.pin-church::after {
+  content: ''; position: absolute; left: 50%; bottom: -7px; width: 14px; height: 14px;
+  background: #1A1B3E; transform: translateX(-50%) rotate(45deg); border-radius: 2px;
+}
+.pin-church img { width: 34px; height: 34px; border-radius: 50%; background: #0A0A21; }
+.pin-church b { display: block; font-size: 14px; letter-spacing: .02em; }
+.pin-station {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--sans); font-size: 13px; font-weight: 600; color: #1A1B3E;
+  background: rgba(255, 255, 255, .92); padding: 4px 10px 4px 4px; border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(26, 27, 62, .2);
+}
+.pin-station-dot { width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 4px solid #5b3fd6; }
