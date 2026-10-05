@@ -20,10 +20,17 @@
     if (!im.naturalWidth) return false;
     const s = document.createElement('div');
     s.className = 'hero-slide';
-    s.style.backgroundImage = `url("${url}")`;
+    // Photo trop différente de l'écran (ex. photo en hauteur sur un écran large) :
+    // on l'affiche entière, sur un fond flou de la même photo, au lieu de la recadrer.
+    const photoRatio = im.naturalWidth / im.naturalHeight;
+    const boxRatio = box.clientWidth / Math.max(1, box.clientHeight);
+    const fit = Math.max(photoRatio, boxRatio) / Math.min(photoRatio, boxRatio) > 1.35 ? 'contain' : 'cover';
+    s.classList.add('fit-' + fit);
+    s.innerHTML = `<div class="hero-slide-blur"></div><div class="hero-slide-img"></div>`;
+    s.querySelectorAll('div').forEach(d => { d.style.backgroundImage = `url("${url}")`; });
     // direction du mouvement de caméra, différente à chaque photo
-    s.style.setProperty('--x0', rnd(-2, 2)); s.style.setProperty('--y0', rnd(-2, 2));
-    s.style.setProperty('--x1', rnd(-3, 3)); s.style.setProperty('--y1', rnd(-3, 3));
+    s.style.setProperty('--x0', rnd(-1, 1)); s.style.setProperty('--y0', rnd(-1, 1));
+    s.style.setProperty('--x1', rnd(-1.5, 1.5)); s.style.setProperty('--y1', rnd(-1.5, 1.5));
     box.appendChild(s);
     requestAnimationFrame(() => requestAnimationFrame(() => s.classList.add('on')));
     // on retire les anciennes photos une fois le fondu terminé
