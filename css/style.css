@@ -2540,3 +2540,34 @@ html.intro-playing .hero *, html.intro-playing .hero { animation-play-state: pau
   .intro-stage { width: 150px; height: 150px; }
   .intro-ring circle { stroke-width: 2.6; }
 }
+
+/* Page Navette : affiche du minibus */
+.navette-bus {
+  display: grid; grid-template-columns: minmax(0, 420px) 1fr; gap: 56px; align-items: center;
+  margin: 56px 0 64px;
+}
+.navette-bus-poster {
+  margin: 0; border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: 0 40px 80px -30px rgba(26, 27, 62, .45), 0 0 0 1px rgba(26, 27, 62, .08);
+  transform: rotate(-1.5deg); transition: transform .5s var(--ease);
+}
+.navette-bus-poster:hover { transform: rotate(0) scale(1.01); }
+.navette-bus-poster img { width: 100%; height: auto; display: block; }
+.navette-bus-text h3 {
+  font-family: var(--serif); font-weight: 500; color: var(--night);
+  font-size: clamp(30px, 3.4vw, 42px); line-height: 1.1; margin: 4px 0 22px;
+}
+.navette-bus-text ul { list-style: none; padding: 0; display: grid; gap: 14px; }
+.navette-bus-text li {
+  position: relative; padding-left: 30px;
+  font-size: 17px; line-height: 1.55; color: var(--text-dark);
+}
+.navette-bus-text li::before {
+  content: ''; position: absolute; left: 0; top: .45em;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #7C5CF6; box-shadow: 0 0 0 4px rgba(124, 92, 246, .18);
+}
+@media (max-width: 760px) {
+  .navette-bus { grid-template-columns: 1fr; gap: 28px; margin: 40px 0 48px; }
+  .navette-bus-poster { max-width: 420px; width: 100%; margin: 0 auto; transform: none; }
+}
