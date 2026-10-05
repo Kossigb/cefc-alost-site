@@ -2460,3 +2460,83 @@ input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 .rdv-form .form-row label { color: var(--night); }
 .rdv-form [hidden] { display: none !important; }
 .rdv-done { font-size: 15px; line-height: 1.6; color: var(--night); margin: 0; }
+
+/* =====================================================================
+   ANIMATION D'ENTRÉE DU LOGO (js/intro-logo.js) — une fois par visite
+   ===================================================================== */
+@property --intro-sweep { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+html.intro-playing { overflow: hidden; }
+/* Les animations du haut de l'accueil attendent la fin de l'intro */
+html.intro-playing .hero *, html.intro-playing .hero { animation-play-state: paused !important; }
+
+.intro {
+  position: fixed; inset: 0; z-index: 100000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px;
+  cursor: pointer;
+}
+.intro-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 42%, #2A2B5A 0%, #1A1B3E 38%, #0A0A21 100%);
+  transition: opacity .55s ease .2s;
+}
+.intro-stage { position: relative; width: 190px; height: 190px; will-change: transform; }
+.intro-mark {
+  position: absolute; inset: 0; border-radius: 50%; overflow: hidden;
+  -webkit-mask: conic-gradient(from -90deg, #000 var(--intro-sweep), transparent 0);
+  mask: conic-gradient(from -90deg, #000 var(--intro-sweep), transparent 0);
+  animation: intro-sweep .85s cubic-bezier(.65,0,.35,1) .15s forwards;
+}
+.intro-mark img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
+  animation: intro-pop 1s cubic-bezier(.34,1.56,.64,1) .1s both;
+}
+/* reflet qui traverse le logo */
+.intro-mark::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.55) 50%, transparent 62%);
+  transform: translateX(-130%);
+  animation: intro-shine .7s ease-in-out 1s forwards;
+}
+.intro-ring { position: absolute; inset: -14px; width: calc(100% + 28px); height: calc(100% + 28px); transform: rotate(-90deg); overflow: visible; }
+.intro-ring circle {
+  fill: none; stroke: url(#introG); stroke-width: 2.2; stroke-linecap: round;
+  stroke-dasharray: 604; stroke-dashoffset: 604;
+  animation: intro-draw 1s cubic-bezier(.65,0,.35,1) .1s forwards;
+}
+.intro-glow {
+  position: absolute; inset: -40%; border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,.45) 0%, rgba(124,92,246,.12) 40%, transparent 68%);
+  opacity: 0; animation: intro-glow 1.4s ease-out .75s forwards;
+}
+.intro-name {
+  position: relative; text-align: center; color: var(--silver);
+  font-family: var(--serif); font-weight: 500; line-height: 1.15;
+  font-size: clamp(24px, 3.2vw, 34px);
+}
+.intro-name em { display: block; font-style: italic; color: #C4B5FD; }
+.intro-name span {
+  display: inline-block; opacity: 0; transform: translateY(14px);
+  animation: intro-letter .5s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay: calc(.7s + var(--i) * 22ms);
+}
+/* sortie : le fond s'efface, le nom disparaît, le logo rejoint le menu (JS) */
+.intro.intro-out { pointer-events: none; }
+.intro.intro-out .intro-bg { opacity: 0; }
+.intro.intro-out .intro-name { opacity: 0; transform: translateY(10px); transition: opacity .3s, transform .3s; }
+.intro.intro-out .intro-ring, .intro.intro-out .intro-glow { opacity: 0; transition: opacity .35s; }
+
+@keyframes intro-sweep { to { --intro-sweep: 360deg; } }
+@keyframes intro-pop { from { transform: scale(.78) rotate(-12deg); filter: blur(6px); } to { transform: none; filter: none; } }
+@keyframes intro-shine { to { transform: translateX(130%); } }
+@keyframes intro-draw { to { stroke-dashoffset: 0; } }
+@keyframes intro-glow { 0% { opacity: 0; transform: scale(.6); } 40% { opacity: 1; } 100% { opacity: .55; transform: scale(1.1); } }
+@keyframes intro-letter { to { opacity: 1; transform: none; } }
+
+/* navigateurs sans @property : simple fondu du logo */
+.intro-simple .intro-mark { -webkit-mask: none; mask: none; animation: none; }
+
+@media (max-width: 640px) {
+  .intro-stage { width: 150px; height: 150px; }
+  .intro-ring circle { stroke-width: 2.6; }
+}
