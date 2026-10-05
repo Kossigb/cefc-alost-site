@@ -20,7 +20,10 @@
   let lastY = scrollY, ticking = false;
 
   // Parallaxe discret sur le contenu du hero (accueil)
-  const heroInner = document.querySelector('.hero-inner');
+  // Sur écran tactile : pas de parallaxe ni de menu escamotable (le défilement par
+  // élan et la barre d'adresse mobile les font trembler / clignoter).
+  const touch = matchMedia('(hover: none), (pointer: coarse)').matches;
+  const heroInner = touch ? null : document.querySelector('.hero-inner');
   const hero = heroInner && heroInner.closest('.hero');
 
   function onScroll() {
@@ -28,7 +31,7 @@
     const max = root.scrollHeight - innerHeight;
     bar.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`;
 
-    if (nav) {
+    if (nav && !touch) {
       const menuOpen = navLinks && navLinks.classList.contains('open');
       if (y > 420 && y > lastY + 4 && !menuOpen && !nav.contains(document.activeElement)) nav.classList.add('nav-hidden');
       else if (y < lastY - 4 || y < 420) nav.classList.remove('nav-hidden');
