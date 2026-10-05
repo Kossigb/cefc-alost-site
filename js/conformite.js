@@ -1,6 +1,6 @@
 // ===== CONFORMITÉ : consentement cookies (RGPD / ePrivacy) + accessibilité =====
 // - Le site lui-même ne dépose aucun cookie publicitaire ni de mesure d'audience.
-// - Les contenus externes (YouTube, Google Maps) déposent des cookies : ils ne sont
+// - Les contenus externes (vidéos YouTube) déposent des cookies : ils ne sont
 //   chargés qu'après accord explicite. Refuser est aussi simple qu'accepter.
 // - Le choix est conservé 6 mois dans le navigateur (localStorage), puis redemandé.
 (function () {
@@ -101,14 +101,14 @@
     el.innerHTML =
       '<h2 id="ccTitle">Vos choix de confidentialité</h2>' +
       '<p id="ccDesc">Ce site n\'utilise ni publicité ni outil de statistiques. ' +
-      'Seuls les contenus externes (vidéos YouTube, carte Google Maps) peuvent déposer des cookies : ' +
+      'Seules les vidéos YouTube intégrées peuvent déposer des cookies : ' +
       'ils ne se chargent que si vous les acceptez. Vous pouvez changer d\'avis à tout moment via « Gérer les cookies » en bas de page. ' +
       '<a href="/cookies.html">En savoir plus</a></p>' +
       '<div class="cc-options" id="ccOptions" hidden>' +
       '  <label class="cc-opt"><input type="checkbox" checked disabled />' +
       '    <span><strong>Nécessaires</strong><small>Mémorisent votre langue et vos choix ci-dessus. Aucun suivi. Toujours actifs.</small></span></label>' +
       '  <label class="cc-opt"><input type="checkbox" id="ccMedia" />' +
-      '    <span><strong>Contenus externes</strong><small>Vidéos YouTube et carte Google Maps. Google peut déposer des cookies et recevoir votre adresse IP.</small></span></label>' +
+      '    <span><strong>Contenus externes</strong><small>Vidéos YouTube (culte en direct). Google peut déposer des cookies et recevoir votre adresse IP.</small></span></label>' +
       '</div>' +
       '<div class="cc-actions">' +
       '  <button type="button" class="cc-btn" data-cc="refuse">Tout refuser</button>' +
