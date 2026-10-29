@@ -423,6 +423,10 @@ h2.section-title em { font-style: italic; }
 }
 
 /* Comment participer : montant en grand, puis les deux façons de donner */
+/* Affiche du projet : montrée en entier, comme imprimée */
+.temple-affiche { background: var(--night-deep); padding: 0 24px 72px; }
+.temple-affiche img { display: block; width: 100%; max-width: 960px; height: auto; margin: 0 auto; border-radius: 10px; box-shadow: 0 18px 50px rgba(0,0,0,.45); }
+@media (max-width: 640px) { .temple-affiche { padding: 0 12px 48px; } .temple-affiche img { border-radius: 6px; } }
 .participer-h {
   font-family: var(--sans); font-size: 15px; font-weight: 600;
   color: #A78BFA; margin-bottom: 28px;
@@ -515,6 +519,11 @@ h2.section-title em { font-style: italic; }
       <strong style="font-style:normal;font-size:12px;letter-spacing:.08em;color:rgba(167,139,250,.5)">AGGÉE 1 : 8</strong>
     </p>
   </div>
+</section>
+
+<!-- AFFICHE DU PROJET (réglable dans l'admin → Dons & Temple) -->
+<section class="temple-affiche" id="affiche" hidden>
+  <img id="templeAffiche" alt="Affiche « Achat du Temple » : achetons un temple à l'Éternel. Numéro de compte et adresse Wijngaardveld 29, 9300 Alost." loading="lazy" />
 </section>
 
 <!-- COMMENT PARTICIPER -->
@@ -655,6 +664,11 @@ h2.section-title em { font-style: italic; }
 <script>
 // IBAN du projet temple, modifiable dans l'admin (Dons & Temple)
 fetch('/contenu.json').then(r => r.json()).then(d => {
+  const affiche = d.temple && d.temple.affiche;
+  if (affiche) {
+    document.getElementById('templeAffiche').src = affiche;
+    document.getElementById('affiche').hidden = false;
+  }
   document.querySelectorAll('[data-cms]').forEach(el => {
     const v = el.dataset.cms.split('.').reduce((o, k) => o && o[k], d);
     if (typeof v === 'string' && v.trim()) el.textContent = v;

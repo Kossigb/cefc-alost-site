@@ -235,6 +235,7 @@ function populateAll() {
   renderDepts();
   renderEquipe();
   renderTemoignages();
+  renderTempleAffiche();
 }
 
 // ════════════ ANNONCES DE LA JEUNESSE ════════════
@@ -798,6 +799,46 @@ function addTemoignage() {
 function removeTemoignage(i) {
   if (!confirm('Supprimer ce témoignage ?')) return;
   contenu.temoignages.liste.splice(i, 1); renderTemoignages();
+}
+
+// ════════════ AFFICHE DU PROJET TEMPLE ════════════
+
+function renderTempleAffiche() {
+  const el = document.getElementById('temple-affiche');
+  if (!el) return;
+  const url = contenu.temple?.affiche || '';
+  el.innerHTML = `
+    <div class="dept-photo-row">
+      <div class="dept-photo" style="aspect-ratio:3/2;${url ? `background-image:url('${esc(photoSrc(url))}');background-size:contain;background-color:#fff` : ''}">
+        ${url ? '' : '<span>Pas d\'affiche</span>'}
+      </div>
+      <div class="dept-photo-actions">
+        <label class="btn-upload">${url ? 'Changer l\'affiche' : 'Ajouter une affiche'}
+          <input type="file" accept="image/*" hidden onchange="uploadTempleAffiche(this)" /></label>
+        ${url ? '<button class="btn-mini" onclick="contenu.temple.affiche=\'\'; renderTempleAffiche()">Retirer l\'affiche</button>' : ''}
+        <div class="field-hint" id="temple-affiche-hint">L'image est affichée en entier, sans être recadrée. Pensez à enregistrer après l'avoir retirée.</div>
+      </div>
+    </div>`;
+}
+async function uploadTempleAffiche(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  if (!contenu.temple) contenu.temple = {};
+  const before = contenu.temple.affiche;
+  try {
+    const { base64, ext } = await compressImage(file);
+    const path = `img/temple/affiche-${Date.now()}.${ext}`;
+    rememberPhoto(path, base64, ext);
+    contenu.temple.affiche = '/' + path;
+    renderTempleAffiche();
+    uploadingHint('temple-affiche-hint');
+    try { await ghCommitBinary(path, base64, 'Affiche du projet temple'); }
+    catch (e) { contenu.temple.affiche = before; renderTempleAffiche(); throw e; }
+    await saveAll();
+  } catch (e) {
+    toast('Erreur photo : ' + e.message, 'error');
+  }
+  input.value = '';
 }
 
 // ════════════ PHOTOS CULTE ════════════
