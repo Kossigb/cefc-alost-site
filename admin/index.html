@@ -216,6 +216,12 @@
     .dept-resp .field { margin-bottom:6px; }
     .dept-dest { display:inline-block; margin-left:8px; font-size:11px; font-weight:500; color:var(--text2); padding:2px 8px; border-radius:20px; border:1px solid var(--border); }
     .dept-dest.ok { color:#86efac; border-color:rgba(134,239,172,.35); }
+    .form-dept { display:grid; grid-template-columns:180px 1fr; gap:12px; align-items:center; padding:8px 0; border-top:1px solid var(--border); }
+    .form-dept:first-child { border-top:0; }
+    .form-dept-name { font-size:14px; font-weight:600; }
+    .form-dept-name small { display:block; font-weight:400; color:var(--text2); font-size:11px; margin-top:2px; }
+    .form-dept input { width:100%; }
+    @media (max-width:640px) { .form-dept { grid-template-columns:1fr; gap:6px; } }
     .dept-more { margin-top:6px; border-top:1px solid var(--border); padding-top:10px; }
     .dept-more summary { cursor:pointer; font-size:13px; color:var(--text2); margin-bottom:10px; }
     .dept-more[open] summary { color:var(--text); }
@@ -641,9 +647,17 @@
           </div>
         </div>
         <div class="card">
-          <div class="card-title">Départements</div>
-          <div class="field"><label>Candidature à un département</label><input type="text" data-path="formulaires.candidature" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Page Départements → « Rejoindre ». Utilisée seulement pour les départements sans email de responsable (rubrique Départements).</div></div>
-          <div class="field"><label>Question sur un département</label><input type="text" data-path="formulaires.question" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Page Départements → « En savoir plus / Poser une question ».</div></div>
+          <div class="card-title">Départements : email de chaque responsable</div>
+          <div class="field-hint" style="font-size:13px;line-height:1.6;margin-bottom:14px">
+            Quand quelqu'un clique sur « Rejoindre » ou pose une question sur un département,
+            le message part directement au responsable de ce département.
+          </div>
+          <div id="form-dept-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Départements sans responsable</div>
+          <div class="field"><label>Candidature à un département</label><input type="text" data-path="formulaires.candidature" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Reçoit les candidatures des départements dont l'email du responsable est vide (ci-dessus).</div></div>
+          <div class="field"><label>Question sur un département</label><input type="text" data-path="formulaires.question" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Reçoit les questions des départements dont l'email du responsable est vide (ci-dessus).</div></div>
         </div>
         <div class="card">
           <div class="card-title">Autres formulaires</div>

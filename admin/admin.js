@@ -554,7 +554,20 @@ function setDeptEmail(i, input) {
   renderDepts();
 }
 
+// Même champ « email du responsable », repris dans la page Formulaires
+function renderFormDepts() {
+  const el = document.getElementById('form-dept-list');
+  if (!el) return;
+  const list = contenu.departements?.liste || [];
+  el.innerHTML = list.length ? list.map((d, i) => `
+    <div class="form-dept">
+      <div class="form-dept-name">${esc(d.nom || d.id || 'Sans nom')}${d.masquer ? ' <small>masqué sur le site</small>' : ''}${d.responsable ? `<small>${esc(d.responsable)}</small>` : ''}</div>
+      <input type="email" multiple value="${esc(d.email || '')}" placeholder="Vide = adresse « Candidature à un département » ci-dessous" onchange="setDeptEmail(${i}, this)" />
+    </div>`).join('') : '<div class="field-hint">Aucun département.</div>';
+}
+
 function renderDepts() {
+  renderFormDepts();
   const list = contenu.departements?.liste || [];
   const el = document.getElementById('dept-list');
   if (!list.length) { el.innerHTML = ''; return; }
