@@ -211,6 +211,11 @@
       text-transform:none; letter-spacing:0;
     }
     .btn-upload:hover { background:var(--purple-light); }
+    .dept-resp { margin:14px 0 4px; padding:12px 14px; border:1px solid var(--border); border-radius:10px; background:var(--bg2); }
+    .dept-resp-title { font-size:13px; font-weight:600; margin-bottom:8px; }
+    .dept-resp .field { margin-bottom:6px; }
+    .dept-dest { display:inline-block; margin-left:8px; font-size:11px; font-weight:500; color:var(--text2); padding:2px 8px; border-radius:20px; border:1px solid var(--border); }
+    .dept-dest.ok { color:#86efac; border-color:rgba(134,239,172,.35); }
     .dept-more { margin-top:6px; border-top:1px solid var(--border); padding-top:10px; }
     .dept-more summary { cursor:pointer; font-size:13px; color:var(--text2); margin-bottom:10px; }
     .dept-more[open] summary { color:var(--text); }
@@ -637,7 +642,7 @@
         </div>
         <div class="card">
           <div class="card-title">Départements</div>
-          <div class="field"><label>Candidature à un département</label><input type="text" data-path="formulaires.candidature" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Page Départements → « Rejoindre ». Un département peut aussi avoir sa propre adresse (rubrique Départements).</div></div>
+          <div class="field"><label>Candidature à un département</label><input type="text" data-path="formulaires.candidature" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Page Départements → « Rejoindre ». Utilisée seulement pour les départements sans email de responsable (rubrique Départements).</div></div>
           <div class="field"><label>Question sur un département</label><input type="text" data-path="formulaires.question" placeholder="contact@cefclabornealost.be" /><div class="field-hint">Page Départements → « En savoir plus / Poser une question ».</div></div>
         </div>
         <div class="card">
