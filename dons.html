@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dons &amp; Offrandes — CEFC Alost</title>
+<title>Faire un don — CEFC Alost</title>
 <meta name="description" content="Soutenez le ministère de la CEFC Alost par vos dîmes, offrandes et dons spéciaux. Votre libéralité permet à l'église de poursuivre sa mission." />
 <meta name="theme-color" content="#1A1B3E" />
 <meta property="og:title" content="Dons &amp; Offrandes — CEFC Alost" />
@@ -27,293 +27,74 @@
 <link href="/fonts/fonts.css" rel="stylesheet" />
 
 <style>
-/* ===== PAGE-SPECIFIC STYLES: DONS ===== */
+/* ===== PAGE DONS : une seule colonne, l'essentiel d'abord ===== */
+.don-page { background: var(--silver-soft); color: var(--text-dark); padding: 132px 20px 96px; }
+.don-col { max-width: 760px; margin: 0 auto; }
 
-/* Hero / page header */
-.dons-hero {
-  background: var(--silver-soft);
-  padding: 140px 24px 80px;
-  text-align: center;
+.don-page h1 {
+  font-family: var(--serif); font-weight: 500; font-style: normal;
+  font-size: clamp(34px, 5vw, 46px); line-height: 1.1; letter-spacing: -.01em;
+  margin: 0 0 14px;
 }
-.dons-hero .eyebrow { color: var(--text-muted); margin-bottom: 14px; }
-.dons-hero .section-title { color: var(--text-dark); }
-.dons-hero-sub {
-  max-width: 580px;
-  margin: 0 auto;
-  color: var(--text-muted);
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(15px, 2vw, 18px);
-  line-height: 1.7;
-}
+.don-lead { font-size: 17px; line-height: 1.65; color: #4a4a5e; max-width: 600px; margin: 0 0 40px; }
 
-/* Cards section */
-.dons-types {
-  background: #fff;
-  padding: 80px 24px;
-}
-.dons-types-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-.dons-card {
-  background: #fff;
-  border: 1px solid rgba(26, 27, 62, 0.08);
-  border-radius: 16px;
-  padding: 36px 32px;
-  box-shadow: 0 4px 24px rgba(26, 27, 62, 0.06);
-  transition: box-shadow 0.3s, transform 0.3s;
-}
-.dons-card:hover {
-  box-shadow: 0 8px 40px rgba(26, 27, 62, 0.10);
-  transform: translateY(-3px);
-}
-.dons-card-icon {
-  width: 52px; height: 52px;
-  border-radius: 14px;
-  background: var(--silver-soft);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 20px;
-  color: var(--night);
-}
-.dons-card h3 {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--text-dark);
-  margin-bottom: 12px;
-  line-height: 1.2;
-}
-.dons-card p {
-  color: var(--text-muted);
-  font-size: 14px;
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-.dons-card-ref {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 13px;
-  color: var(--text-dark);
-  opacity: 0.65;
-  border-left: 2px solid rgba(26, 27, 62, 0.15);
-  padding-left: 12px;
-  line-height: 1.5;
-}
+.don-box { background: #fff; border: 1px solid #e2e2ea; border-radius: 14px; padding: 28px; }
+.don-q { font-size: 14px; font-weight: 600; margin: 0 0 12px; }
 
-/* How to give — dark section */
-.dons-how {
-  background: var(--night);
-  padding: 80px 24px;
-  color: var(--silver);
+/* Choix : de vrais boutons radio, stylés en pastilles */
+.don-choices { display: flex; flex-wrap: wrap; gap: 8px; border: 0; padding: 0; margin: 0; }
+.don-choices label { position: relative; }
+.don-choices input { position: absolute; opacity: 0; inset: 0; cursor: pointer; margin: 0; }
+.don-choices span {
+  display: inline-block; padding: 9px 15px; border-radius: 999px; font-size: 14px; font-weight: 500;
+  border: 1px solid #d5d5df; color: #3a3a50; background: #fff; transition: background .15s, border-color .15s, color .15s;
 }
-.dons-how .section-head .eyebrow { color: rgba(227, 227, 235, 0.66); }
-.dons-how .section-title { color: var(--silver); }
-.dons-how-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.dons-how-card {
-  background: rgba(227, 227, 235, 0.04);
-  border: 0.5px solid rgba(227, 227, 235, 0.14);
-  border-radius: 16px;
-  padding: 32px 28px;
-  box-shadow: 0 0 0 1px rgba(227, 227, 235, 0.04) inset;
-  transition: background 0.3s, border-color 0.3s;
-}
-.dons-how-card:hover {
-  background: rgba(227, 227, 235, 0.07);
-  border-color: rgba(227, 227, 235, 0.22);
-}
-.dons-how-card-num {
-  font-family: var(--serif);
-  font-size: 36px;
-  font-weight: 500;
-  color: rgba(227, 227, 235, 0.18);
-  line-height: 1;
-  margin-bottom: 16px;
-  letter-spacing: -0.03em;
-}
-.dons-how-card h3 {
-  font-family: var(--serif);
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--silver);
-  margin-bottom: 10px;
-}
-.dons-how-card p {
-  font-size: 14px;
-  color: rgba(227, 227, 235, 0.66);
-  line-height: 1.65;
-}
-.dons-how-card .dons-note {
-  font-size: 12px;
-  color: rgba(227, 227, 235, 0.66);
-  margin-top: 10px;
-  font-style: italic;
-}
-.dons-how-card-soon {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 4px 10px;
-  border: 0.5px solid rgba(227, 227, 235, 0.2);
-  border-radius: 999px;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(227, 227, 235, 0.66);
-}
+.don-choices input:hover + span { border-color: #9c9cb0; }
+.don-choices input:checked + span { background: var(--night); border-color: var(--night); color: #fff; }
+.don-choices input:focus-visible + span { outline: 2px solid #5b3fd6; outline-offset: 2px; }
+.don-desc { font-size: 15px; line-height: 1.6; color: #5a5a6e; margin: 14px 0 0; min-height: 1.6em; }
 
-/* Verse banner */
-.dons-verse {
-  background: var(--night-deep);
-  padding: 72px 24px;
-  text-align: center;
-  color: var(--silver);
+.don-details { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: start; margin-top: 24px; padding-top: 24px; border-top: 1px solid #ececf2; }
+.don-rows { margin: 0; }
+.don-row { padding: 12px 0; border-bottom: 1px solid #f0f0f4; }
+.don-row:first-child { padding-top: 0; }
+.don-row:last-child { border-bottom: 0; }
+.don-row dt { font-size: 13px; color: #6b6b7e; margin-bottom: 3px; }
+.don-row dd { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.don-val { font-size: 17px; font-weight: 500; color: var(--text-dark); word-break: break-word; }
+.don-iban { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.don-copy {
+  font: inherit; font-size: 13px; font-weight: 500; color: #3a3a50; cursor: pointer;
+  background: #fff; border: 1px solid #d5d5df; border-radius: 8px; padding: 6px 12px; white-space: nowrap;
 }
-.dons-verse-text {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(18px, 2.8vw, 26px);
-  font-weight: 400;
-  max-width: 680px;
-  margin: 0 auto 16px;
-  line-height: 1.55;
-  color: rgba(227, 227, 235, 0.9);
-}
-.dons-verse-ref {
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(227, 227, 235, 0.66);
-}
+.don-copy:hover { border-color: #9c9cb0; }
+.don-copy.ok { color: #1f7a3f; border-color: #9fd3b0; background: #f1faf4; }
 
-/* ── Section coordonnées bancaires ── */
-.dons-bank {
-  background: var(--night);
-  padding: 72px 24px;
-}
-.dons-bank-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-.dons-bank-header .eyebrow {
-  color: rgba(167,139,250,0.8);
-  display: block;
-  margin-bottom: 12px;
-}
-.dons-bank-header h2 {
-  font-family: var(--serif);
-  font-size: clamp(24px, 3vw, 32px);
-  font-weight: 500;
-  color: var(--silver);
-  margin-bottom: 8px;
-}
-.dons-bank-header p {
-  font-size: 14px;
-  color: rgba(227,227,235,0.66);
-}
-.dons-bank-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  max-width: 900px;
-  margin: 0 auto 24px;
-}
-.dons-iban-card {
-  background: rgba(227,227,235,0.04);
-  border: 1px solid rgba(167,139,250,0.2);
-  border-radius: 18px;
-  padding: 32px 28px;
-  position: relative;
-  transition: border-color 0.2s, background 0.2s;
-}
-.dons-iban-card:hover {
-  background: rgba(227,227,235,0.07);
-  border-color: rgba(167,139,250,0.35);
-}
-.dons-iban-type {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(167,139,250,0.8);
-  margin-bottom: 14px;
-  display: block;
-}
-.dons-iban-label {
-  font-family: var(--serif);
-  font-size: 16px;
-  font-weight: 500;
-  color: rgba(227,227,235,0.7);
-  margin-bottom: 18px;
-  line-height: 1.4;
-}
-.dons-iban-number {
-  font-family: 'Courier New', 'Menlo', monospace;
-  font-size: clamp(22px, 3vw, 30px);
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  margin-bottom: 22px;
-  word-break: break-all;
-}
-.dons-copy-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 9px 18px;
-  border-radius: 8px;
-  font-size: 12.5px;
-  font-weight: 600;
-  font-family: var(--sans);
-  cursor: pointer;
-  border: 1px solid rgba(167,139,250,0.3);
-  background: rgba(167,139,250,0.1);
-  color: rgba(167,139,250,0.9);
-  transition: all 0.15s;
-}
-.dons-copy-btn:hover {
-  background: rgba(167,139,250,0.18);
-  border-color: rgba(167,139,250,0.5);
-  color: #c4b5fd;
-}
-.dons-copy-btn.copied {
-  background: rgba(52,211,153,0.12);
-  border-color: rgba(52,211,153,0.3);
-  color: #6ee7b7;
-}
-.dons-bank-note {
-  text-align: center;
-  font-size: 12.5px;
-  color: rgba(227,227,235,0.66);
-  max-width: 500px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-.dons-bank-note strong {
-  color: rgba(227,227,235,0.66);
-  font-weight: 600;
-}
+.don-qr { width: 172px; text-align: center; }
+.don-qr-img { width: 172px; height: 172px; border: 1px solid #ececf2; border-radius: 10px; padding: 8px; background: #fff; }
+.don-qr-img svg { display: block; width: 100%; height: 100%; }
+.don-qr p { font-size: 12.5px; line-height: 1.45; color: #6b6b7e; margin: 8px 0 0; }
+.don-qr-toggle { display: none; }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .dons-types-grid { grid-template-columns: 1fr 1fr; }
-  .dons-bank-grid  { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
-  .dons-types-grid { grid-template-columns: 1fr; }
-  .dons-how-grid { grid-template-columns: 1fr; }
-  .dons-card { padding: 28px 22px; }
-  .dons-iban-card { padding: 24px 20px; }
-  .dons-iban-number { font-size: 22px; }
+.don-other { margin-top: 48px; display: grid; gap: 28px; }
+.don-other h2 { font-family: var(--sans); font-size: 17px; font-weight: 600; margin: 0 0 6px; }
+.don-other p { font-size: 15.5px; line-height: 1.65; color: #4a4a5e; margin: 0; }
+.don-other a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+.don-verse { margin: 56px 0 0; padding-left: 18px; border-left: 3px solid #c9c9d6; }
+.don-verse p { font-family: var(--serif); font-size: 19px; line-height: 1.55; color: #33334a; margin: 0; }
+.don-verse cite { display: block; margin-top: 8px; font-style: normal; font-size: 13px; color: #6b6b7e; }
+
+@media (max-width: 640px) {
+  .don-page { padding: 112px 16px 72px; }
+  .don-box { padding: 20px 18px; }
+  .don-details { grid-template-columns: 1fr; gap: 8px; }
+  .don-iban { font-size: 18px; }
+  /* Sur téléphone on ne scanne pas son propre écran : le code reste replié */
+  .don-qr { width: auto; text-align: left; }
+  .don-qr-toggle { display: inline-block; font: inherit; font-size: 14px; color: #3a3a50; background: none; border: 0; padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .don-qr-body { display: none; margin-top: 10px; }
+  .don-qr.open .don-qr-body { display: block; }
 }
 </style>
 </head>
@@ -356,171 +137,67 @@
   </div>
 </nav>
 
-<!-- ===== SECTION 1 : HERO ===== -->
-<section class="dons-hero" id="dons-hero">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow" data-i18n="dons.eyebrow">Donner avec joie</span>
-      <h1 class="section-title"><span data-i18n="dons.hero.title.1">Libéralité · Dîme ·</span> <span class="accent" data-i18n="dons.hero.title.2">Dons Spéciaux</span></h1>
-    </div>
-    <p class="dons-hero-sub reveal" style="transition-delay:0.1s;" data-i18n="dons.hero.sub">
-      Donner, c'est une façon de dire merci à Dieu. C'est aussi grâce à vos dons que l'église peut continuer à vivre et à aider ceux qui en ont besoin.
-    </p>
-  </div>
-</section>
+<main class="don-page" id="dons">
+  <div class="don-col">
+    <h1 data-dons="title">Faire un don</h1>
+    <p class="don-lead" data-dons="lead">Le plus simple, c'est le virement. Choisissez à quoi sert votre don, puis copiez le numéro de compte ou scannez le code avec l'app de votre banque.</p>
 
-<!-- ===== SECTION 2 : TYPES DE DONS ===== -->
-<section class="dons-types" id="dons-types">
-  <div class="container">
-    <div class="dons-types-grid">
+    <section class="don-box" id="coordonnees-bancaires" aria-labelledby="donQ">
+      <p class="don-q" id="donQ" data-dons="q">Votre don est pour :</p>
+      <fieldset class="don-choices" id="donChoices" aria-labelledby="donQ">
+        <label><input type="radio" name="don" value="dime" checked><span data-dons="c.dime">Dîme et offrandes</span></label>
+        <label><input type="radio" name="don" value="special"><span data-dons="c.special">Don spécial</span></label>
+        <label><input type="radio" name="don" value="solidarite"><span data-dons="c.solidarite">Solidarité</span></label>
+        <label id="donTempleChoice"><input type="radio" name="don" value="temple"><span data-dons="c.temple">Projet temple</span></label>
+      </fieldset>
+      <p class="don-desc" id="donDesc" aria-live="polite">La vie de l'église au quotidien : le culte, le travail pastoral, les locaux.</p>
 
-      <!-- Carte 1 : Dîme & Libéralité -->
-      <div class="dons-card reveal">
-        <div class="dons-card-icon" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="2" x2="12" y2="22" />
-            <line x1="2" y1="12" x2="22" y2="12" />
-          </svg>
+      <div class="don-details">
+        <dl class="don-rows">
+          <div class="don-row">
+            <dt data-dons="l.benef">Bénéficiaire</dt>
+            <dd><span class="don-val" id="donBenef" data-cms="dons.beneficiaire">Centre Évangélique La Famille Chrétienne</span></dd>
+          </div>
+          <div class="don-row">
+            <dt data-dons="l.iban">Numéro de compte (IBAN)</dt>
+            <dd><span class="don-val don-iban" id="donIban">BE97 3631 6425 1049</span>
+              <button type="button" class="don-copy" data-copy="donIban" data-dons="copy">Copier</button></dd>
+          </div>
+          <div class="don-row">
+            <dt data-dons="l.comm">Communication</dt>
+            <dd><span class="don-val" id="donComm">Dîme</span>
+              <button type="button" class="don-copy" data-copy="donComm" data-dons="copy">Copier</button></dd>
+          </div>
+        </dl>
+
+        <div class="don-qr" id="donQr">
+          <button type="button" class="don-qr-toggle" data-dons="qr.show">Afficher le code QR</button>
+          <div class="don-qr-body">
+            <div class="don-qr-img" id="donQrImg" role="img" aria-label="Code QR de virement"></div>
+            <p data-dons="qr.help">Scannez-le avec l'app de votre banque : le compte et la communication se remplissent tout seuls. Il ne reste qu'à mettre le montant.</p>
+          </div>
         </div>
-        <h3 data-i18n="dons.card1.title">La Dîme &amp; Libéralité</h3>
-        <p data-i18n="dons.card1.text">La dîme est le dixième de nos revenus remis à Dieu avec foi. La libéralité va au-delà et reflète un cœur généreux. Ces offrandes soutiennent le ministère de l'église et le travail pastoral.</p>
-        <blockquote class="dons-card-ref" data-i18n="dons.card1.ref">
-          Malachie 3 : 10 — « Apportez toutes les dîmes dans la maison du trésor... »
-        </blockquote>
       </div>
+    </section>
 
-      <!-- Carte 2 : Dons Spéciaux -->
-      <div class="dons-card reveal" style="transition-delay:0.1s;">
-        <div class="dons-card-icon" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </div>
-        <h3 data-i18n="dons.card2.title">Dons Spéciaux</h3>
-        <p data-i18n="dons.card2.text">Les dons spéciaux sont des offrandes ponctuelles pour des besoins particuliers : projets de construction, missions, aide aux familles dans le besoin, événements de l'église.</p>
+    <div class="don-other">
+      <div>
+        <h2 data-dons="cult.t">Au culte</h2>
+        <p data-dons="cult.p">Vous pouvez aussi donner le dimanche pendant le culte, au moment de la collecte.</p>
       </div>
-
-      <!-- Carte 3 : Solidarité -->
-      <div class="dons-card reveal" style="transition-delay:0.2s;">
-        <div class="dons-card-icon" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-        </div>
-        <h3 data-i18n="dons.card3.title">Solidarité</h3>
-        <p data-i18n="dons.card3.text">Le fonds de solidarité permet à l'église de soutenir les membres dans le besoin, les familles en difficulté et les actions sociales de la communauté.</p>
-        <blockquote class="dons-card-ref">
-          <span data-i18n="dons.card3.ref">Compte bancaire — Solidarité :</span><br><strong data-cms="dons.iban_solidarite">BE42 3632 0186 8154</strong>
-        </blockquote>
+      <div>
+        <h2 data-dons="fees.t">Frais</h2>
+        <p><span data-dons="fees.p">L'église ne retient rien sur vos dons. Seule votre banque peut compter ses propres frais, par exemple pour un virement depuis l'étranger. Un don fait par erreur ?</span>
+          <a href="/conditions.html#dons" data-dons="fees.a">Voir la politique de dons et de remboursement</a>.</p>
       </div>
-
     </div>
+
+    <blockquote class="don-verse">
+      <p data-dons="verse">« Que chacun donne comme il l'a résolu en son cœur, sans tristesse ni contrainte, car Dieu aime celui qui donne avec joie. »</p>
+      <cite data-dons="verse.ref">2 Corinthiens 9 : 7</cite>
+    </blockquote>
   </div>
-</section>
-
-<!-- ===== SECTION 2b : COORDONNÉES BANCAIRES ===== -->
-<section class="dons-bank" id="coordonnees-bancaires">
-  <div class="container">
-    <div class="dons-bank-header">
-      <span class="eyebrow">Virement bancaire</span>
-      <h2>Coordonnées bancaires</h2>
-      <p>Pour effectuer un virement, utilisez le compte correspondant à votre type d'offrande.</p>
-    </div>
-    <div class="dons-bank-grid">
-
-      <!-- Compte principal -->
-      <div class="dons-iban-card">
-        <span class="dons-iban-type">Compte principal</span>
-        <div class="dons-iban-label">Dîme · Libéralité · Dons spéciaux</div>
-        <div class="dons-iban-number" id="iban1" data-cms="dons.iban_principal">BE97 3631 6425 1049</div>
-        <button class="dons-copy-btn" onclick="copyIban('iban1', this)" aria-label="Copier le numéro de compte">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Copier le numéro
-        </button>
-      </div>
-
-      <!-- Compte solidarité -->
-      <div class="dons-iban-card">
-        <span class="dons-iban-type">Solidarité</span>
-        <div class="dons-iban-label">Fonds d'entraide &amp; soutien aux familles</div>
-        <div class="dons-iban-number" id="iban2" data-cms="dons.iban_solidarite">BE42 3632 0186 8154</div>
-        <button class="dons-copy-btn" onclick="copyIban('iban2', this)" aria-label="Copier le numéro de compte solidarité">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Copier le numéro
-        </button>
-      </div>
-
-    </div>
-    <p class="dons-bank-note">
-      Bénéficiaire : <strong data-cms="dons.beneficiaire">Centre Évangélique La Famille Chrétienne</strong><br>
-      Communication libre, par exemple « Dîme juillet 2026 » ou « Don spécial »
-    </p>
-    <p class="dons-bank-note">
-      <strong>Aucun frais caché :</strong> l'église ne prélève rien sur vos dons. Seule votre banque peut appliquer ses propres frais (par exemple pour un virement depuis l'étranger).
-      Un don fait par erreur&nbsp;? Voir notre <a href="/conditions.html#dons" style="text-decoration:underline">politique de dons et de remboursement</a>.
-    </p>
-  </div>
-</section>
-
-<script>
-function copyIban(id, btn) {
-  const text = document.getElementById(id).textContent.replace(/\s/g, '');
-  navigator.clipboard.writeText(text).then(() => {
-    const orig = btn.innerHTML;
-    btn.classList.add('copied');
-    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Copié !';
-    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2200);
-  });
-}
-</script>
-
-<!-- ===== SECTION 3 : COMMENT DONNER ===== -->
-<section class="dons-how" id="comment-donner">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow" data-i18n="dons.how.eyebrow">Modalités</span>
-      <h2 class="section-title" data-i18n="dons.how.title">Comment donner&nbsp;?</h2>
-    </div>
-    <div class="dons-how-grid">
-
-      <!-- Méthode 1 -->
-      <div class="dons-how-card reveal">
-        <div class="dons-how-card-num">01</div>
-        <h3 data-i18n="dons.method1.title">En personne</h3>
-        <p data-i18n="dons.method1.text">Pendant le culte, au moment de la collecte.</p>
-      </div>
-
-      <!-- Méthode 2 -->
-      <div class="dons-how-card reveal" style="transition-delay:0.1s;">
-        <div class="dons-how-card-num">02</div>
-        <h3 data-i18n="dons.method2.title">Virement bancaire</h3>
-        <p style="margin-bottom:8px;" data-i18n="dons.method2.label1">Dîme, Libéralité &amp; Dons spéciaux</p>
-        <p class="dons-note" style="font-style:normal;font-weight:600;letter-spacing:0.04em;font-size:13px;color:rgba(227,227,235,0.85);" data-cms="dons.iban_principal">BE97 3631 6425 1049</p>
-        <p style="margin-top:14px;margin-bottom:8px;" data-i18n="dons.method2.label2">Solidarité</p>
-        <p class="dons-note" style="font-style:normal;font-weight:600;letter-spacing:0.04em;font-size:13px;color:rgba(227,227,235,0.85);" data-cms="dons.iban_solidarite">BE42 3632 0186 8154</p>
-      </div>
-
-      <!-- Méthode 3 -->
-      <div class="dons-how-card reveal" style="transition-delay:0.2s;">
-        <div class="dons-how-card-num">03</div>
-        <h3 data-i18n="dons.method3.title">En ligne</h3>
-        <p data-i18n="dons.method3.text">Nous préparons une solution de don en ligne. En attendant, le virement reste le plus simple.</p>
-        <span class="dons-how-card-soon" data-i18n="dons.method3.soon">Bientôt disponible</span>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ===== SECTION 4 : VERSET BANNIÈRE ===== -->
-<section class="dons-verse" id="dons-verset">
-  <div class="reveal">
-    <p class="dons-verse-text" data-i18n="dons.verse.text">
-      « Que chacun donne comme il l'a résolu en son cœur, sans tristesse ni contrainte, car Dieu aime celui qui donne avec joie. »
-    </p>
-    <p class="dons-verse-ref" data-i18n="dons.verse.ref">2 Corinthiens 9 : 7</p>
-  </div>
-</section>
+</main>
 
 <!-- ===== FOOTER ===== -->
 <footer>
@@ -558,5 +235,7 @@ function copyIban(id, btn) {
 <script src="/js/motion.js" defer></script>
 <script src="/js/main.js"></script>
 <script src="/js/cmdk.js" defer></script>
+<script src="/vendor/qrcode/qrcode.js" defer></script>
+<script src="/js/dons.js" defer></script>
 </body>
 </html>
