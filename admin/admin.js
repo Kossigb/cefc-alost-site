@@ -531,6 +531,29 @@ function deptField(i, key, label, type = 'text') {
 }
 const L = (code) => `<span class="lang lang-${code}">${code.toUpperCase()}</span>`;
 
+// Les candidatures / questions d'un département partent vers l'email de son responsable
+// (lu par netlify/functions/send-form.js). Vide : adresse générale de la rubrique Formulaires.
+const deptEmails = d => String(d.email || '').split(/[\s,;]+/).filter(x => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x)).join(', ');
+function deptEmailHint(d) {
+  const general = contenu.formulaires?.candidature || contenu.infos?.email || 'contact@cefclabornealost.be';
+  return deptEmails(d)
+    ? `Les candidatures et questions pour « ${esc(d.nom || d.id)} » arrivent directement à <b>${esc(deptEmails(d))}</b>. Plusieurs adresses : séparez-les par des virgules.`
+    : `Aucun email : les candidatures arrivent à l'adresse générale (<b>${esc(general)}</b>, réglable dans Formulaires).`;
+}
+function setDeptEmail(i, input) {
+  const v = input.value.trim();
+  const d = contenu.departements.liste[i];
+  if (v && !deptEmails({ email: v })) {
+    input.setCustomValidity('Adresse email invalide');
+    input.reportValidity();
+    toast('Adresse email invalide', 'error');
+    return;
+  }
+  input.setCustomValidity('');
+  d.email = v;
+  renderDepts();
+}
+
 function renderDepts() {
   const list = contenu.departements?.liste || [];
   const el = document.getElementById('dept-list');
@@ -540,7 +563,8 @@ function renderDepts() {
     return `
     <div class="list-item dept-item${d.masquer ? ' is-hidden' : ''}">
       <div class="list-item-head">
-        <h4>${esc(d.nom || 'Sans nom')}${d.masquer ? ' <small class="muted">(masqué)</small>' : ''}</h4>
+        <h4>${esc(d.nom || 'Sans nom')}${d.masquer ? ' <small class="muted">(masqué)</small>' : ''}
+          <small class="dept-dest ${deptEmails(d) ? 'ok' : ''}">${deptEmails(d) ? '✉ ' + esc(deptEmails(d)) : '✉ adresse générale'}</small></h4>
         <div class="row-actions">
           <button class="btn-mini" title="Monter" onclick="moveDept(${i},-1)" ${i === 0 ? 'disabled' : ''}>↑</button>
           <button class="btn-mini" title="Descendre" onclick="moveDept(${i},1)" ${i === list.length - 1 ? 'disabled' : ''}>↓</button>
@@ -569,6 +593,21 @@ function renderDepts() {
         </div>
       </div>
 
+      <div class="dept-resp">
+        <div class="dept-resp-title">Responsable du département</div>
+        <div class="grid2">
+          <div class="field">
+            <label>Nom du responsable</label>
+            <input type="text" value="${esc(d.responsable || '')}" placeholder="Ex : Frère Jean" onchange="contenu.departements.liste[${i}].responsable=this.value.trim()" />
+          </div>
+          <div class="field">
+            <label>Email du responsable</label>
+            <input type="email" multiple value="${esc(d.email || '')}" placeholder="responsable@exemple.com" onchange="setDeptEmail(${i}, this)" />
+          </div>
+        </div>
+        <div class="field-hint" id="dept-email-hint-${i}">${deptEmailHint(d)}</div>
+      </div>
+
       <div class="toggle-row" style="margin:14px 0">
         <label>Masquer ce département sur le site</label>
         <label class="toggle"><input type="checkbox" ${d.masquer ? 'checked' : ''} onchange="contenu.departements.liste[${i}].masquer=this.checked; renderDepts()" /><span class="toggle-slider"></span></label>
@@ -589,11 +628,6 @@ function renderDepts() {
         ${deptField(i, 'texte_fenetre', 'Texte de présentation dans la fenêtre ' + L('fr'), 'textarea')}
         ${deptField(i, 'texte_fenetre_nl', 'Texte de présentation dans la fenêtre ' + L('nl'), 'textarea')}
         ${deptField(i, 'texte_fenetre_en', 'Texte de présentation dans la fenêtre ' + L('en'), 'textarea')}
-        <div class="field">
-          <label>Adresse(s) qui reçoivent les candidatures et questions de ce département</label>
-          <input type="text" value="${esc(d.email || '')}" placeholder="Vide = adresse de la rubrique Formulaires" onchange="contenu.departements.liste[${i}].email=this.value.trim()" />
-          <div class="field-hint">Ex : le responsable du département. Plusieurs adresses séparées par des virgules.</div>
-        </div>
         <div class="field">
           <label>Choix proposés dans le formulaire (un par ligne)</label>
           <textarea onchange="contenu.departements.liste[${i}].options=this.value.split('\n').map(x=>x.trim()).filter(Boolean)">${esc((d.options || []).join('\n'))}</textarea>
