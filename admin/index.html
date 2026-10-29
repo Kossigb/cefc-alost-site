@@ -275,6 +275,26 @@
     /* Drag & drop photos */
     .photo-drag-ghost  { opacity: 0.25; border-radius: 10px; }
     .photo-drag-chosen { transform: scale(1.04); box-shadow: 0 8px 28px rgba(124,58,237,.45); z-index: 10; position: relative; }
+    /* Aperçu du site (cadre plein écran) */
+    .pv { position:fixed; inset:0; z-index:500; background:#0b0d1a; display:none; flex-direction:column; }
+    .pv.open { display:flex; }
+    .pv-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:10px 14px; background:var(--bg2); border-bottom:1px solid var(--border); }
+    .pv-bar strong { font-size:14px; margin-right:6px; }
+    .pv-bar select { width:auto; padding:7px 10px; border-radius:8px; background:var(--bg); color:var(--text); border:1px solid var(--border); font-size:13px; }
+    .pv-seg { display:inline-flex; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+    .pv-seg button { background:transparent; border:0; color:var(--text2); padding:7px 11px; font-size:13px; cursor:pointer; }
+    .pv-seg button.on { background:var(--purple); color:#fff; }
+    .pv-bar .pv-note { font-size:12px; color:var(--text2); }
+    .pv-bar .pv-right { margin-left:auto; display:flex; gap:8px; }
+    .pv-btn { background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:7px 12px; font-size:13px; cursor:pointer; }
+    .pv-btn:hover { border-color:rgba(255,255,255,.25); }
+    .pv-btn.primary { background:var(--purple); border-color:var(--purple); color:#fff; }
+    .pv-stage { flex:1; overflow:auto; display:flex; justify-content:center; align-items:flex-start; padding:18px; }
+    .pv-frame { background:#fff; border:0; width:100%; height:100%; border-radius:6px; box-shadow:0 10px 40px rgba(0,0,0,.5); transition:width .25s; }
+    .pv[data-device="tablette"] .pv-frame { width:820px; max-width:100%; }
+    .pv[data-device="telephone"] .pv-frame { width:390px; height:min(844px, 100%); border-radius:28px; border:10px solid #1f2235; }
+    .pv-loading { position:absolute; top:62px; left:50%; transform:translateX(-50%); font-size:12px; color:var(--text2); }
+    @media (max-width:640px) { .pv-bar .pv-note, .pv-seg { display:none; } .pv-stage { padding:0; } .pv-frame { border-radius:0; } }
   </style>
 </head>
 <body>
@@ -335,7 +355,7 @@
       <div class="nav-item" data-page="parametres"><span class="icon">⚙️</span> Paramètres</div>
     </nav>
     <div class="sidebar-footer">
-      <button class="logout-btn" onclick="openPreview()" style="margin-bottom:8px;color:var(--purple-light);border-color:rgba(124,58,237,.3)"><span>👁</span> Prévisualiser</button>
+      <button class="logout-btn" onclick="openPreview()" style="margin-bottom:8px;color:var(--purple-light);border-color:rgba(124,58,237,.3)"><span>👁</span> Aperçu du site</button>
       <button class="logout-btn" onclick="doLogout()"><span>🚪</span> Déconnexion</button>
     </div>
   </aside>
@@ -865,5 +885,33 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <script src="admin.js"></script>
+<!-- Aperçu du site avec les modifications pas encore publiées -->
+<div class="pv" id="preview" data-device="ordinateur" role="dialog" aria-label="Aperçu du site">
+  <div class="pv-bar">
+    <strong>👁 Aperçu</strong>
+    <select id="pv-page" onchange="loadPreview()" aria-label="Page">
+      <option value="/">Accueil</option>
+      <option value="/services.html">Services</option>
+      <option value="/annonces.html">Annonces</option>
+      <option value="/departements.html">Départements</option>
+      <option value="/jeunesse.html">Jeunesse</option>
+      <option value="/navette.html">Navette</option>
+      <option value="/dons.html">Dons</option>
+      <option value="/temple.html">Temple</option>
+      <option value="/contact.html">Contact</option>
+      <option value="/anniversaire.html">Anniversaires</option>
+    </select>
+    <div class="pv-seg" id="pv-device">
+      <button data-d="ordinateur" class="on">Ordinateur</button><button data-d="tablette">Tablette</button><button data-d="telephone">Téléphone</button>
+    </div>
+    <span class="pv-note">Vos modifications, avant publication</span>
+    <div class="pv-right">
+      <button class="pv-btn" onclick="loadPreview()" title="Recharger avec les dernières modifications">↻ Actualiser</button>
+      <button class="pv-btn" onclick="openPreviewTab()">Nouvel onglet</button>
+      <button class="pv-btn primary" onclick="closePreview()">Fermer</button>
+    </div>
+  </div>
+  <div class="pv-stage"><iframe class="pv-frame" id="pv-frame" title="Aperçu du site"></iframe></div>
+</div>
 </body>
 </html>
