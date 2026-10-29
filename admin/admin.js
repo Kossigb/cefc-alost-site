@@ -859,11 +859,11 @@ function renderPhotosGrid() {
     toolbar.style.display = photos.length ? 'flex' : 'none';
     toolbar.innerHTML = photoSelectMode ? `
       <button onclick="toggleSelectAll()" style="padding:7px 14px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:13px;cursor:pointer">
-        ☑ Tout sélectionner
+        ${photoSelected.size && photoSelected.size === photos.length ? '☐ Tout désélectionner' : '☑ Tout sélectionner'}
       </button>
       <button onclick="deleteSelectedPhotos()" id="btn-del-sel"
-        style="padding:7px 14px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:none">
-        🗑 Supprimer (<span id="sel-count">0</span>)
+        style="padding:7px 14px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;${photoSelected.size ? '' : 'display:none'}">
+        🗑 Supprimer (<span id="sel-count">${photoSelected.size}</span>)
       </button>
       <button onclick="exitSelectMode()" style="padding:7px 14px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:8px;font-size:13px;cursor:pointer;margin-left:auto">
         Annuler
