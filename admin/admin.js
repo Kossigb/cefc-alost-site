@@ -10,6 +10,11 @@ const SESSION_MAX = 7 * 24 * 60 * 60 * 1000; // 1 semaine en ms
 
 let contenu    = {};
 let photosData = { photos: [] };
+// Photos envoyées pendant cette session : chemin → image en mémoire. Le site met ~1 min
+// à publier un nouveau fichier ; en attendant, l'admin et l'aperçu montrent cette copie.
+const localPhotos = {};
+const photoSrc = u => (u && localPhotos[u]) || u || '';
+const rememberPhoto = (path, base64, ext) => { localPhotos['/' + path] = `data:image/${ext};base64,${base64}`; };
 
 // ════════════ AUTH ════════════
 
@@ -262,7 +267,7 @@ function renderJefcAnnonces() {
       <div class="grid2" style="margin-top:4px">${f(i, 'titre', "Titre de l'annonce " + L('fr'), false, 'ex : Brunch de rentrée')}${f(i, 'date', 'Date', false, 'ex : Samedi 3 octobre 2026 à 12h')}</div>
       ${f(i, 'description', "Texte de l'annonce " + L('fr'), true, 'ex : Le comeback de la jeunesse ! Viens avec un plat à partager, et ne viens pas seul.')}
       <div class="dept-photo-row" style="margin:6px 0 14px">
-        <div class="dept-photo" style="${a.image ? `background-image:url('${esc(a.image)}')` : ''}">${a.image ? '' : '<span>Pas de photo</span>'}</div>
+        <div class="dept-photo" style="${a.image ? `background-image:url('${esc(photoSrc(a.image))}')` : ''}">${a.image ? '' : '<span>Pas de photo</span>'}</div>
         <div class="dept-photo-actions">
           <button class="btn-upload" onclick="openPhotoPicker(${i}, 'jefc')">Choisir une photo</button>
           <label class="btn-mini" style="cursor:pointer">Envoyer une nouvelle photo
@@ -380,7 +385,7 @@ function renderAnnonces() {
       </div>
 
       <div class="dept-photo-row">
-        <div class="dept-photo" style="${a.image ? `background-image:url('${esc(a.image)}')` : ''}">${a.image ? '' : '<span>Pas de photo</span>'}</div>
+        <div class="dept-photo" style="${a.image ? `background-image:url('${esc(photoSrc(a.image))}')` : ''}">${a.image ? '' : '<span>Pas de photo</span>'}</div>
         <div class="dept-photo-actions">
           <button class="btn-upload" onclick="openPhotoPicker(${i})">Choisir une photo</button>
           <label class="btn-mini" style="cursor:pointer">Envoyer une nouvelle photo
@@ -439,9 +444,13 @@ async function uploadAnnoncePhoto(i, input, kind = 'annonces') {
     const { base64, ext } = await compressImage(file);
     const base = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40);
     const path = `img/uploads/${Date.now()}-${base || 'annonce'}.${ext}`;
-    await ghCommitBinary(path, base64, 'Photo d\'annonce');
-    annList(kind)[i].image = '/' + path;
+    const a = annList(kind)[i], before = a.image;
+    rememberPhoto(path, base64, ext);
+    a.image = '/' + path;
     rerenderAnn(kind);
+    uploadingHint((kind === 'jefc' ? 'jefc-ann-upload-' : 'ann-upload-') + i);
+    try { await ghCommitBinary(path, base64, 'Photo d\'annonce'); }
+    catch (e) { a.image = before; rerenderAnn(kind); throw e; }
     await saveAll();
   } catch (e) {
     if (hint) hint.textContent = 'Échec : ' + e.message;
@@ -466,7 +475,7 @@ function openPhotoPicker(i, kind = 'annonces') {
       <div class="picker-head"><strong>Choisir une photo</strong><span class="muted">${photos.length} photo(s)</span>
         <button class="btn-mini" data-close>Fermer</button></div>
       <div class="picker-grid">${photos.length ? photos.map(u => `
-        <button class="picker-item${u === current ? ' selected' : ''}" data-url="${esc(u)}" style="background-image:url('${esc(u)}')"></button>`).join('')
+        <button class="picker-item${u === current ? ' selected' : ''}" data-url="${esc(u)}" style="background-image:url('${esc(photoSrc(u))}')"></button>`).join('')
         : '<p class="muted">Aucune photo en ligne pour le moment. Utilisez « Envoyer une nouvelle photo ».</p>'}</div>
     </div>`;
   const close = () => ov.remove();
@@ -572,7 +581,7 @@ function renderDepts() {
   const el = document.getElementById('dept-list');
   if (!list.length) { el.innerHTML = ''; return; }
   el.innerHTML = list.map((d, i) => {
-    const url = deptPhotoUrl(d.photo);
+    const url = photoSrc(deptPhotoUrl(d.photo));
     return `
     <div class="list-item dept-item${d.masquer ? ' is-hidden' : ''}">
       <div class="list-item-head">
@@ -665,9 +674,13 @@ async function uploadDeptPhoto(i, input) {
   try {
     const { base64, ext } = await compressImage(file);
     const path = `img/dept/${d.id || 'dept'}-${Date.now()}.${ext}`;
-    await ghCommitBinary(path, base64, `Photo du département ${d.nom || d.id}`);
+    const before = d.photo;
+    rememberPhoto(path, base64, ext);
     d.photo = '/' + path;
     renderDepts();
+    uploadingHint('dept-upload-' + i);
+    try { await ghCommitBinary(path, base64, `Photo du département ${d.nom || d.id}`); }
+    catch (e) { d.photo = before; renderDepts(); throw e; }
     await saveAll();
   } catch (e) {
     if (hint) hint.textContent = 'Échec : ' + e.message;
@@ -708,7 +721,7 @@ function renderEquipe() {
     <div class="list-item">
       <div class="list-item-head"><h4>👤 ${esc(m.nom||'Sans nom')}</h4><button class="btn-del" onclick="removeMembre(${i})">Supprimer</button></div>
       <div class="dept-photo-row" style="grid-template-columns:96px 1fr;margin-bottom:12px">
-        <div class="dept-photo" style="aspect-ratio:1;border-radius:50%;${m.photo ? `background-image:url('${esc(m.photo)}')` : ''}">${m.photo ? '' : esc(m.initiales || '?')}</div>
+        <div class="dept-photo" style="aspect-ratio:1;border-radius:50%;${m.photo ? `background-image:url('${esc(photoSrc(m.photo))}')` : ''}">${m.photo ? '' : esc(m.initiales || '?')}</div>
         <div class="dept-photo-actions">
           <label class="btn-upload">${m.photo ? 'Changer la photo' : 'Ajouter une photo'}
             <input type="file" accept="image/*" hidden onchange="uploadMembrePhoto(${i}, this)" /></label>
@@ -735,9 +748,13 @@ async function uploadMembrePhoto(i, input) {
     const { base64, ext } = await compressImage(file);
     const slug = (m.nom || 'membre').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-');
     const path = `img/equipe/${slug}-${Date.now()}.${ext}`;
-    await ghCommitBinary(path, base64, `Photo de ${m.nom || 'membre'}`);
+    const before = m.photo;
+    rememberPhoto(path, base64, ext);
     m.photo = '/' + path;
     renderEquipe();
+    uploadingHint('membre-upload-' + i);
+    try { await ghCommitBinary(path, base64, `Photo de ${m.nom || 'membre'}`); }
+    catch (e) { m.photo = before; renderEquipe(); throw e; }
     await saveAll();
   } catch (e) {
     if (hint) hint.textContent = 'Échec : ' + e.message;
@@ -829,7 +846,7 @@ function renderPhotosGrid() {
         style="position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--bg3);
                ${photoSelectMode ? 'cursor:pointer;' : ''}
                ${photoSelected.has(i) ? 'outline:3px solid var(--red);outline-offset:-3px;' : ''}">
-        <img src="${esc(p.url)}" loading="lazy"
+        <img src="${esc(photoSrc(p.url))}" loading="lazy"
              style="width:100%;height:100%;object-fit:cover;display:block;${photoSelected.has(i) ? 'opacity:.65' : ''}" />
         ${photoSelectMode ? `
           <div style="position:absolute;top:6px;left:6px;width:22px;height:22px;border-radius:6px;
@@ -870,10 +887,75 @@ function initPhotosDragSort() {
   });
 }
 
-function openPreview() {
-  sessionStorage.setItem('cefc_preview', JSON.stringify(contenu));
-  window.open('/?preview=1', '_blank');
+// ════════════ APERÇU ════════════
+// Le site s'affiche dans un cadre avec le contenu en cours d'édition (lu par js/apercu.js).
+// Les photos qui viennent d'être envoyées sont montrées depuis la mémoire du navigateur
+// tant que le site n'a pas fini de se mettre à jour.
+
+const PREVIEW_PAGES = {
+  accueil: '/', horaires: '/', live: '/', banniere: '/', vision: '/', photos: '/', seo: '/', infos: '/', footer: '/',
+  annonces: '/annonces.html', jefc: '/jeunesse.html', departements: '/departements.html', navette: '/navette.html',
+  dons: '/dons.html', equipe: '/contact.html', temoignages: '/contact.html', formulaires: '/contact.html',
+};
+
+function syncFieldsToContenu() {
+  document.querySelectorAll('[data-path]').forEach(el => {
+    setPath(contenu, el.dataset.path, el.type === 'checkbox' ? el.checked : el.value);
+  });
 }
+function withLocalPhotos(json) {
+  for (const [path, dataUrl] of Object.entries(localPhotos)) json = json.split(JSON.stringify(path).slice(1, -1)).join(dataUrl);
+  return json;
+}
+window.cefcPreviewData = () => {
+  syncFieldsToContenu();
+  return { contenu: withLocalPhotos(JSON.stringify(contenu)), photos: withLocalPhotos(JSON.stringify(photosData)) };
+};
+
+function loadPreview() {
+  const frame = document.getElementById('pv-frame');
+  const page = document.getElementById('pv-page').value;
+  // Recharger en gardant la page affichée si on a navigué dans l'aperçu
+  let current = page;
+  try { if (frame.contentWindow && frame.dataset.base === page) current = frame.contentWindow.location.pathname; } catch {}
+  frame.dataset.base = page;
+  frame.src = current + (current.includes('?') ? '&' : '?') + 'v=' + Date.now();
+}
+function openPreview() {
+  const pv = document.getElementById('preview');
+  const active = document.querySelector('.nav-item.active')?.dataset.page;
+  const sel = document.getElementById('pv-page');
+  sel.value = PREVIEW_PAGES[active] || '/';
+  document.getElementById('pv-frame').dataset.base = '';
+  pv.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  loadPreview();
+}
+function closePreview() {
+  document.getElementById('preview').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('pv-frame').src = 'about:blank';
+}
+function openPreviewTab() {
+  const data = window.cefcPreviewData();
+  try {
+    localStorage.setItem('cefc_preview', JSON.stringify(data));
+  } catch {
+    // trop lourd avec les photos fraîchement envoyées : on les retire de l'aperçu en onglet
+    try { localStorage.setItem('cefc_preview', JSON.stringify({ contenu: JSON.stringify(contenu), photos: JSON.stringify(photosData) })); }
+    catch { toast('Aperçu en onglet impossible sur ce navigateur.', 'error'); return; }
+  }
+  window.open(document.getElementById('pv-page').value + '?apercu=1', '_blank');
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('#pv-device button');
+  if (!b) return;
+  document.querySelectorAll('#pv-device button').forEach(x => x.classList.toggle('on', x === b));
+  document.getElementById('preview').dataset.device = b.dataset.d;
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('preview')?.classList.contains('open') && !document.querySelector('.picker-overlay')) closePreview();
+});
 
 function enterSelectMode() {
   photoSelectMode = true;
@@ -950,7 +1032,9 @@ async function handlePhotoUpload(input) {
       const baseName = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-_]/g, '');
       const path = `img/uploads/${Date.now()}-${baseName}.${ext}`;
       await ghCommitBinary(path, base64, `Ajout photo: ${baseName}`);
+      rememberPhoto(path, base64, ext);
       photosData.photos.push({ url: `/${path}`, legende: '', date: new Date().toISOString().split('T')[0] });
+      renderPhotosGrid();
       done++;
     } catch (e) { toast(`Erreur sur ${file.name} : ${e.message}`, 'error'); }
   }
@@ -982,6 +1066,11 @@ async function deletePhoto(idx) {
     toast('Photo supprimée.', 'success');
   } catch (e) { toast('Erreur : ' + e.message, 'error'); }
   renderPhotosGrid();
+}
+
+function uploadingHint(id) {
+  const h = document.getElementById(id);
+  if (h) h.textContent = 'Envoi de la photo… (elle est déjà visible ici)';
 }
 
 async function compressImage(file) {
