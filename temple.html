@@ -423,10 +423,72 @@ h2.section-title em { font-style: italic; }
 }
 
 /* Comment participer : montant en grand, puis les deux façons de donner */
-/* Affiche du projet : montrée en entier, comme imprimée */
-.temple-affiche { background: var(--night-deep); padding: 0 24px 72px; }
-.temple-affiche img { display: block; width: 100%; max-width: 960px; height: auto; margin: 0 auto; border-radius: 10px; box-shadow: 0 18px 50px rgba(0,0,0,.45); }
-@media (max-width: 640px) { .temple-affiche { padding: 0 12px 48px; } .temple-affiche img { border-radius: 6px; } }
+/* Haut de page avec l'affiche : l'affiche floutée en fond, et en entier à droite du titre */
+.temple-hero-bg { display: none; }
+.temple-hero.has-affiche { text-align: left; min-height: 100vh; min-height: 100svh; padding: 120px 40px 90px; background: var(--night-deep); }
+.has-affiche::before { display: none; }
+.has-affiche .temple-hero-bg {
+  display: block; position: absolute; inset: -60px;
+  background: var(--affiche, none) center / cover no-repeat;
+  filter: blur(26px) saturate(1.15);
+  transform: scale(1.08);
+}
+.has-affiche::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(10,10,33,.94) 0%, rgba(10,10,33,.82) 38%, rgba(10,10,33,.45) 70%, rgba(10,10,33,.55) 100%),
+    linear-gradient(180deg, rgba(10,10,33,0) 60%, var(--night) 100%);
+}
+.has-affiche .temple-hero-inner {
+  max-width: 1240px; width: 100%;
+  display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 64px; align-items: center;
+}
+.temple-kicker { font-size: 14px; font-weight: 500; color: rgba(227,227,235,.7); margin-bottom: 18px; }
+.has-affiche h1 { font-size: clamp(36px, 4.6vw, 62px); margin-bottom: 22px; }
+.has-affiche .temple-hero-sub { margin: 0 0 36px; font-size: 18px; color: rgba(227,227,235,.78); max-width: 480px; }
+.has-affiche .temple-cta-row { justify-content: flex-start; margin-bottom: 40px; }
+.has-affiche .temple-hero-verse { font-style: normal; font-size: 16px; line-height: 1.6; color: rgba(227,227,235,.62); max-width: 460px; padding-top: 22px; }
+.temple-hero-verse span { display: block; margin-top: 6px; font-family: var(--sans); font-size: 13px; color: rgba(227,227,235,.45); }
+
+.temple-poster {
+  display: block; position: relative; z-index: 1;
+  border-radius: 6px; overflow: hidden;
+  box-shadow: 0 2px 0 rgba(255,255,255,.06) inset, 0 40px 90px rgba(0,0,0,.55), 0 8px 24px rgba(0,0,0,.35);
+  transform: rotate(1.2deg);
+  transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+}
+.temple-poster[hidden] { display: none; }
+.temple-poster img { display: block; width: 100%; height: auto; }
+.temple-poster:hover { transform: rotate(0deg) scale(1.01); }
+.temple-poster:focus-visible { outline: 2px solid #A78BFA; outline-offset: 6px; }
+@media (prefers-reduced-motion: no-preference) {
+  .has-affiche .temple-poster { animation: poster-in 1s .15s var(--ease) both; }
+  .has-affiche .temple-hero-text > * { animation: hero-up .8s var(--ease) both; }
+  .has-affiche .temple-hero-text > :nth-child(2) { animation-delay: .06s; }
+  .has-affiche .temple-hero-text > :nth-child(3) { animation-delay: .12s; }
+  .has-affiche .temple-hero-text > :nth-child(4) { animation-delay: .18s; }
+  .has-affiche .temple-hero-text > :nth-child(5) { animation-delay: .24s; }
+}
+@keyframes poster-in { from { opacity: 0; transform: translateY(28px) rotate(3deg); } to { opacity: 1; transform: rotate(1.2deg); } }
+@keyframes hero-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 900px) {
+  .temple-hero.has-affiche { padding: 104px 20px 64px; min-height: 0; }
+  .has-affiche .temple-hero-inner { grid-template-columns: 1fr; gap: 36px; }
+  .has-affiche::after { background: linear-gradient(180deg, rgba(10,10,33,.9) 0%, rgba(10,10,33,.78) 55%, var(--night) 100%); }
+  .has-affiche .temple-hero-bg { filter: blur(18px) saturate(1.1); }
+  .temple-poster { transform: none; }
+  /* Sur téléphone, l'affiche vient juste après le titre */
+  .has-affiche .temple-hero-text { display: contents; }
+  .has-affiche .temple-hero-inner { gap: 0; }
+  .has-affiche .temple-kicker { order: 1; }
+  .has-affiche h1 { order: 2; }
+  .has-affiche .temple-poster { order: 3; margin: 6px 0 28px; }
+  .has-affiche .temple-hero-sub { order: 4; }
+  .has-affiche .temple-cta-row { order: 5; }
+  .has-affiche .temple-hero-verse { order: 6; }
+  @keyframes poster-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+}
 .participer-h {
   font-family: var(--sans); font-size: 15px; font-weight: 600;
   color: #A78BFA; margin-bottom: 28px;
@@ -498,32 +560,33 @@ h2.section-title em { font-style: italic; }
 </nav>
 
 <!-- HERO -->
-<section class="temple-hero">
+<section class="temple-hero has-affiche" id="templeHero">
+  <div class="temple-hero-bg" aria-hidden="true"></div>
   <div class="temple-hero-inner">
-    <div class="temple-eyebrow">
-      <span></span> Projet Temple · CEFC Alost
+    <div class="temple-hero-text">
+      <p class="temple-kicker">Projet temple · CEFC Alost</p>
+      <h1>Achetons un temple à l'Éternel</h1>
+      <p class="temple-hero-sub">
+        L'église se prépare à acheter son propre lieu de culte. Chaque famille peut y participer, chaque mois.
+      </p>
+      <div class="temple-cta-row">
+        <a href="#comment-participer" class="btn-temple-primary">Comment participer</a>
+        <a href="#virement" class="btn-temple-ghost">
+          Faire un virement
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <p class="temple-hero-verse">
+        « Montez à la montagne, apportez du bois, et rebâtissez le temple ; j'y prendrai plaisir, et je serai glorifié. »
+        <span>Aggée 1 : 8</span>
+      </p>
     </div>
-    <h1>Achetons un Temple<br><em>à l'Éternel</em></h1>
-    <p class="temple-hero-sub">
-      L'église se prépare à acheter son propre lieu de culte. Chaque famille peut y participer, chaque mois.
-    </p>
-    <div class="temple-cta-row">
-      <a href="#comment-participer" class="btn-temple-primary">Comment participer</a>
-      <a href="#virement" class="btn-temple-ghost">
-        Faire un virement
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-    <p class="temple-hero-verse">
-      « Montez à la montagne, apportez du bois, et rebâtissez le temple ; j'y prendrai plaisir, et je serai glorifié. »<br>
-      <strong style="font-style:normal;font-size:12px;letter-spacing:.08em;color:rgba(167,139,250,.5)">AGGÉE 1 : 8</strong>
-    </p>
+    <!-- Affiche du projet (réglable dans l'admin → Dons & Temple) -->
+    <a class="temple-poster" id="affiche" href="/img/temple/affiche-achat-temple.webp" target="_blank" rel="noopener" aria-label="Voir l'affiche en grand">
+      <img id="templeAffiche" src="/img/temple/affiche-achat-temple.webp" width="1536" height="1024" fetchpriority="high"
+        alt="Affiche « Achat du Temple » : achetons un temple à l'Éternel. Numéro de compte et adresse Wijngaardveld 29, 9300 Alost." />
+    </a>
   </div>
-</section>
-
-<!-- AFFICHE DU PROJET (réglable dans l'admin → Dons & Temple) -->
-<section class="temple-affiche" id="affiche" hidden>
-  <img id="templeAffiche" alt="Affiche « Achat du Temple » : achetons un temple à l'Éternel. Numéro de compte et adresse Wijngaardveld 29, 9300 Alost." loading="lazy" />
 </section>
 
 <!-- COMMENT PARTICIPER -->
@@ -662,13 +725,22 @@ h2.section-title em { font-style: italic; }
 <script src="/js/conformite.js"></script>
 <script src="/js/motion.js" defer></script>
 <script>
+// Affiche du projet : en entier à côté du titre, et floutée en fond du haut de page
+function setAffiche(url) {
+  const hero = document.getElementById('templeHero');
+  const link = document.getElementById('affiche');
+  if (!url) { hero.classList.remove('has-affiche'); link.hidden = true; return; }
+  document.getElementById('templeAffiche').src = url;
+  link.href = url;
+  hero.style.setProperty('--affiche', `url("${url}")`);
+}
+setAffiche(document.getElementById('templeAffiche').getAttribute('src'));
+
 // IBAN du projet temple, modifiable dans l'admin (Dons & Temple)
 fetch('/contenu.json').then(r => r.json()).then(d => {
   const affiche = d.temple && d.temple.affiche;
-  if (affiche) {
-    document.getElementById('templeAffiche').src = affiche;
-    document.getElementById('affiche').hidden = false;
-  }
+  if (affiche === '') setAffiche(null);          // retirée dans l'admin
+  else if (affiche) setAffiche(affiche);
   document.querySelectorAll('[data-cms]').forEach(el => {
     const v = el.dataset.cms.split('.').reduce((o, k) => o && o[k], d);
     if (typeof v === 'string' && v.trim()) el.textContent = v;
